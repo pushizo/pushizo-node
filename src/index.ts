@@ -1,73 +1,103 @@
 import { createHmac, randomUUID } from 'node:crypto';
-import type { PublicComponents, PublicPaths } from '@herosignal/api-client';
 import { HttpClient, type HttpOptions } from './http.js';
+import { createAnalytics } from './resources/analytics.js';
+import { createApiKeys } from './resources/api-keys.js';
+import { createCampaigns } from './resources/campaigns.js';
+import type { ResourceContext } from './resources/context.js';
+import { createExports, createImports } from './resources/data-transfer.js';
+import { createInAppMessages } from './resources/in-app-messages.js';
+import { createInbox } from './resources/inbox.js';
+import { createSegments } from './resources/segments.js';
+import { createTemplates } from './resources/templates.js';
+import type {
+  AddSubscriptionInput,
+  App,
+  AppList,
+  AuditPage,
+  Channel,
+  ChannelConfig,
+  ChannelValidation,
+  CreateAppInput,
+  CreateNotificationInput,
+  CreateNotificationResult,
+  CreateSuppressionInput,
+  CreateWebhookInput,
+  CursorPage,
+  Delivery,
+  DeliveryList,
+  EstimateAudienceInput,
+  EstimateAudienceResult,
+  EventDefinition,
+  EventDefinitionDetail,
+  EventDefinitionList,
+  EventsAccepted,
+  ExportJob,
+  MemberList,
+  Message,
+  MessageList,
+  Org,
+  PatchEventDefinitionInput,
+  PatchSubscriptionInput,
+  PatchUserInput,
+  QueryParams,
+  SearchUsersInput,
+  SendEventsInput,
+  Subscription,
+  Suppression,
+  SuppressionChannel,
+  SuppressionPage,
+  SuppressionReason,
+  UpdateAppInput,
+  UpdateWebhookInput,
+  UpsertChannelInput,
+  UpsertUserInput,
+  UserDetail,
+  UserExport,
+  UserIdentity,
+  UserList,
+  Webhook,
+  WebhookDeliveryDetail,
+  WebhookDeliveryPage,
+  WebhookWithSecret,
+} from './types.js';
 
 export { HeroSignalError } from './errors.js';
 export * from './webhooks.js';
+export * from './types.js';
+export type { CreateImportInput, ImportFile } from './resources/data-transfer.js';
 
-type Schemas = PublicComponents['schemas'];
-type JsonBody<
-  P extends keyof PublicPaths,
-  M extends keyof PublicPaths[P],
-> = PublicPaths[P][M] extends { requestBody?: { content: { 'application/json': infer B } } }
-  ? B
-  : never;
-
-export type Message = Schemas['Message'];
-export type MessageList = Schemas['MessageList'];
-export type CreateNotificationResult = Schemas['CreateNotificationResult'];
-export type Delivery = Schemas['Delivery'];
-export type DeliveryList = Schemas['DeliveryList'];
-export type User = Schemas['User'];
-export type UserDetail = Schemas['UserDetail'];
-export type UserList = Schemas['UserList'];
-export type Subscription = Schemas['Subscription'];
-export type App = Schemas['App'];
-export type AppList = Schemas['AppList'];
-export type ChannelConfig = Schemas['ChannelConfig'];
-export type ChannelValidation = Schemas['ChannelValidation'];
-export type EventsAccepted = Schemas['EventsAccepted'];
-export type ExportJob = Schemas['Export'];
-export type Webhook = Schemas['Webhook'];
-export type WebhookWithSecret = Schemas['WebhookWithSecret'];
-export type WebhookDeliveryPage = Schemas['WebhookDeliveryPage'];
-export type WebhookDeliveryDetail = Schemas['WebhookDeliveryDetail'];
-export type Suppression = Schemas['Suppression'];
-export type SuppressionPage = Schemas['SuppressionPage'];
-export type CreateSuppressionInput = JsonBody<'/v1/apps/{appId}/suppressions', 'post'>;
-export type SuppressionChannel = Suppression['channel'];
-export type SuppressionReason = Suppression['reason'];
-export type CreateWebhookInput = JsonBody<'/v1/apps/{appId}/webhooks', 'post'>;
-export type UpdateWebhookInput = JsonBody<'/v1/apps/{appId}/webhooks/{webhookId}', 'patch'>;
-
-export type CreateNotificationInput = JsonBody<'/v1/notifications', 'post'>;
-export type UpsertUserInput = JsonBody<'/v1/apps/{appId}/users', 'post'>;
-export type PatchUserInput = JsonBody<'/v1/apps/{appId}/users/by/{label}/{value}', 'patch'>;
-export type AddSubscriptionInput = JsonBody<
-  '/v1/apps/{appId}/users/by/{label}/{value}/subscriptions',
-  'post'
->;
-export type PatchSubscriptionInput = JsonBody<
-  '/v1/apps/{appId}/subscriptions/{subscriptionId}',
-  'patch'
->;
-export type SendEventsInput = JsonBody<'/v1/apps/{appId}/events', 'post'>;
-export type UpsertChannelInput = JsonBody<'/v1/apps/{appId}/channels/{channel}', 'put'>;
-export type UpdateAppInput = JsonBody<'/v1/apps/{appId}', 'patch'>;
-export type Channel = 'ios_push' | 'android_push' | 'web_push' | 'email' | 'sms';
+/** `subscriptions.updateByToken` için token türü: HeroSignal kanal adı veya OneSignal karşılığı. */
+export type SubscriptionTokenType =
+  | Channel
+  | 'iOSPush'
+  | 'AndroidPush'
+  | 'ChromePush'
+  | 'FirefoxPush'
+  | 'SafariPush'
+  | 'Email'
+  | 'SMS';
 
 export interface HeroSignalOptions extends Omit<HttpOptions, 'baseUrl'> {
   /** Varsayılan: https://api.herosignal.dev; yerel geliştirmede http://localhost:4000 */
   baseUrl?: string;
   /** Çağrılarda `appId` verilmezse kullanılacak varsayılan app. */
   appId?: string;
-  /** `notifications.create` için idempotency anahtarı verilmemişse otomatik UUID üret (varsayılan true). */
+  /**
+   * `notifications.create` ve `users.upsert` için idempotency anahtarı verilmemişse otomatik UUID
+   * üret (varsayılan true).
+   */
   autoIdempotencyKey?: boolean;
 }
 
 interface Page {
   limit?: number;
   cursor?: string;
+}
+
+/** Tek istek için seçenekler. */
+export interface RequestOptions {
+  /** `Idempotency-Key` başlığı (24 saat içinde aynı anahtarla tekrarlanan istek aynı yanıtı döner). */
+  idempotencyKey?: string;
 }
 
 const enc = encodeURIComponent;
@@ -103,12 +133,63 @@ export class HeroSignal {
     return id;
   }
 
+  /** Ayrı modüllerdeki kaynak gruplarına verilen bağlam; alanlar çağrı anında okunur. */
+  private resourceContext(): ResourceContext {
+    // eslint-disable-next-line @typescript-eslint/no-this-alias -- getter'lar istemciye geç bağlanır
+    const client = this;
+    return {
+      get http() {
+        return client.http;
+      },
+      get autoIdempotencyKey() {
+        return client.autoIdempotencyKey;
+      },
+      app: (appId) => client.app(appId),
+      appPath: (appId) => `/v1/apps/${enc(client.app(appId))}`,
+    };
+  }
+
+  /**
+   * Cursor sayfalı herhangi bir liste çağrısını öğe öğe dolaşır.
+   *
+   * ```ts
+   * for await (const t of hs.paginate((cursor) => hs.templates.list({ cursor, limit: 100 }))) { … }
+   * ```
+   */
+  async *paginate<T>(
+    fetchPage: (cursor: string | undefined) => Promise<CursorPage<T>>,
+    cursor?: string,
+  ): AsyncGenerator<T, void, undefined> {
+    let next = cursor;
+    for (;;) {
+      const page = await fetchPage(next);
+      for (const item of page.data ?? []) yield item;
+      if (!page.has_more || !page.next_cursor) return;
+      next = page.next_cursor;
+    }
+  }
+
+  /** Org geneli admin anahtarı gerektirir. */
   readonly organization = {
-    get: () => this.http.request<Schemas['Org']>({ method: 'GET', path: '/v1/organization' }),
+    get: () => this.http.request<Org>({ method: 'GET', path: '/v1/organization' }),
+    members: () =>
+      this.http.request<MemberList>({ method: 'GET', path: '/v1/organization/members' }),
+    /** Audit log; `action`, `actor_id`, `app_id`, `from`/`to` filtreleri ve cursor. */
+    auditLogs: (
+      params: QueryParams<'/v1/organization/audit-logs', 'get'> & { app_id?: string } = {},
+    ) =>
+      this.http.request<AuditPage>({
+        method: 'GET',
+        path: '/v1/organization/audit-logs',
+        query: params,
+      }),
   };
 
   readonly apps = {
     list: () => this.http.request<AppList>({ method: 'GET', path: '/v1/apps' }),
+    /** Org geneli admin anahtarı gerektirir. */
+    create: (body: CreateAppInput) =>
+      this.http.request<App>({ method: 'POST', path: '/v1/apps', body }),
     get: (appId?: string) =>
       this.http.request<App>({ method: 'GET', path: `/v1/apps/${enc(this.app(appId))}` }),
     update: (body: UpdateAppInput, appId?: string) =>
@@ -143,6 +224,7 @@ export class HeroSignal {
         source?: Message['source'];
         kind?: Message['source'];
         status?: Message['status'];
+        sort?: 'created_at' | '-created_at';
       } = {},
       appId?: string,
     ) =>
@@ -151,6 +233,15 @@ export class HeroSignal {
         path: '/v1/notifications',
         query: { app_id: this.app(appId), ...params },
       }),
+    /** Kaydedilmemiş hedef için alıcı sayısı (gönderim yapmaz). */
+    estimate: (input: Omit<EstimateAudienceInput, 'app_id'> & { appId?: string }) => {
+      const { appId, ...rest } = input;
+      return this.http.request<EstimateAudienceResult>({
+        method: 'POST',
+        path: '/v1/notifications/estimate',
+        body: { ...rest, app_id: this.app(appId) },
+      });
+    },
     cancel: (messageId: string, appId?: string) =>
       this.http.request<Message>({
         method: 'DELETE',
@@ -167,6 +258,13 @@ export class HeroSignal {
         path: `/v1/notifications/${enc(messageId)}/history`,
         query: { app_id: this.app(appId) },
       }),
+    /** Mesaj olayları (gönderildi/teslim/açıldı/tıklandı/bounce…) CSV dışa aktarma işi (202). */
+    exportEvents: (messageId: string, appId?: string) =>
+      this.http.request<ExportJob>({
+        method: 'POST',
+        path: `/v1/notifications/${enc(messageId)}/export_events`,
+        query: { app_id: this.app(appId) },
+      }),
     deliveries: (
       messageId: string,
       params: Page & { status?: Delivery['status'] } = {},
@@ -180,16 +278,26 @@ export class HeroSignal {
   };
 
   readonly users = {
-    list: (params: Page & { q?: string; tag?: string } = {}, appId?: string) =>
+    list: (params: QueryParams<'/v1/apps/{appId}/users', 'get'> = {}, appId?: string) =>
       this.http.request<UserList>({
         method: 'GET',
         path: `/v1/apps/${enc(this.app(appId))}/users`,
         query: params,
       }),
-    upsert: (body: UpsertUserInput, appId?: string) =>
+    /** Oluştur/güncelle; `Idempotency-Key` verilmezse (ve `autoIdempotencyKey` açıksa) UUID üretilir. */
+    upsert: (body: UpsertUserInput, appId?: string, options: RequestOptions = {}) =>
       this.http.request<UserDetail>({
         method: 'POST',
         path: `/v1/apps/${enc(this.app(appId))}/users`,
+        body,
+        idempotencyKey:
+          options.idempotencyKey ?? (this.autoIdempotencyKey ? randomUUID() : undefined),
+      }),
+    /** Segment tanımı (filtre AST'si) ile kullanıcı arama. */
+    search: (body: SearchUsersInput, appId?: string) =>
+      this.http.request<UserList>({
+        method: 'POST',
+        path: `/v1/apps/${enc(this.app(appId))}/users/search`,
         body,
       }),
     getByAlias: (label: string, value: string, appId?: string) =>
@@ -209,6 +317,18 @@ export class HeroSignal {
       this.http.request<{ ok: true }>({
         method: 'DELETE',
         path: `/v1/apps/${enc(this.app(appId))}/users/by/${enc(label)}/${enc(value)}`,
+      }),
+    /** Kullanıcının tüm kimlikleri (hs_id, external_id, özel alias'lar). */
+    getIdentity: (label: string, value: string, appId?: string) =>
+      this.http.request<UserIdentity>({
+        method: 'GET',
+        path: `/v1/apps/${enc(this.app(appId))}/users/by/${enc(label)}/${enc(value)}/identity`,
+      }),
+    /** KVKK/GDPR veri taşınabilirliği: profil, alias, abonelik ve son olaylar. */
+    export: (label: string, value: string, appId?: string) =>
+      this.http.request<UserExport>({
+        method: 'GET',
+        path: `/v1/apps/${enc(this.app(appId))}/users/by/${enc(label)}/${enc(value)}/export`,
       }),
     addAliases: (label: string, value: string, identity: Record<string, string>, appId?: string) =>
       this.http.request<UserDetail>({
@@ -246,6 +366,24 @@ export class HeroSignal {
         method: 'DELETE',
         path: `/v1/apps/${enc(this.app(appId))}/subscriptions/${enc(subscriptionId)}`,
       }),
+    /** Aboneliğin sahibi kullanıcının kimlikleri. */
+    getUserIdentity: (subscriptionId: string, appId?: string) =>
+      this.http.request<UserIdentity>({
+        method: 'GET',
+        path: `/v1/apps/${enc(this.app(appId))}/subscriptions/${enc(subscriptionId)}/user/identity`,
+      }),
+    /** Abonelik kimliği yerine token ile güncelle (OneSignal token türü adları da kabul edilir). */
+    updateByToken: (
+      tokenType: SubscriptionTokenType,
+      token: string,
+      body: PatchSubscriptionInput,
+      appId?: string,
+    ) =>
+      this.http.request<Subscription>({
+        method: 'PATCH',
+        path: `/v1/apps/${enc(this.app(appId))}/subscriptions_by_token/${enc(tokenType)}/${enc(token)}`,
+        body,
+      }),
     setOwner: (subscriptionId: string, externalId: string, appId?: string) =>
       this.http.request<Subscription>({
         method: 'POST',
@@ -261,6 +399,23 @@ export class HeroSignal {
         method: 'POST',
         path: `/v1/apps/${enc(this.app(appId))}/events`,
         body: { events },
+      }),
+    listDefinitions: (appId?: string) =>
+      this.http.request<EventDefinitionList>({
+        method: 'GET',
+        path: `/v1/apps/${enc(this.app(appId))}/events/definitions`,
+      }),
+    getDefinition: (name: string, appId?: string) =>
+      this.http.request<EventDefinitionDetail>({
+        method: 'GET',
+        path: `/v1/apps/${enc(this.app(appId))}/events/definitions/${enc(name)}`,
+      }),
+    /** Görünen ad ve dönüşüm işareti (`is_conversion`). */
+    updateDefinition: (name: string, body: PatchEventDefinitionInput, appId?: string) =>
+      this.http.request<EventDefinition>({
+        method: 'PATCH',
+        path: `/v1/apps/${enc(this.app(appId))}/events/definitions/${enc(name)}`,
+        body,
       }),
   };
 
@@ -381,6 +536,25 @@ export class HeroSignal {
         path: `/v1/apps/${enc(this.app(appId))}/webhooks/deliveries/${enc(deliveryId)}/replay`,
       }),
   };
+
+  /** Segmentler: liste, CRUD, önizleme, tahmini sayım ve kullanan kampanyalar. */
+  readonly segments = createSegments(this.resourceContext());
+  /** Şablonlar: CRUD, sürümler, render önizlemesi ve app'ler arası kopyalama. */
+  readonly templates = createTemplates(this.resourceContext());
+  /** Kampanyalar: CRUD, yaşam döngüsü, istatistik, teslimat ve mesajlar. */
+  readonly campaigns = createCampaigns(this.resourceContext());
+  /** Uygulama içi mesajlar. */
+  readonly inAppMessages = createInAppMessages(this.resourceContext());
+  /** Kullanıcı bildirim kutusu (alias ile). */
+  readonly inbox = createInbox(this.resourceContext());
+  /** Analitik raporları (JSON veya `format: 'csv'`). */
+  readonly analytics = createAnalytics(this.resourceContext());
+  /** Dışa aktarma işleri. */
+  readonly exports = createExports(this.resourceContext());
+  /** İçe aktarma işleri (multipart CSV). */
+  readonly imports = createImports(this.resourceContext());
+  /** App API anahtarları. */
+  readonly apiKeys = createApiKeys(this.resourceContext());
 }
 
 export default HeroSignal;

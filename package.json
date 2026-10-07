@@ -2,7 +2,7 @@
   "name": "@herosignal/node",
   "version": "0.1.0",
   "private": true,
-  "description": "HeroSignal Node.js sunucu SDK'sı: bildirim gönderme, kullanıcı/abonelik yönetimi, olaylar, kanallar (OpenAPI tipleri ile)",
+  "description": "HeroSignal Node.js sunucu SDK'sı: public API'nin tamamı (bildirim, kullanıcı, segment, şablon, kampanya, analitik, veri aktarımı, webhook…) OpenAPI tipleri ile",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",

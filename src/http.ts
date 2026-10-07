@@ -17,7 +17,9 @@ export interface RequestInput {
   method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
   path: string;
   query?: object;
+  /** JSON gövde; `FormData` verilirse multipart olarak (sınır başlığını fetch belirler) gönderilir. */
   body?: unknown;
+  /** `Idempotency-Key` başlığı; yeniden denemelerde aynı anahtar gider. */
   idempotencyKey?: string;
 }
 
@@ -52,7 +54,15 @@ export class HttpClient {
       accept: 'application/json',
       'user-agent': this.options.userAgent ?? 'herosignal-node/0.1.0',
     };
-    if (input.body !== undefined) headers['content-type'] = 'application/json';
+    const multipart = input.body instanceof FormData;
+    if (input.body !== undefined && !multipart) headers['content-type'] = 'application/json';
+    if (input.idempotencyKey) headers['idempotency-key'] = input.idempotencyKey;
+    const payload: NonNullable<Parameters<typeof fetch>[1]>['body'] =
+      input.body === undefined
+        ? undefined
+        : multipart
+          ? (input.body as FormData)
+          : JSON.stringify(input.body);
 
     const maxRetries = this.options.maxRetries ?? BACKOFF_MS.length;
     let attempt = 0;
@@ -63,11 +73,13 @@ export class HttpClient {
         const response = await this.fetchImpl(url.toString(), {
           method: input.method,
           headers,
-          body: input.body === undefined ? undefined : JSON.stringify(input.body),
+          body: payload,
           signal: controller.signal,
         });
         if (response.ok) {
           const text = await response.text();
+          // `format=csv` raporları metin olarak döner; diğer tüm yanıtlar JSON'dur.
+          if (/^text\/csv/i.test(response.headers.get('content-type') ?? '')) return text as T;
           return (text ? JSON.parse(text) : undefined) as T;
         }
         let envelope: {
