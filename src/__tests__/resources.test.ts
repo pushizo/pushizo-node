@@ -223,6 +223,70 @@ describe('Node SDK: OpenAPI eşitliği için eklenen kaynaklar', () => {
     expect(err).toMatchObject({ status: 403, code: 'HS_FORBIDDEN', requestId: 'r1' });
   });
 
+  it('journey: taslak → yayın → tetikleme gövdeleri, çalıştırma sorgusu ve alias yolu', async () => {
+    const { hs, calls } = fakeClient(() => json(200, { id: 'jrn_1', status: 'active' }));
+    const graph = {
+      nodes: [
+        {
+          id: 'n1',
+          type: 'trigger',
+          position: { x: 0, y: 0 },
+          data: { trigger: { kind: 'api' } },
+        },
+        { id: 'n2', type: 'exit', position: { x: 0, y: 120 }, data: {} },
+      ],
+      edges: [{ id: 'e1', source: 'n1', target: 'n2', sourceHandle: 'next' }],
+    };
+    await hs.journeys.create({ name: 'Karşılama', graph });
+    expect(calls[0]!.url).toBe('https://api.test/v1/apps/app_1/journeys');
+    expect(bodyOf(calls[0]!.body)).toEqual({ name: 'Karşılama', graph });
+    await hs.journeys.saveDraft(
+      'jrn/1',
+      { graph, settings: { re_entry: { mode: 'never' } } },
+      'app_9',
+    );
+    expect(calls[1]!.method).toBe('PUT');
+    expect(calls[1]!.url).toBe('https://api.test/v1/apps/app_9/journeys/jrn%2F1/draft');
+    expect(bodyOf(calls[1]!.body)).toEqual({ graph, settings: { re_entry: { mode: 'never' } } });
+    await hs.journeys.updateNode('jrn_1', 'n/2', { data: { label: 'Bitiş' } });
+    expect(calls[2]!.method).toBe('PATCH');
+    expect(calls[2]!.url).toBe('https://api.test/v1/apps/app_1/journeys/jrn_1/nodes/n%2F2');
+    for (const action of ['publish', 'pause', 'resume', 'archive', 'duplicate'] as const) {
+      await hs.journeys[action]('jrn_1');
+    }
+    const lifecycle = calls.slice(3);
+    expect(lifecycle.map((c) => new URL(c.url).pathname.split('/').pop())).toEqual([
+      'publish',
+      'pause',
+      'resume',
+      'archive',
+      'duplicate',
+    ]);
+    expect(lifecycle.every((c) => c.method === 'POST' && c.body === undefined)).toBe(true);
+    await hs.journeys.triggerRun('jrn_1', {
+      alias: { label: 'crm', value: 'c1' },
+      context: { order_id: 'o1' },
+    });
+    expect(calls.at(-1)!.url).toBe('https://api.test/v1/apps/app_1/journeys/jrn_1/runs');
+    expect(bodyOf(calls.at(-1)!.body)).toEqual({
+      alias: { label: 'crm', value: 'c1' },
+      context: { order_id: 'o1' },
+    });
+    await hs.journeys.listRuns('jrn_1', { status: 'waiting', version: 2, limit: 10 });
+    expect(calls.at(-1)!.url).toBe(
+      'https://api.test/v1/apps/app_1/journeys/jrn_1/runs?status=waiting&version=2&limit=10',
+    );
+    await hs.journeys.stats('jrn_1', { version: 3 });
+    expect(calls.at(-1)!.url).toBe('https://api.test/v1/apps/app_1/journeys/jrn_1/stats?version=3');
+    await hs.journeys.exitRun('jrn_1', 'run_1');
+    expect(calls.at(-1)!.method).toBe('DELETE');
+    expect(calls.at(-1)!.url).toBe('https://api.test/v1/apps/app_1/journeys/jrn_1/runs/run_1');
+    await hs.journeys.listForUser('external_id', 'u 1');
+    expect(calls.at(-1)!.url).toBe(
+      'https://api.test/v1/apps/app_1/users/by/external_id/u%201/journeys',
+    );
+  });
+
   it('paginate: next_cursor ile tüm sayfaları dolaşır', async () => {
     const { hs, calls } = fakeClient((call) =>
       new URL(call.url).searchParams.get('cursor') === 'c2'

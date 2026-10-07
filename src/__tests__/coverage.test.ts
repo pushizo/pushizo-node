@@ -199,6 +199,33 @@ const TABLE: Record<string, (hs: HeroSignal) => Promise<unknown>> = {
   'DELETE /v1/apps/{appId}/in-app-messages/{messageId}': (hs) => hs.inAppMessages.delete('iam_1'),
   'POST /v1/apps/{appId}/in-app-messages/{messageId}/status': (hs) =>
     hs.inAppMessages.setStatus('iam_1', 'active'),
+  // journey'ler
+  'GET /v1/apps/{appId}/journeys': (hs) => hs.journeys.list(),
+  'POST /v1/apps/{appId}/journeys': (hs) => hs.journeys.create({ name: 'Karşılama' }),
+  'GET /v1/apps/{appId}/journeys/{journeyId}': (hs) => hs.journeys.get('jrn_1'),
+  'PATCH /v1/apps/{appId}/journeys/{journeyId}': (hs) =>
+    hs.journeys.update('jrn_1', { name: 'Yeni ad' }),
+  'DELETE /v1/apps/{appId}/journeys/{journeyId}': (hs) => hs.journeys.delete('jrn_1'),
+  'PUT /v1/apps/{appId}/journeys/{journeyId}/draft': (hs) =>
+    hs.journeys.saveDraft('jrn_1', { graph: { nodes: [], edges: [] } }),
+  'PATCH /v1/apps/{appId}/journeys/{journeyId}/nodes/{nodeId}': (hs) =>
+    hs.journeys.updateNode('jrn_1', 'n1', { position: { x: 0, y: 0 } }),
+  'GET /v1/apps/{appId}/journeys/{journeyId}/versions': (hs) => hs.journeys.versions('jrn_1'),
+  'POST /v1/apps/{appId}/journeys/{journeyId}/publish': (hs) => hs.journeys.publish('jrn_1'),
+  'POST /v1/apps/{appId}/journeys/{journeyId}/pause': (hs) => hs.journeys.pause('jrn_1'),
+  'POST /v1/apps/{appId}/journeys/{journeyId}/resume': (hs) => hs.journeys.resume('jrn_1'),
+  'POST /v1/apps/{appId}/journeys/{journeyId}/archive': (hs) => hs.journeys.archive('jrn_1'),
+  'POST /v1/apps/{appId}/journeys/{journeyId}/duplicate': (hs) => hs.journeys.duplicate('jrn_1'),
+  'GET /v1/apps/{appId}/journeys/{journeyId}/stats': (hs) => hs.journeys.stats('jrn_1'),
+  'GET /v1/apps/{appId}/journeys/{journeyId}/runs': (hs) => hs.journeys.listRuns('jrn_1'),
+  'POST /v1/apps/{appId}/journeys/{journeyId}/runs': (hs) =>
+    hs.journeys.triggerRun('jrn_1', { external_id: 'u1' }),
+  'GET /v1/apps/{appId}/journeys/{journeyId}/runs/{runId}': (hs) =>
+    hs.journeys.getRun('jrn_1', 'run_1'),
+  'DELETE /v1/apps/{appId}/journeys/{journeyId}/runs/{runId}': (hs) =>
+    hs.journeys.exitRun('jrn_1', 'run_1'),
+  'GET /v1/apps/{appId}/users/by/{label}/{value}/journeys': (hs) =>
+    hs.journeys.listForUser('external_id', 'u1'),
 };
 
 /** `/v1/apps/{appId}/x/{id}` → ^/v1/apps/[^/]+/x/[^/]+$ */
@@ -213,8 +240,8 @@ function templateRegex(template: string): RegExp {
 describe('OpenAPI kapsamı (Node SDK)', () => {
   const operations = publicOperations();
 
-  it('spec en az 112 public işlem içerir ve her işlem tabloda bir SDK metoduna eşlenir', () => {
-    expect(operations.length).toBeGreaterThanOrEqual(112);
+  it('spec en az 131 public işlem içerir ve her işlem tabloda bir SDK metoduna eşlenir', () => {
+    expect(operations.length).toBeGreaterThanOrEqual(131);
     const missing = operations.filter((op) => !(op in TABLE));
     expect(missing).toEqual([]);
     const stale = Object.keys(TABLE).filter((op) => !operations.includes(op));

@@ -7,6 +7,7 @@ import type { ResourceContext } from './resources/context.js';
 import { createExports, createImports } from './resources/data-transfer.js';
 import { createInAppMessages } from './resources/in-app-messages.js';
 import { createInbox } from './resources/inbox.js';
+import { createJourneys } from './resources/journeys.js';
 import { createSegments } from './resources/segments.js';
 import { createTemplates } from './resources/templates.js';
 import type {
@@ -543,6 +544,8 @@ export class HeroSignal {
   readonly templates = createTemplates(this.resourceContext());
   /** Kampanyalar: CRUD, yaşam döngüsü, istatistik, teslimat ve mesajlar. */
   readonly campaigns = createCampaigns(this.resourceContext());
+  /** Journey'ler: taslak graf, yayın/sürümler, yaşam döngüsü, istatistik ve çalıştırmalar. */
+  readonly journeys = createJourneys(this.resourceContext());
   /** Uygulama içi mesajlar. */
   readonly inAppMessages = createInAppMessages(this.resourceContext());
   /** Kullanıcı bildirim kutusu (alias ile). */

@@ -108,6 +108,17 @@ export type RenderPreview = Schemas['RenderPreview'];
 export type Campaign = Schemas['Campaign'];
 export type CampaignPage = Schemas['CampaignPage'];
 export type CampaignStats = Schemas['CampaignStats'];
+export type Journey = Schemas['Journey'];
+export type JourneyPage = Schemas['JourneyPage'];
+export type JourneyDetail = Schemas['JourneyDetail'];
+export type JourneyVersionList = Schemas['JourneyVersionList'];
+export type JourneyPublishResult = Schemas['JourneyPublishResult'];
+export type JourneyRun = Schemas['JourneyRun'];
+export type JourneyRunPage = Schemas['JourneyRunPage'];
+export type JourneyRunDetail = Schemas['JourneyRunDetail'];
+export type JourneyTriggerResult = Schemas['JourneyTriggerResult'];
+export type JourneyStats = Schemas['JourneyStats'];
+export type UserJourneyRuns = Schemas['UserJourneyRuns'];
 export type InAppMessage = Schemas['InAppMessage'];
 export type InAppMessagePage = Schemas['InAppMessagePage'];
 export type InboxItem = Schemas['InboxItem'];
@@ -196,6 +207,18 @@ export type UpdateCampaignInput = Relax<
 export type ScheduleCampaignInput = JsonBody<
   '/v1/apps/{appId}/campaigns/{campaignId}/schedule',
   'post'
+>;
+export type CreateJourneyInput = Relax<JsonBody<'/v1/apps/{appId}/journeys', 'post'>>;
+export type UpdateJourneyInput = JsonBody<'/v1/apps/{appId}/journeys/{journeyId}', 'patch'>;
+export type SaveJourneyDraftInput = Relax<
+  JsonBody<'/v1/apps/{appId}/journeys/{journeyId}/draft', 'put'>
+>;
+export type UpdateJourneyNodeInput = Relax<
+  JsonBody<'/v1/apps/{appId}/journeys/{journeyId}/nodes/{nodeId}', 'patch'>
+>;
+/** Kullanıcı `external_id`, `user_id` veya `alias` ile seçilir; `context` journey değişkenleridir. */
+export type TriggerJourneyRunInput = Relax<
+  JsonBody<'/v1/apps/{appId}/journeys/{journeyId}/runs', 'post'>
 >;
 export type CreateInAppMessageInput = Relax<JsonBody<'/v1/apps/{appId}/in-app-messages', 'post'>>;
 export type UpdateInAppMessageInput = Relax<
