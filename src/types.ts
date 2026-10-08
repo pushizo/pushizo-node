@@ -210,10 +210,7 @@ export type CreateCampaignInput = Relax<JsonBody<'/v1/apps/{appId}/campaigns', '
 export type UpdateCampaignInput = Relax<
   JsonBody<'/v1/apps/{appId}/campaigns/{campaignId}', 'patch'>
 >;
-export type SelectWinnerInput = JsonBody<
-  '/v1/apps/{appId}/campaigns/{campaignId}/winner',
-  'post'
->;
+export type SelectWinnerInput = JsonBody<'/v1/apps/{appId}/campaigns/{campaignId}/winner', 'post'>;
 export type CreateCategoryInput = Relax<JsonBody<'/v1/apps/{appId}/categories', 'post'>>;
 export type UpdateCategoryInput = Relax<
   JsonBody<'/v1/apps/{appId}/categories/{categoryId}', 'patch'>
