@@ -7,6 +7,7 @@ import type {
   RenderTemplateInput,
   Template,
   TemplatePage,
+  TemplateStats,
   TemplateVersionList,
   UpdateTemplateInput,
 } from '../types.js';
@@ -35,6 +36,9 @@ export function createTemplates(ctx: ResourceContext) {
         path: `${one(templateId, appId)}/copy_to_app`,
         body,
       }),
+    /** Şablonu kullanan mesajların toplu istatistiği (gönderim, açılma, tıklama, son kullanım). */
+    stats: (templateId: string, appId?: string) =>
+      ctx.http.request<TemplateStats>({ method: 'GET', path: `${one(templateId, appId)}/stats` }),
     versions: (templateId: string, appId?: string) =>
       ctx.http.request<TemplateVersionList>({
         method: 'GET',

@@ -2,12 +2,14 @@ import type {
   Campaign,
   CampaignPage,
   CampaignStats,
+  CampaignVariantStats,
   CreateCampaignInput,
   DeliveryList,
   MessageList,
   Ok,
   QueryParams,
   ScheduleCampaignInput,
+  SelectWinnerInput,
   UpdateCampaignInput,
 } from '../types.js';
 import { enc, type ResourceContext } from './context.js';
@@ -62,5 +64,18 @@ export function createCampaigns(ctx: ResourceContext) {
     /** Kampanyanın ürettiği mesajlar (tekrarlayan kampanyalarda her çalıştırma bir mesaj). */
     messages: (campaignId: string, appId?: string) =>
       ctx.http.request<MessageList>({ method: 'GET', path: `${one(campaignId, appId)}/messages` }),
+    /** A/B testi: varyant bazlı gönderim/açılma/tıklama/dönüşüm, kontrol grubu ve anlamlılık. */
+    variantStats: (campaignId: string, appId?: string) =>
+      ctx.http.request<CampaignVariantStats>({
+        method: 'GET',
+        path: `${one(campaignId, appId)}/variants/stats`,
+      }),
+    /** A/B testinde kazananı elle seçer; kalan kitleye kazanan varyant gönderilir. */
+    selectWinner: (campaignId: string, body: SelectWinnerInput, appId?: string) =>
+      ctx.http.request<Campaign>({
+        method: 'POST',
+        path: `${one(campaignId, appId)}/winner`,
+        body,
+      }),
   };
 }

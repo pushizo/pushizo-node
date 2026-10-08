@@ -8,6 +8,7 @@ import { createExports, createImports } from './resources/data-transfer.js';
 import { createInAppMessages } from './resources/in-app-messages.js';
 import { createInbox } from './resources/inbox.js';
 import { createJourneys } from './resources/journeys.js';
+import { createPreferences } from './resources/preferences.js';
 import { createSegments } from './resources/segments.js';
 import { createTemplates } from './resources/templates.js';
 import type {
@@ -548,6 +549,8 @@ export class HeroSignal {
   readonly journeys = createJourneys(this.resourceContext());
   /** Uygulama içi mesajlar. */
   readonly inAppMessages = createInAppMessages(this.resourceContext());
+  /** Mesaj kategorileri ve kullanıcı tercihleri (tercih merkezi). */
+  readonly preferences = createPreferences(this.resourceContext());
   /** Kullanıcı bildirim kutusu (alias ile). */
   readonly inbox = createInbox(this.resourceContext());
   /** Analitik raporları (JSON veya `format: 'csv'`). */
