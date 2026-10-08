@@ -192,8 +192,7 @@ const TABLE: Record<string, (hs: HeroSignal) => Promise<unknown>> = {
     hs.preferences.createCategory({ key: 'marketing', name: { tr: 'Pazarlama' } }),
   'PATCH /v1/apps/{appId}/categories/{categoryId}': (hs) =>
     hs.preferences.updateCategory('cat_1', { position: 1 }),
-  'DELETE /v1/apps/{appId}/categories/{categoryId}': (hs) =>
-    hs.preferences.deleteCategory('cat_1'),
+  'DELETE /v1/apps/{appId}/categories/{categoryId}': (hs) => hs.preferences.deleteCategory('cat_1'),
   'GET /v1/apps/{appId}/users/by/{label}/{value}/preferences': (hs) =>
     hs.preferences.getUser('external_id', 'u1'),
   'PUT /v1/apps/{appId}/users/by/{label}/{value}/preferences': (hs) =>
