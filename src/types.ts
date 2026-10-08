@@ -104,10 +104,12 @@ export type SegmentEstimate = Schemas['SegmentEstimate'];
 export type Template = Schemas['Template'];
 export type TemplatePage = Schemas['TemplatePage'];
 export type TemplateVersionList = Schemas['TemplateVersionList'];
+export type TemplateStats = Schemas['TemplateStats'];
 export type RenderPreview = Schemas['RenderPreview'];
 export type Campaign = Schemas['Campaign'];
 export type CampaignPage = Schemas['CampaignPage'];
 export type CampaignStats = Schemas['CampaignStats'];
+export type CampaignVariantStats = Schemas['CampaignVariantStats'];
 export type Journey = Schemas['Journey'];
 export type JourneyPage = Schemas['JourneyPage'];
 export type JourneyDetail = Schemas['JourneyDetail'];
@@ -132,6 +134,10 @@ export type ConversionsReport = Schemas['ConversionsReport'];
 export type FunnelReport = Schemas['FunnelReport'];
 export type ProvidersReport = Schemas['ProvidersReport'];
 export type EngagementReport = Schemas['EngagementReport'];
+export type RetentionReport = Schemas['RetentionReport'];
+export type MessageCategory = Schemas['MessageCategory'];
+export type MessageCategoryList = Schemas['MessageCategoryList'];
+export type UserPreferences = Schemas['UserPreferences'];
 export type Webhook = Schemas['Webhook'];
 export type WebhookList = Schemas['WebhookList'];
 export type WebhookWithSecret = Schemas['WebhookWithSecret'];
@@ -203,6 +209,18 @@ export type RenderTemplateInput = WithDefaults<
 export type CreateCampaignInput = Relax<JsonBody<'/v1/apps/{appId}/campaigns', 'post'>>;
 export type UpdateCampaignInput = Relax<
   JsonBody<'/v1/apps/{appId}/campaigns/{campaignId}', 'patch'>
+>;
+export type SelectWinnerInput = JsonBody<
+  '/v1/apps/{appId}/campaigns/{campaignId}/winner',
+  'post'
+>;
+export type CreateCategoryInput = Relax<JsonBody<'/v1/apps/{appId}/categories', 'post'>>;
+export type UpdateCategoryInput = Relax<
+  JsonBody<'/v1/apps/{appId}/categories/{categoryId}', 'patch'>
+>;
+export type SetPreferencesInput = JsonBody<
+  '/v1/apps/{appId}/users/by/{label}/{value}/preferences',
+  'put'
 >;
 export type ScheduleCampaignInput = JsonBody<
   '/v1/apps/{appId}/campaigns/{campaignId}/schedule',

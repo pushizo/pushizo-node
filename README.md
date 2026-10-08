@@ -43,11 +43,12 @@ Her public API işlemi (`/sdk/v1` hariç) bir SDK metoduna karşılık gelir; e�
 | `inbox` | `list`, `readAll`, `read`, `archive` |
 | `events` | `send`, `listDefinitions`, `getDefinition`, `updateDefinition` |
 | `segments` | `list`, `create`, `preview`, `get`, `update`, `delete`, `usedBy`, `estimate` |
-| `templates` | `list`, `create`, `get`, `update`, `delete`, `copyToApp`, `versions`, `render` |
-| `campaigns` | `list`, `create`, `get`, `update`, `delete`, `schedule`, `send`, `pause`, `resume`, `cancel`, `duplicate`, `approve`, `stats`, `deliveries`, `resendFailed`, `messages` |
+| `templates` | `list`, `create`, `get`, `update`, `delete`, `copyToApp`, `versions`, `render`, `stats` |
+| `campaigns` | `list`, `create`, `get`, `update`, `delete`, `schedule`, `send`, `pause`, `resume`, `cancel`, `duplicate`, `approve`, `stats`, `deliveries`, `resendFailed`, `messages`, `variantStats`, `selectWinner` |
 | `journeys` | `list`, `create`, `get`, `update`, `delete`, `saveDraft`, `updateNode`, `versions`, `publish`, `pause`, `resume`, `archive`, `duplicate`, `stats`, `listRuns`, `triggerRun`, `getRun`, `exitRun`, `listForUser` |
 | `inAppMessages` | `list`, `create`, `get`, `update`, `delete`, `setStatus` |
-| `analytics` | `overview`, `messages`, `subscriptions`, `events`, `conversions`, `funnel`, `providers`, `engagement` |
+| `preferences` | `listCategories`, `createCategory`, `updateCategory`, `deleteCategory`, `getUser`, `setUser` |
+| `analytics` | `overview`, `messages`, `subscriptions`, `events`, `conversions`, `funnel`, `providers`, `engagement`, `retention` |
 | `exports` | `create`, `list`, `get` |
 | `imports` | `create` (multipart CSV), `list`, `get` |
 | `channels` | `list`, `upsert`, `validate` |
@@ -99,6 +100,31 @@ await hs.subscriptions.updateByToken('email', 'ayse@example.com', { status: 'uns
 
 // API anahtarı: düz anahtar yalnızca bu yanıtta döner, loglamayın
 const created = await hs.apiKeys.create({ name: 'ci', scopes: ['notifications:write'] });
+```
+
+## A/B testi ve tercihler
+
+```ts
+// Kampanya varyantları `variants` ile tanımlanır; `ab_test.winner` otomatik kazanan seçimini açar.
+const cmp = await hs.campaigns.create({
+  name: 'Bahar',
+  variants: [
+    { name: 'A', weight_percent: 45, content: { contents: { tr: 'Bahar indirimi' } } },
+    { name: 'B', weight_percent: 45, content: { contents: { tr: '%20 indirim' } } },
+    { name: 'Kontrol', weight_percent: 10, is_control: true },
+  ],
+  ab_test: { enabled: true, test_percentage: 30, winner: { mode: 'auto', metric: 'click_rate', evaluate_after_minutes: 120 } },
+});
+const stats = await hs.campaigns.variantStats(cmp.id); // varyant bazlı oranlar + anlamlılık
+await hs.campaigns.selectWinner(cmp.id, { variant_id: stats.variants[0]!.variant_id }); // elle seçim
+
+// Kategoriler ve kullanıcı tercihleri (kategoriye kapalı kullanıcıya o kategori gönderilmez)
+await hs.preferences.createCategory({ key: 'marketing', name: { tr: 'Pazarlama', en: 'Marketing' } });
+await hs.preferences.setUser('external_id', 'u-1', {
+  preferences: [{ category: 'marketing', channel: 'email', opted_in: false }],
+});
+await hs.templates.stats('tpl_1');
+await hs.analytics.retention({ weeks: 8 });
 ```
 
 ## Journey'ler

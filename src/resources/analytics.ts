@@ -9,6 +9,7 @@ import type {
   OverviewStats,
   ProvidersReport,
   QueryParams,
+  RetentionReport,
   SubscriptionsReport,
 } from '../types.js';
 import type { ResourceContext } from './context.js';
@@ -51,6 +52,8 @@ export function createAnalytics(ctx: ResourceContext) {
     conversions: report<'/v1/apps/{appId}/analytics/conversions', ConversionsReport>('conversions'),
     providers: report<'/v1/apps/{appId}/analytics/providers', ProvidersReport>('providers'),
     engagement: report<'/v1/apps/{appId}/analytics/engagement', EngagementReport>('engagement'),
+    /** Retention kohortu: ilk görülme haftası × sonraki haftalarda aktiflik oranı (`weeks`). */
+    retention: report<'/v1/apps/{appId}/analytics/retention', RetentionReport>('retention'),
     /** Sıralı adımlı huni raporu (`window_hours` içinde tamamlanan adımlar). */
     funnel: <F extends ReportFormat = 'json'>(
       body: Omit<FunnelInput, 'format'> & { format?: F },

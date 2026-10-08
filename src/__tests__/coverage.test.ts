@@ -128,6 +128,7 @@ const TABLE: Record<string, (hs: HeroSignal) => Promise<unknown>> = {
     hs.analytics.funnel({ steps: [{ name: 'a' }, { name: 'b' }] }),
   'GET /v1/apps/{appId}/analytics/providers': (hs) => hs.analytics.providers(),
   'GET /v1/apps/{appId}/analytics/engagement': (hs) => hs.analytics.engagement(),
+  'GET /v1/apps/{appId}/analytics/retention': (hs) => hs.analytics.retention({ weeks: 8 }),
   // dışa/içe aktarma
   'POST /v1/apps/{appId}/exports': (hs) => hs.exports.create({ type: 'users' }),
   'GET /v1/apps/{appId}/exports': (hs) => hs.exports.list(),
@@ -158,6 +159,7 @@ const TABLE: Record<string, (hs: HeroSignal) => Promise<unknown>> = {
   'POST /v1/apps/{appId}/templates/{templateId}/copy_to_app': (hs) =>
     hs.templates.copyToApp('tpl_1', { target_app_id: 'app_2' }),
   'GET /v1/apps/{appId}/templates/{templateId}/versions': (hs) => hs.templates.versions('tpl_1'),
+  'GET /v1/apps/{appId}/templates/{templateId}/stats': (hs) => hs.templates.stats('tpl_1'),
   'POST /v1/apps/{appId}/templates/{templateId}/render': (hs) => hs.templates.render('tpl_1'),
   // kampanyalar
   'GET /v1/apps/{appId}/campaigns': (hs) => hs.campaigns.list(),
@@ -180,6 +182,24 @@ const TABLE: Record<string, (hs: HeroSignal) => Promise<unknown>> = {
   'POST /v1/apps/{appId}/campaigns/{campaignId}/resend-failed': (hs) =>
     hs.campaigns.resendFailed('cmp_1'),
   'GET /v1/apps/{appId}/campaigns/{campaignId}/messages': (hs) => hs.campaigns.messages('cmp_1'),
+  'GET /v1/apps/{appId}/campaigns/{campaignId}/variants/stats': (hs) =>
+    hs.campaigns.variantStats('cmp_1'),
+  'POST /v1/apps/{appId}/campaigns/{campaignId}/winner': (hs) =>
+    hs.campaigns.selectWinner('cmp_1', { variant_id: 'cvr_1' }),
+  // kategoriler ve tercihler
+  'GET /v1/apps/{appId}/categories': (hs) => hs.preferences.listCategories(),
+  'POST /v1/apps/{appId}/categories': (hs) =>
+    hs.preferences.createCategory({ key: 'marketing', name: { tr: 'Pazarlama' } }),
+  'PATCH /v1/apps/{appId}/categories/{categoryId}': (hs) =>
+    hs.preferences.updateCategory('cat_1', { position: 1 }),
+  'DELETE /v1/apps/{appId}/categories/{categoryId}': (hs) =>
+    hs.preferences.deleteCategory('cat_1'),
+  'GET /v1/apps/{appId}/users/by/{label}/{value}/preferences': (hs) =>
+    hs.preferences.getUser('external_id', 'u1'),
+  'PUT /v1/apps/{appId}/users/by/{label}/{value}/preferences': (hs) =>
+    hs.preferences.setUser('external_id', 'u1', {
+      preferences: [{ category: 'marketing', opted_in: false }],
+    }),
   // suppression list
   'GET /v1/apps/{appId}/suppressions': (hs) => hs.suppressions.list(),
   'POST /v1/apps/{appId}/suppressions': (hs) =>
@@ -240,8 +260,8 @@ function templateRegex(template: string): RegExp {
 describe('OpenAPI kapsamı (Node SDK)', () => {
   const operations = publicOperations();
 
-  it('spec en az 131 public işlem içerir ve her işlem tabloda bir SDK metoduna eşlenir', () => {
-    expect(operations.length).toBeGreaterThanOrEqual(131);
+  it('spec en az 141 public işlem içerir ve her işlem tabloda bir SDK metoduna eşlenir', () => {
+    expect(operations.length).toBeGreaterThanOrEqual(141);
     const missing = operations.filter((op) => !(op in TABLE));
     expect(missing).toEqual([]);
     const stale = Object.keys(TABLE).filter((op) => !operations.includes(op));
