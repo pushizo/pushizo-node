@@ -38,6 +38,30 @@ export type CreateSuppressionInput = JsonBody<'/v1/apps/{appId}/suppressions', '
 export type SuppressionChannel = Suppression['channel'];
 export type SuppressionReason = Suppression['reason'];
 export type CreateWebhookInput = JsonBody<'/v1/apps/{appId}/webhooks', 'post'>;
+export type RecipientEstimate = Schemas['RecipientEstimate'];
+export type EstimateRecipientsInput = JsonBody<'/v1/notifications/estimate', 'post'>;
+export type UserIdentity = Schemas['UserIdentity'];
+export type UserExport = Schemas['UserExport'];
+export type InboxItem = Schemas['InboxItem'];
+export type InboxPage = Schemas['InboxPage'];
+export type Template = Schemas['Template'];
+export type TemplatePage = Schemas['TemplatePage'];
+export type TemplateVersionList = Schemas['TemplateVersionList'];
+export type RenderPreview = Schemas['RenderPreview'];
+export type CreateTemplateInput = JsonBody<'/v1/apps/{appId}/templates', 'post'>;
+export type UpdateTemplateInput = JsonBody<'/v1/apps/{appId}/templates/{templateId}', 'patch'>;
+export type RenderTemplateInput = JsonBody<'/v1/apps/{appId}/templates/{templateId}/render', 'post'>;
+export type CopyTemplateInput = JsonBody<'/v1/apps/{appId}/templates/{templateId}/copy', 'post'>;
+export type InAppMessage = Schemas['InAppMessage'];
+export type InAppMessagePage = Schemas['InAppMessagePage'];
+export type CreateInAppInput = JsonBody<'/v1/apps/{appId}/in-app-messages', 'post'>;
+export type UpdateInAppInput = JsonBody<'/v1/apps/{appId}/in-app-messages/{messageId}', 'patch'>;
+export type InAppStatus = JsonBody<'/v1/apps/{appId}/in-app-messages/{messageId}/status', 'post'>['status'];
+export type ApiKey = Schemas['ApiKey'];
+export type ApiKeyList = Schemas['ApiKeyList'];
+export type CreatedApiKey = Schemas['CreatedApiKey'];
+export type CreateApiKeyInput = JsonBody<'/v1/apps/{appId}/api-keys', 'post'>;
+export type UpdateApiKeyInput = JsonBody<'/v1/apps/{appId}/api-keys/{keyId}', 'patch'>;
 export type UpdateWebhookInput = JsonBody<'/v1/apps/{appId}/webhooks/{webhookId}', 'patch'>;
 
 export type CreateNotificationInput = JsonBody<'/v1/notifications', 'post'>;
@@ -177,6 +201,23 @@ export class HeroSignal {
         path: `/v1/notifications/${enc(messageId)}/deliveries`,
         query: { app_id: this.app(appId), ...params },
       }),
+    /**
+     * Kaydedilmemiş hedef için alıcı sayımı (gönderim yapmaz, abonelik oluşturmaz). `channels` verilmezse tüm
+     * kanallar sayılır; `unknown_contacts` henüz aboneliği olmayan `email_to`/`include_phone_numbers` adresleridir.
+     */
+    estimate: (target: EstimateRecipientsInput['target'], appId?: string) =>
+      this.http.request<RecipientEstimate>({
+        method: 'POST',
+        path: '/v1/notifications/estimate',
+        body: { app_id: this.app(appId), target },
+      }),
+    /** Mesaj olayları (teslim, açılma, tıklama, bounce…) CSV işi; tamamlanınca `download_url` dolar. */
+    exportEvents: (messageId: string, appId?: string) =>
+      this.http.request<ExportJob>({
+        method: 'POST',
+        path: `/v1/notifications/${enc(messageId)}/export-events`,
+        query: { app_id: this.app(appId) },
+      }),
   };
 
   readonly users = {
@@ -227,6 +268,44 @@ export class HeroSignal {
         path: `/v1/apps/${enc(this.app(appId))}/users/by/${enc(label)}/${enc(value)}/subscriptions`,
         body,
       }),
+    /** Kullanıcının tüm kimlikleri: `hs_id`, varsa `external_id` ve özel alias'lar. */
+    identity: (label: string, value: string, appId?: string) =>
+      this.http.request<UserIdentity>({
+        method: 'GET',
+        path: `/v1/apps/${enc(this.app(appId))}/users/by/${enc(label)}/${enc(value)}/identity`,
+      }),
+    /** KVKK/GDPR veri taşınabilirliği: profil, alias, abonelikler ve son olaylar (audit kaydı oluşturur). */
+    export: (label: string, value: string, appId?: string) =>
+      this.http.request<UserExport>({
+        method: 'GET',
+        path: `/v1/apps/${enc(this.app(appId))}/users/by/${enc(label)}/${enc(value)}/export`,
+      }),
+    /** Bildirim kutusu (inbox) öğeleri. */
+    inbox: {
+      list: (
+        label: string,
+        value: string,
+        params: Page & { include_archived?: boolean } = {},
+        appId?: string,
+      ) => {
+        const { include_archived, ...page } = params;
+        return this.http.request<InboxPage>({
+          method: 'GET',
+          path: `/v1/apps/${enc(this.app(appId))}/users/by/${enc(label)}/${enc(value)}/inbox`,
+          query: { ...page, ...(include_archived !== undefined ? { include_archived: String(include_archived) } : {}) },
+        });
+      },
+      markRead: (label: string, value: string, itemId: string, appId?: string) =>
+        this.http.request<InboxItem>({
+          method: 'POST',
+          path: `/v1/apps/${enc(this.app(appId))}/users/by/${enc(label)}/${enc(value)}/inbox/${enc(itemId)}/read`,
+        }),
+      archive: (label: string, value: string, itemId: string, appId?: string) =>
+        this.http.request<{ ok: true }>({
+          method: 'DELETE',
+          path: `/v1/apps/${enc(this.app(appId))}/users/by/${enc(label)}/${enc(value)}/inbox/${enc(itemId)}`,
+        }),
+    },
   };
 
   readonly subscriptions = {
@@ -251,6 +330,24 @@ export class HeroSignal {
         method: 'POST',
         path: `/v1/apps/${enc(this.app(appId))}/subscriptions/${enc(subscriptionId)}/owner`,
         body: { external_id: externalId },
+      }),
+    /** Aboneliğin sahibi kullanıcının kimlikleri (kullanıcısız abonelikte 404). */
+    identity: (subscriptionId: string, appId?: string) =>
+      this.http.request<UserIdentity>({
+        method: 'GET',
+        path: `/v1/apps/${enc(this.app(appId))}/subscriptions/${enc(subscriptionId)}/user/identity`,
+      }),
+    /** Aboneliği kanal + token ile güncelle (APNs/FCM token, e-posta, E.164 telefon; token kanonik biçime getirilir). */
+    updateByToken: (
+      channel: Exclude<Channel, 'web_push'>,
+      token: string,
+      body: PatchSubscriptionInput,
+      appId?: string,
+    ) =>
+      this.http.request<Subscription>({
+        method: 'PATCH',
+        path: `/v1/apps/${enc(this.app(appId))}/subscriptions/by-token/${channel}/${enc(token)}`,
+        body,
       }),
   };
 
@@ -318,6 +415,121 @@ export class HeroSignal {
       this.http.request<{ ok: true }>({
         method: 'DELETE',
         path: `/v1/apps/${enc(this.app(appId))}/suppressions/${enc(suppressionId)}`,
+      }),
+  };
+
+  /** Mesaj şablonları (okuma `analytics:read`, yazma `admin`); içerik `POST /v1/notifications` ile aynı şemadır. */
+  readonly templates = {
+    list: (params: Page & { q?: string; channel?: Channel } = {}, appId?: string) =>
+      this.http.request<TemplatePage>({
+        method: 'GET',
+        path: `/v1/apps/${enc(this.app(appId))}/templates`,
+        query: params,
+      }),
+    get: (templateId: string, appId?: string) =>
+      this.http.request<Template>({
+        method: 'GET',
+        path: `/v1/apps/${enc(this.app(appId))}/templates/${enc(templateId)}`,
+      }),
+    create: (body: CreateTemplateInput, appId?: string) =>
+      this.http.request<Template>({ method: 'POST', path: `/v1/apps/${enc(this.app(appId))}/templates`, body }),
+    /** `content` verilirse yeni sürüm açılır. */
+    update: (templateId: string, body: UpdateTemplateInput, appId?: string) =>
+      this.http.request<Template>({
+        method: 'PATCH',
+        path: `/v1/apps/${enc(this.app(appId))}/templates/${enc(templateId)}`,
+        body,
+      }),
+    delete: (templateId: string, appId?: string) =>
+      this.http.request<{ ok: true }>({
+        method: 'DELETE',
+        path: `/v1/apps/${enc(this.app(appId))}/templates/${enc(templateId)}`,
+      }),
+    versions: (templateId: string, appId?: string) =>
+      this.http.request<TemplateVersionList>({
+        method: 'GET',
+        path: `/v1/apps/${enc(this.app(appId))}/templates/${enc(templateId)}/versions`,
+      }),
+    render: (templateId: string, body: RenderTemplateInput, appId?: string) =>
+      this.http.request<RenderPreview>({
+        method: 'POST',
+        path: `/v1/apps/${enc(this.app(appId))}/templates/${enc(templateId)}/render`,
+        body,
+      }),
+    /** Aynı organizasyondaki başka bir app'e kopyalar (org anahtarı gerekir); hedefte sürüm 1 olur. */
+    copy: (templateId: string, body: CopyTemplateInput, appId?: string) =>
+      this.http.request<Template>({
+        method: 'POST',
+        path: `/v1/apps/${enc(this.app(appId))}/templates/${enc(templateId)}/copy`,
+        body,
+      }),
+  };
+
+  /** In-app mesajlar (okuma `analytics:read`, yazma/yayınlama `admin`). */
+  readonly inAppMessages = {
+    list: (params: Page & { status?: InAppMessage['status'] } = {}, appId?: string) =>
+      this.http.request<InAppMessagePage>({
+        method: 'GET',
+        path: `/v1/apps/${enc(this.app(appId))}/in-app-messages`,
+        query: params,
+      }),
+    get: (messageId: string, appId?: string) =>
+      this.http.request<InAppMessage>({
+        method: 'GET',
+        path: `/v1/apps/${enc(this.app(appId))}/in-app-messages/${enc(messageId)}`,
+      }),
+    /** Taslak olarak oluşturulur; `setStatus(id, 'active')` ile yayınlanır. */
+    create: (body: CreateInAppInput, appId?: string) =>
+      this.http.request<InAppMessage>({
+        method: 'POST',
+        path: `/v1/apps/${enc(this.app(appId))}/in-app-messages`,
+        body,
+      }),
+    update: (messageId: string, body: UpdateInAppInput, appId?: string) =>
+      this.http.request<InAppMessage>({
+        method: 'PATCH',
+        path: `/v1/apps/${enc(this.app(appId))}/in-app-messages/${enc(messageId)}`,
+        body,
+      }),
+    setStatus: (messageId: string, status: InAppStatus, appId?: string) =>
+      this.http.request<InAppMessage>({
+        method: 'POST',
+        path: `/v1/apps/${enc(this.app(appId))}/in-app-messages/${enc(messageId)}/status`,
+        body: { status },
+      }),
+    delete: (messageId: string, appId?: string) =>
+      this.http.request<{ ok: true }>({
+        method: 'DELETE',
+        path: `/v1/apps/${enc(this.app(appId))}/in-app-messages/${enc(messageId)}`,
+      }),
+  };
+
+  /**
+   * App API anahtarları (`admin` kapsamı). Oluşturma ve rotasyonda dönen `key` yalnızca bu yanıtta görünür;
+   * çağıran anahtarın kapsamından geniş anahtar oluşturulamaz.
+   */
+  readonly apiKeys = {
+    list: (appId?: string) =>
+      this.http.request<ApiKeyList>({ method: 'GET', path: `/v1/apps/${enc(this.app(appId))}/api-keys` }),
+    create: (body: CreateApiKeyInput, appId?: string) =>
+      this.http.request<CreatedApiKey>({ method: 'POST', path: `/v1/apps/${enc(this.app(appId))}/api-keys`, body }),
+    /** Ad, kapsam veya IP/CIDR izin listesi (`ip_allowlist`, boş dizi kısıtı kaldırır). */
+    update: (keyId: string, body: UpdateApiKeyInput, appId?: string) =>
+      this.http.request<ApiKey>({
+        method: 'PATCH',
+        path: `/v1/apps/${enc(this.app(appId))}/api-keys/${enc(keyId)}`,
+        body,
+      }),
+    /** Aynı kimlikle yeni değer üretir; eski değer hemen geçersiz olur (401). */
+    rotate: (keyId: string, appId?: string) =>
+      this.http.request<CreatedApiKey>({
+        method: 'POST',
+        path: `/v1/apps/${enc(this.app(appId))}/api-keys/${enc(keyId)}/rotate`,
+      }),
+    delete: (keyId: string, appId?: string) =>
+      this.http.request<{ ok: true }>({
+        method: 'DELETE',
+        path: `/v1/apps/${enc(this.app(appId))}/api-keys/${enc(keyId)}`,
       }),
   };
 

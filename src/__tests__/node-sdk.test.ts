@@ -187,6 +187,66 @@ describe('HeroSignal Node SDK', () => {
       'POST https://api.test/v1/apps/app_1/webhooks/deliveries/whd_1/replay',
     ]);
   });
+
+  it('Faz 10B uçları: sayım, olay CSV, kimlik, dışa aktarım, inbox, token ile güncelleme', async () => {
+    const { hs, calls } = client(() => json(200, {}));
+    await hs.notifications.estimate({ email_to: ['a@example.com'], include_external_ids: ['u1'] });
+    await hs.notifications.exportEvents('msg_1');
+    await hs.users.identity('external_id', 'u 1');
+    await hs.users.export('external_id', 'u1');
+    await hs.users.inbox.list('external_id', 'u1', { limit: 5, include_archived: true });
+    await hs.users.inbox.markRead('external_id', 'u1', 'inb_1');
+    await hs.users.inbox.archive('external_id', 'u1', 'inb_1');
+    await hs.subscriptions.identity('sub_1');
+    await hs.subscriptions.updateByToken('email', 'Ali@Example.com', { status: 'unsubscribed' });
+    expect(calls.map((c) => `${c.method} ${c.url}`)).toEqual([
+      'POST https://api.test/v1/notifications/estimate',
+      'POST https://api.test/v1/notifications/msg_1/export-events?app_id=app_1',
+      'GET https://api.test/v1/apps/app_1/users/by/external_id/u%201/identity',
+      'GET https://api.test/v1/apps/app_1/users/by/external_id/u1/export',
+      'GET https://api.test/v1/apps/app_1/users/by/external_id/u1/inbox?limit=5&include_archived=true',
+      'POST https://api.test/v1/apps/app_1/users/by/external_id/u1/inbox/inb_1/read',
+      'DELETE https://api.test/v1/apps/app_1/users/by/external_id/u1/inbox/inb_1',
+      'GET https://api.test/v1/apps/app_1/subscriptions/sub_1/user/identity',
+      'PATCH https://api.test/v1/apps/app_1/subscriptions/by-token/email/Ali%40Example.com',
+    ]);
+    expect(JSON.parse(calls[0]!.body!)).toEqual({ app_id: 'app_1', target: { email_to: ['a@example.com'], include_external_ids: ['u1'] } });
+    expect(JSON.parse(calls[8]!.body!)).toEqual({ status: 'unsubscribed' });
+  });
+
+  it('şablon, in-app ve API anahtarı kaynakları doğru yolları çağırır', async () => {
+    const { hs, calls } = client(() => json(200, {}));
+    await hs.templates.list({ q: 'hoş', limit: 2 });
+    await hs.templates.create({ name: 'Hoş geldin', content: { contents: { en: 'Hi' } } });
+    await hs.templates.update('tpl_1', { name: 'Yeni' });
+    await hs.templates.versions('tpl_1');
+    await hs.templates.copy('tpl_1', { target_app_id: 'app_2' });
+    await hs.templates.delete('tpl_1');
+    await hs.inAppMessages.list({ status: 'active' });
+    await hs.inAppMessages.setStatus('iam_1', 'paused');
+    await hs.inAppMessages.delete('iam_1');
+    await hs.apiKeys.create({ name: 'CI', scopes: ['notifications:write'] });
+    await hs.apiKeys.update('key_1', { ip_allowlist: ['10.0.0.0/8'] });
+    await hs.apiKeys.rotate('key_1');
+    await hs.apiKeys.delete('key_1');
+    expect(calls.map((c) => `${c.method} ${c.url}`)).toEqual([
+      'GET https://api.test/v1/apps/app_1/templates?q=ho%C5%9F&limit=2',
+      'POST https://api.test/v1/apps/app_1/templates',
+      'PATCH https://api.test/v1/apps/app_1/templates/tpl_1',
+      'GET https://api.test/v1/apps/app_1/templates/tpl_1/versions',
+      'POST https://api.test/v1/apps/app_1/templates/tpl_1/copy',
+      'DELETE https://api.test/v1/apps/app_1/templates/tpl_1',
+      'GET https://api.test/v1/apps/app_1/in-app-messages?status=active',
+      'POST https://api.test/v1/apps/app_1/in-app-messages/iam_1/status',
+      'DELETE https://api.test/v1/apps/app_1/in-app-messages/iam_1',
+      'POST https://api.test/v1/apps/app_1/api-keys',
+      'PATCH https://api.test/v1/apps/app_1/api-keys/key_1',
+      'POST https://api.test/v1/apps/app_1/api-keys/key_1/rotate',
+      'DELETE https://api.test/v1/apps/app_1/api-keys/key_1',
+    ]);
+    expect(JSON.parse(calls[4]!.body!)).toEqual({ target_app_id: 'app_2' });
+    expect(JSON.parse(calls[7]!.body!)).toEqual({ status: 'paused' });
+  });
 });
 
 describe('webhook imza doğrulama (alıcı tarafı)', () => {
