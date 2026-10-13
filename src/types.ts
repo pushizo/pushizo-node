@@ -135,6 +135,7 @@ export type FunnelReport = Schemas['FunnelReport'];
 export type ProvidersReport = Schemas['ProvidersReport'];
 export type EngagementReport = Schemas['EngagementReport'];
 export type RetentionReport = Schemas['RetentionReport'];
+export type UsageReport = Schemas['UsageReport'];
 export type MessageCategory = Schemas['MessageCategory'];
 export type MessageCategoryList = Schemas['MessageCategoryList'];
 export type UserPreferences = Schemas['UserPreferences'];
