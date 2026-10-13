@@ -61,6 +61,7 @@ import type {
   WebhookDeliveryDetail,
   WebhookDeliveryPage,
   WebhookWithSecret,
+  UsageReport,
 } from './types.js';
 
 export { HeroSignalError } from './errors.js';
@@ -183,6 +184,13 @@ export class HeroSignal {
       this.http.request<AuditPage>({
         method: 'GET',
         path: '/v1/organization/audit-logs',
+        query: params,
+      }),
+    /** Organizasyon kullanımı ve plan kotaları (org geneli `analytics:read`/`admin` anahtarı). */
+    usage: (params: QueryParams<'/v1/organization/usage', 'get'> = {}) =>
+      this.http.request<UsageReport>({
+        method: 'GET',
+        path: '/v1/organization/usage',
         query: params,
       }),
   };

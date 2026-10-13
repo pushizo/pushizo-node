@@ -34,6 +34,7 @@ const TABLE: Record<string, (hs: HeroSignal) => Promise<unknown>> = {
   'GET /v1/organization': (hs) => hs.organization.get(),
   'GET /v1/organization/members': (hs) => hs.organization.members(),
   'GET /v1/organization/audit-logs': (hs) => hs.organization.auditLogs({ action: 'app.update' }),
+  'GET /v1/organization/usage': (hs) => hs.organization.usage({ days: 30 }),
   'GET /v1/apps': (hs) => hs.apps.list(),
   'POST /v1/apps': (hs) => hs.apps.create({ name: 'Yeni app' }),
   'GET /v1/apps/{appId}': (hs) => hs.apps.get(),
@@ -259,8 +260,8 @@ function templateRegex(template: string): RegExp {
 describe('OpenAPI kapsamı (Node SDK)', () => {
   const operations = publicOperations();
 
-  it('spec en az 141 public işlem içerir ve her işlem tabloda bir SDK metoduna eşlenir', () => {
-    expect(operations.length).toBeGreaterThanOrEqual(141);
+  it('spec en az 142 public işlem içerir ve her işlem tabloda bir SDK metoduna eşlenir', () => {
+    expect(operations.length).toBeGreaterThanOrEqual(142);
     const missing = operations.filter((op) => !(op in TABLE));
     expect(missing).toEqual([]);
     const stale = Object.keys(TABLE).filter((op) => !operations.includes(op));
