@@ -13,7 +13,7 @@ const hs = new HeroSignal({
   apiKey: process.env.HS_API_KEY!, // hs_live_…
   appId: process.env.HS_APP_ID, // çağrıda appId verilmezse kullanılır
   baseUrl: 'https://api.herosignal.dev', // yerel: http://localhost:4000
-  maxRetries: 3, // 429/5xx ve ağ hatalarında üstel geri çekilme (Retry-After'a uyar)
+  maxRetries: 3, // 429 her metotta; 5xx/ağ hatası GET/PUT/DELETE'te, POST/PATCH'te yalnızca Idempotency-Key varsa veya istek gönderilemediyse
   timeoutMs: 30_000,
   autoIdempotencyKey: true, // notifications.create ve users.upsert için otomatik UUID
 });

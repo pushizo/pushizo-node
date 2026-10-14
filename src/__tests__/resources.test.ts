@@ -188,11 +188,11 @@ describe('Node SDK: OpenAPI eşitliği için eklenen kaynaklar', () => {
     );
   });
 
-  it('import: multipart gövde (type + file), JSON content-type gönderilmez; 5xx sonrası aynı form yeniden gider', async () => {
+  it('import: multipart gövde (type + file), JSON content-type gönderilmez; 429 sonrası aynı form yeniden gider', async () => {
     let n = 0;
     const { hs, calls } = fakeClient(() =>
       ++n === 1
-        ? json(503, { error: { code: 'HS_UNAVAILABLE', message: 'meşgul' } })
+        ? json(429, { error: { code: 'HS_RATE_LIMITED', message: 'meşgul' } })
         : json(200, { id: 'imp_1', status: 'pending' }),
     );
     const result = await hs.imports.create({

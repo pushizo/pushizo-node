@@ -1,4 +1,8 @@
 import { createHmac } from 'node:crypto';
+import { readFileSync } from 'node:fs';
+import { createServer } from 'node:http';
+import type { AddressInfo } from 'node:net';
+import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 import {
   HeroSignal,
@@ -136,6 +140,125 @@ describe('HeroSignal Node SDK', () => {
     expect(() => bare.users.list()).toThrow(/appId/);
   });
 
+  describe('yeniden deneme politikası', () => {
+    const unavailable = () =>
+      json(503, { error: { code: 'HS_SERVICE_UNAVAILABLE', message: 'x' } });
+    /** İlk çağrıda `first`, sonrakilerde 200 döner. */
+    const flaky = (first: () => Response) => {
+      let n = 0;
+      return () => (n++ === 0 ? first() : json(200, { id: 'ok' }));
+    };
+
+    it('anahtarsız POST 503 sonrası yeniden denenmez', async () => {
+      const { hs, calls } = client(flaky(unavailable));
+      await expect(hs.events.send([{ external_id: 'u1', name: 'purchase' }])).rejects.toMatchObject(
+        {
+          status: 503,
+        },
+      );
+      expect(calls).toHaveLength(1);
+
+      const { hs: noAuto, calls: noAutoCalls } = client(flaky(unavailable), {
+        autoIdempotencyKey: false,
+      });
+      await expect(
+        noAuto.notifications.create({ target: { all: true }, contents: { en: 'x' } }),
+      ).rejects.toMatchObject({
+        status: 503,
+      });
+      expect(noAutoCalls).toHaveLength(1);
+    });
+
+    it('zaman aşımı/okuma hatasında anahtarsız POST tekrarlanmaz (istek gitmiş olabilir)', async () => {
+      const { hs, calls } = client(() => {
+        throw new DOMException('This operation was aborted', 'AbortError');
+      });
+      await expect(hs.events.send([])).rejects.toMatchObject({ status: 0, code: 'NETWORK' });
+      expect(calls).toHaveLength(1);
+    });
+
+    it('Idempotency-Key taşıyan POST 503 sonrası aynı anahtarla yeniden denenir', async () => {
+      const { hs, calls } = client(flaky(unavailable));
+      await hs.users.upsert({ external_id: 'u1' }, undefined, {
+        idempotencyKey: 'usr-1',
+      });
+      expect(calls).toHaveLength(2);
+      expect(calls.map((c) => c.headers['idempotency-key'])).toEqual(['usr-1', 'usr-1']);
+
+      // Otomatik anahtar (gövdedeki idempotency_key) da sayılır.
+      const { hs: auto, calls: autoCalls } = client(flaky(unavailable));
+      await auto.notifications.create({ target: { all: true }, contents: { en: 'x' } });
+      expect(autoCalls).toHaveLength(2);
+      const keys = autoCalls.map(
+        (c) => (JSON.parse(c.body!) as { idempotency_key: string }).idempotency_key,
+      );
+      expect(new Set(keys).size).toBe(1);
+    });
+
+    it('GET ve DELETE 503 sonrası yeniden denenir', async () => {
+      const { hs, calls } = client(flaky(unavailable));
+      await hs.notifications.get('msg_1');
+      expect(calls.map((c) => c.method)).toEqual(['GET', 'GET']);
+
+      const { hs: del, calls: delCalls } = client(flaky(unavailable));
+      await del.webhooks.delete('whk_1');
+      expect(delCalls.map((c) => c.method)).toEqual(['DELETE', 'DELETE']);
+    });
+
+    it('429 alan anahtarsız POST Retry-After sonrası yeniden denenir', async () => {
+      const waits: number[] = [];
+      const { hs, calls } = client(
+        flaky(() =>
+          json(429, { error: { code: 'HS_RATE_LIMITED', message: 'x' } }, { 'retry-after': '2' }),
+        ),
+        { sleep: async (ms) => void waits.push(ms) },
+      );
+      await hs.events.send([]);
+      expect(calls).toHaveLength(2);
+      expect(waits).toEqual([2000]);
+    });
+
+    it('bağlantı kurulamayan (ECONNREFUSED) POST yeniden denenir', async () => {
+      const refused = Object.assign(new TypeError('fetch failed'), {
+        cause: Object.assign(new Error('connect ECONNREFUSED 127.0.0.1:1'), {
+          code: 'ECONNREFUSED',
+        }),
+      });
+      let n = 0;
+      const { hs, calls } = client(() => {
+        if (n++ === 0) throw refused;
+        return json(200, { accepted: 1 });
+      });
+      await expect(hs.events.send([])).resolves.toEqual({ accepted: 1 });
+      expect(calls).toHaveLength(2);
+    });
+
+    it('gerçek bağlantı reddinde (kapalı port) POST yeniden denenir', async () => {
+      const server = createServer();
+      await new Promise<void>((resolve) => server.listen(0, '127.0.0.1', resolve));
+      const { port } = server.address() as AddressInfo;
+      await new Promise<void>((resolve) => server.close(() => resolve()));
+      const waits: number[] = [];
+      const hs = new HeroSignal({
+        apiKey: 'k',
+        appId: 'app_1',
+        baseUrl: `http://127.0.0.1:${port}`,
+        maxRetries: 1,
+        sleep: async (ms) => void waits.push(ms),
+      });
+      await expect(hs.events.send([])).rejects.toMatchObject({ status: 0, code: 'NETWORK' });
+      expect(waits).toEqual([300]);
+    }, 20_000);
+  });
+
+  it('inAppMessages.selectWinner A/B kazananını POST eder', async () => {
+    const { hs, calls } = client(() => json(200, { id: 'iam_1' }));
+    await hs.inAppMessages.selectWinner('iam_1', 'b');
+    expect(calls[0]!.method).toBe('POST');
+    expect(calls[0]!.url).toBe('https://api.test/v1/apps/app_1/in-app-messages/iam_1/winner');
+    expect(JSON.parse(calls[0]!.body!)).toEqual({ variant_id: 'b' });
+  });
+
   it('notifications.list kind filtresi ve history dışa aktarma işi', async () => {
     const job = {
       id: 'exp_1',
@@ -189,61 +312,55 @@ describe('HeroSignal Node SDK', () => {
   });
 });
 
-describe('webhook imza doğrulama (alıcı tarafı)', () => {
-  const secret = 'whsec_test_secret';
-  const body = JSON.stringify({
-    id: 'whe_1',
-    type: 'user.created',
-    created_at: '2026-10-07T00:00:00Z',
-    app_id: 'app_1',
-    data: { user: { id: 'usr_1' } },
-  });
-  const t = 1_800_000_000;
-  const sign = (s: string, ts = t, payload = body) =>
-    createHmac('sha256', s).update(`${ts}.${payload}`).digest('hex');
+describe('webhook imza doğrulama (alıcı tarafı, ortak vektörler)', () => {
+  interface VectorCase {
+    name: string;
+    toleranceSeconds: number;
+    payload: string;
+    header: string | null;
+    secrets: string[];
+    now: number;
+    expected: { ok: true; timestamp: number } | { ok: false; reason: string };
+    events?: number;
+  }
+  const vectors = JSON.parse(
+    readFileSync(
+      fileURLToPath(new URL('../../../testdata/webhook-signature-vectors.json', import.meta.url)),
+      'utf8',
+    ),
+  ) as { cases: VectorCase[] };
 
-  it('geçerli imza; gövde/secret değişirse reddedilir', () => {
-    const header = `t=${t},v1=${sign(secret)}`;
-    expect(verifyWebhookSignature({ payload: body, header, secret, now: t * 1000 })).toEqual({
-      ok: true,
-      timestamp: t,
-    });
-    expect(
-      verifyWebhookSignature({ payload: Buffer.from(body), header, secret, now: t * 1000 }).ok,
-    ).toBe(true);
-    expect(verifyWebhookSignature({ payload: `${body} `, header, secret, now: t * 1000 })).toEqual({
-      ok: false,
-      reason: 'signature_mismatch',
-    });
-    expect(
-      verifyWebhookSignature({ payload: body, header, secret: 'baska', now: t * 1000 }).ok,
-    ).toBe(false);
+  it('vektör dosyası yüklendi', () => {
+    expect(vectors.cases.length).toBeGreaterThan(10);
   });
 
-  it('replay: 5 dakikadan eski zaman damgası reddedilir', () => {
-    const header = `t=${t},v1=${sign(secret)}`;
+  it.each(vectors.cases.map((c) => [c.name, c] as const))('%s', (_name, c) => {
+    const secret = c.secrets.length === 1 ? c.secrets[0]! : c.secrets;
+    const options = {
+      payload: c.payload,
+      header: c.header,
+      secret,
+      toleranceSeconds: c.toleranceSeconds,
+      now: c.now * 1000,
+    };
+    expect(verifyWebhookSignature(options)).toEqual(c.expected);
+    // Aynı vektör Buffer girdisiyle ve dizi başlıkla da aynı sonucu vermeli.
     expect(
-      verifyWebhookSignature({ payload: body, header, secret, now: (t + 301) * 1000 }),
-    ).toEqual({
-      ok: false,
-      reason: 'timestamp_out_of_tolerance',
-    });
-  });
-
-  it('rotasyon: iki v1 imzası, eski veya yeni secret kabul edilir; olaylar ayrıştırılır', () => {
-    const header = `t=${t},v1=${sign('yeni')},v1=${sign(secret)}`;
-    expect(verifyWebhookSignature({ payload: body, header, secret, now: t * 1000 }).ok).toBe(true);
-    expect(
-      constructWebhookEvents({ payload: body, header, secret: ['yeni'], now: t * 1000 }),
-    ).toEqual([JSON.parse(body)]);
-    const batch = JSON.stringify({ events: [JSON.parse(body), JSON.parse(body)] });
-    const bh = `t=${t},v1=${sign(secret, t, batch)}`;
-    expect(
-      constructWebhookEvents({ payload: batch, header: bh, secret, now: t * 1000 }),
-    ).toHaveLength(2);
-    expect(() => constructWebhookEvents({ payload: body, header: undefined, secret })).toThrow(
-      WebhookSignatureError,
-    );
+      verifyWebhookSignature({
+        ...options,
+        payload: Buffer.from(c.payload, 'utf8'),
+        secret: c.secrets,
+      }),
+    ).toEqual(c.expected);
+    if (c.header !== null)
+      expect(verifyWebhookSignature({ ...options, header: [c.header] })).toEqual(c.expected);
+    if (c.events !== undefined) {
+      expect(constructWebhookEvents(options)).toHaveLength(c.events);
+    } else if (!c.expected.ok) {
+      const reason = c.expected.reason;
+      expect(() => constructWebhookEvents(options)).toThrow(WebhookSignatureError);
+      expect(() => constructWebhookEvents(options)).toThrow(expect.objectContaining({ reason }));
+    }
   });
 });
 
