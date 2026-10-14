@@ -219,6 +219,8 @@ const TABLE: Record<string, (hs: HeroSignal) => Promise<unknown>> = {
   'DELETE /v1/apps/{appId}/in-app-messages/{messageId}': (hs) => hs.inAppMessages.delete('iam_1'),
   'POST /v1/apps/{appId}/in-app-messages/{messageId}/status': (hs) =>
     hs.inAppMessages.setStatus('iam_1', 'active'),
+  'POST /v1/apps/{appId}/in-app-messages/{messageId}/winner': (hs) =>
+    hs.inAppMessages.selectWinner('iam_1', 'a'),
   // journey'ler
   'GET /v1/apps/{appId}/journeys': (hs) => hs.journeys.list(),
   'POST /v1/apps/{appId}/journeys': (hs) => hs.journeys.create({ name: 'Karşılama' }),
