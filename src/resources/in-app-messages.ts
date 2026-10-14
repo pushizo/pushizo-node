@@ -30,5 +30,12 @@ export function createInAppMessages(ctx: ResourceContext) {
         path: `${one(messageId, appId)}/status`,
         body: { status },
       }),
+    /** A/B kazananını elle seçer; SDK'lar bundan sonra herkese kazanan görünümü sunar. */
+    selectWinner: (messageId: string, variantId: string, appId?: string) =>
+      ctx.http.request<InAppMessage>({
+        method: 'POST',
+        path: `${one(messageId, appId)}/winner`,
+        body: { variant_id: variantId },
+      }),
   };
 }
