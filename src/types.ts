@@ -149,7 +149,7 @@ export type SuppressionPage = Schemas['SuppressionPage'];
 export type Ok = Schemas['Ok'];
 export type SuppressionChannel = Suppression['channel'];
 export type SuppressionReason = Suppression['reason'];
-export type Channel = 'ios_push' | 'android_push' | 'web_push' | 'email' | 'sms';
+export type Channel = 'ios_push' | 'android_push' | 'hms_push' | 'web_push' | 'email' | 'sms';
 
 // --- İstek gövdeleri --------------------------------------------------------------------------
 
