@@ -3,6 +3,7 @@ import { HttpClient, type HttpOptions } from './http.js';
 import { createAnalytics } from './resources/analytics.js';
 import { createApiKeys } from './resources/api-keys.js';
 import { createIdentityKeys, createIdentityToken, type IdentityTokenOptions } from './resources/identity-keys.js';
+import { createLiveActivities } from './resources/live-activities.js';
 import { createCampaigns } from './resources/campaigns.js';
 import type { ResourceContext } from './resources/context.js';
 import { createExports, createImports } from './resources/data-transfer.js';
@@ -578,6 +579,8 @@ export class HeroSignal {
   readonly apiKeys = createApiKeys(this.resourceContext());
   /** SDK JWT identity verification genel anahtarları. */
   readonly identityKeys = createIdentityKeys(this.resourceContext());
+  /** iOS Live Activities: türler ve start/update/end. */
+  readonly liveActivities = createLiveActivities(this.resourceContext());
 }
 
 export default HeroSignal;

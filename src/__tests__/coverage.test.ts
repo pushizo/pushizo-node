@@ -48,6 +48,13 @@ const TABLE: Record<string, (hs: HeroSignal) => Promise<unknown>> = {
   'GET /v1/apps/{appId}/identity-keys': (hs) => hs.identityKeys.list(),
   'POST /v1/apps/{appId}/identity-keys': (hs) => hs.identityKeys.create({ kid: 'main', public_key_pem: 'pem' }),
   'DELETE /v1/apps/{appId}/identity-keys/{keyId}': (hs) => hs.identityKeys.revoke('ajk_1'),
+  'GET /v1/apps/{appId}/live-activities/types': (hs) => hs.liveActivities.listTypes(),
+  'POST /v1/apps/{appId}/live-activities/types': (hs) => hs.liveActivities.createType({ name: 'OrderActivity', content_state_schema: { type: 'object', properties: { eta: { type: 'integer' } } } }),
+  'PATCH /v1/apps/{appId}/live-activities/types/{activityType}': (hs) => hs.liveActivities.updateType('OrderActivity', { description: 'Sipariş' }),
+  'DELETE /v1/apps/{appId}/live-activities/types/{activityType}': (hs) => hs.liveActivities.deleteType('OrderActivity'),
+  'POST /v1/apps/{appId}/live-activities/{activityType}/start': (hs) => hs.liveActivities.start('OrderActivity', { target: { all: true }, content_state: { eta: 5 } }),
+  'POST /v1/apps/{appId}/live-activities/{activityType}/update': (hs) => hs.liveActivities.update('OrderActivity', { activity_id: 'order-1', content_state: { eta: 3 } }),
+  'POST /v1/apps/{appId}/live-activities/{activityType}/end': (hs) => hs.liveActivities.end('OrderActivity', { activity_id: 'order-1' }),
   'POST /v1/apps/{appId}/api-keys/{keyId}/rotate': (hs) => hs.apiKeys.rotate('key_1'),
   // webhook'lar
   'GET /v1/apps/{appId}/webhooks': (hs) => hs.webhooks.list(),

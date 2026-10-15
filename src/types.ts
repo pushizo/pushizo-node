@@ -168,6 +168,14 @@ export type UpdateApiKeyInput = JsonBody<'/v1/apps/{appId}/api-keys/{keyId}', 'p
 export type IdentityKey = Schemas['IdentityKey'];
 export type IdentityKeyList = Schemas['IdentityKeyList'];
 export type CreateIdentityKeyInput = Relax<JsonBody<'/v1/apps/{appId}/identity-keys', 'post'>>;
+export type LiveActivityType = Schemas['LiveActivityType'];
+export type LiveActivityTypeList = Schemas['LiveActivityTypeList'];
+export type LiveActivitySendResult = Schemas['LiveActivitySendResult'];
+export type CreateLiveActivityTypeInput = Relax<JsonBody<'/v1/apps/{appId}/live-activities/types', 'post'>>;
+export type UpdateLiveActivityTypeInput = Relax<JsonBody<'/v1/apps/{appId}/live-activities/types/{activityType}', 'patch'>>;
+export type StartLiveActivityInput = Relax<JsonBody<'/v1/apps/{appId}/live-activities/{activityType}/start', 'post'>>;
+export type UpdateLiveActivityInput = Relax<JsonBody<'/v1/apps/{appId}/live-activities/{activityType}/update', 'post'>>;
+export type EndLiveActivityInput = Relax<JsonBody<'/v1/apps/{appId}/live-activities/{activityType}/end', 'post'>>;
 export type UpsertUserInput = JsonBody<'/v1/apps/{appId}/users', 'post'>;
 export type SearchUsersInput = WithDefaults<
   Relax<JsonBody<'/v1/apps/{appId}/users/search', 'post'>>,
