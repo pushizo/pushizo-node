@@ -258,6 +258,99 @@ const TABLE: Record<string, (hs: HeroSignal) => Promise<unknown>> = {
     hs.journeys.exitRun('jrn_1', 'run_1'),
   'GET /v1/apps/{appId}/users/by/{label}/{value}/journeys': (hs) =>
     hs.journeys.listForUser('external_id', 'u1'),
+  // webhook önizleme
+  'POST /v1/apps/{appId}/webhooks/preview': (hs) =>
+    hs.webhooks.preview({ event_type: 'user.created', body_template: '{"id":"{{ data.user_id }}"}' }),
+  // veri feed'leri ve içerik tabloları
+  'GET /v1/apps/{appId}/data-feeds': (hs) => hs.dataFeeds.list(),
+  'POST /v1/apps/{appId}/data-feeds': (hs) =>
+    hs.dataFeeds.create({ name: 'stok', url_template: 'https://example.com/stok/{{ user.external_id }}' }),
+  'GET /v1/apps/{appId}/data-feeds/{feedId}': (hs) => hs.dataFeeds.get('dfd_1'),
+  'PATCH /v1/apps/{appId}/data-feeds/{feedId}': (hs) => hs.dataFeeds.update('dfd_1', { enabled: false }),
+  'DELETE /v1/apps/{appId}/data-feeds/{feedId}': (hs) => hs.dataFeeds.delete('dfd_1'),
+  'POST /v1/apps/{appId}/data-feeds/{feedId}/test': (hs) =>
+    hs.dataFeeds.test('dfd_1', { external_id: 'u1' }),
+  'GET /v1/apps/{appId}/content-tables': (hs) => hs.contentTables.list(),
+  'POST /v1/apps/{appId}/content-tables': (hs) =>
+    hs.contentTables.create({ name: 'urunler', key_column: 'sku', file: 'sku,ad\nA1,Kalem\n' }),
+  'GET /v1/apps/{appId}/content-tables/{tableId}': (hs) => hs.contentTables.get('ctb_1'),
+  'PATCH /v1/apps/{appId}/content-tables/{tableId}': (hs) => hs.contentTables.update('ctb_1', { description: 'Ürün kataloğu' }),
+  'DELETE /v1/apps/{appId}/content-tables/{tableId}': (hs) => hs.contentTables.delete('ctb_1'),
+  'GET /v1/apps/{appId}/content-tables/{tableId}/rows': (hs) =>
+    hs.contentTables.rows('ctb_1', { limit: 10, q: 'A1' }),
+  'PUT /v1/apps/{appId}/content-tables/{tableId}/rows': (hs) =>
+    hs.contentTables.replaceRows('ctb_1', { file: 'sku,ad\nA2,Defter\n' }),
+  // veri ambarı dışa aktarımları
+  'GET /v1/apps/{appId}/warehouse-exports/tables': (hs) => hs.warehouseExports.tables(),
+  'POST /v1/apps/{appId}/warehouse-exports/test-connection': (hs) =>
+    hs.warehouseExports.testConnection({
+      destination: 's3_parquet',
+      config: { bucket: 'hs-ambar', region: 'eu-central-1' },
+      credentials: { access_key_id: 'AKIA_TEST', secret_access_key: 'gizli' },
+    }),
+  'GET /v1/apps/{appId}/warehouse-exports': (hs) => hs.warehouseExports.list(),
+  'POST /v1/apps/{appId}/warehouse-exports': (hs) =>
+    hs.warehouseExports.create({
+      name: 'Gece aktarımı',
+      tables: ['deliveries', 'events'],
+      schedule: 'daily',
+      destination: 's3_parquet',
+      config: { bucket: 'hs-ambar', region: 'eu-central-1' },
+      credentials: { access_key_id: 'AKIA_TEST', secret_access_key: 'gizli' },
+    }),
+  'GET /v1/apps/{appId}/warehouse-exports/{exportId}': (hs) => hs.warehouseExports.get('whe_1'),
+  'PATCH /v1/apps/{appId}/warehouse-exports/{exportId}': (hs) =>
+    hs.warehouseExports.update('whe_1', { schedule: 'hourly' }),
+  'DELETE /v1/apps/{appId}/warehouse-exports/{exportId}': (hs) => hs.warehouseExports.delete('whe_1'),
+  'POST /v1/apps/{appId}/warehouse-exports/{exportId}/test': (hs) => hs.warehouseExports.test('whe_1'),
+  'POST /v1/apps/{appId}/warehouse-exports/{exportId}/run': (hs) => hs.warehouseExports.run('whe_1'),
+  'GET /v1/apps/{appId}/warehouse-exports/{exportId}/runs': (hs) =>
+    hs.warehouseExports.runs('whe_1', { limit: 20 }),
+  // konuşmalar, anahtar kelimeler ve WhatsApp şablonları
+  'GET /v1/apps/{appId}/conversations': (hs) =>
+    hs.conversations.list({ channel: 'whatsapp', unread: true }),
+  'GET /v1/apps/{appId}/conversations/{conversationId}': (hs) => hs.conversations.get('cnv_1'),
+  'GET /v1/apps/{appId}/conversations/{conversationId}/messages': (hs) =>
+    hs.conversations.messages('cnv_1'),
+  'POST /v1/apps/{appId}/conversations/{conversationId}/messages': (hs) =>
+    hs.conversations.reply('cnv_1', { text: 'Merhaba' }),
+  'POST /v1/apps/{appId}/conversations/{conversationId}/read': (hs) => hs.conversations.markRead('cnv_1'),
+  'GET /v1/apps/{appId}/sms-keywords': (hs) => hs.smsKeywords.list(),
+  'POST /v1/apps/{appId}/sms-keywords': (hs) =>
+    hs.smsKeywords.create({ keyword: 'KAMPANYA', actions: { reply: { text: 'Kaydınız alındı' } } }),
+  'PATCH /v1/apps/{appId}/sms-keywords/{keywordId}': (hs) =>
+    hs.smsKeywords.update('kw_1', { enabled: false }),
+  'DELETE /v1/apps/{appId}/sms-keywords/{keywordId}': (hs) => hs.smsKeywords.delete('kw_1'),
+  'GET /v1/apps/{appId}/whatsapp/templates': (hs) => hs.whatsappTemplates.list({ status: 'APPROVED' }),
+  'POST /v1/apps/{appId}/whatsapp/templates/sync': (hs) => hs.whatsappTemplates.sync(),
+  // e-posta teslim edilebilirliği
+  'GET /v1/apps/{appId}/email-deliverability': (hs) => hs.emailDeliverability.get(),
+  'PUT /v1/apps/{appId}/email-deliverability': (hs) =>
+    hs.emailDeliverability.update({ validation: { enabled: true, check_mx: true } }),
+  'POST /v1/apps/{appId}/email-deliverability/verify-address': (hs) =>
+    hs.emailDeliverability.verifyAddress({ address: 'a@example.com' }),
+  'GET /v1/apps/{appId}/email-deliverability/warmup-plans': (hs) =>
+    hs.emailDeliverability.listWarmupPlans(),
+  'POST /v1/apps/{appId}/email-deliverability/warmup-plans': (hs) =>
+    hs.emailDeliverability.createWarmupPlan({ name: 'Yeni alan', kind: 'domain', target: 'mail.example.com' }),
+  'GET /v1/apps/{appId}/email-deliverability/warmup-plans/{planId}': (hs) =>
+    hs.emailDeliverability.getWarmupPlan('ewp_1'),
+  'GET /v1/apps/{appId}/email-deliverability/warmup-plans/{planId}/usage': (hs) =>
+    hs.emailDeliverability.warmupPlanUsage('ewp_1', { days: 7 }),
+  'PATCH /v1/apps/{appId}/email-deliverability/warmup-plans/{planId}': (hs) =>
+    hs.emailDeliverability.updateWarmupPlan('ewp_1', { status: 'paused' }),
+  'DELETE /v1/apps/{appId}/email-deliverability/warmup-plans/{planId}': (hs) =>
+    hs.emailDeliverability.deleteWarmupPlan('ewp_1'),
+  // Zapier ve MCP taslakları
+  'GET /v1/apps/{appId}/integrations/zapier/me': (hs) => hs.zapier.me(),
+  'POST /v1/apps/{appId}/integrations/zapier/hooks': (hs) =>
+    hs.zapier.subscribe({ target_url: 'https://hooks.zapier.com/x', event: 'user.created' }),
+  'DELETE /v1/apps/{appId}/integrations/zapier/hooks/{hookId}': (hs) => hs.zapier.unsubscribe('zh_1'),
+  'GET /v1/apps/{appId}/integrations/zapier/samples': (hs) =>
+    hs.zapier.samples({ event: 'event.received', event_name: 'purchase' }),
+  'POST /v1/apps/{appId}/mcp/campaign-drafts': (hs) => hs.mcp.createCampaignDraft({ name: 'Taslak' }),
+  'POST /v1/apps/{appId}/mcp/segment-drafts': (hs) =>
+    hs.mcp.createSegmentDraft({ name: 'VIP taslak', definition: emptyDefinition }),
 };
 
 /** `/v1/apps/{appId}/x/{id}` → ^/v1/apps/[^/]+/x/[^/]+$ */

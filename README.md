@@ -53,7 +53,16 @@ Her public API işlemi (`/sdk/v1` hariç) bir SDK metoduna karşılık gelir; e�
 | `imports` | `create` (multipart CSV), `list`, `get` |
 | `channels` | `list`, `upsert`, `validate` |
 | `suppressions` | `list`, `create`, `remove` |
-| `webhooks` | `list`, `create`, `get`, `update`, `delete`, `rotateSecret`, `test`, `deliveries`, `replay` |
+| `webhooks` | `list`, `create`, `get`, `update`, `delete`, `rotateSecret`, `test`, `deliveries`, `replay`, `preview` |
+| `dataFeeds` | `list`, `create`, `get`, `update`, `delete`, `test` |
+| `contentTables` | `list`, `create` (multipart CSV), `get`, `update`, `delete`, `rows`, `replaceRows` (multipart CSV) |
+| `warehouseExports` | `tables`, `testConnection`, `list`, `create`, `get`, `update`, `delete`, `test`, `run`, `runs` |
+| `conversations` | `list`, `get`, `messages`, `reply`, `markRead` |
+| `smsKeywords` | `list`, `create`, `update`, `delete` |
+| `whatsappTemplates` | `list`, `sync` |
+| `emailDeliverability` | `get`, `update`, `verifyAddress`, `listWarmupPlans`, `createWarmupPlan`, `updateWarmupPlan`, `deleteWarmupPlan` |
+| `zapier` | `me`, `subscribe`, `unsubscribe`, `samples` |
+| `mcp` | `createCampaignDraft`, `createSegmentDraft` |
 
 Webhook alıcıları için `verifyWebhookSignature` ve `constructWebhookEvents` dışa aktarılır.
 

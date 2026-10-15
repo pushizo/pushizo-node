@@ -6,13 +6,18 @@ import { createIdentityKeys, createIdentityToken, type IdentityTokenOptions } fr
 import { createLiveActivities } from './resources/live-activities.js';
 import { createCampaigns } from './resources/campaigns.js';
 import type { ResourceContext } from './resources/context.js';
+import { createConversations, createSmsKeywords, createWhatsAppTemplates } from './resources/conversations.js';
 import { createExports, createImports } from './resources/data-transfer.js';
+import { createContentTables, createDataFeeds } from './resources/dynamic-content.js';
+import { createEmailDeliverability } from './resources/email-deliverability.js';
 import { createInAppMessages } from './resources/in-app-messages.js';
 import { createInbox } from './resources/inbox.js';
+import { createMcpDrafts, createZapier } from './resources/integrations.js';
 import { createJourneys } from './resources/journeys.js';
 import { createPreferences } from './resources/preferences.js';
 import { createSegments } from './resources/segments.js';
 import { createTemplates } from './resources/templates.js';
+import { createWarehouseExports } from './resources/warehouse-exports.js';
 import type {
   AddSubscriptionInput,
   App,
@@ -62,6 +67,8 @@ import type {
   Webhook,
   WebhookDeliveryDetail,
   WebhookDeliveryPage,
+  WebhookPreviewInput,
+  WebhookPreviewResult,
   WebhookWithSecret,
   UsageReport,
 } from './types.js';
@@ -70,6 +77,10 @@ export { HeroSignalError } from './errors.js';
 export * from './webhooks.js';
 export * from './types.js';
 export type { CreateImportInput, ImportFile } from './resources/data-transfer.js';
+export type {
+  CreateContentTableInput,
+  ReplaceContentTableRowsInput,
+} from './resources/dynamic-content.js';
 export { createIdentityToken, type IdentityTokenOptions } from './resources/identity-keys.js';
 
 /** `subscriptions.updateByToken` için token türü: HeroSignal kanal adı veya OneSignal karşılığı. */
@@ -553,6 +564,13 @@ export class HeroSignal {
         method: 'POST',
         path: `/v1/apps/${enc(this.app(appId))}/webhooks/deliveries/${enc(deliveryId)}/replay`,
       }),
+    /** Gövde şablonu ve filtreleri örnek olay verisiyle dener (gönderim yapmaz). */
+    preview: (body: WebhookPreviewInput, appId?: string) =>
+      this.http.request<WebhookPreviewResult>({
+        method: 'POST',
+        path: `/v1/apps/${enc(this.app(appId))}/webhooks/preview`,
+        body,
+      }),
   };
 
   /** Segmentler: liste, CRUD, önizleme, tahmini sayım ve kullanan kampanyalar. */
@@ -581,6 +599,24 @@ export class HeroSignal {
   readonly identityKeys = createIdentityKeys(this.resourceContext());
   /** iOS Live Activities: türler ve start/update/end. */
   readonly liveActivities = createLiveActivities(this.resourceContext());
+  /** Veri feed'leri: gönderim anında çağrılan harici HTTP kaynakları. */
+  readonly dataFeeds = createDataFeeds(this.resourceContext());
+  /** İçerik tabloları: CSV ile yüklenen, şablonda `lookup` ile okunan tablolar. */
+  readonly contentTables = createContentTables(this.resourceContext());
+  /** Veri ambarı dışa aktarımları (BigQuery, Snowflake, S3 Parquet). */
+  readonly warehouseExports = createWarehouseExports(this.resourceContext());
+  /** İki yönlü konuşmalar (SMS, WhatsApp, RCS). */
+  readonly conversations = createConversations(this.resourceContext());
+  /** Gelen mesaj anahtar kelimeleri. */
+  readonly smsKeywords = createSmsKeywords(this.resourceContext());
+  /** WhatsApp Business şablonları. */
+  readonly whatsappTemplates = createWhatsAppTemplates(this.resourceContext());
+  /** E-posta teslim edilebilirliği ve ısınma planları. */
+  readonly emailDeliverability = createEmailDeliverability(this.resourceContext());
+  /** Zapier REST Hook entegrasyonu. */
+  readonly zapier = createZapier(this.resourceContext());
+  /** MCP onaylı mod: kampanya ve segment taslakları. */
+  readonly mcp = createMcpDrafts(this.resourceContext());
 }
 
 export default HeroSignal;

@@ -264,3 +264,78 @@ export type CreateExportInput = WithDefaults<
   'filters'
 >;
 export type ImportType = 'onesignal_players' | 'csv_users';
+
+// --- v2 Faz 18–21: dinamik içerik, veri ambarı, konuşmalar, teslim edilebilirlik, entegrasyonlar ---
+
+export type DataFeed = Schemas['DataFeed'];
+export type DataFeedList = Schemas['DataFeedList'];
+export type DataFeedTestResult = Schemas['DataFeedTestResult'];
+export type CreateDataFeedInput = JsonBody<'/v1/apps/{appId}/data-feeds', 'post'>;
+export type UpdateDataFeedInput = JsonBody<'/v1/apps/{appId}/data-feeds/{feedId}', 'patch'>;
+/** Feed testi için örnek kullanıcı (`external_id` veya `user_id`); boşsa örneksiz render edilir. */
+export type TestDataFeedInput = JsonBody<'/v1/apps/{appId}/data-feeds/{feedId}/test', 'post'>;
+export type ContentTable = Schemas['ContentTable'];
+export type ContentTableList = Schemas['ContentTableList'];
+export type ContentTableRows = Schemas['ContentTableRows'];
+export type UpdateContentTableInput = JsonBody<'/v1/apps/{appId}/content-tables/{tableId}', 'patch'>;
+export type WebhookPreviewInput = JsonBody<'/v1/apps/{appId}/webhooks/preview', 'post'>;
+export type WebhookPreviewResult = Schemas['WebhookPreviewResult'];
+export type WarehouseTables = Schemas['WarehouseTables'];
+export type WarehouseConnectionResult = Schemas['WarehouseConnectionResult'];
+export type WarehouseExport = Schemas['WarehouseExport'];
+export type WarehouseExportList = Schemas['WarehouseExportList'];
+export type WarehouseExportRun = Schemas['WarehouseExportRun'];
+export type WarehouseExportRunPage = Schemas['WarehouseExportRunPage'];
+export type TestWarehouseConnectionInput = JsonBody<
+  '/v1/apps/{appId}/warehouse-exports/test-connection',
+  'post'
+>;
+export type CreateWarehouseExportInput = JsonBody<'/v1/apps/{appId}/warehouse-exports', 'post'>;
+export type UpdateWarehouseExportInput = JsonBody<
+  '/v1/apps/{appId}/warehouse-exports/{exportId}',
+  'patch'
+>;
+export type Conversation = Schemas['Conversation'];
+export type ConversationPage = Schemas['ConversationPage'];
+export type ConversationMessagePage = Schemas['ConversationMessagePage'];
+export type ConversationReplyResult = Schemas['ConversationReplyResult'];
+export type ConversationReplyInput = JsonBody<
+  '/v1/apps/{appId}/conversations/{conversationId}/messages',
+  'post'
+>;
+export type SmsKeyword = Schemas['SmsKeyword'];
+export type SmsKeywordList = Schemas['SmsKeywordList'];
+export type CreateSmsKeywordInput = JsonBody<'/v1/apps/{appId}/sms-keywords', 'post'>;
+export type UpdateSmsKeywordInput = JsonBody<'/v1/apps/{appId}/sms-keywords/{keywordId}', 'patch'>;
+export type WhatsAppTemplateList = Schemas['WhatsAppTemplateList'];
+export type WhatsAppTemplateSync = Schemas['WhatsAppTemplateSync'];
+export type EmailDeliverabilitySettings = Schemas['EmailDeliverabilitySettings'];
+export type EmailAddressCheck = Schemas['EmailAddressCheck'];
+export type EmailWarmupPlan = Schemas['EmailWarmupPlan'];
+export type EmailWarmupPlanList = Schemas['EmailWarmupPlanList'];
+export type EmailWarmupUsage = Schemas['EmailWarmupUsage'];
+export type UpdateEmailDeliverabilityInput = JsonBody<'/v1/apps/{appId}/email-deliverability', 'put'>;
+export type VerifyEmailAddressInput = JsonBody<
+  '/v1/apps/{appId}/email-deliverability/verify-address',
+  'post'
+>;
+export type CreateWarmupPlanInput = JsonBody<
+  '/v1/apps/{appId}/email-deliverability/warmup-plans',
+  'post'
+>;
+export type UpdateWarmupPlanInput = JsonBody<
+  '/v1/apps/{appId}/email-deliverability/warmup-plans/{planId}',
+  'patch'
+>;
+export type ZapierMe = Schemas['ZapierMe'];
+export type ZapierHook = Schemas['ZapierHook'];
+export type ZapierSamples = Schemas['ZapierSamples'];
+export type IntegrationOk = Schemas['IntegrationOk'];
+export type ZapierSubscribeInput = JsonBody<'/v1/apps/{appId}/integrations/zapier/hooks', 'post'>;
+/** Örnek veri sorgusu: `event` zorunlu, `event.received` için isteğe bağlı `event_name`. */
+export type ZapierSamplesParams = NonNullable<
+  Operation<'/v1/apps/{appId}/integrations/zapier/samples', 'get'>['parameters']['query']
+>;
+export type CreateCampaignDraftInput = Relax<
+  JsonBody<'/v1/apps/{appId}/mcp/campaign-drafts', 'post'>
+>;
