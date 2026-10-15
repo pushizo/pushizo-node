@@ -165,6 +165,9 @@ export type CreateApiKeyInput = WithDefaults<
   'environment'
 >;
 export type UpdateApiKeyInput = JsonBody<'/v1/apps/{appId}/api-keys/{keyId}', 'patch'>;
+export type IdentityKey = Schemas['IdentityKey'];
+export type IdentityKeyList = Schemas['IdentityKeyList'];
+export type CreateIdentityKeyInput = Relax<JsonBody<'/v1/apps/{appId}/identity-keys', 'post'>>;
 export type UpsertUserInput = JsonBody<'/v1/apps/{appId}/users', 'post'>;
 export type SearchUsersInput = WithDefaults<
   Relax<JsonBody<'/v1/apps/{appId}/users/search', 'post'>>,

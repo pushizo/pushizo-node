@@ -45,6 +45,9 @@ const TABLE: Record<string, (hs: HeroSignal) => Promise<unknown>> = {
     hs.apiKeys.create({ name: 'ci', scopes: ['notifications:write'] }),
   'PATCH /v1/apps/{appId}/api-keys/{keyId}': (hs) => hs.apiKeys.update('key_1', { name: 'x' }),
   'DELETE /v1/apps/{appId}/api-keys/{keyId}': (hs) => hs.apiKeys.revoke('key_1'),
+  'GET /v1/apps/{appId}/identity-keys': (hs) => hs.identityKeys.list(),
+  'POST /v1/apps/{appId}/identity-keys': (hs) => hs.identityKeys.create({ kid: 'main', public_key_pem: 'pem' }),
+  'DELETE /v1/apps/{appId}/identity-keys/{keyId}': (hs) => hs.identityKeys.revoke('ajk_1'),
   'POST /v1/apps/{appId}/api-keys/{keyId}/rotate': (hs) => hs.apiKeys.rotate('key_1'),
   // webhook'lar
   'GET /v1/apps/{appId}/webhooks': (hs) => hs.webhooks.list(),
