@@ -2,6 +2,7 @@ import { createHmac, randomUUID } from 'node:crypto';
 import { HttpClient, type HttpOptions } from './http.js';
 import { createAnalytics } from './resources/analytics.js';
 import { createApiKeys } from './resources/api-keys.js';
+import { createIdentityKeys, createIdentityToken, type IdentityTokenOptions } from './resources/identity-keys.js';
 import { createCampaigns } from './resources/campaigns.js';
 import type { ResourceContext } from './resources/context.js';
 import { createExports, createImports } from './resources/data-transfer.js';
@@ -68,6 +69,7 @@ export { HeroSignalError } from './errors.js';
 export * from './webhooks.js';
 export * from './types.js';
 export type { CreateImportInput, ImportFile } from './resources/data-transfer.js';
+export { createIdentityToken, type IdentityTokenOptions } from './resources/identity-keys.js';
 
 /** `subscriptions.updateByToken` için token türü: HeroSignal kanal adı veya OneSignal karşılığı. */
 export type SubscriptionTokenType =
@@ -128,6 +130,11 @@ export class HeroSignal {
   /** SDK identity verification için `identity_hash` = HMAC-SHA256(sdk_secret, external_id). */
   static identityHash(sdkSecret: string, externalId: string): string {
     return createHmac('sha256', sdkSecret).update(externalId, 'utf8').digest('hex');
+  }
+
+  /** SDK JWT identity verification belirteci (ES256; `sub` = external_id, `aud` = app_id). */
+  static identityToken(options: IdentityTokenOptions): string {
+    return createIdentityToken(options);
   }
 
   private app(appId?: string): string {
@@ -569,6 +576,8 @@ export class HeroSignal {
   readonly imports = createImports(this.resourceContext());
   /** App API anahtarları. */
   readonly apiKeys = createApiKeys(this.resourceContext());
+  /** SDK JWT identity verification genel anahtarları. */
+  readonly identityKeys = createIdentityKeys(this.resourceContext());
 }
 
 export default HeroSignal;
