@@ -32,7 +32,7 @@ export interface CreateImportInput {
   filename?: string;
 }
 
-function toBlob(file: ImportFile): Blob {
+export function toBlob(file: ImportFile): Blob {
   if (file instanceof Blob) return file;
   if (typeof file === 'string') return new Blob([file], { type: 'text/csv' });
   const bytes = file instanceof Uint8Array ? file : new Uint8Array(file);

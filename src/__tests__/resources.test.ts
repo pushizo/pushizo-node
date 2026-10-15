@@ -304,4 +304,45 @@ describe('Node SDK: OpenAPI eşitliği için eklenen kaynaklar', () => {
     expect(ids).toEqual(['tpl_1', 'tpl_2', 'tpl_3']);
     expect(calls).toHaveLength(2);
   });
+  it('içerik tabloları: multipart CSV yükleme ve satır değiştirme', async () => {
+    const { hs, calls } = fakeClient(() => json(201, { id: 'ctb_1' }));
+    await hs.contentTables.create({
+      name: 'urunler',
+      key_column: 'sku',
+      file: 'sku,ad\nA1,Kalem\n',
+    });
+    const form = calls[0]!.body as FormData;
+    expect(form).toBeInstanceOf(FormData);
+    expect(calls[0]!.headers['content-type']).toBeUndefined();
+    expect(form.get('name')).toBe('urunler');
+    expect(form.get('key_column')).toBe('sku');
+    expect(form.has('description')).toBe(false);
+    const file = form.get('file') as File;
+    expect(file.name).toBe('table.csv');
+    expect(await file.text()).toBe('sku,ad\nA1,Kalem\n');
+    await hs.contentTables.replaceRows('ctb/1', { file: 'sku\nA2\n', filename: 'yeni.csv' });
+    expect(calls[1]!.method).toBe('PUT');
+    expect(calls[1]!.url).toBe('https://api.test/v1/apps/app_1/content-tables/ctb%2F1/rows');
+    const replaced = calls[1]!.body as FormData;
+    expect(replaced.has('key_column')).toBe(false);
+    expect((replaced.get('file') as File).name).toBe('yeni.csv');
+  });
+
+  it('konuşmalar ve Zapier: sorgu parametreleri ve yanıt gövdesi', async () => {
+    const { hs, calls } = fakeClient();
+    await hs.conversations.list({ channel: 'sms', unread: true, limit: 5 });
+    expect(calls[0]!.url).toBe(
+      'https://api.test/v1/apps/app_1/conversations?channel=sms&unread=true&limit=5',
+    );
+    await hs.conversations.reply('cnv_1', { text: 'Merhaba' }, 'app_2');
+    expect(calls[1]!.url).toBe('https://api.test/v1/apps/app_2/conversations/cnv_1/messages');
+    expect(bodyOf(calls[1]!.body)).toEqual({ text: 'Merhaba' });
+    await hs.zapier.samples({ event: 'event.received', event_name: 'purchase' });
+    expect(calls[2]!.url).toBe(
+      'https://api.test/v1/apps/app_1/integrations/zapier/samples?event=event.received&event_name=purchase',
+    );
+    await hs.warehouseExports.run('whe_1');
+    expect(calls[3]!.method).toBe('POST');
+    expect(calls[3]!.body).toBeUndefined();
+  });
 });
