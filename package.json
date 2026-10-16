@@ -1,19 +1,19 @@
 {
-  "name": "@herosignal/node",
+  "name": "@pushizo/node",
   "version": "0.1.0",
-  "description": "HeroSignal Node.js sunucu SDK'sı: public API'nin tamamı (bildirim, kullanıcı, segment, şablon, kampanya, analitik, veri aktarımı, webhook…) OpenAPI tipleri ile",
+  "description": "Pushizo Node.js sunucu SDK'sı: public API'nin tamamı (bildirim, kullanıcı, segment, şablon, kampanya, analitik, veri aktarımı, webhook…) OpenAPI tipleri ile",
   "license": "MIT",
-  "homepage": "https://github.com/exec0de/herosignal/tree/main/sdk/node#readme",
+  "homepage": "https://github.com/exec0de/pushizo/tree/main/sdk/node#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/exec0de/herosignal.git",
+    "url": "git+https://github.com/exec0de/pushizo.git",
     "directory": "sdk/node"
   },
   "bugs": {
-    "url": "https://github.com/exec0de/herosignal/issues"
+    "url": "https://github.com/exec0de/pushizo/issues"
   },
   "keywords": [
-    "herosignal",
+    "pushizo",
     "push",
     "notifications",
     "email",
@@ -45,7 +45,7 @@
     "clean": "node -e \"require('fs').rmSync('dist',{recursive:true,force:true})\""
   },
   "dependencies": {
-    "@herosignal/api-client": "*"
+    "@pushizo/api-client": "*"
   },
   "engines": {
     "node": ">=20"

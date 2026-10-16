@@ -1,18 +1,18 @@
-# @herosignal/node
+# @pushizo/node
 
-HeroSignal Node.js sunucu SDK'sı. Node.js ≥ 20 (yerleşik `fetch`), ESM; istek ve yanıt tipleri
-`api/openapi.yaml`'dan üretilen `@herosignal/api-client` tiplerinden türetilir. Yalnızca sunucuda
+Pushizo Node.js sunucu SDK'sı. Node.js ≥ 20 (yerleşik `fetch`), ESM; istek ve yanıt tipleri
+`api/openapi.yaml`'dan üretilen `@pushizo/api-client` tiplerinden türetilir. Yalnızca sunucuda
 kullanın; API anahtarını istemci koduna gömmeyin. Ayrıntılı rehber: [`docs/sdk/node.md`](../../docs/sdk/node.md).
 
 ## Başlatma
 
 ```ts
-import { HeroSignal } from '@herosignal/node';
+import { Pushizo } from '@pushizo/node';
 
-const hs = new HeroSignal({
+const hs = new Pushizo({
   apiKey: process.env.HS_API_KEY!, // hs_live_…
   appId: process.env.HS_APP_ID, // çağrıda appId verilmezse kullanılır
-  baseUrl: 'https://api.herosignal.dev', // yerel: http://localhost:4000
+  baseUrl: 'https://api.pushizo.com', // yerel: http://localhost:4000
   maxRetries: 3, // 429 her metotta; 5xx/ağ hatası GET/PUT/DELETE'te, POST/PATCH'te yalnızca Idempotency-Key varsa veya istek gönderilemediyse
   timeoutMs: 30_000,
   autoIdempotencyKey: true, // notifications.create ve users.upsert için otomatik UUID
@@ -23,7 +23,7 @@ Ortak davranışlar:
 
 - Kimlik doğrulama `Authorization: Bearer <apiKey>` başlığıyla yapılır.
 - App kapsamlı her metodun son parametresi isteğe bağlı `appId`'dir; verilmezse varsayılan app kullanılır.
-- Hata yanıtları `HeroSignalError` (`status`, `code`, `requestId`, `details`, `retryable`) olarak fırlatılır.
+- Hata yanıtları `PushizoError` (`status`, `code`, `requestId`, `details`, `retryable`) olarak fırlatılır.
 - `hs.paginate((cursor) => hs.templates.list({ cursor }))` cursor sayfalı listeleri `for await` ile öğe öğe dolaşır.
 - Analitik raporlarında `format: 'csv'` verilirse yanıt CSV metni (`string`) olarak döner.
 
@@ -185,5 +185,5 @@ for await (const r of hs.paginate((cursor) =>
 npx vitest run --project unit sdk/node   # birim + sözleşme kapsamı testleri
 npx tsc --noEmit -p sdk/node
 npx eslint sdk/node
-npm run build -w @herosignal/node        # dist/
+npm run build -w @pushizo/node        # dist/
 ```

@@ -1,4 +1,4 @@
-import type { PublicPaths } from '@herosignal/api-client';
+import type { PublicPaths } from '@pushizo/api-client';
 import type {
   ConversionsReport,
   EngagementReport,

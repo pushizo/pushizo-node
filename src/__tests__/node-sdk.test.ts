@@ -5,8 +5,8 @@ import type { AddressInfo } from 'node:net';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 import {
-  HeroSignal,
-  HeroSignalError,
+  Pushizo,
+  PushizoError,
   WebhookSignatureError,
   constructWebhookEvents,
   verifyWebhookSignature,
@@ -21,10 +21,10 @@ interface Call {
 
 function client(
   handler: (call: Call) => Response | Promise<Response>,
-  extra: Partial<ConstructorParameters<typeof HeroSignal>[0]> = {},
+  extra: Partial<ConstructorParameters<typeof Pushizo>[0]> = {},
 ) {
   const calls: Call[] = [];
-  const hs = new HeroSignal({
+  const hs = new Pushizo({
     apiKey: 'hs_live_test',
     baseUrl: 'https://api.test/',
     appId: 'app_1',
@@ -55,7 +55,7 @@ const json = (status: number, body: unknown, headers: Record<string, string> = {
     headers: { 'content-type': 'application/json', ...headers },
   });
 
-describe('HeroSignal Node SDK', () => {
+describe('Pushizo Node SDK', () => {
   it('bildirim oluşturur: app_id ve otomatik idempotency anahtarı eklenir, Bearer başlığı gider', async () => {
     const { hs, calls } = client(() =>
       json(202, { id: 'msg_1', status: 'queued', recipients_estimate: 1, external_id_missing: [] }),
@@ -94,7 +94,7 @@ describe('HeroSignal Node SDK', () => {
     expect(JSON.parse(calls[2]!.body!)).toEqual({ external_id: 'u-9' });
   });
 
-  it('429 → Retry-After kadar bekleyip yeniden dener; 404 → HeroSignalError (retryable değil)', async () => {
+  it('429 → Retry-After kadar bekleyip yeniden dener; 404 → PushizoError (retryable değil)', async () => {
     let n = 0;
     const { hs } = client(() => {
       n++;
@@ -115,7 +115,7 @@ describe('HeroSignal Node SDK', () => {
       }),
     );
     const err = await hs404.notifications.get('msg_x').catch((e: unknown) => e);
-    expect(err).toBeInstanceOf(HeroSignalError);
+    expect(err).toBeInstanceOf(PushizoError);
     expect(err).toMatchObject({
       status: 404,
       code: 'HS_NOT_FOUND',
@@ -132,7 +132,7 @@ describe('HeroSignal Node SDK', () => {
       { maxRetries: 1 },
     );
     await expect(hs.apps.list()).rejects.toMatchObject({ status: 0, code: 'NETWORK' });
-    const bare = new HeroSignal({
+    const bare = new Pushizo({
       apiKey: 'k',
       baseUrl: 'https://api.test',
       fetch: async () => json(200, {}),
@@ -239,7 +239,7 @@ describe('HeroSignal Node SDK', () => {
       const { port } = server.address() as AddressInfo;
       await new Promise<void>((resolve) => server.close(() => resolve()));
       const waits: number[] = [];
-      const hs = new HeroSignal({
+      const hs = new Pushizo({
         apiKey: 'k',
         appId: 'app_1',
         baseUrl: `http://127.0.0.1:${port}`,
@@ -290,7 +290,7 @@ describe('HeroSignal Node SDK', () => {
   });
 
   it('identityHash sunucu ile aynı HMAC-SHA256 değerini üretir', () => {
-    expect(HeroSignal.identityHash('secret', 'u-1')).toBe(
+    expect(Pushizo.identityHash('secret', 'u-1')).toBe(
       createHmac('sha256', 'secret').update('u-1').digest('hex'),
     );
   });
@@ -435,7 +435,7 @@ describe('Faz 10: suppression list ve e-posta/SMS/inbox içerik alanları', () =
     });
   });
 
-  it('suppression hatası HeroSignalError olarak döner', async () => {
+  it('suppression hatası PushizoError olarak döner', async () => {
     const { hs } = client(() =>
       json(400, { error: { code: 'HS_VALIDATION_ERROR', message: 'Geçersiz adres' } }),
     );

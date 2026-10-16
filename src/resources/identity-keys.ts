@@ -33,7 +33,7 @@ const b64url = (input: Buffer | string) => Buffer.from(input).toString('base64ur
 
 /**
  * SDK'ya verilecek kimlik belirteci (JWT, ES256): `sub` = external_id, `aud` = app_id. Mobil/web uygulamanız bu
- * belirteci kendi sunucunuzdan alır ve `HeroSignal.login(externalId, { jwt })` ile SDK'ya verir.
+ * belirteci kendi sunucunuzdan alır ve `Pushizo.login(externalId, { jwt })` ile SDK'ya verir.
  */
 export function createIdentityToken(opts: IdentityTokenOptions): string {
   const ttl = opts.expiresInSeconds ?? 3600;

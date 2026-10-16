@@ -1,4 +1,4 @@
-import type { PublicComponents, PublicPaths } from '@herosignal/api-client';
+import type { PublicComponents, PublicPaths } from '@pushizo/api-client';
 
 /**
  * Üretilmiş OpenAPI tiplerinden (`packages/api-client/src/generated/public.d.ts`) türetilen

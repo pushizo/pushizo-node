@@ -1,5 +1,5 @@
 /** API hata zarfından türetilen istisna; `status` ve `code` ile programatik işleme. */
-export class HeroSignalError extends Error {
+export class PushizoError extends Error {
   constructor(
     readonly status: number,
     readonly code: string,
@@ -8,7 +8,7 @@ export class HeroSignalError extends Error {
     readonly details?: Record<string, unknown>,
   ) {
     super(message);
-    this.name = 'HeroSignalError';
+    this.name = 'PushizoError';
   }
 
   /** 429 veya 5xx: yeniden denenebilir. */

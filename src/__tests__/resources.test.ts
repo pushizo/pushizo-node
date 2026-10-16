@@ -1,5 +1,5 @@
 import { describe, expect, expectTypeOf, it } from 'vitest';
-import { HeroSignalError, type MessagesReport } from '../index.js';
+import { PushizoError, type MessagesReport } from '../index.js';
 import { fakeClient, json } from './helpers.js';
 
 const bodyOf = (body: unknown) => JSON.parse(body as string) as Record<string, unknown>;
@@ -211,7 +211,7 @@ describe('Node SDK: OpenAPI eşitliği için eklenen kaynaklar', () => {
     expect(await file.text()).toBe('external_id,email\nu1,a@example.com\n');
   });
 
-  it('export işi gövdesi ve hata zarfı HeroSignalError olur', async () => {
+  it('export işi gövdesi ve hata zarfı PushizoError olur', async () => {
     const { hs, calls } = fakeClient(() =>
       json(403, { error: { code: 'HS_FORBIDDEN', message: 'Kapsam yetersiz', request_id: 'r1' } }),
     );
@@ -219,7 +219,7 @@ describe('Node SDK: OpenAPI eşitliği için eklenen kaynaklar', () => {
       .create({ type: 'events', filters: { name: 'purchase' } })
       .catch((e: unknown) => e);
     expect(bodyOf(calls[0]!.body)).toEqual({ type: 'events', filters: { name: 'purchase' } });
-    expect(err).toBeInstanceOf(HeroSignalError);
+    expect(err).toBeInstanceOf(PushizoError);
     expect(err).toMatchObject({ status: 403, code: 'HS_FORBIDDEN', requestId: 'r1' });
   });
 
