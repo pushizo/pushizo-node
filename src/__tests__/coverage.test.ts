@@ -2,7 +2,7 @@ import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { parse } from 'yaml';
 import { describe, expect, it } from 'vitest';
-import type { HeroSignal } from '../index.js';
+import type { Pushizo } from '../index.js';
 import { fakeClient } from './helpers.js';
 
 /**
@@ -29,7 +29,7 @@ function publicOperations(): string[] {
 const emptyDefinition = { all: [{ field: 'tag:vip', op: 'eq', value: 'true' }] };
 
 /** İşlem anahtarı → SDK çağrısı. */
-const TABLE: Record<string, (hs: HeroSignal) => Promise<unknown>> = {
+const TABLE: Record<string, (hs: Pushizo) => Promise<unknown>> = {
   // organizasyon ve app'ler
   'GET /v1/organization': (hs) => hs.organization.get(),
   'GET /v1/organization/members': (hs) => hs.organization.members(),

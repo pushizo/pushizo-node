@@ -1,8 +1,8 @@
 import { createHmac, timingSafeEqual } from 'node:crypto';
 
 /** Webhook imza başlığı (küçük harfle de gelir; Node `req.headers` anahtarları küçük harftir). */
-export const WEBHOOK_SIGNATURE_HEADER = 'herosignal-signature';
-export const WEBHOOK_EVENT_ID_HEADER = 'herosignal-event-id';
+export const WEBHOOK_SIGNATURE_HEADER = 'pushizo-signature';
+export const WEBHOOK_EVENT_ID_HEADER = 'pushizo-event-id';
 /** Varsayılan zaman damgası toleransı (sn): daha eski `t` ile gelen istek tekrar (replay) sayılır. */
 export const WEBHOOK_DEFAULT_TOLERANCE_SECONDS = 300;
 
@@ -13,7 +13,7 @@ export type WebhookVerifyResult = { ok: true; timestamp: number } | { ok: false;
 export interface VerifyWebhookOptions {
   /** HAM istek gövdesi (string veya Buffer). JSON'u ayrıştırıp yeniden serileştirmeyin; imza ham baytlar üzerindedir. */
   payload: string | Buffer;
-  /** `HeroSignal-Signature` başlık değeri. */
+  /** `Pushizo-Signature` başlık değeri. */
   header: string | string[] | null | undefined;
   /** Endpoint secret'ı (`whsec_…`). Rotasyon sırasında eski ve yeni secret birlikte verilebilir. */
   secret: string | string[];
@@ -23,15 +23,15 @@ export interface VerifyWebhookOptions {
 }
 
 /**
- * HeroSignal webhook imzasını doğrular: `HeroSignal-Signature: t=<unix>,v1=<hex>` — `v1 = HMAC-SHA256(secret, t + "." + gövde)`.
+ * Pushizo webhook imzasını doğrular: `Pushizo-Signature: t=<unix>,v1=<hex>` — `v1 = HMAC-SHA256(secret, t + "." + gövde)`.
  * Zaman damgası tolerans dışındaysa (varsayılan 5 dk) reddedilir; sabit zamanlı karşılaştırma kullanılır.
  *
  * ```ts
- * app.post('/hooks/herosignal', express.raw({ type: 'application/json' }), (req, res) => {
- *   const result = verifyWebhookSignature({ payload: req.body, header: req.headers['herosignal-signature'], secret: process.env.HS_WEBHOOK_SECRET! });
+ * app.post('/hooks/pushizo', express.raw({ type: 'application/json' }), (req, res) => {
+ *   const result = verifyWebhookSignature({ payload: req.body, header: req.headers['pushizo-signature'], secret: process.env.HS_WEBHOOK_SECRET! });
  *   if (!result.ok) return res.status(400).send(result.reason);
  *   const event = JSON.parse(req.body.toString('utf8'));
- *   // HeroSignal-Event-Id ile tekrarları ayıklayın, 2xx ile hızlı yanıt verin.
+ *   // Pushizo-Event-Id ile tekrarları ayıklayın, 2xx ile hızlı yanıt verin.
  *   res.sendStatus(204);
  * });
  * ```
@@ -71,7 +71,7 @@ export interface WebhookEvent<T = Record<string, unknown>> {
 
 export class WebhookSignatureError extends Error {
   constructor(readonly reason: WebhookVerifyFailure) {
-    super(`HeroSignal webhook imzası geçersiz: ${reason}`);
+    super(`Pushizo webhook imzası geçersiz: ${reason}`);
     this.name = 'WebhookSignatureError';
   }
 }

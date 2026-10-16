@@ -1,6 +1,6 @@
 import { generateKeyPairSync, verify } from 'node:crypto';
 import { describe, expect, it } from 'vitest';
-import { HeroSignal, createIdentityToken } from '../index.js';
+import { Pushizo, createIdentityToken } from '../index.js';
 
 describe('SDK JWT identity verification belirteci (ES256)', () => {
   const { privateKey, publicKey } = generateKeyPairSync('ec', { namedCurve: 'P-256' });
@@ -18,7 +18,7 @@ describe('SDK JWT identity verification belirteci (ES256)', () => {
   it('PEM anahtarı kabul eder; statik yardımcı aynı sonucu üretir; 24 saatten uzun ömür reddedilir', () => {
     const pem = privateKey.export({ type: 'pkcs8', format: 'pem' }).toString();
     const opts = { privateKey: pem, kid: 'k', appId: 'a', externalId: 'e', now: 1 };
-    expect(HeroSignal.identityToken(opts).split('.').slice(0, 2)).toEqual(createIdentityToken(opts).split('.').slice(0, 2));
+    expect(Pushizo.identityToken(opts).split('.').slice(0, 2)).toEqual(createIdentityToken(opts).split('.').slice(0, 2));
     expect(() => createIdentityToken({ ...opts, expiresInSeconds: 90_000 })).toThrow();
   });
 });

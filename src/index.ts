@@ -73,7 +73,7 @@ import type {
   UsageReport,
 } from './types.js';
 
-export { HeroSignalError } from './errors.js';
+export { PushizoError } from './errors.js';
 export * from './webhooks.js';
 export * from './types.js';
 export type { CreateImportInput, ImportFile } from './resources/data-transfer.js';
@@ -83,7 +83,7 @@ export type {
 } from './resources/dynamic-content.js';
 export { createIdentityToken, type IdentityTokenOptions } from './resources/identity-keys.js';
 
-/** `subscriptions.updateByToken` için token türü: HeroSignal kanal adı veya OneSignal karşılığı. */
+/** `subscriptions.updateByToken` için token türü: Pushizo kanal adı veya OneSignal karşılığı. */
 export type SubscriptionTokenType =
   | Channel
   | 'iOSPush'
@@ -94,8 +94,8 @@ export type SubscriptionTokenType =
   | 'Email'
   | 'SMS';
 
-export interface HeroSignalOptions extends Omit<HttpOptions, 'baseUrl'> {
-  /** Varsayılan: https://api.herosignal.dev; yerel geliştirmede http://localhost:4000 */
+export interface PushizoOptions extends Omit<HttpOptions, 'baseUrl'> {
+  /** Varsayılan: https://api.pushizo.com; yerel geliştirmede http://localhost:4000 */
   baseUrl?: string;
   /** Çağrılarda `appId` verilmezse kullanılacak varsayılan app. */
   appId?: string;
@@ -120,21 +120,21 @@ export interface RequestOptions {
 const enc = encodeURIComponent;
 
 /**
- * HeroSignal sunucu SDK'sı (Node.js ≥ 20, yerleşik fetch).
+ * Pushizo sunucu SDK'sı (Node.js ≥ 20, yerleşik fetch).
  *
  * ```ts
- * const hs = new HeroSignal({ apiKey: process.env.HS_API_KEY!, appId: 'app_…' });
+ * const hs = new Pushizo({ apiKey: process.env.HS_API_KEY!, appId: 'app_…' });
  * await hs.notifications.create({ idempotencyKey: `order-${id}`, target: { include_aliases: { external_id: [userId] } }, contents: { en: 'Shipped' } });
  * ```
  */
-export class HeroSignal {
+export class Pushizo {
   private readonly http: HttpClient;
   private readonly defaultAppId: string | undefined;
   private readonly autoIdempotencyKey: boolean;
 
-  constructor(options: HeroSignalOptions) {
+  constructor(options: PushizoOptions) {
     const { baseUrl, appId, autoIdempotencyKey, ...http } = options;
-    this.http = new HttpClient({ ...http, baseUrl: baseUrl ?? 'https://api.herosignal.dev' });
+    this.http = new HttpClient({ ...http, baseUrl: baseUrl ?? 'https://api.pushizo.com' });
     this.defaultAppId = appId;
     this.autoIdempotencyKey = autoIdempotencyKey ?? true;
   }
@@ -151,7 +151,7 @@ export class HeroSignal {
 
   private app(appId?: string): string {
     const id = appId ?? this.defaultAppId;
-    if (!id) throw new Error('HeroSignal: appId verilmedi (seçenek veya çağrı parametresi).');
+    if (!id) throw new Error('Pushizo: appId verilmedi (seçenek veya çağrı parametresi).');
     return id;
   }
 
@@ -619,4 +619,4 @@ export class HeroSignal {
   readonly mcp = createMcpDrafts(this.resourceContext());
 }
 
-export default HeroSignal;
+export default Pushizo;

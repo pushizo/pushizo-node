@@ -1,4 +1,4 @@
-import { HeroSignalError } from './errors.js';
+import { PushizoError } from './errors.js';
 
 export interface HttpOptions {
   apiKey: string;
@@ -80,7 +80,7 @@ export class HttpClient {
   private readonly sleep: (ms: number) => Promise<void>;
 
   constructor(private readonly options: HttpOptions) {
-    if (!options.apiKey) throw new Error('HeroSignal: apiKey gerekli.');
+    if (!options.apiKey) throw new Error('Pushizo: apiKey gerekli.');
     this.fetchImpl = options.fetch ?? ((input, init) => fetch(input, init));
     this.sleep = options.sleep ?? ((ms) => new Promise((r) => setTimeout(r, ms)));
   }
@@ -101,7 +101,7 @@ export class HttpClient {
     const headers: Record<string, string> = {
       authorization: `Bearer ${this.options.apiKey}`,
       accept: 'application/json',
-      'user-agent': this.options.userAgent ?? 'herosignal-node/0.1.0',
+      'user-agent': this.options.userAgent ?? 'pushizo-node/0.1.0',
     };
     const multipart = input.body instanceof FormData;
     if (input.body !== undefined && !multipart) headers['content-type'] = 'application/json';
@@ -149,7 +149,7 @@ export class HttpClient {
         } catch {
           envelope = {};
         }
-        const err = new HeroSignalError(
+        const err = new PushizoError(
           response.status,
           envelope.error?.code ?? `HTTP_${response.status}`,
           envelope.error?.message ?? `HTTP ${response.status}`,
@@ -165,9 +165,9 @@ export class HttpClient {
             : BACKOFF_MS[Math.min(attempt, BACKOFF_MS.length - 1)]!,
         );
       } catch (err) {
-        if (err instanceof HeroSignalError) throw err;
+        if (err instanceof PushizoError) throw err;
         if (attempt >= maxRetries || !shouldRetry(input.method, 0, hasKey, requestNotSent(err))) {
-          throw new HeroSignalError(
+          throw new PushizoError(
             0,
             'NETWORK',
             err instanceof Error ? err.message : 'network error',

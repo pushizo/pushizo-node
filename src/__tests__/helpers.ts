@@ -1,4 +1,4 @@
-import { HeroSignal, type HeroSignalOptions } from '../index.js';
+import { Pushizo, type PushizoOptions } from '../index.js';
 
 /** Sahte fetch'in kaydettiği istek. */
 export interface RecordedCall {
@@ -19,10 +19,10 @@ export const json = (status: number, body: unknown, headers: Record<string, stri
 export function fakeClient(
   handler: (call: RecordedCall) => Response | Promise<Response> = () =>
     json(200, { data: [], next_cursor: null, has_more: false }),
-  extra: Partial<HeroSignalOptions> = {},
+  extra: Partial<PushizoOptions> = {},
 ) {
   const calls: RecordedCall[] = [];
-  const hs = new HeroSignal({
+  const hs = new Pushizo({
     apiKey: 'hs_live_test',
     baseUrl: 'https://api.test/',
     appId: 'app_1',
