@@ -327,6 +327,19 @@ export type UpdateWarmupPlanInput = JsonBody<
   '/v1/apps/{appId}/email-deliverability/warmup-plans/{planId}',
   'patch'
 >;
+// Reklam hesapları ve kitleleri (ADR-0037)
+export type AdAccount = Schemas['AdAccount'];
+export type AdAccountList = Schemas['AdAccountList'];
+export type AdAudience = Schemas['AdAudience'];
+export type AdAudienceList = Schemas['AdAudienceList'];
+export type AdAudienceSyncList = Schemas['AdAudienceSyncList'];
+export type AdAudienceSyncQueued = Schemas['AdAudienceSyncQueued'];
+export type AdOk = Schemas['AdOk'];
+export type CreateAdAudienceInput = JsonBody<'/v1/apps/{appId}/ads/audiences', 'post'>;
+export type UpdateAdAudienceInput = JsonBody<'/v1/apps/{appId}/ads/audiences/{audienceId}', 'patch'>;
+export type SyncAdAudienceInput = JsonBody<'/v1/apps/{appId}/ads/audiences/{audienceId}/sync', 'post'>;
+export type CreateLookalikeInput = JsonBody<'/v1/apps/{appId}/ads/audiences/{audienceId}/lookalikes', 'post'>;
+export type AdAudienceListParams = NonNullable<Operation<'/v1/apps/{appId}/ads/audiences', 'get'>['parameters']['query']>;
 export type ZapierMe = Schemas['ZapierMe'];
 export type ZapierHook = Schemas['ZapierHook'];
 export type ZapierSamples = Schemas['ZapierSamples'];

@@ -342,6 +342,16 @@ const TABLE: Record<string, (hs: Pushizo) => Promise<unknown>> = {
   'DELETE /v1/apps/{appId}/email-deliverability/warmup-plans/{planId}': (hs) =>
     hs.emailDeliverability.deleteWarmupPlan('ewp_1'),
   // Zapier ve MCP taslakları
+  // reklam kitleleri (ADR-0037)
+  'GET /v1/apps/{appId}/ads/accounts': (hs) => hs.ads.listAccounts(),
+  'GET /v1/apps/{appId}/ads/audiences': (hs) => hs.ads.listAudiences({ ad_account_id: 'ada_1' }),
+  'POST /v1/apps/{appId}/ads/audiences': (hs) => hs.ads.createAudience({ ad_account_id: 'ada_1', source: 'segment', segment_id: 'seg_1', name: 'VIP' }),
+  'GET /v1/apps/{appId}/ads/audiences/{audienceId}': (hs) => hs.ads.getAudience('adu_1'),
+  'PATCH /v1/apps/{appId}/ads/audiences/{audienceId}': (hs) => hs.ads.updateAudience('adu_1', { status: 'paused' }),
+  'DELETE /v1/apps/{appId}/ads/audiences/{audienceId}': (hs) => hs.ads.deleteAudience('adu_1', { deleteOnPlatform: true }),
+  'POST /v1/apps/{appId}/ads/audiences/{audienceId}/sync': (hs) => hs.ads.syncAudience('adu_1', { full: true }),
+  'GET /v1/apps/{appId}/ads/audiences/{audienceId}/syncs': (hs) => hs.ads.listSyncs('adu_1', { limit: 5 }),
+  'POST /v1/apps/{appId}/ads/audiences/{audienceId}/lookalikes': (hs) => hs.ads.createLookalike('adu_1', { country: 'TR', ratio: 0.01 }),
   'GET /v1/apps/{appId}/integrations/zapier/me': (hs) => hs.zapier.me(),
   'POST /v1/apps/{appId}/integrations/zapier/hooks': (hs) =>
     hs.zapier.subscribe({ target_url: 'https://hooks.zapier.com/x', event: 'user.created' }),
