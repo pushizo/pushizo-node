@@ -1,5 +1,6 @@
 import { createHmac, randomUUID } from 'node:crypto';
 import { HttpClient, type HttpOptions } from './http.js';
+import { createAds } from './resources/ads.js';
 import { createAnalytics } from './resources/analytics.js';
 import { createApiKeys } from './resources/api-keys.js';
 import { createIdentityKeys, createIdentityToken, type IdentityTokenOptions } from './resources/identity-keys.js';
@@ -617,6 +618,8 @@ export class Pushizo {
   readonly zapier = createZapier(this.resourceContext());
   /** MCP onaylı mod: kampanya ve segment taslakları. */
   readonly mcp = createMcpDrafts(this.resourceContext());
+  /** Reklam hesapları ve reklam kitleleri (segment → Meta/Google/TikTok/LinkedIn; ADR-0037). */
+  readonly ads = createAds(this.resourceContext());
 }
 
 export default Pushizo;
