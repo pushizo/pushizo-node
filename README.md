@@ -40,7 +40,7 @@ Her public API işlemi (`/sdk/v1` hariç) bir SDK metoduna karşılık gelir; e�
 | `notifications` | `create`, `list`, `get`, `cancel`, `estimate`, `deliveries`, `history`, `exportEvents` |
 | `users` | `list`, `upsert`, `search`, `getByAlias`, `getByExternalId`, `update`, `delete`, `getIdentity`, `export`, `addAliases`, `removeAlias`, `addSubscription` |
 | `subscriptions` | `get`, `update`, `delete`, `getUserIdentity`, `updateByToken`, `setOwner` |
-| `inbox` | `list`, `readAll`, `read`, `archive` |
+| `inbox` | `list`, `readAll`, `read`, `archive`; ekip gelen kutusu: `listCannedResponses`, `createCannedResponse`, `updateCannedResponse`, `deleteCannedResponse`, `listTeams`, `listAgents`, `getSettings`, `updateSettings`, `metrics` |
 | `events` | `send`, `listDefinitions`, `getDefinition`, `updateDefinition` |
 | `segments` | `list`, `create`, `preview`, `get`, `update`, `delete`, `usedBy`, `estimate` |
 | `templates` | `list`, `create`, `get`, `update`, `delete`, `copyToApp`, `versions`, `render`, `stats` |
@@ -57,12 +57,17 @@ Her public API işlemi (`/sdk/v1` hariç) bir SDK metoduna karşılık gelir; e�
 | `dataFeeds` | `list`, `create`, `get`, `update`, `delete`, `test` |
 | `contentTables` | `list`, `create` (multipart CSV), `get`, `update`, `delete`, `rows`, `replaceRows` (multipart CSV) |
 | `warehouseExports` | `tables`, `testConnection`, `list`, `create`, `get`, `update`, `delete`, `test`, `run`, `runs` |
-| `conversations` | `list`, `get`, `messages`, `reply`, `markRead` |
+| `conversations` | `list`, `get`, `messages`, `reply`, `markRead`, `update`, `assign`, `updateTags`, `activity` |
 | `smsKeywords` | `list`, `create`, `update`, `delete` |
 | `whatsappTemplates` | `list`, `sync` |
 | `emailDeliverability` | `get`, `update`, `verifyAddress`, `listWarmupPlans`, `createWarmupPlan`, `updateWarmupPlan`, `deleteWarmupPlan` |
 | `zapier` | `me`, `subscribe`, `unsubscribe`, `samples` |
 | `mcp` | `createCampaignDraft`, `createSegmentDraft` |
+| `ads` | `listAccounts`, `listAudiences`, `createAudience`, `getAudience`, `updateAudience`, `deleteAudience`, `syncAudience`, `listSyncs`, `createLookalike`, `listCampaigns`, `getCampaign`, `updateCampaign`, `refreshAccount`, `spendReport`, `attributionReport`, `ltvReport`, `listCapiConfigs`, `listCapiDeliveries`, `listAlertRules`, `createAlertRule`, `updateAlertRule`, `deleteAlertRule`, `listAlerts` |
+| `webCampaigns` | `list`, `create`, `get`, `update`, `report`, `setStatus` |
+| `forms` | `list`, `create`, `get`, `listSubmissions`, `submit` |
+| `surveys` | `list`, `create`, `get`, `setStatus`, `report`, `listResponses`, `respond` |
+| `landingPages` | `list`, `get`, `publish`, `unpublish` |
 
 Webhook alıcıları için `verifyWebhookSignature` ve `constructWebhookEvents` dışa aktarılır.
 
@@ -177,6 +182,37 @@ for await (const r of hs.paginate((cursor) =>
 )) {
   console.log(r.id, r.current_node_id);
 }
+```
+
+## Gelen kutusu, reklam raporlama ve web büyüme
+
+```ts
+// Ekip gelen kutusu: durum, atama, etiket ve metrikler (ADR-0040)
+await hs.conversations.assign('cnv_1', { team_id: 'team_1', assignee_id: null });
+await hs.conversations.updateTags('cnv_1', { add: { plan: 'pro' }, remove: ['lead'] });
+await hs.conversations.update('cnv_1', { status: 'resolved' });
+const metrics = await hs.inbox.metrics({ from: '2026-10-01T00:00:00Z', channel: 'chat' });
+await hs.inbox.createCannedResponse({ shortcut: 'iade', title: 'İade', body: 'Merhaba {{ contact.name }}, iadeniz alındı.' });
+
+// Reklam raporlama ve bütçe uyarıları (ADR-0038); from/to zorunlu
+const spend = await hs.ads.spendReport({ from: '2026-10-01', to: '2026-10-31', group_by: 'campaign' });
+const attribution = await hs.ads.attributionReport({ from: '2026-10-01', to: '2026-10-31', model: 'time_decay' });
+await hs.ads.updateCampaign('ade_1', { status: 'paused' }); // platforma da yazılır
+await hs.ads.createAlertRule({ name: 'Günlük tavan', kind: 'daily_spend', threshold: 500, recipients: ['pazarlama@example.com'] });
+
+// Web büyüme (ADR-0039): kampanya taslak oluşur, setStatus ile yayınlanır
+const popup = await hs.webCampaigns.create({
+  name: 'Bülten pop-up',
+  display: { layout: 'popup', blocks: [{ type: 'title', text: { tr: 'Bültenimize katılın' } }], form_id: 'frm_1' },
+  trigger: { kind: 'exit_intent' },
+});
+await hs.webCampaigns.setStatus(popup.id, 'active');
+await hs.forms.submit('frm_1', { values: { email: 'ayse@example.com' }, external_id: 'u-1' }); // sunucu tarafı gönderim
+for await (const s of hs.paginate((cursor) => hs.forms.listSubmissions('frm_1', { status: 'confirmed', cursor }))) {
+  console.log(s.id);
+}
+const nps = await hs.surveys.report('srv_1', { days: 30 });
+await hs.landingPages.publish('lp_1');
 ```
 
 ## Geliştirme

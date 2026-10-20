@@ -19,6 +19,7 @@ import { createPreferences } from './resources/preferences.js';
 import { createSegments } from './resources/segments.js';
 import { createTemplates } from './resources/templates.js';
 import { createWarehouseExports } from './resources/warehouse-exports.js';
+import { createForms, createLandingPages, createSurveys, createWebCampaigns } from './resources/web-growth.js';
 import type {
   AddSubscriptionInput,
   App,
@@ -586,7 +587,7 @@ export class Pushizo {
   readonly inAppMessages = createInAppMessages(this.resourceContext());
   /** Mesaj kategorileri ve kullanıcı tercihleri (tercih merkezi). */
   readonly preferences = createPreferences(this.resourceContext());
-  /** Kullanıcı bildirim kutusu (alias ile). */
+  /** Kullanıcı bildirim kutusu (alias ile) ve ekip gelen kutusu yönetimi (hazır yanıtlar, takımlar, ayarlar). */
   readonly inbox = createInbox(this.resourceContext());
   /** Analitik raporları (JSON veya `format: 'csv'`). */
   readonly analytics = createAnalytics(this.resourceContext());
@@ -618,8 +619,16 @@ export class Pushizo {
   readonly zapier = createZapier(this.resourceContext());
   /** MCP onaylı mod: kampanya ve segment taslakları. */
   readonly mcp = createMcpDrafts(this.resourceContext());
-  /** Reklam hesapları ve reklam kitleleri (segment → Meta/Google/TikTok/LinkedIn; ADR-0037). */
+  /** Reklam hesapları, kitleler (ADR-0037), kampanya raporlama, atribüsyon ve bütçe uyarıları (ADR-0038). */
   readonly ads = createAds(this.resourceContext());
+  /** Web kampanyaları: pop-up/banner/slide-in, durum geçişi ve günlük rapor (ADR-0039). */
+  readonly webCampaigns = createWebCampaigns(this.resourceContext());
+  /** Formlar: tanım, gönderimler ve sunucu tarafı gönderim. */
+  readonly forms = createForms(this.resourceContext());
+  /** Anketler: NPS/CSAT raporu, yanıtlar ve sunucu tarafı yanıt. */
+  readonly surveys = createSurveys(this.resourceContext());
+  /** Landing sayfaları: liste, detay, yayınla/yayından kaldır. */
+  readonly landingPages = createLandingPages(this.resourceContext());
 }
 
 export default Pushizo;
