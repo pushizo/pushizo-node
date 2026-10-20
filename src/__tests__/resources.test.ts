@@ -346,3 +346,94 @@ describe('Node SDK: OpenAPI eşitliği için eklenen kaynaklar', () => {
     expect(calls[3]!.body).toBeUndefined();
   });
 });
+
+describe('Node SDK: v3 kaynakları (gelen kutusu, reklam raporlama, web büyüme)', () => {
+  it('konuşma durumu, atama, etiket ve ekip gelen kutusu: gövde ve sorgu şekilleri', async () => {
+    const { hs, calls } = fakeClient();
+    await hs.conversations.update('cnv/1', { status: 'pending' }, 'app_2');
+    expect(calls[0]!.method).toBe('PATCH');
+    expect(calls[0]!.url).toBe('https://api.test/v1/apps/app_2/conversations/cnv%2F1');
+    expect(bodyOf(calls[0]!.body)).toEqual({ status: 'pending' });
+    await hs.conversations.assign('cnv_1', { assignee_id: null, team_id: 'team_1' });
+    expect(bodyOf(calls[1]!.body)).toEqual({ assignee_id: null, team_id: 'team_1' });
+    await hs.conversations.updateTags('cnv_1', { add: { plan: 'pro' } });
+    expect(calls[2]!.url).toBe('https://api.test/v1/apps/app_1/conversations/cnv_1/tags');
+    await hs.inbox.metrics({ from: '2026-10-01T00:00:00Z', to: '2026-10-08T00:00:00Z', channel: 'chat' });
+    expect(calls[3]!.url).toBe(
+      'https://api.test/v1/apps/app_1/inbox/metrics?from=2026-10-01T00%3A00%3A00Z&to=2026-10-08T00%3A00%3A00Z&channel=chat',
+    );
+    await hs.inbox.updateSettings({ widget: { enabled: true, position: 'left' } });
+    expect(calls[4]!.method).toBe('PUT');
+    expect(bodyOf(calls[4]!.body)).toEqual({ widget: { enabled: true, position: 'left' } });
+    await hs.inbox.deleteCannedResponse('cr/1');
+    expect(calls[5]!.method).toBe('DELETE');
+    expect(calls[5]!.url).toBe('https://api.test/v1/apps/app_1/canned-responses/cr%2F1');
+  });
+
+  it('reklam raporları: zorunlu tarih aralığı sorguda, yenileme gövdesiz POST, uyarı kuralı gövdesi', async () => {
+    const { hs, calls } = fakeClient();
+    await hs.ads.spendReport({ from: '2026-10-01', to: '2026-10-07', currency: 'TRY', group_by: 'campaign' });
+    expect(calls[0]!.url).toBe(
+      'https://api.test/v1/apps/app_1/ads/reports/spend?from=2026-10-01&to=2026-10-07&currency=TRY&group_by=campaign',
+    );
+    await hs.ads.attributionReport({
+      from: '2026-10-01',
+      to: '2026-10-07',
+      model: 'time_decay',
+      half_life_days: 7,
+      conversion_events: 'purchase,signup',
+    });
+    expect(new URL(calls[1]!.url).searchParams.get('conversion_events')).toBe('purchase,signup');
+    expect(new URL(calls[1]!.url).searchParams.get('half_life_days')).toBe('7');
+    await hs.ads.refreshAccount('ada_1');
+    expect(calls[2]!.method).toBe('POST');
+    expect(calls[2]!.url).toBe('https://api.test/v1/apps/app_1/ads/accounts/ada_1/refresh');
+    expect(calls[2]!.body).toBeUndefined();
+    await hs.ads.createAlertRule({ name: 'ROAS', kind: 'roas_drop', threshold: 1.5, window_days: 7, recipients: ['a@example.com'] });
+    expect(bodyOf(calls[3]!.body)).toEqual({
+      name: 'ROAS',
+      kind: 'roas_drop',
+      threshold: 1.5,
+      window_days: 7,
+      recipients: ['a@example.com'],
+    });
+    await hs.ads.updateCampaign('ade/1', { daily_budget: 250 });
+    expect(calls[4]!.method).toBe('PATCH');
+    expect(calls[4]!.url).toBe('https://api.test/v1/apps/app_1/ads/campaigns/ade%2F1');
+  });
+
+  it('web kampanyası, form, anket ve landing sayfası: durum gövdesi, sunucu tarafı gönderim ve sayfalama', async () => {
+    const pages = [
+      { data: [{ id: 'frs_1' }, { id: 'frs_2' }], next_cursor: 'c2', has_more: true },
+      { data: [{ id: 'frs_3' }], next_cursor: null, has_more: false },
+    ];
+    let page = 0;
+    const { hs, calls } = fakeClient((call) =>
+      new URL(call.url).pathname.endsWith('/forms/frm_1/submissions') && call.method === 'GET'
+        ? json(200, pages[page++])
+        : json(200, { id: 'x' }),
+    );
+    await hs.webCampaigns.setStatus('wcm_1', 'paused');
+    expect(calls[0]!.url).toBe('https://api.test/v1/apps/app_1/web-campaigns/wcm_1/status');
+    expect(bodyOf(calls[0]!.body)).toEqual({ status: 'paused' });
+    await hs.forms.submit('frm_1', { values: { email: 'ayşe@example.com', consent: true }, external_id: 'u1' });
+    expect(bodyOf(calls[1]!.body)).toEqual({ values: { email: 'ayşe@example.com', consent: true }, external_id: 'u1' });
+    const ids: string[] = [];
+    for await (const sub of hs.paginate((cursor) => hs.forms.listSubmissions('frm_1', { cursor, limit: 2 }))) {
+      ids.push(sub.id);
+    }
+    expect(ids).toEqual(['frs_1', 'frs_2', 'frs_3']);
+    expect(new URL(calls[3]!.url).searchParams.get('cursor')).toBe('c2');
+    await hs.surveys.respond('srv_1', { answers: { q1: 10, q2: 'Harika' } });
+    expect(calls[4]!.url).toBe('https://api.test/v1/apps/app_1/surveys/srv_1/responses');
+    expect(bodyOf(calls[4]!.body)).toEqual({ answers: { q1: 10, q2: 'Harika' } });
+    await hs.surveys.listResponses('srv_1', { nps_category: 'promoter', text_question: 'q2' });
+    expect(calls[5]!.url).toBe(
+      'https://api.test/v1/apps/app_1/surveys/srv_1/responses?nps_category=promoter&text_question=q2',
+    );
+    await hs.landingPages.unpublish('lp/1', 'app_3');
+    expect(calls[6]!.method).toBe('POST');
+    expect(calls[6]!.url).toBe('https://api.test/v1/apps/app_3/landing-pages/lp%2F1/unpublish');
+    expect(calls[6]!.body).toBeUndefined();
+  });
+});

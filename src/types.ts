@@ -352,3 +352,64 @@ export type ZapierSamplesParams = NonNullable<
 export type CreateCampaignDraftInput = Relax<
   JsonBody<'/v1/apps/{appId}/mcp/campaign-drafts', 'post'>
 >;
+// Canlı sohbet ve ekip gelen kutusu (Faz 25, ADR-0040)
+export type ConversationTagsResult = Schemas['ConversationTagsResult'];
+export type ConversationActivity = Schemas['ConversationActivity'];
+export type UpdateConversationInput = JsonBody<'/v1/apps/{appId}/conversations/{conversationId}', 'patch'>;
+export type AssignConversationInput = JsonBody<'/v1/apps/{appId}/conversations/{conversationId}/assign', 'post'>;
+export type ConversationTagsInput = JsonBody<'/v1/apps/{appId}/conversations/{conversationId}/tags', 'post'>;
+export type CannedResponse = Schemas['CannedResponse'];
+export type CannedResponseList = Schemas['CannedResponseList'];
+export type CreateCannedResponseInput = JsonBody<'/v1/apps/{appId}/canned-responses', 'post'>;
+export type UpdateCannedResponseInput = JsonBody<'/v1/apps/{appId}/canned-responses/{cannedId}', 'patch'>;
+export type InboxTeamList = Schemas['InboxTeamList'];
+export type InboxAgentList = Schemas['InboxAgentList'];
+export type InboxSettings = Schemas['InboxSettings'];
+export type UpdateInboxSettingsInput = JsonBody<'/v1/apps/{appId}/inbox/settings', 'put'>;
+export type InboxMetrics = Schemas['InboxMetrics'];
+// Reklam raporlama, Conversions API ve bütçe uyarıları (Faz 23, ADR-0038)
+export type AdEntity = Schemas['AdEntity'];
+export type AdEntityList = Schemas['AdEntityList'];
+export type AdRefreshQueued = Schemas['AdRefreshQueued'];
+export type AdSpendReport = Schemas['AdSpendReport'];
+export type AdAttributionReport = Schemas['AdAttributionReport'];
+export type AdLtvReport = Schemas['AdLtvReport'];
+export type AdCapiConfigList = Schemas['AdCapiConfigList'];
+export type AdCapiDeliveryList = Schemas['AdCapiDeliveryList'];
+export type AdBudgetAlertRule = Schemas['AdBudgetAlertRule'];
+export type AdBudgetAlertRuleList = Schemas['AdBudgetAlertRuleList'];
+export type AdBudgetAlertList = Schemas['AdBudgetAlertList'];
+export type UpdateAdCampaignInput = JsonBody<'/v1/apps/{appId}/ads/campaigns/{entityId}', 'patch'>;
+export type CreateAdAlertRuleInput = JsonBody<'/v1/apps/{appId}/ads/alert-rules', 'post'>;
+export type UpdateAdAlertRuleInput = JsonBody<'/v1/apps/{appId}/ads/alert-rules/{ruleId}', 'patch'>;
+/** Harcama raporu sorgusu: `from` ve `to` zorunlu. */
+export type AdSpendReportParams = NonNullable<
+  Operation<'/v1/apps/{appId}/ads/reports/spend', 'get'>['parameters']['query']
+>;
+/** Atribüsyon raporu sorgusu: `from` ve `to` zorunlu; `conversion_events` virgülle ayrılmış olay adları. */
+export type AdAttributionReportParams = NonNullable<
+  Operation<'/v1/apps/{appId}/ads/reports/attribution', 'get'>['parameters']['query']
+>;
+// Web büyüme: web kampanyaları, formlar, anketler ve landing sayfaları (Faz 24, ADR-0039)
+export type WebCampaign = Schemas['WebCampaign'];
+export type WebCampaignPage = Schemas['WebCampaignPage'];
+export type WebCampaignReport = Schemas['WebCampaignReport'];
+export type CreateWebCampaignInput = JsonBody<'/v1/apps/{appId}/web-campaigns', 'post'>;
+export type UpdateWebCampaignInput = JsonBody<'/v1/apps/{appId}/web-campaigns/{campaignId}', 'patch'>;
+export type WebCampaignStatus = JsonBody<'/v1/apps/{appId}/web-campaigns/{campaignId}/status', 'post'>['status'];
+export type Form = Schemas['Form'];
+export type FormPage = Schemas['FormPage'];
+export type FormSubmissionPage = Schemas['FormSubmissionPage'];
+export type FormSubmitResult = Schemas['FormSubmitResult'];
+export type CreateFormInput = JsonBody<'/v1/apps/{appId}/forms', 'post'>;
+export type SubmitFormInput = JsonBody<'/v1/apps/{appId}/forms/{formId}/submissions', 'post'>;
+export type Survey = Schemas['Survey'];
+export type SurveyPage = Schemas['SurveyPage'];
+export type SurveyReport = Schemas['SurveyReport'];
+export type SurveyResponsePage = Schemas['SurveyResponsePage'];
+export type SurveyResponseResult = Schemas['SurveyResponseResult'];
+export type CreateSurveyInput = JsonBody<'/v1/apps/{appId}/surveys', 'post'>;
+export type SurveyStatus = JsonBody<'/v1/apps/{appId}/surveys/{surveyId}/status', 'post'>['status'];
+export type SubmitSurveyResponseInput = JsonBody<'/v1/apps/{appId}/surveys/{surveyId}/responses', 'post'>;
+export type LandingPage = Schemas['LandingPage'];
+export type LandingPageList = Schemas['LandingPageList'];

@@ -1,21 +1,29 @@
 import type {
+  AssignConversationInput,
   Conversation,
+  ConversationActivity,
   ConversationMessagePage,
   ConversationPage,
   ConversationReplyInput,
   ConversationReplyResult,
+  ConversationTagsInput,
+  ConversationTagsResult,
   CreateSmsKeywordInput,
   Ok,
   QueryParams,
   SmsKeyword,
   SmsKeywordList,
+  UpdateConversationInput,
   UpdateSmsKeywordInput,
   WhatsAppTemplateList,
   WhatsAppTemplateSync,
 } from '../types.js';
 import { enc, type ResourceContext } from './context.js';
 
-/** İki yönlü konuşmalar (SMS, WhatsApp, RCS): gelen kutusu, mesaj geçmişi ve yanıt. */
+/**
+ * İki yönlü konuşmalar (SMS, WhatsApp, RCS, e-posta, canlı sohbet): gelen kutusu, mesaj geçmişi, yanıt,
+ * durum, atama, etiket ve zaman çizelgesi (ADR-0040).
+ */
 export function createConversations(ctx: ResourceContext) {
   const base = (appId?: string) => `${ctx.appPath(appId)}/conversations`;
   const one = (conversationId: string, appId?: string) => `${base(appId)}/${enc(conversationId)}`;
@@ -45,6 +53,21 @@ export function createConversations(ctx: ResourceContext) {
     /** Konuşmayı okundu olarak işaretler. */
     markRead: (conversationId: string, appId?: string) =>
       ctx.http.request<Conversation>({ method: 'POST', path: `${one(conversationId, appId)}/read` }),
+    /** Durum: `open`, `pending` veya `resolved` (`closed`, `resolved` ile eşdeğerdir). */
+    update: (conversationId: string, body: UpdateConversationInput, appId?: string) =>
+      ctx.http.request<Conversation>({ method: 'PATCH', path: one(conversationId, appId), body }),
+    /**
+     * Temsilciye ve/veya takıma atar; `null` atamayı kaldırır. `inbox.manage` yetkisi olmayan anahtar
+     * yalnızca kendine atayabilir.
+     */
+    assign: (conversationId: string, body: AssignConversationInput, appId?: string) =>
+      ctx.http.request<Conversation>({ method: 'POST', path: `${one(conversationId, appId)}/assign`, body }),
+    /** Konuşmanın kişisine etiket ekler (`add`) veya kaldırır (`remove`). */
+    updateTags: (conversationId: string, body: ConversationTagsInput, appId?: string) =>
+      ctx.http.request<ConversationTagsResult>({ method: 'POST', path: `${one(conversationId, appId)}/tags`, body }),
+    /** Zaman çizelgesi: atama, durum değişikliği, ilk yanıt ve bot devri olayları. */
+    activity: (conversationId: string, appId?: string) =>
+      ctx.http.request<ConversationActivity>({ method: 'GET', path: `${one(conversationId, appId)}/activity` }),
   };
 }
 

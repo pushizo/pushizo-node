@@ -28,6 +28,13 @@ function publicOperations(): string[] {
 
 const emptyDefinition = { all: [{ field: 'tag:vip', op: 'eq', value: 'true' }] };
 
+/** Asgari web kampanyası: başlıklı pop-up, sayfa yüklenince. */
+const webCampaignInput = {
+  name: 'Hoş geldin',
+  display: { layout: 'popup' as const, blocks: [{ type: 'title' as const, text: { tr: 'Hoş geldiniz' } }] },
+  trigger: { kind: 'page_load' as const },
+};
+
 /** İşlem anahtarı → SDK çağrısı. */
 const TABLE: Record<string, (hs: Pushizo) => Promise<unknown>> = {
   // organizasyon ve app'ler
@@ -315,6 +322,27 @@ const TABLE: Record<string, (hs: Pushizo) => Promise<unknown>> = {
   'POST /v1/apps/{appId}/conversations/{conversationId}/messages': (hs) =>
     hs.conversations.reply('cnv_1', { text: 'Merhaba' }),
   'POST /v1/apps/{appId}/conversations/{conversationId}/read': (hs) => hs.conversations.markRead('cnv_1'),
+  'PATCH /v1/apps/{appId}/conversations/{conversationId}': (hs) =>
+    hs.conversations.update('cnv_1', { status: 'resolved' }),
+  'POST /v1/apps/{appId}/conversations/{conversationId}/assign': (hs) =>
+    hs.conversations.assign('cnv_1', { assignee_id: 'usr_1', team_id: null }),
+  'POST /v1/apps/{appId}/conversations/{conversationId}/tags': (hs) =>
+    hs.conversations.updateTags('cnv_1', { add: { vip: '1' }, remove: ['lead'] }),
+  'GET /v1/apps/{appId}/conversations/{conversationId}/activity': (hs) => hs.conversations.activity('cnv_1'),
+  // ekip gelen kutusu: hazır yanıtlar, takımlar, temsilciler, ayarlar ve metrikler (ADR-0040)
+  'GET /v1/apps/{appId}/canned-responses': (hs) => hs.inbox.listCannedResponses({ q: 'iade' }),
+  'POST /v1/apps/{appId}/canned-responses': (hs) =>
+    hs.inbox.createCannedResponse({ shortcut: 'iade', title: 'İade', body: 'Merhaba {{ contact.name }}' }),
+  'PATCH /v1/apps/{appId}/canned-responses/{cannedId}': (hs) =>
+    hs.inbox.updateCannedResponse('cr_1', { title: 'İade süreci' }),
+  'DELETE /v1/apps/{appId}/canned-responses/{cannedId}': (hs) => hs.inbox.deleteCannedResponse('cr_1'),
+  'GET /v1/apps/{appId}/inbox/teams': (hs) => hs.inbox.listTeams(),
+  'GET /v1/apps/{appId}/inbox/agents': (hs) => hs.inbox.listAgents(),
+  'GET /v1/apps/{appId}/inbox/settings': (hs) => hs.inbox.getSettings(),
+  'PUT /v1/apps/{appId}/inbox/settings': (hs) =>
+    hs.inbox.updateSettings({ routing: { auto_assign: true, visibility: 'team' } }),
+  'GET /v1/apps/{appId}/inbox/metrics': (hs) =>
+    hs.inbox.metrics({ from: '2026-10-01T00:00:00Z', channel: 'chat' }),
   'GET /v1/apps/{appId}/sms-keywords': (hs) => hs.smsKeywords.list(),
   'POST /v1/apps/{appId}/sms-keywords': (hs) =>
     hs.smsKeywords.create({ keyword: 'KAMPANYA', actions: { reply: { text: 'Kaydınız alındı' } } }),
@@ -352,6 +380,26 @@ const TABLE: Record<string, (hs: Pushizo) => Promise<unknown>> = {
   'POST /v1/apps/{appId}/ads/audiences/{audienceId}/sync': (hs) => hs.ads.syncAudience('adu_1', { full: true }),
   'GET /v1/apps/{appId}/ads/audiences/{audienceId}/syncs': (hs) => hs.ads.listSyncs('adu_1', { limit: 5 }),
   'POST /v1/apps/{appId}/ads/audiences/{audienceId}/lookalikes': (hs) => hs.ads.createLookalike('adu_1', { country: 'TR', ratio: 0.01 }),
+  // reklam raporlama, Conversions API ve bütçe uyarıları (ADR-0038)
+  'GET /v1/apps/{appId}/ads/campaigns': (hs) => hs.ads.listCampaigns({ level: 'ad_set', parent_id: 'ade_1' }),
+  'GET /v1/apps/{appId}/ads/campaigns/{entityId}': (hs) => hs.ads.getCampaign('ade_1'),
+  'PATCH /v1/apps/{appId}/ads/campaigns/{entityId}': (hs) =>
+    hs.ads.updateCampaign('ade_1', { status: 'paused', daily_budget: '150.00' }),
+  'POST /v1/apps/{appId}/ads/accounts/{accountId}/refresh': (hs) => hs.ads.refreshAccount('ada_1'),
+  'GET /v1/apps/{appId}/ads/reports/spend': (hs) =>
+    hs.ads.spendReport({ from: '2026-10-01', to: '2026-10-07', group_by: 'platform' }),
+  'GET /v1/apps/{appId}/ads/reports/attribution': (hs) =>
+    hs.ads.attributionReport({ from: '2026-10-01', to: '2026-10-07', model: 'linear' }),
+  'GET /v1/apps/{appId}/ads/reports/ltv': (hs) => hs.ads.ltvReport({ months: 6 }),
+  'GET /v1/apps/{appId}/ads/conversions-api/configs': (hs) => hs.ads.listCapiConfigs(),
+  'GET /v1/apps/{appId}/ads/conversions-api/deliveries': (hs) =>
+    hs.ads.listCapiDeliveries({ status: 'failed', limit: 20 }),
+  'GET /v1/apps/{appId}/ads/alert-rules': (hs) => hs.ads.listAlertRules(),
+  'POST /v1/apps/{appId}/ads/alert-rules': (hs) =>
+    hs.ads.createAlertRule({ name: 'Günlük tavan', kind: 'daily_spend', threshold: 500 }),
+  'PATCH /v1/apps/{appId}/ads/alert-rules/{ruleId}': (hs) => hs.ads.updateAlertRule('abr_1', { enabled: false }),
+  'DELETE /v1/apps/{appId}/ads/alert-rules/{ruleId}': (hs) => hs.ads.deleteAlertRule('abr_1'),
+  'GET /v1/apps/{appId}/ads/alerts': (hs) => hs.ads.listAlerts({ rule_id: 'abr_1' }),
   'GET /v1/apps/{appId}/integrations/zapier/me': (hs) => hs.zapier.me(),
   'POST /v1/apps/{appId}/integrations/zapier/hooks': (hs) =>
     hs.zapier.subscribe({ target_url: 'https://hooks.zapier.com/x', event: 'user.created' }),
@@ -361,6 +409,35 @@ const TABLE: Record<string, (hs: Pushizo) => Promise<unknown>> = {
   'POST /v1/apps/{appId}/mcp/campaign-drafts': (hs) => hs.mcp.createCampaignDraft({ name: 'Taslak' }),
   'POST /v1/apps/{appId}/mcp/segment-drafts': (hs) =>
     hs.mcp.createSegmentDraft({ name: 'VIP taslak', definition: emptyDefinition }),
+  // web büyüme: web kampanyaları, formlar, anketler ve landing sayfaları (ADR-0039)
+  'GET /v1/apps/{appId}/web-campaigns': (hs) => hs.webCampaigns.list({ status: 'active' }),
+  'POST /v1/apps/{appId}/web-campaigns': (hs) => hs.webCampaigns.create(webCampaignInput),
+  'GET /v1/apps/{appId}/web-campaigns/{campaignId}': (hs) => hs.webCampaigns.get('wcm_1'),
+  'PATCH /v1/apps/{appId}/web-campaigns/{campaignId}': (hs) => hs.webCampaigns.update('wcm_1', { priority: 5 }),
+  'GET /v1/apps/{appId}/web-campaigns/{campaignId}/report': (hs) => hs.webCampaigns.report('wcm_1', { days: 7 }),
+  'POST /v1/apps/{appId}/web-campaigns/{campaignId}/status': (hs) => hs.webCampaigns.setStatus('wcm_1', 'active'),
+  'GET /v1/apps/{appId}/forms': (hs) => hs.forms.list(),
+  'POST /v1/apps/{appId}/forms': (hs) =>
+    hs.forms.create({ name: 'Bülten', fields: [{ id: 'email', type: 'email', label: { tr: 'E-posta' }, required: true }] }),
+  'GET /v1/apps/{appId}/forms/{formId}': (hs) => hs.forms.get('frm_1'),
+  'GET /v1/apps/{appId}/forms/{formId}/submissions': (hs) =>
+    hs.forms.listSubmissions('frm_1', { status: 'confirmed', limit: 50 }),
+  'POST /v1/apps/{appId}/forms/{formId}/submissions': (hs) =>
+    hs.forms.submit('frm_1', { values: { email: 'a@example.com' }, external_id: 'u1' }),
+  'GET /v1/apps/{appId}/surveys': (hs) => hs.surveys.list(),
+  'POST /v1/apps/{appId}/surveys': (hs) =>
+    hs.surveys.create({ name: 'NPS', questions: [{ id: 'q1', type: 'nps', text: { tr: 'Bizi önerir misiniz?' } }] }),
+  'GET /v1/apps/{appId}/surveys/{surveyId}': (hs) => hs.surveys.get('srv_1'),
+  'POST /v1/apps/{appId}/surveys/{surveyId}/status': (hs) => hs.surveys.setStatus('srv_1', 'active'),
+  'GET /v1/apps/{appId}/surveys/{surveyId}/report': (hs) => hs.surveys.report('srv_1', { days: 30 }),
+  'GET /v1/apps/{appId}/surveys/{surveyId}/responses': (hs) =>
+    hs.surveys.listResponses('srv_1', { nps_category: 'detractor' }),
+  'POST /v1/apps/{appId}/surveys/{surveyId}/responses': (hs) =>
+    hs.surveys.respond('srv_1', { answers: { q1: 9 }, external_id: 'u1' }),
+  'GET /v1/apps/{appId}/landing-pages': (hs) => hs.landingPages.list({ status: 'published' }),
+  'GET /v1/apps/{appId}/landing-pages/{pageId}': (hs) => hs.landingPages.get('lp_1'),
+  'POST /v1/apps/{appId}/landing-pages/{pageId}/publish': (hs) => hs.landingPages.publish('lp_1'),
+  'POST /v1/apps/{appId}/landing-pages/{pageId}/unpublish': (hs) => hs.landingPages.unpublish('lp_1'),
 };
 
 /** `/v1/apps/{appId}/x/{id}` → ^/v1/apps/[^/]+/x/[^/]+$ */
