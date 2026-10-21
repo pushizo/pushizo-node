@@ -13,8 +13,16 @@
 
 **Pushizo Node.js SDK** — Server-side SDK for Node.js 20+ (TypeScript, ESM, built-in fetch): notifications, users, segments, journeys, campaigns, analytics and webhook signature verification. Types are generated from the Pushizo OpenAPI schema. Use it on the server only.
 
-> **Status:** Publishing to npm is in progress; until then you can build from this repository.<br>
-> **Durum:** npm yayını hazırlanıyor; o zamana kadar bu depodan derleyerek kullanabilirsiniz.
+> **Status:** Publishing to npm is in progress.<br>
+> **Durum:** npm yayını hazırlanıyor.
+
+**Install from GitHub until then · O zamana kadar GitHub'dan kurulum:**
+
+```bash
+npm install https://github.com/pushizo/pushizo-node/releases/download/v0.1.0/pushizo-node-0.1.0.tgz
+```
+
+**After publication · Yayından sonra:**
 
 ```bash
 npm install @pushizo/node
