@@ -1,7 +1,7 @@
-import type { PublicComponents, PublicPaths } from '@pushizo/api-client';
+import type { components as PublicComponents, paths as PublicPaths } from './generated/openapi.js';
 
 /**
- * Üretilmiş OpenAPI tiplerinden (`packages/api-client/src/generated/public.d.ts`) türetilen
+ * Üretilmiş OpenAPI tiplerinden (`src/generated/openapi.ts`, `npm run generate` ile `api/openapi.yaml`'dan) türetilen
  * istek/yanıt tipleri. Tipler sözleşmeden okunur; elle şema kopyası tutulmaz.
  */
 export type Schemas = PublicComponents['schemas'];

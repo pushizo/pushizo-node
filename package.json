@@ -6,10 +6,10 @@
   "homepage": "https://docs.pushizo.com/docs/sdk/node",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/exec0de/pushizo.git",
-    "directory": "sdk/node"
+    "url": "git+https://github.com/pushizo/pushizo-node.git"
   },
   "bugs": {
+    "url": "https://github.com/pushizo/pushizo-node/issues",
     "email": "support@pushizo.com"
   },
   "keywords": [
@@ -40,12 +40,10 @@
   ],
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
+    "generate": "node ../scripts/generate-server-sdks.mjs --lang node",
     "dev": "tsc -p tsconfig.build.json --watch --preserveWatchOutput",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "clean": "node -e \"require('fs').rmSync('dist',{recursive:true,force:true})\""
-  },
-  "dependencies": {
-    "@pushizo/api-client": "*"
   },
   "engines": {
     "node": ">=20"
