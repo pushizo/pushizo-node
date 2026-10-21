@@ -1,4 +1,4 @@
-import type { PublicPaths } from '@pushizo/api-client';
+import type { paths as PublicPaths } from '../generated/openapi.js';
 import type {
   ConversionsReport,
   EngagementReport,

@@ -1,8 +1,36 @@
+<!-- pushizo:header -->
+<p align="center">
+  <a href="https://pushizo.com"><img src="https://raw.githubusercontent.com/pushizo/.github/main/profile/assets/mark.svg" alt="Pushizo" width="56" height="56"></a>
+</p>
+<p align="center">
+  <a href="https://docs.pushizo.com/docs/sdk/node"><img src="https://img.shields.io/badge/docs-docs.pushizo.com-5b4bdb" alt="Docs"></a>
+  <a href="https://docs.pushizo.com/docs/api"><img src="https://img.shields.io/badge/API-reference-b44fc4" alt="API reference"></a>
+  <a href="https://github.com/pushizo/pushizo-node/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-16130f" alt="License: MIT"></a>
+</p>
+<p align="center"><a href="#english">English</a> · <a href="#türkçe">Türkçe</a></p>
+
+## English
+
+**Pushizo Node.js SDK** — Server-side SDK for Node.js 20+ (TypeScript, ESM, built-in fetch): notifications, users, segments, journeys, campaigns, analytics and webhook signature verification. Types are generated from the Pushizo OpenAPI schema. Use it on the server only.
+
+> **Status:** Publishing to npm is in progress; until then you can build from this repository.<br>
+> **Durum:** npm yayını hazırlanıyor; o zamana kadar bu depodan derleyerek kullanabilirsiniz.
+
+```bash
+npm install @pushizo/node
+```
+
+The detailed guide below is in Turkish; code samples are language-neutral. Full documentation:
+[docs.pushizo.com/docs/sdk/node](https://docs.pushizo.com/docs/sdk/node) · API reference: [docs.pushizo.com/docs/api](https://docs.pushizo.com/docs/api).
+
+## Türkçe
+<!-- /pushizo:header -->
+
 # @pushizo/node
 
 Pushizo Node.js sunucu SDK'sı. Node.js ≥ 20 (yerleşik `fetch`), ESM; istek ve yanıt tipleri
-`api/openapi.yaml`'dan üretilen `@pushizo/api-client` tiplerinden türetilir. Yalnızca sunucuda
-kullanın; API anahtarını istemci koduna gömmeyin. Ayrıntılı rehber: [`docs/sdk/node.md`](../../docs/sdk/node.md).
+[Pushizo OpenAPI şemasından](https://github.com/pushizo/pushizo-openapi) üretilen ve pakete gömülü tiplerden türetilir. Yalnızca sunucuda
+kullanın; API anahtarını istemci koduna gömmeyin. Ayrıntılı rehber: [docs.pushizo.com/docs/sdk/node](https://docs.pushizo.com/docs/sdk/node).
 
 ## Başlatma
 
@@ -187,20 +215,20 @@ for await (const r of hs.paginate((cursor) =>
 ## Gelen kutusu, reklam raporlama ve web büyüme
 
 ```ts
-// Ekip gelen kutusu: durum, atama, etiket ve metrikler (ADR-0040)
+// Ekip gelen kutusu: durum, atama, etiket ve metrikler
 await hs.conversations.assign('cnv_1', { team_id: 'team_1', assignee_id: null });
 await hs.conversations.updateTags('cnv_1', { add: { plan: 'pro' }, remove: ['lead'] });
 await hs.conversations.update('cnv_1', { status: 'resolved' });
 const metrics = await hs.inbox.metrics({ from: '2026-10-01T00:00:00Z', channel: 'chat' });
 await hs.inbox.createCannedResponse({ shortcut: 'iade', title: 'İade', body: 'Merhaba {{ contact.name }}, iadeniz alındı.' });
 
-// Reklam raporlama ve bütçe uyarıları (ADR-0038); from/to zorunlu
+// Reklam raporlama ve bütçe uyarıları; from/to zorunlu
 const spend = await hs.ads.spendReport({ from: '2026-10-01', to: '2026-10-31', group_by: 'campaign' });
 const attribution = await hs.ads.attributionReport({ from: '2026-10-01', to: '2026-10-31', model: 'time_decay' });
 await hs.ads.updateCampaign('ade_1', { status: 'paused' }); // platforma da yazılır
 await hs.ads.createAlertRule({ name: 'Günlük tavan', kind: 'daily_spend', threshold: 500, recipients: ['pazarlama@example.com'] });
 
-// Web büyüme (ADR-0039): kampanya taslak oluşur, setStatus ile yayınlanır
+// Web büyüme: kampanya taslak oluşur, setStatus ile yayınlanır
 const popup = await hs.webCampaigns.create({
   name: 'Bülten pop-up',
   display: { layout: 'popup', blocks: [{ type: 'title', text: { tr: 'Bültenimize katılın' } }], form_id: 'frm_1' },
@@ -223,3 +251,24 @@ npx tsc --noEmit -p sdk/node
 npx eslint sdk/node
 npm run build -w @pushizo/node        # dist/
 ```
+
+<!-- pushizo:footer -->
+---
+
+## Support · Destek
+
+- **Guide · Rehber:** [docs.pushizo.com/docs/sdk/node](https://docs.pushizo.com/docs/sdk/node)
+- **API reference & OpenAPI · API referansı ve OpenAPI:** [docs.pushizo.com/docs/api](https://docs.pushizo.com/docs/api) ·
+  [pushizo-openapi](https://github.com/pushizo/pushizo-openapi)
+- **Bugs & ideas · Hata ve öneri:** [Issues](https://github.com/pushizo/pushizo-node/issues)
+- **Security · Güvenlik:** please do not open public issues; email [security@pushizo.com](mailto:security@pushizo.com) ·
+  herkese açık issue açmayın, bu adrese yazın.
+- **Help · Destek:** [support@pushizo.com](mailto:support@pushizo.com)
+
+This repository is mirrored automatically from the Pushizo main repository on every release. Please open an issue
+instead of a pull request; fixes land in the main repository and ship with the next release.
+Bu depo her sürümde Pushizo ana deposundan otomatik yansıtılır. Pull request yerine issue açın; düzeltmeler ana depoda
+yapılır ve bir sonraki sürümle buraya gelir.
+
+Released under the MIT License · MIT lisanslıdır — [LICENSE](https://github.com/pushizo/pushizo-node/blob/main/LICENSE).
+<!-- /pushizo:footer -->
