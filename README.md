@@ -13,17 +13,6 @@
 
 **Pushizo Node.js SDK** — Server-side SDK for Node.js 20+ (TypeScript, ESM, built-in fetch): notifications, users, segments, journeys, campaigns, analytics and webhook signature verification. Types are generated from the Pushizo OpenAPI schema. Use it on the server only.
 
-> **Status:** Publishing to npm is in progress.<br>
-> **Durum:** npm yayını hazırlanıyor.
-
-**Install from GitHub until then · O zamana kadar GitHub'dan kurulum:**
-
-```bash
-npm install --allow-remote=root https://github.com/pushizo/pushizo-node/releases/download/v0.1.0/pushizo-node-0.1.0.tgz
-```
-
-**After publication · Yayından sonra:**
-
 ```bash
 npm install @pushizo/node
 ```
@@ -98,7 +87,7 @@ Her public API işlemi (`/sdk/v1` hariç) bir SDK metoduna karşılık gelir; e�
 | `whatsappTemplates` | `list`, `sync` |
 | `emailDeliverability` | `get`, `update`, `verifyAddress`, `listWarmupPlans`, `createWarmupPlan`, `updateWarmupPlan`, `deleteWarmupPlan` |
 | `zapier` | `me`, `subscribe`, `unsubscribe`, `samples` |
-| `mcp` | `createCampaignDraft`, `createSegmentDraft` |
+| `mcp` | `createCampaignDraft`, `createSegmentDraft`, `createTemplateDraft`, `createJourneyDraft`, `createInAppDraft`, `sendTest` |
 | `ads` | `listAccounts`, `listAudiences`, `createAudience`, `getAudience`, `updateAudience`, `deleteAudience`, `syncAudience`, `listSyncs`, `createLookalike`, `listCampaigns`, `getCampaign`, `updateCampaign`, `refreshAccount`, `spendReport`, `attributionReport`, `ltvReport`, `listCapiConfigs`, `listCapiDeliveries`, `listAlertRules`, `createAlertRule`, `updateAlertRule`, `deleteAlertRule`, `listAlerts` |
 | `webCampaigns` | `list`, `create`, `get`, `update`, `report`, `setStatus` |
 | `forms` | `list`, `create`, `get`, `listSubmissions`, `submit` |
@@ -146,7 +135,7 @@ await hs.imports.create({ type: 'csv_users', file: csvText, filename: 'kullanici
 
 // Kullanıcı kutusu ve token ile abonelik güncelleme
 await hs.inbox.readAll('external_id', 'u-1');
-await hs.subscriptions.updateByToken('email', 'ayse@example.com', { status: 'unsubscribed' });
+await hs.subscriptions.updateByToken('email', 'ayse@pushizo.com', { status: 'unsubscribed' });
 
 // API anahtarı: düz anahtar yalnızca bu yanıtta döner, loglamayın
 const created = await hs.apiKeys.create({ name: 'ci', scopes: ['notifications:write'] });
@@ -234,7 +223,7 @@ await hs.inbox.createCannedResponse({ shortcut: 'iade', title: 'İade', body: 'M
 const spend = await hs.ads.spendReport({ from: '2026-10-01', to: '2026-10-31', group_by: 'campaign' });
 const attribution = await hs.ads.attributionReport({ from: '2026-10-01', to: '2026-10-31', model: 'time_decay' });
 await hs.ads.updateCampaign('ade_1', { status: 'paused' }); // platforma da yazılır
-await hs.ads.createAlertRule({ name: 'Günlük tavan', kind: 'daily_spend', threshold: 500, recipients: ['pazarlama@example.com'] });
+await hs.ads.createAlertRule({ name: 'Günlük tavan', kind: 'daily_spend', threshold: 500, recipients: ['pazarlama@pushizo.com'] });
 
 // Web büyüme: kampanya taslak oluşur, setStatus ile yayınlanır
 const popup = await hs.webCampaigns.create({
@@ -243,7 +232,7 @@ const popup = await hs.webCampaigns.create({
   trigger: { kind: 'exit_intent' },
 });
 await hs.webCampaigns.setStatus(popup.id, 'active');
-await hs.forms.submit('frm_1', { values: { email: 'ayse@example.com' }, external_id: 'u-1' }); // sunucu tarafı gönderim
+await hs.forms.submit('frm_1', { values: { email: 'ayse@pushizo.com' }, external_id: 'u-1' }); // sunucu tarafı gönderim
 for await (const s of hs.paginate((cursor) => hs.forms.listSubmissions('frm_1', { status: 'confirmed', cursor }))) {
   console.log(s.id);
 }

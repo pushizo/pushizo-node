@@ -66,7 +66,7 @@ const TABLE: Record<string, (hs: Pushizo) => Promise<unknown>> = {
   // webhook'lar
   'GET /v1/apps/{appId}/webhooks': (hs) => hs.webhooks.list(),
   'POST /v1/apps/{appId}/webhooks': (hs) =>
-    hs.webhooks.create({ url: 'https://example.com/h', events: ['user.created'] }),
+    hs.webhooks.create({ url: 'https://pushizo.com/h', events: ['user.created'] }),
   'GET /v1/apps/{appId}/webhooks/{webhookId}': (hs) => hs.webhooks.get('wh_1'),
   'PATCH /v1/apps/{appId}/webhooks/{webhookId}': (hs) => hs.webhooks.update('wh_1', {}),
   'DELETE /v1/apps/{appId}/webhooks/{webhookId}': (hs) => hs.webhooks.delete('wh_1'),
@@ -93,7 +93,7 @@ const TABLE: Record<string, (hs: Pushizo) => Promise<unknown>> = {
   'DELETE /v1/apps/{appId}/users/by/{label}/{value}/identity/{aliasLabel}': (hs) =>
     hs.users.removeAlias('external_id', 'u1', 'crm'),
   'POST /v1/apps/{appId}/users/by/{label}/{value}/subscriptions': (hs) =>
-    hs.users.addSubscription('external_id', 'u1', { channel: 'email', token: 'a@example.com' }),
+    hs.users.addSubscription('external_id', 'u1', { channel: 'email', token: 'a@pushizo.com' }),
   // bildirim kutusu
   'GET /v1/apps/{appId}/users/by/{label}/{value}/inbox': (hs) => hs.inbox.list('external_id', 'u1'),
   'POST /v1/apps/{appId}/users/by/{label}/{value}/inbox/read-all': (hs) =>
@@ -111,7 +111,7 @@ const TABLE: Record<string, (hs: Pushizo) => Promise<unknown>> = {
   'GET /v1/apps/{appId}/subscriptions/{subscriptionId}/user/identity': (hs) =>
     hs.subscriptions.getUserIdentity('sub_1'),
   'PATCH /v1/apps/{appId}/subscriptions_by_token/{tokenType}/{token}': (hs) =>
-    hs.subscriptions.updateByToken('email', 'a@example.com', { status: 'unsubscribed' }),
+    hs.subscriptions.updateByToken('email', 'a@pushizo.com', { status: 'unsubscribed' }),
   'POST /v1/apps/{appId}/subscriptions/{subscriptionId}/owner': (hs) =>
     hs.subscriptions.setOwner('sub_1', 'u1'),
   // olaylar
@@ -220,7 +220,7 @@ const TABLE: Record<string, (hs: Pushizo) => Promise<unknown>> = {
   // suppression list
   'GET /v1/apps/{appId}/suppressions': (hs) => hs.suppressions.list(),
   'POST /v1/apps/{appId}/suppressions': (hs) =>
-    hs.suppressions.create({ channel: 'email', value: 'a@example.com' }),
+    hs.suppressions.create({ channel: 'email', value: 'a@pushizo.com' }),
   'DELETE /v1/apps/{appId}/suppressions/{suppressionId}': (hs) => hs.suppressions.remove('sup_1'),
   // in-app mesajlar
   'GET /v1/apps/{appId}/in-app-messages': (hs) => hs.inAppMessages.list(),
@@ -271,7 +271,7 @@ const TABLE: Record<string, (hs: Pushizo) => Promise<unknown>> = {
   // veri feed'leri ve içerik tabloları
   'GET /v1/apps/{appId}/data-feeds': (hs) => hs.dataFeeds.list(),
   'POST /v1/apps/{appId}/data-feeds': (hs) =>
-    hs.dataFeeds.create({ name: 'stok', url_template: 'https://example.com/stok/{{ user.external_id }}' }),
+    hs.dataFeeds.create({ name: 'stok', url_template: 'https://pushizo.com/stok/{{ user.external_id }}' }),
   'GET /v1/apps/{appId}/data-feeds/{feedId}': (hs) => hs.dataFeeds.get('dfd_1'),
   'PATCH /v1/apps/{appId}/data-feeds/{feedId}': (hs) => hs.dataFeeds.update('dfd_1', { enabled: false }),
   'DELETE /v1/apps/{appId}/data-feeds/{feedId}': (hs) => hs.dataFeeds.delete('dfd_1'),
@@ -356,11 +356,11 @@ const TABLE: Record<string, (hs: Pushizo) => Promise<unknown>> = {
   'PUT /v1/apps/{appId}/email-deliverability': (hs) =>
     hs.emailDeliverability.update({ validation: { enabled: true, check_mx: true } }),
   'POST /v1/apps/{appId}/email-deliverability/verify-address': (hs) =>
-    hs.emailDeliverability.verifyAddress({ address: 'a@example.com' }),
+    hs.emailDeliverability.verifyAddress({ address: 'a@pushizo.com' }),
   'GET /v1/apps/{appId}/email-deliverability/warmup-plans': (hs) =>
     hs.emailDeliverability.listWarmupPlans(),
   'POST /v1/apps/{appId}/email-deliverability/warmup-plans': (hs) =>
-    hs.emailDeliverability.createWarmupPlan({ name: 'Yeni alan', kind: 'domain', target: 'mail.example.com' }),
+    hs.emailDeliverability.createWarmupPlan({ name: 'Yeni alan', kind: 'domain', target: 'mail.pushizo.com' }),
   'GET /v1/apps/{appId}/email-deliverability/warmup-plans/{planId}': (hs) =>
     hs.emailDeliverability.getWarmupPlan('ewp_1'),
   'GET /v1/apps/{appId}/email-deliverability/warmup-plans/{planId}/usage': (hs) =>
@@ -409,6 +409,16 @@ const TABLE: Record<string, (hs: Pushizo) => Promise<unknown>> = {
   'POST /v1/apps/{appId}/mcp/campaign-drafts': (hs) => hs.mcp.createCampaignDraft({ name: 'Taslak' }),
   'POST /v1/apps/{appId}/mcp/segment-drafts': (hs) =>
     hs.mcp.createSegmentDraft({ name: 'VIP taslak', definition: emptyDefinition }),
+  'POST /v1/apps/{appId}/mcp/template-drafts': (hs) =>
+    hs.mcp.createTemplateDraft({ name: 'Şablon', content: { contents: { tr: 'Merhaba' } } }),
+  'POST /v1/apps/{appId}/mcp/journey-drafts': (hs) => hs.mcp.createJourneyDraft({ name: 'Akış' }),
+  'POST /v1/apps/{appId}/mcp/in-app-drafts': (hs) =>
+    hs.mcp.createInAppDraft({
+      name: 'Duyuru',
+      triggers: [{ kind: 'session_start' }],
+      display: { layout: 'modal', blocks: [{ type: 'title', text: { tr: 'Yeni' } }] },
+    }),
+  'POST /v1/apps/{appId}/mcp/test-sends': (hs) => hs.mcp.sendTest({ contents: { tr: 'Test' } }),
   // web büyüme: web kampanyaları, formlar, anketler ve landing sayfaları (ADR-0039)
   'GET /v1/apps/{appId}/web-campaigns': (hs) => hs.webCampaigns.list({ status: 'active' }),
   'POST /v1/apps/{appId}/web-campaigns': (hs) => hs.webCampaigns.create(webCampaignInput),
@@ -423,7 +433,7 @@ const TABLE: Record<string, (hs: Pushizo) => Promise<unknown>> = {
   'GET /v1/apps/{appId}/forms/{formId}/submissions': (hs) =>
     hs.forms.listSubmissions('frm_1', { status: 'confirmed', limit: 50 }),
   'POST /v1/apps/{appId}/forms/{formId}/submissions': (hs) =>
-    hs.forms.submit('frm_1', { values: { email: 'a@example.com' }, external_id: 'u1' }),
+    hs.forms.submit('frm_1', { values: { email: 'a@pushizo.com' }, external_id: 'u1' }),
   'GET /v1/apps/{appId}/surveys': (hs) => hs.surveys.list(),
   'POST /v1/apps/{appId}/surveys': (hs) =>
     hs.surveys.create({ name: 'NPS', questions: [{ id: 'q1', type: 'nps', text: { tr: 'Bizi önerir misiniz?' } }] }),

@@ -1,9 +1,17 @@
 import type {
   Campaign,
   CreateCampaignDraftInput,
+  CreateInAppDraftInput,
+  CreateJourneyDraftInput,
+  CreateNotificationResult,
   CreateSegmentInput,
+  CreateTemplateDraftInput,
+  InAppMessage,
   IntegrationOk,
+  JourneyDetail,
+  McpTestSendInput,
   Segment,
+  Template,
   ZapierHook,
   ZapierMe,
   ZapierSamples,
@@ -37,8 +45,8 @@ export function createZapier(ctx: ResourceContext) {
 }
 
 /**
- * MCP onaylı mod yazma uçları (`mcp:write`): kayıtlar her zaman taslak oluşur; kampanya gönderilmez veya
- * zamanlanmaz, segment dinamik olarak kaydedilir.
+ * MCP onaylı mod yazma uçları (`mcp:write`): taslaklar gönderilmez, zamanlanmaz ve yayımlanmaz.
+ * `sendTest` yalnızca test cihazlarına gider.
  */
 export function createMcpDrafts(ctx: ResourceContext) {
   const base = (appId?: string) => `${ctx.appPath(appId)}/mcp`;
@@ -48,5 +56,17 @@ export function createMcpDrafts(ctx: ResourceContext) {
       ctx.http.request<Campaign>({ method: 'POST', path: `${base(appId)}/campaign-drafts`, body }),
     createSegmentDraft: (body: CreateSegmentInput, appId?: string) =>
       ctx.http.request<Segment>({ method: 'POST', path: `${base(appId)}/segment-drafts`, body }),
+    /** Şablona `mcp` etiketi eklenir; şablon tek başına gönderilmez. */
+    createTemplateDraft: (body: CreateTemplateDraftInput, appId?: string) =>
+      ctx.http.request<Template>({ method: 'POST', path: `${base(appId)}/template-drafts`, body }),
+    /** Journey `draft` oluşur; yayımlanmaz. */
+    createJourneyDraft: (body: CreateJourneyDraftInput, appId?: string) =>
+      ctx.http.request<JourneyDetail>({ method: 'POST', path: `${base(appId)}/journey-drafts`, body }),
+    /** In-app mesaj `draft` oluşur; etkinleştirilmez. */
+    createInAppDraft: (body: CreateInAppDraftInput, appId?: string) =>
+      ctx.http.request<InAppMessage>({ method: 'POST', path: `${base(appId)}/in-app-drafts`, body }),
+    /** Yalnızca test cihazları. Seçilen abonelikler test cihazı değilse API 403 döner. */
+    sendTest: (body: McpTestSendInput, appId?: string) =>
+      ctx.http.request<CreateNotificationResult>({ method: 'POST', path: `${base(appId)}/test-sends`, body }),
   };
 }

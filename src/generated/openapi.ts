@@ -3645,6 +3645,74 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/apps/{appId}/mcp/template-drafts": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Şablon oluştur (MCP onaylı mod; şablon tek başına gönderim yapmaz) */
+        post: operations["McpDraftsController_createTemplateDraft"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/mcp/journey-drafts": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Journey taslağı oluştur (MCP onaylı mod; yayımlanmaz) */
+        post: operations["McpDraftsController_createJourneyDraft"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/mcp/in-app-drafts": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** In-app mesaj taslağı oluştur (MCP onaylı mod; etkinleştirilmez) */
+        post: operations["McpDraftsController_createInAppDraft"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/mcp/test-sends": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Test gönderimi (yalnızca app’in test cihazlarına; MCP onaylı mod) */
+        post: operations["McpDraftsController_testSend"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/sdk/v1/apps/{appId}/web-campaigns": {
         parameters: {
             query?: never;
@@ -6609,6 +6677,19 @@ export interface components {
                 referrer?: string;
             }[];
         };
+        TestPushDto: {
+            subscription_ids?: string[];
+            headings?: {
+                [key: string]: string;
+            };
+            contents: {
+                [key: string]: string;
+            };
+            url?: string;
+            data?: {
+                [key: string]: string;
+            };
+        };
         SdkWebCampaignEventDto: {
             /** @enum {string} */
             type: "impression" | "click" | "close" | "conversion";
@@ -9273,7 +9354,7 @@ export interface components {
             id: string;
             app_id: string;
             /** @enum {string} */
-            type: "eski sağlayıcı_players" | "csv_users";
+            type: "legacy_players" | "csv_users";
             file_name: string | null;
             /** @enum {string} */
             status: "pending" | "running" | "completed" | "failed";
@@ -9296,7 +9377,7 @@ export interface components {
                 id: string;
                 app_id: string;
                 /** @enum {string} */
-                type: "eski sağlayıcı_players" | "csv_users";
+                type: "legacy_players" | "csv_users";
                 file_name: string | null;
                 /** @enum {string} */
                 status: "pending" | "running" | "completed" | "failed";
@@ -9697,6 +9778,30 @@ export interface components {
                 period_start: string | null;
                 period_end: string | null;
                 issued_at: string | null;
+            }[];
+        };
+        OverageChargeList: {
+            data: {
+                id: string;
+                period_start: string;
+                period_end: string;
+                provider: string;
+                plan_code: string;
+                currency: string;
+                amount: number;
+                /** @enum {string} */
+                status: "pending" | "invoiced" | "awaiting_payment" | "paid" | "failed" | "waived";
+                lines: {
+                    metric: string;
+                    included: number;
+                    used: number;
+                    billable: number;
+                    amount: number;
+                    description: string;
+                }[];
+                charged_at: string | null;
+                paid_at: string | null;
+                created_at: string;
             }[];
         };
         CheckoutResult: {
@@ -19899,7 +20004,7 @@ export interface operations {
             content: {
                 "multipart/form-data": {
                     /** @enum {string} */
-                    type: "eski sağlayıcı_players" | "csv_users";
+                    type: "legacy_players" | "csv_users";
                     /**
                      * Format: binary
                      * @description CSV dosyası (UTF-8, en fazla 50 MB)
@@ -24519,6 +24624,134 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["Segment"];
+                };
+            };
+        };
+    };
+    McpDraftsController_createTemplateDraft: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateTemplateDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Template"];
+                };
+            };
+        };
+    };
+    McpDraftsController_createJourneyDraft: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    name: string;
+                    description?: string;
+                    /** @description React Flow uyumlu journey grafı: { nodes: [{ id, type, position, data }], edges: [{ id, source, target, sourceHandle }] } (docs/journeys.md) */
+                    graph?: {
+                        nodes: {
+                            [key: string]: unknown;
+                        }[];
+                        edges: {
+                            [key: string]: unknown;
+                        }[];
+                    };
+                    /** @description Yeniden giriş, yalnızca yeni girenler, çıkış kuralları, çıkış tag'leri, hedefler, takvim (docs/journeys.md) */
+                    settings?: {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["JourneyDetail"];
+                };
+            };
+        };
+    };
+    McpDraftsController_createInAppDraft: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateInAppDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["InAppMessage"];
+                };
+            };
+        };
+    };
+    McpDraftsController_testSend: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["TestPushDto"];
+            };
+        };
+        responses: {
+            202: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CreateNotificationResult"];
                 };
             };
         };

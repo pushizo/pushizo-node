@@ -263,7 +263,7 @@ export type CreateExportInput = WithDefaults<
   JsonBody<'/v1/apps/{appId}/exports', 'post'>,
   'filters'
 >;
-export type ImportType = 'eski sağlayıcı_players' | 'csv_users';
+export type ImportType = 'legacy_players' | 'csv_users';
 
 // --- v2 Faz 18–21: dinamik içerik, veri ambarı, konuşmalar, teslim edilebilirlik, entegrasyonlar ---
 
@@ -352,6 +352,10 @@ export type ZapierSamplesParams = NonNullable<
 export type CreateCampaignDraftInput = Relax<
   JsonBody<'/v1/apps/{appId}/mcp/campaign-drafts', 'post'>
 >;
+export type CreateTemplateDraftInput = Relax<JsonBody<'/v1/apps/{appId}/mcp/template-drafts', 'post'>>;
+export type CreateJourneyDraftInput = Relax<JsonBody<'/v1/apps/{appId}/mcp/journey-drafts', 'post'>>;
+export type CreateInAppDraftInput = Relax<JsonBody<'/v1/apps/{appId}/mcp/in-app-drafts', 'post'>>;
+export type McpTestSendInput = Relax<JsonBody<'/v1/apps/{appId}/mcp/test-sends', 'post'>>;
 // Canlı sohbet ve ekip gelen kutusu (Faz 25, ADR-0040)
 export type ConversationTagsResult = Schemas['ConversationTagsResult'];
 export type ConversationActivity = Schemas['ConversationActivity'];

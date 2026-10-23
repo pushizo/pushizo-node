@@ -197,7 +197,7 @@ describe('Node SDK: OpenAPI eşitliği için eklenen kaynaklar', () => {
     );
     const result = await hs.imports.create({
       type: 'csv_users',
-      file: new TextEncoder().encode('external_id,email\nu1,a@example.com\n'),
+      file: new TextEncoder().encode('external_id,email\nu1,a@pushizo.com\n'),
       filename: 'kullanicilar.csv',
     });
     expect(result).toMatchObject({ id: 'imp_1' });
@@ -208,7 +208,7 @@ describe('Node SDK: OpenAPI eşitliği için eklenen kaynaklar', () => {
     const file = (form as FormData).get('file') as File;
     expect((form as FormData).get('type')).toBe('csv_users');
     expect(file.name).toBe('kullanicilar.csv');
-    expect(await file.text()).toBe('external_id,email\nu1,a@example.com\n');
+    expect(await file.text()).toBe('external_id,email\nu1,a@pushizo.com\n');
   });
 
   it('export işi gövdesi ve hata zarfı PushizoError olur', async () => {
@@ -389,13 +389,13 @@ describe('Node SDK: v3 kaynakları (gelen kutusu, reklam raporlama, web büyüme
     expect(calls[2]!.method).toBe('POST');
     expect(calls[2]!.url).toBe('https://api.test/v1/apps/app_1/ads/accounts/ada_1/refresh');
     expect(calls[2]!.body).toBeUndefined();
-    await hs.ads.createAlertRule({ name: 'ROAS', kind: 'roas_drop', threshold: 1.5, window_days: 7, recipients: ['a@example.com'] });
+    await hs.ads.createAlertRule({ name: 'ROAS', kind: 'roas_drop', threshold: 1.5, window_days: 7, recipients: ['a@pushizo.com'] });
     expect(bodyOf(calls[3]!.body)).toEqual({
       name: 'ROAS',
       kind: 'roas_drop',
       threshold: 1.5,
       window_days: 7,
-      recipients: ['a@example.com'],
+      recipients: ['a@pushizo.com'],
     });
     await hs.ads.updateCampaign('ade/1', { daily_budget: 250 });
     expect(calls[4]!.method).toBe('PATCH');
@@ -416,8 +416,8 @@ describe('Node SDK: v3 kaynakları (gelen kutusu, reklam raporlama, web büyüme
     await hs.webCampaigns.setStatus('wcm_1', 'paused');
     expect(calls[0]!.url).toBe('https://api.test/v1/apps/app_1/web-campaigns/wcm_1/status');
     expect(bodyOf(calls[0]!.body)).toEqual({ status: 'paused' });
-    await hs.forms.submit('frm_1', { values: { email: 'ayşe@example.com', consent: true }, external_id: 'u1' });
-    expect(bodyOf(calls[1]!.body)).toEqual({ values: { email: 'ayşe@example.com', consent: true }, external_id: 'u1' });
+    await hs.forms.submit('frm_1', { values: { email: 'ayşe@pushizo.com', consent: true }, external_id: 'u1' });
+    expect(bodyOf(calls[1]!.body)).toEqual({ values: { email: 'ayşe@pushizo.com', consent: true }, external_id: 'u1' });
     const ids: string[] = [];
     for await (const sub of hs.paginate((cursor) => hs.forms.listSubmissions('frm_1', { cursor, limit: 2 }))) {
       ids.push(sub.id);
