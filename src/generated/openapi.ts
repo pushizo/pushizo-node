@@ -8844,6 +8844,9 @@ export interface components {
             /** @enum {string} */
             role: "owner" | "admin" | "developer" | "marketer" | "analyst" | "billing" | "viewer" | "composer" | "agent";
         };
+        ShopifyWebhookStatus: {
+            configured: boolean;
+        };
         App: {
             id: string;
             org_id: string;
@@ -9671,7 +9674,7 @@ export interface components {
         };
         BillingStatus: {
             org_id: string;
-            /** @description stripe | iyzico | mock | none (ödeme sağlayıcısı yapılandırılmamış; checkout/portal 503 döner) */
+            /** @description stripe | iyzico | creem | mock | none (ödeme sağlayıcısı yapılandırılmamış; checkout/portal 503 döner) */
             provider: string;
             plan: {
                 code: string;
@@ -12087,6 +12090,33 @@ export interface components {
                 updated_at: string;
             }[];
         };
+        AiPanelResult: {
+            answer: string;
+            segment: {
+                name: string;
+                description: string;
+                /** @enum {string} */
+                kind: "clicked_7d" | "not_opened_7d" | "inactive_30d" | "event_7d";
+                event_name?: string;
+            } | null;
+            campaign: {
+                name: string;
+                title: string;
+                body: string;
+            } | null;
+            journey: {
+                name: string;
+                description: string;
+            } | null;
+            meta: {
+                model: string;
+            };
+        };
+        AiPanelApplyResult: {
+            segment_id: string | null;
+            campaign_id: string | null;
+            journey_id: string | null;
+        };
         InboxSettings: {
             widget: {
                 enabled?: boolean;
@@ -14328,7 +14358,7 @@ export interface components {
             id: string;
             app_id: string;
             /** @enum {string} */
-            type: "segment" | "amplitude" | "mixpanel" | "zapier" | "slack";
+            type: "segment" | "amplitude" | "mixpanel" | "ga4" | "posthog" | "rudderstack" | "appsflyer" | "adjust" | "revenuecat" | "zapier" | "slack";
             name: string;
             /** @enum {string} */
             status: "active" | "paused" | "error";
@@ -14361,7 +14391,7 @@ export interface components {
                 id: string;
                 app_id: string;
                 /** @enum {string} */
-                type: "segment" | "amplitude" | "mixpanel" | "zapier" | "slack";
+                type: "segment" | "amplitude" | "mixpanel" | "ga4" | "posthog" | "rudderstack" | "appsflyer" | "adjust" | "revenuecat" | "zapier" | "slack";
                 name: string;
                 /** @enum {string} */
                 status: "active" | "paused" | "error";
@@ -14391,7 +14421,7 @@ export interface components {
             }[];
             catalog: {
                 /** @enum {string} */
-                type: "segment" | "amplitude" | "mixpanel" | "zapier" | "slack";
+                type: "segment" | "amplitude" | "mixpanel" | "ga4" | "posthog" | "rudderstack" | "appsflyer" | "adjust" | "revenuecat" | "zapier" | "slack";
                 events: string[];
                 cohorts: boolean;
                 inbound: boolean;
