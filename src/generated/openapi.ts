@@ -4723,6 +4723,15 @@ export interface components {
                         };
                     };
                 };
+                brandKit?: {
+                    website_url?: string;
+                    name?: string;
+                    primary_color?: string;
+                    accent_color?: string;
+                    font?: string;
+                    logo_url?: string;
+                    tone?: string;
+                };
                 defaultTtlSeconds?: number;
                 identityVerificationRequired?: boolean;
                 allowedOrigins?: string[];
@@ -8961,6 +8970,15 @@ export interface components {
             /** @enum {string} */
             role: "owner" | "admin" | "developer" | "marketer" | "analyst" | "billing" | "viewer" | "composer" | "agent";
         };
+        BrandKitExtract: {
+            website_url?: string;
+            name?: string;
+            primary_color?: string;
+            accent_color?: string;
+            font?: string;
+            logo_url?: string;
+            tone?: string;
+        };
         ShopifyWebhookStatus: {
             configured: boolean;
         };
@@ -9031,6 +9049,15 @@ export interface components {
                             saved?: string;
                         };
                     };
+                };
+                brandKit?: {
+                    website_url?: string;
+                    name?: string;
+                    primary_color?: string;
+                    accent_color?: string;
+                    font?: string;
+                    logo_url?: string;
+                    tone?: string;
                 };
                 defaultTtlSeconds?: number;
                 identityVerificationRequired?: boolean;
@@ -9198,6 +9225,15 @@ export interface components {
                                 saved?: string;
                             };
                         };
+                    };
+                    brandKit?: {
+                        website_url?: string;
+                        name?: string;
+                        primary_color?: string;
+                        accent_color?: string;
+                        font?: string;
+                        logo_url?: string;
+                        tone?: string;
                     };
                     defaultTtlSeconds?: number;
                     identityVerificationRequired?: boolean;
