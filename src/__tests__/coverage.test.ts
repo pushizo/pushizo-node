@@ -313,6 +313,30 @@ const TABLE: Record<string, (hs: Pushizo) => Promise<unknown>> = {
   'POST /v1/apps/{appId}/warehouse-exports/{exportId}/run': (hs) => hs.warehouseExports.run('whe_1'),
   'GET /v1/apps/{appId}/warehouse-exports/{exportId}/runs': (hs) =>
     hs.warehouseExports.runs('whe_1', { limit: 20 }),
+  'GET /v1/apps/{appId}/reverse-etl': (hs) => hs.reverseEtl.list(),
+  'POST /v1/apps/{appId}/reverse-etl/test-connection': (hs) =>
+    hs.reverseEtl.testConnection({
+      source: 's3',
+      config: { bucket: 'hs-ambar', region: 'eu-central-1', key: 'users.csv', format: 'csv', mapping: { external_id_column: 'id' } },
+      credentials: { access_key_id: 'AKIA_TEST', secret_access_key: 'gizli-anahtar' },
+    }),
+  'POST /v1/apps/{appId}/reverse-etl': (hs) =>
+    hs.reverseEtl.create({
+      name: 'Kullanıcılar',
+      target: 'user',
+      schedule: 'daily',
+      source: 's3',
+      config: { bucket: 'hs-ambar', region: 'eu-central-1', key: 'users.csv', format: 'csv', mapping: { external_id_column: 'id' } },
+      credentials: { access_key_id: 'AKIA_TEST', secret_access_key: 'gizli-anahtar' },
+    }),
+  'GET /v1/apps/{appId}/reverse-etl/{syncId}': (hs) => hs.reverseEtl.get('ret_1'),
+  'PATCH /v1/apps/{appId}/reverse-etl/{syncId}': (hs) => hs.reverseEtl.update('ret_1', { schedule: 'hourly' }),
+  'DELETE /v1/apps/{appId}/reverse-etl/{syncId}': (hs) => hs.reverseEtl.delete('ret_1'),
+  'POST /v1/apps/{appId}/reverse-etl/{syncId}/test': (hs) => hs.reverseEtl.test('ret_1'),
+  'POST /v1/apps/{appId}/reverse-etl/{syncId}/run': (hs) => hs.reverseEtl.run('ret_1'),
+  'GET /v1/apps/{appId}/reverse-etl/{syncId}/runs': (hs) => hs.reverseEtl.runs('ret_1', { limit: 20 }),
+  'POST /v1/apps/{appId}/verify/sms': (hs) => hs.verify.start({ phone: '+905321112233', locale: 'tr' }),
+  'POST /v1/apps/{appId}/verify/sms/check': (hs) => hs.verify.check({ id: 'phv_1', code: '123456' }),
   // konuşmalar, anahtar kelimeler ve WhatsApp şablonları
   'GET /v1/apps/{appId}/conversations': (hs) =>
     hs.conversations.list({ channel: 'whatsapp', unread: true }),
@@ -367,6 +391,8 @@ const TABLE: Record<string, (hs: Pushizo) => Promise<unknown>> = {
     hs.emailDeliverability.warmupPlanUsage('ewp_1', { days: 7 }),
   'PATCH /v1/apps/{appId}/email-deliverability/warmup-plans/{planId}': (hs) =>
     hs.emailDeliverability.updateWarmupPlan('ewp_1', { status: 'paused' }),
+  'GET /v1/apps/{appId}/email-deliverability/postmaster': (hs) => hs.emailDeliverability.postmaster(),
+  'POST /v1/apps/{appId}/email-deliverability/postmaster/sync': (hs) => hs.emailDeliverability.syncPostmaster(),
   'DELETE /v1/apps/{appId}/email-deliverability/warmup-plans/{planId}': (hs) =>
     hs.emailDeliverability.deleteWarmupPlan('ewp_1'),
   // Zapier ve MCP taslakları

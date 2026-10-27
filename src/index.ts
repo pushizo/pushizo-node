@@ -18,6 +18,8 @@ import { createJourneys } from './resources/journeys.js';
 import { createPreferences } from './resources/preferences.js';
 import { createSegments } from './resources/segments.js';
 import { createTemplates } from './resources/templates.js';
+import { createReverseEtl } from './resources/reverse-etl.js';
+import { createVerify } from './resources/verify.js';
 import { createWarehouseExports } from './resources/warehouse-exports.js';
 import { createForms, createLandingPages, createSurveys, createWebCampaigns } from './resources/web-growth.js';
 import type {
@@ -607,6 +609,10 @@ export class Pushizo {
   readonly contentTables = createContentTables(this.resourceContext());
   /** Veri ambarı dışa aktarımları (BigQuery, Snowflake, S3 Parquet). */
   readonly warehouseExports = createWarehouseExports(this.resourceContext());
+  /** Depodan içeri aktarım. */
+  readonly reverseEtl = createReverseEtl(this.resourceContext());
+  /** SMS doğrulama kodu. */
+  readonly verify = createVerify(this.resourceContext());
   /** İki yönlü konuşmalar (SMS, WhatsApp, RCS). */
   readonly conversations = createConversations(this.resourceContext());
   /** Gelen mesaj anahtar kelimeleri. */

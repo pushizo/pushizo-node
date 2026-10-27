@@ -49,5 +49,15 @@ export function createEmailDeliverability(ctx: ResourceContext) {
       ctx.http.request<EmailWarmupPlan>({ method: 'PATCH', path: plan(planId, appId), body }),
     deleteWarmupPlan: (planId: string, appId?: string) =>
       ctx.http.request<Ok>({ method: 'DELETE', path: plan(planId, appId) }),
+    postmaster: (appId?: string) =>
+      ctx.http.request<{ domain: string | null; data: { day: string; domain_reputation: string | null; spam_rate: string | null }[] }>({
+        method: 'GET',
+        path: `${base(appId)}/postmaster`,
+      }),
+    syncPostmaster: (appId?: string) =>
+      ctx.http.request<{ domain: string | null; data: { day: string; domain_reputation: string | null; spam_rate: string | null }[] }>({
+        method: 'POST',
+        path: `${base(appId)}/postmaster/sync`,
+      }),
   };
 }

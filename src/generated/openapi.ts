@@ -2725,6 +2725,74 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/apps/{appId}/email-deliverability/postmaster": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Google Postmaster itibar kayıtları */
+        get: operations["PublicDeliverabilityController_postmaster"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/email-deliverability/postmaster/sync": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Google Postmaster dünkü itibarını oku */
+        post: operations["PublicDeliverabilityController_syncPostmaster"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/verify/sms": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** SMS doğrulama kodu gönder */
+        post: operations["PublicVerifyController_start"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/verify/sms/check": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** SMS doğrulama kodunu kontrol et */
+        post: operations["PublicVerifyController_check"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/apps/{appId}/suppressions": {
         parameters: {
             query?: never;
@@ -4195,7 +4263,7 @@ export interface components {
         };
         SdkRegisterDto: {
             /** @enum {string} */
-            channel: "ios_push" | "android_push" | "hms_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs";
+            channel: "ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs";
             token: string;
             /** @default {} */
             device: {
@@ -4211,6 +4279,10 @@ export interface components {
                 push_capable?: boolean;
                 /** @enum {string} */
                 push_environment?: "sandbox" | "production";
+                /** @enum {string} */
+                form_factor?: "phone" | "watch";
+                /** @enum {string} */
+                push_kind?: "alert" | "voip" | "app_clip";
             };
             test_device?: boolean;
             user?: {
@@ -4244,6 +4316,10 @@ export interface components {
                 push_capable?: boolean;
                 /** @enum {string} */
                 push_environment?: "sandbox" | "production";
+                /** @enum {string} */
+                form_factor?: "phone" | "watch";
+                /** @enum {string} */
+                push_kind?: "alert" | "voip" | "app_clip";
             };
             opted_in?: boolean;
             location?: {
@@ -4688,7 +4764,7 @@ export interface components {
                         /** @enum {string} */
                         unit: "minutes" | "hours" | "days" | "weeks";
                     };
-                    channels?: ("ios_push" | "android_push" | "hms_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs")[];
+                    channels?: ("ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs")[];
                 }[];
                 inApp?: {
                     minIntervalSeconds?: number;
@@ -4841,7 +4917,7 @@ export interface components {
             };
             subscriptions?: {
                 /** @enum {string} */
-                channel: "ios_push" | "android_push" | "hms_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs";
+                channel: "ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs";
                 token: string;
                 /** @default {} */
                 device: {
@@ -4857,6 +4933,10 @@ export interface components {
                     push_capable?: boolean;
                     /** @enum {string} */
                     push_environment?: "sandbox" | "production";
+                    /** @enum {string} */
+                    form_factor?: "phone" | "watch";
+                    /** @enum {string} */
+                    push_kind?: "alert" | "voip" | "app_clip";
                 };
                 /** @enum {string} */
                 status?: "subscribed" | "unsubscribed";
@@ -4893,7 +4973,7 @@ export interface components {
         };
         AddSubscriptionDto: {
             /** @enum {string} */
-            channel: "ios_push" | "android_push" | "hms_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs";
+            channel: "ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs";
             token: string;
             /** @default {} */
             device: {
@@ -4909,6 +4989,10 @@ export interface components {
                 push_capable?: boolean;
                 /** @enum {string} */
                 push_environment?: "sandbox" | "production";
+                /** @enum {string} */
+                form_factor?: "phone" | "watch";
+                /** @enum {string} */
+                push_kind?: "alert" | "voip" | "app_clip";
             };
             /** @enum {string} */
             status?: "subscribed" | "unsubscribed";
@@ -4933,6 +5017,10 @@ export interface components {
                 push_capable?: boolean;
                 /** @enum {string} */
                 push_environment?: "sandbox" | "production";
+                /** @enum {string} */
+                form_factor?: "phone" | "watch";
+                /** @enum {string} */
+                push_kind?: "alert" | "voip" | "app_clip";
             };
             /** @enum {string} */
             status?: "subscribed" | "unsubscribed";
@@ -4970,7 +5058,7 @@ export interface components {
                 included_segments?: string[];
                 excluded_segments?: string[];
                 filters?: unknown;
-                channels?: ("ios_push" | "android_push" | "hms_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs")[];
+                channels?: ("ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs")[];
                 test_devices_only?: boolean;
                 email_to?: string[];
                 include_phone_numbers?: string[];
@@ -5016,6 +5104,16 @@ export interface components {
             large_icon?: string;
             android_accent_color?: string;
             android_visibility?: 1 | 0 | -1;
+            ios_carousel?: {
+                url: string;
+                title?: string;
+            }[];
+            android_live_update?: {
+                progress: number;
+                ongoing?: boolean;
+            };
+            voip?: boolean;
+            app_clip?: boolean;
             chrome_web_icon?: string;
             chrome_web_image?: string;
             chrome_web_badge?: string;
@@ -5150,6 +5248,10 @@ export interface components {
             name?: string;
             labels?: string[];
             category?: string;
+            /** @enum {string} */
+            fallback_channel?: "sms" | "email";
+            /** @enum {string} */
+            form_factor?: "phone" | "watch";
         };
         EstimateAudienceDto: {
             app_id?: string;
@@ -5163,7 +5265,7 @@ export interface components {
                 included_segments?: string[];
                 excluded_segments?: string[];
                 filters?: unknown;
-                channels?: ("ios_push" | "android_push" | "hms_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs")[];
+                channels?: ("ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs")[];
                 test_devices_only?: boolean;
                 email_to?: string[];
                 include_phone_numbers?: string[];
@@ -5213,13 +5315,13 @@ export interface components {
                 campaign_id?: string;
                 status?: string;
                 /** @enum {string} */
-                channel?: "ios_push" | "android_push" | "hms_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs";
+                channel?: "ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs";
                 segment_id?: string;
             };
         };
         CreateTemplateDto: {
             name: string;
-            channel?: ("ios_push" | "android_push" | "hms_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs") | null;
+            channel?: ("ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs") | null;
             tags?: string[];
             content: {
                 headings?: {
@@ -5380,11 +5482,21 @@ export interface components {
                 rcs_fallback_text?: {
                     [key: string]: string;
                 };
+                ios_carousel?: {
+                    url: string;
+                    title?: string;
+                }[];
+                android_live_update?: {
+                    progress: number;
+                    ongoing?: boolean;
+                };
+                voip?: boolean;
+                app_clip?: boolean;
             };
         };
         UpdateTemplateDto: {
             name?: string;
-            channel?: ("ios_push" | "android_push" | "hms_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs") | null;
+            channel?: ("ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs") | null;
             tags?: string[];
             content?: {
                 headings?: {
@@ -5545,6 +5657,16 @@ export interface components {
                 rcs_fallback_text?: {
                     [key: string]: string;
                 };
+                ios_carousel?: {
+                    url: string;
+                    title?: string;
+                }[];
+                android_live_update?: {
+                    progress: number;
+                    ongoing?: boolean;
+                };
+                voip?: boolean;
+                app_clip?: boolean;
             };
         };
         CopyTemplateDto: {
@@ -5556,7 +5678,7 @@ export interface components {
              * @default ios_push
              * @enum {string}
              */
-            channel: "ios_push" | "android_push" | "hms_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs";
+            channel: "ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs";
             language?: string;
             user?: {
                 external_id?: string;
@@ -5729,6 +5851,16 @@ export interface components {
                 rcs_fallback_text?: {
                     [key: string]: string;
                 };
+                ios_carousel?: {
+                    url: string;
+                    title?: string;
+                }[];
+                android_live_update?: {
+                    progress: number;
+                    ongoing?: boolean;
+                };
+                voip?: boolean;
+                app_clip?: boolean;
             };
             version?: number;
         };
@@ -5971,6 +6103,14 @@ export interface components {
                 provider: ("zerobounce" | "neverbounce" | "mock") | null;
                 api_key?: string;
             };
+            volume_spike?: {
+                multiplier: number | null;
+                floor: number | null;
+            };
+            postmaster?: {
+                domain: string | null;
+                access_token?: string;
+            };
         };
         VerifyAddressDto: {
             address: string;
@@ -6006,6 +6146,14 @@ export interface components {
                 yahoo: number;
                 other: number;
             } | null;
+        };
+        StartVerifyDto: {
+            phone: string;
+            locale?: string;
+        };
+        CheckVerifyDto: {
+            id: string;
+            code: string;
         };
         CreateSuppressionDto: {
             /** @enum {string} */
@@ -6667,7 +6815,7 @@ export interface components {
             description?: {
                 [key: string]: string;
             };
-            channels?: ("ios_push" | "android_push" | "hms_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs")[] | null;
+            channels?: ("ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs")[] | null;
             default_opted_in?: boolean;
             position?: number;
         };
@@ -6678,21 +6826,21 @@ export interface components {
             description?: {
                 [key: string]: string;
             };
-            channels?: ("ios_push" | "android_push" | "hms_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs")[] | null;
+            channels?: ("ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs")[] | null;
             default_opted_in?: boolean;
             position?: number;
         };
         SetPreferencesDto: {
             preferences: {
                 category: string;
-                channel?: ("ios_push" | "android_push" | "hms_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs") | null;
+                channel?: ("ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs") | null;
                 opted_in: boolean;
             }[];
         };
         SdkSetPreferencesDto: {
             preferences: {
                 category: string;
-                channel?: ("ios_push" | "android_push" | "hms_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs") | null;
+                channel?: ("ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs") | null;
                 opted_in: boolean;
             }[];
             subscription_id: string;
@@ -7502,8 +7650,8 @@ export interface components {
         };
         ChannelConfig: {
             /** @enum {string} */
-            channel: "ios_push" | "android_push" | "hms_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs";
-            provider: ("apns" | "fcm" | "hms" | "webpush" | "smtp" | "ses" | "resend" | "twilio" | "netgsm" | "meta_whatsapp" | "google_rbm" | "mock") | null;
+            channel: "ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs";
+            provider: ("apns" | "fcm" | "hms" | "adm" | "wns" | "webpush" | "smtp" | "ses" | "resend" | "twilio" | "netgsm" | "meta_whatsapp" | "google_rbm" | "mock") | null;
             /** @enum {string} */
             status: "unconfigured" | "active" | "invalid" | "suspended";
             config: {
@@ -7540,6 +7688,7 @@ export interface components {
                 account_sid?: string;
                 from_number?: string;
                 messaging_service_sid?: string;
+                verify_service_sid?: string;
                 usercode?: string;
                 msgheader?: string;
                 /** @enum {string} */
@@ -7591,8 +7740,8 @@ export interface components {
         ChannelList: {
             data: {
                 /** @enum {string} */
-                channel: "ios_push" | "android_push" | "hms_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs";
-                provider: ("apns" | "fcm" | "hms" | "webpush" | "smtp" | "ses" | "resend" | "twilio" | "netgsm" | "meta_whatsapp" | "google_rbm" | "mock") | null;
+                channel: "ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs";
+                provider: ("apns" | "fcm" | "hms" | "adm" | "wns" | "webpush" | "smtp" | "ses" | "resend" | "twilio" | "netgsm" | "meta_whatsapp" | "google_rbm" | "mock") | null;
                 /** @enum {string} */
                 status: "unconfigured" | "active" | "invalid" | "suspended";
                 config: {
@@ -7629,6 +7778,7 @@ export interface components {
                     account_sid?: string;
                     from_number?: string;
                     messaging_service_sid?: string;
+                    verify_service_sid?: string;
                     usercode?: string;
                     msgheader?: string;
                     /** @enum {string} */
@@ -7681,8 +7831,8 @@ export interface components {
             } | null;
             channel: {
                 /** @enum {string} */
-                channel: "ios_push" | "android_push" | "hms_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs";
-                provider: ("apns" | "fcm" | "hms" | "webpush" | "smtp" | "ses" | "resend" | "twilio" | "netgsm" | "meta_whatsapp" | "google_rbm" | "mock") | null;
+                channel: "ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs";
+                provider: ("apns" | "fcm" | "hms" | "adm" | "wns" | "webpush" | "smtp" | "ses" | "resend" | "twilio" | "netgsm" | "meta_whatsapp" | "google_rbm" | "mock") | null;
                 /** @enum {string} */
                 status: "unconfigured" | "active" | "invalid" | "suspended";
                 config: {
@@ -7719,6 +7869,7 @@ export interface components {
                     account_sid?: string;
                     from_number?: string;
                     messaging_service_sid?: string;
+                    verify_service_sid?: string;
                     usercode?: string;
                     msgheader?: string;
                     /** @enum {string} */
@@ -7842,7 +7993,7 @@ export interface components {
             app_id: string;
             user_id: string | null;
             /** @enum {string} */
-            channel: "ios_push" | "android_push" | "hms_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs";
+            channel: "ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs";
             token: string;
             /** @enum {string} */
             status: "subscribed" | "unsubscribed" | "invalid" | "pending";
@@ -7860,6 +8011,10 @@ export interface components {
                 push_capable?: boolean;
                 /** @enum {string} */
                 push_environment?: "sandbox" | "production";
+                /** @enum {string} */
+                form_factor?: "phone" | "watch";
+                /** @enum {string} */
+                push_kind?: "alert" | "voip" | "app_clip";
             };
             test_device: boolean;
             test_device_name: string | null;
@@ -7897,7 +8052,7 @@ export interface components {
             created_at: string;
             updated_at: string;
             subscription_count: number;
-            channels: ("ios_push" | "android_push" | "hms_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs")[];
+            channels: ("ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs")[];
         };
         UserDetail: {
             id: string;
@@ -7917,7 +8072,7 @@ export interface components {
             created_at: string;
             updated_at: string;
             subscription_count: number;
-            channels: ("ios_push" | "android_push" | "hms_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs")[];
+            channels: ("ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs")[];
             aliases: {
                 label: string;
                 value: string;
@@ -7927,7 +8082,7 @@ export interface components {
                 app_id: string;
                 user_id: string | null;
                 /** @enum {string} */
-                channel: "ios_push" | "android_push" | "hms_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs";
+                channel: "ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs";
                 token: string;
                 /** @enum {string} */
                 status: "subscribed" | "unsubscribed" | "invalid" | "pending";
@@ -7945,6 +8100,10 @@ export interface components {
                     push_capable?: boolean;
                     /** @enum {string} */
                     push_environment?: "sandbox" | "production";
+                    /** @enum {string} */
+                    form_factor?: "phone" | "watch";
+                    /** @enum {string} */
+                    push_kind?: "alert" | "voip" | "app_clip";
                 };
                 test_device: boolean;
                 test_device_name: string | null;
@@ -7984,7 +8143,7 @@ export interface components {
                 created_at: string;
                 updated_at: string;
                 subscription_count: number;
-                channels: ("ios_push" | "android_push" | "hms_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs")[];
+                channels: ("ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs")[];
             }[];
             next_cursor: string | null;
             has_more: boolean;
@@ -7995,7 +8154,7 @@ export interface components {
                 app_id: string;
                 user_id: string | null;
                 /** @enum {string} */
-                channel: "ios_push" | "android_push" | "hms_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs";
+                channel: "ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs";
                 token: string;
                 /** @enum {string} */
                 status: "subscribed" | "unsubscribed" | "invalid" | "pending";
@@ -8013,6 +8172,10 @@ export interface components {
                     push_capable?: boolean;
                     /** @enum {string} */
                     push_environment?: "sandbox" | "production";
+                    /** @enum {string} */
+                    form_factor?: "phone" | "watch";
+                    /** @enum {string} */
+                    push_kind?: "alert" | "voip" | "app_clip";
                 };
                 test_device: boolean;
                 test_device_name: string | null;
@@ -8070,7 +8233,7 @@ export interface components {
                 created_at: string;
                 updated_at: string;
                 subscription_count: number;
-                channels: ("ios_push" | "android_push" | "hms_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs")[];
+                channels: ("ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs")[];
                 aliases: {
                     label: string;
                     value: string;
@@ -8080,7 +8243,7 @@ export interface components {
                     app_id: string;
                     user_id: string | null;
                     /** @enum {string} */
-                    channel: "ios_push" | "android_push" | "hms_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs";
+                    channel: "ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs";
                     token: string;
                     /** @enum {string} */
                     status: "subscribed" | "unsubscribed" | "invalid" | "pending";
@@ -8098,6 +8261,10 @@ export interface components {
                         push_capable?: boolean;
                         /** @enum {string} */
                         push_environment?: "sandbox" | "production";
+                        /** @enum {string} */
+                        form_factor?: "phone" | "watch";
+                        /** @enum {string} */
+                        push_kind?: "alert" | "voip" | "app_clip";
                     };
                     test_device: boolean;
                     test_device_name: string | null;
@@ -8411,7 +8578,7 @@ export interface components {
             subscription_id: string;
             user_id: string | null;
             /** @enum {string} */
-            channel: "ios_push" | "android_push" | "hms_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs";
+            channel: "ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs";
             provider: string | null;
             /** @enum {string} */
             status: "pending" | "sent" | "delivered" | "failed" | "bounced" | "suppressed" | "expired" | "cancelled";
@@ -8435,7 +8602,7 @@ export interface components {
                 subscription_id: string;
                 user_id: string | null;
                 /** @enum {string} */
-                channel: "ios_push" | "android_push" | "hms_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs";
+                channel: "ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs";
                 provider: string | null;
                 /** @enum {string} */
                 status: "pending" | "sent" | "delivered" | "failed" | "bounced" | "suppressed" | "expired" | "cancelled";
@@ -8465,7 +8632,7 @@ export interface components {
                     subscription_id: string;
                     user_id: string | null;
                     /** @enum {string} */
-                    channel: "ios_push" | "android_push" | "hms_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs";
+                    channel: "ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs";
                     provider: string | null;
                     /** @enum {string} */
                     status: "pending" | "sent" | "delivered" | "failed" | "bounced" | "suppressed" | "expired" | "cancelled";
@@ -8493,7 +8660,7 @@ export interface components {
                 subscription: {
                     id: string;
                     /** @enum {string} */
-                    channel: "ios_push" | "android_push" | "hms_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs";
+                    channel: "ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs";
                     status: string;
                     token_suffix: string;
                     device: {
@@ -8630,8 +8797,8 @@ export interface components {
             }[];
             channels: {
                 /** @enum {string} */
-                channel: "ios_push" | "android_push" | "hms_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs";
-                provider: ("apns" | "fcm" | "hms" | "webpush" | "smtp" | "ses" | "resend" | "twilio" | "netgsm" | "meta_whatsapp" | "google_rbm" | "mock") | null;
+                channel: "ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs";
+                provider: ("apns" | "fcm" | "hms" | "adm" | "wns" | "webpush" | "smtp" | "ses" | "resend" | "twilio" | "netgsm" | "meta_whatsapp" | "google_rbm" | "mock") | null;
                 /** @enum {string} */
                 status: "unconfigured" | "active" | "invalid" | "suspended";
                 last_error: string | null;
@@ -8918,6 +9085,11 @@ export interface components {
             /** @enum {string} */
             role: "owner" | "admin" | "developer" | "marketer" | "analyst" | "billing" | "viewer" | "composer" | "agent";
             app_scopes: string[];
+            app_roles: {
+                app_id: string;
+                /** @enum {string} */
+                role: "owner" | "admin" | "developer" | "marketer" | "analyst" | "billing" | "viewer" | "composer" | "agent";
+            }[];
             accepted_at: string | null;
             created_at: string;
             last_login_at: string | null;
@@ -8931,6 +9103,11 @@ export interface components {
                 /** @enum {string} */
                 role: "owner" | "admin" | "developer" | "marketer" | "analyst" | "billing" | "viewer" | "composer" | "agent";
                 app_scopes: string[];
+                app_roles: {
+                    app_id: string;
+                    /** @enum {string} */
+                    role: "owner" | "admin" | "developer" | "marketer" | "analyst" | "billing" | "viewer" | "composer" | "agent";
+                }[];
                 accepted_at: string | null;
                 created_at: string;
                 last_login_at: string | null;
@@ -9015,7 +9192,7 @@ export interface components {
                         /** @enum {string} */
                         unit: "minutes" | "hours" | "days" | "weeks";
                     };
-                    channels?: ("ios_push" | "android_push" | "hms_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs")[];
+                    channels?: ("ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs")[];
                 }[];
                 inApp?: {
                     minIntervalSeconds?: number;
@@ -9191,7 +9368,7 @@ export interface components {
                             /** @enum {string} */
                             unit: "minutes" | "hours" | "days" | "weeks";
                         };
-                        channels?: ("ios_push" | "android_push" | "hms_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs")[];
+                        channels?: ("ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs")[];
                     }[];
                     inApp?: {
                         minIntervalSeconds?: number;
@@ -9338,7 +9515,7 @@ export interface components {
             id: string;
             app_id: string;
             name: string;
-            channel: ("ios_push" | "android_push" | "hms_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs") | null;
+            channel: ("ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs") | null;
             current_version: number;
             tags: string[];
             content: {
@@ -9368,7 +9545,7 @@ export interface components {
                 id: string;
                 app_id: string;
                 name: string;
-                channel: ("ios_push" | "android_push" | "hms_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs") | null;
+                channel: ("ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs") | null;
                 current_version: number;
                 tags: string[];
                 content: {
@@ -9394,7 +9571,7 @@ export interface components {
         };
         RenderPreview: {
             /** @enum {string} */
-            channel: "ios_push" | "android_push" | "hms_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs";
+            channel: "ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs";
             language: string;
             title: string | null;
             subtitle: string | null;
@@ -9461,7 +9638,7 @@ export interface components {
                 campaign_id?: string;
                 status?: string;
                 /** @enum {string} */
-                channel?: "ios_push" | "android_push" | "hms_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs";
+                channel?: "ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs";
                 segment_id?: string;
             };
             /** @enum {string} */
@@ -9490,7 +9667,7 @@ export interface components {
                     campaign_id?: string;
                     status?: string;
                     /** @enum {string} */
-                    channel?: "ios_push" | "android_push" | "hms_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs";
+                    channel?: "ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs";
                     segment_id?: string;
                 };
                 /** @enum {string} */
@@ -11976,7 +12153,7 @@ export interface components {
             };
             channels: {
                 /** @enum {string} */
-                channel: "ios_push" | "android_push" | "hms_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs";
+                channel: "ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs";
                 targeted: number;
                 sent: number;
                 failed: number;
@@ -12698,6 +12875,22 @@ export interface components {
                 provider: ("zerobounce" | "neverbounce" | "mock") | null;
                 has_key: boolean;
             };
+            volume_spike: {
+                multiplier: number | null;
+                floor: number | null;
+            };
+            postmaster: {
+                domain: string | null;
+                has_token: boolean;
+            };
+        };
+        PostmasterStats: {
+            domain: string | null;
+            data: {
+                day: string;
+                domain_reputation: string | null;
+                spam_rate: string | null;
+            }[];
         };
         EmailAddressCheck: {
             ok: boolean;
@@ -12705,6 +12898,14 @@ export interface components {
             detail: string | null;
             checks: string[];
             unknown: string[];
+        };
+        SmsVerification: {
+            id: string;
+            expires_at: string;
+        };
+        SmsVerificationCheck: {
+            /** @constant */
+            verified: true;
         };
         LiveActivityType: {
             id: string;
@@ -20062,6 +20263,7 @@ export interface operations {
                     key_id?: string;
                     team_id?: string;
                     bundle_id?: string;
+                    app_clip_bundle_id?: string;
                     /** @enum {string} */
                     environment?: "sandbox" | "production";
                     p8?: string;
@@ -20087,6 +20289,16 @@ export interface operations {
                     app_id: string;
                     client_secret?: string;
                     high_priority?: boolean;
+                } | {
+                    /** @constant */
+                    provider: "adm";
+                    client_id: string;
+                    client_secret?: string;
+                } | {
+                    /** @constant */
+                    provider: "wns";
+                    package_sid: string;
+                    client_secret?: string;
                 } | {
                     /** @constant */
                     provider: "webpush";
@@ -20143,6 +20355,7 @@ export interface operations {
                     auth_token?: string;
                     from_number?: string;
                     messaging_service_sid?: string;
+                    verify_service_sid?: string;
                     content_sid?: string;
                     sms_fallback?: boolean;
                 } | {
@@ -21208,7 +21421,7 @@ export interface operations {
                 limit?: number;
                 cursor?: string;
                 q?: string;
-                channel?: "ios_push" | "android_push" | "hms_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs";
+                channel?: "ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs";
             };
             header?: never;
             path: {
@@ -21454,7 +21667,7 @@ export interface operations {
                 q?: string;
                 status?: "draft" | "scheduled" | "running" | "paused" | "completed" | "cancelled" | "failed";
                 type?: "one_time" | "scheduled" | "recurring" | "automated" | "transactional";
-                channel?: "ios_push" | "android_push" | "hms_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs";
+                channel?: "ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs";
                 label?: string;
             };
             header?: never;
@@ -21503,7 +21716,7 @@ export interface operations {
                             any?: Record<string, never>[];
                             none?: Record<string, never>[];
                         };
-                        channels?: ("ios_push" | "android_push" | "hms_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs")[];
+                        channels?: ("ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs")[];
                         test_devices_only?: boolean;
                     };
                     /** @description messages.content ile aynı şema (headings, contents, url, buttons…) */
@@ -21646,7 +21859,7 @@ export interface operations {
                             any?: Record<string, never>[];
                             none?: Record<string, never>[];
                         };
-                        channels?: ("ios_push" | "android_push" | "hms_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs")[];
+                        channels?: ("ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs")[];
                         test_devices_only?: boolean;
                     };
                     /** @description messages.content ile aynı şema (headings, contents, url, buttons…) */
@@ -23237,6 +23450,110 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["EmailWarmupUsage"];
+                };
+            };
+        };
+    };
+    PublicDeliverabilityController_postmaster: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PostmasterStats"];
+                };
+            };
+        };
+    };
+    PublicDeliverabilityController_syncPostmaster: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PostmasterStats"];
+                };
+            };
+        };
+    };
+    PublicVerifyController_start: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["StartVerifyDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SmsVerification"];
+                };
+            };
+        };
+    };
+    PublicVerifyController_check: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CheckVerifyDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SmsVerificationCheck"];
                 };
             };
         };
@@ -25377,7 +25694,7 @@ export interface operations {
                             any?: Record<string, never>[];
                             none?: Record<string, never>[];
                         };
-                        channels?: ("ios_push" | "android_push" | "hms_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs")[];
+                        channels?: ("ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs")[];
                         test_devices_only?: boolean;
                     };
                     /** @description messages.content ile aynı şema (headings, contents, url, buttons…) */
