@@ -903,6 +903,111 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/apps/{appId}/reverse-etl": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Depodan içeri aktarımlar */
+        get: operations["PublicReverseEtlController_list"];
+        put?: never;
+        /** İçeri aktarım oluştur */
+        post: operations["PublicReverseEtlController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/reverse-etl/test-connection": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Kaydetmeden bağlantı testi */
+        post: operations["PublicReverseEtlController_test"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/reverse-etl/{syncId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** İçeri aktarım detayı */
+        get: operations["PublicReverseEtlController_get"];
+        put?: never;
+        post?: never;
+        /** İçeri aktarımı sil */
+        delete: operations["PublicReverseEtlController_remove"];
+        options?: never;
+        head?: never;
+        /** İçeri aktarımı güncelle */
+        patch: operations["PublicReverseEtlController_update"];
+        trace?: never;
+    };
+    "/v1/apps/{appId}/reverse-etl/{syncId}/test": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Kayıtlı içeri aktarımın bağlantı testi */
+        post: operations["PublicReverseEtlController_testSaved"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/reverse-etl/{syncId}/run": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Şimdi içeri aktar */
+        post: operations["PublicReverseEtlController_run"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/reverse-etl/{syncId}/runs": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** İçeri aktarım geçmişi */
+        get: operations["PublicReverseEtlController_runs"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/organization": {
         parameters: {
             query?: never;
@@ -4515,6 +4620,18 @@ export interface components {
         UpdateWarehouseExportDto: {
             name?: string;
             tables?: ("deliveries" | "delivery_events" | "events" | "conversions" | "users" | "subscriptions")[];
+            /** @enum {string} */
+            schedule?: "hourly" | "daily";
+            enabled?: boolean;
+            config?: {
+                [key: string]: unknown;
+            };
+            credentials?: {
+                [key: string]: unknown;
+            };
+        };
+        UpdateReverseEtlDto: {
+            name?: string;
             /** @enum {string} */
             schedule?: "hourly" | "daily";
             enabled?: boolean;
@@ -14153,6 +14270,46 @@ export interface components {
                 access_key_id: string;
                 secret_access_key: string;
             };
+        } | {
+            name: string;
+            tables: ("deliveries" | "delivery_events" | "events" | "conversions" | "users" | "subscriptions")[];
+            /** @enum {string} */
+            schedule: "hourly" | "daily";
+            enabled?: boolean;
+            /** @constant */
+            destination: "databricks";
+            config: {
+                host: string;
+                warehouse_id: string;
+                catalog: string;
+                schema: string;
+                table_prefix?: string;
+            };
+            credentials: {
+                /** @description Databricks kişisel erişim belirteci. */
+                access_token: string;
+            };
+        } | {
+            name: string;
+            tables: ("deliveries" | "delivery_events" | "events" | "conversions" | "users" | "subscriptions")[];
+            /** @enum {string} */
+            schedule: "hourly" | "daily";
+            enabled?: boolean;
+            /** @constant */
+            destination: "redshift";
+            config: {
+                region: string;
+                database: string;
+                schema: string;
+                db_user: string;
+                cluster_identifier?: string;
+                workgroup_name?: string;
+                table_prefix?: string;
+            };
+            credentials: {
+                access_key_id: string;
+                secret_access_key: string;
+            };
         };
         WarehouseConnectionTest: {
             /** @constant */
@@ -14198,13 +14355,43 @@ export interface components {
                 access_key_id: string;
                 secret_access_key: string;
             };
+        } | {
+            /** @constant */
+            destination: "databricks";
+            config: {
+                host: string;
+                warehouse_id: string;
+                catalog: string;
+                schema: string;
+                table_prefix?: string;
+            };
+            credentials: {
+                /** @description Databricks kişisel erişim belirteci. */
+                access_token: string;
+            };
+        } | {
+            /** @constant */
+            destination: "redshift";
+            config: {
+                region: string;
+                database: string;
+                schema: string;
+                db_user: string;
+                cluster_identifier?: string;
+                workgroup_name?: string;
+                table_prefix?: string;
+            };
+            credentials: {
+                access_key_id: string;
+                secret_access_key: string;
+            };
         };
         WarehouseExport: {
             id: string;
             app_id: string;
             name: string;
             /** @enum {string} */
-            destination: "bigquery" | "snowflake" | "s3_parquet";
+            destination: "bigquery" | "snowflake" | "s3_parquet" | "redshift" | "databricks";
             config: {
                 [key: string]: unknown;
             };
@@ -14238,7 +14425,7 @@ export interface components {
                 app_id: string;
                 name: string;
                 /** @enum {string} */
-                destination: "bigquery" | "snowflake" | "s3_parquet";
+                destination: "bigquery" | "snowflake" | "s3_parquet" | "redshift" | "databricks";
                 config: {
                     [key: string]: unknown;
                 };
@@ -14354,11 +14541,375 @@ export interface components {
                 }[];
             }[];
         };
+        ReverseEtlCreate: {
+            name: string;
+            /** @enum {string} */
+            target: "event" | "user";
+            /** @enum {string} */
+            schedule: "hourly" | "daily";
+            enabled?: boolean;
+            /** @constant */
+            source: "snowflake";
+            config: {
+                account: string;
+                user: string;
+                database: string;
+                schema: string;
+                warehouse: string;
+                role?: string;
+                query: string;
+                mapping: {
+                    external_id_column: string;
+                    event_name?: string;
+                    event_name_column?: string;
+                    occurred_at_column?: string;
+                    cursor_column?: string;
+                };
+            };
+            credentials: {
+                private_key: string;
+            };
+        } | {
+            name: string;
+            /** @enum {string} */
+            target: "event" | "user";
+            /** @enum {string} */
+            schedule: "hourly" | "daily";
+            enabled?: boolean;
+            /** @constant */
+            source: "bigquery";
+            config: {
+                project_id: string;
+                query: string;
+                mapping: {
+                    external_id_column: string;
+                    event_name?: string;
+                    event_name_column?: string;
+                    occurred_at_column?: string;
+                    cursor_column?: string;
+                };
+            };
+            credentials: {
+                service_account_json: string;
+            };
+        } | {
+            name: string;
+            /** @enum {string} */
+            target: "event" | "user";
+            /** @enum {string} */
+            schedule: "hourly" | "daily";
+            enabled?: boolean;
+            /** @constant */
+            source: "postgres";
+            config: {
+                host: string;
+                port?: number;
+                user: string;
+                database: string;
+                query: string;
+                mapping: {
+                    external_id_column: string;
+                    event_name?: string;
+                    event_name_column?: string;
+                    occurred_at_column?: string;
+                    cursor_column?: string;
+                };
+            };
+            credentials: {
+                password: string;
+            };
+        } | {
+            name: string;
+            /** @enum {string} */
+            target: "event" | "user";
+            /** @enum {string} */
+            schedule: "hourly" | "daily";
+            enabled?: boolean;
+            /** @constant */
+            source: "mysql";
+            config: {
+                host: string;
+                port?: number;
+                user: string;
+                database: string;
+                query: string;
+                mapping: {
+                    external_id_column: string;
+                    event_name?: string;
+                    event_name_column?: string;
+                    occurred_at_column?: string;
+                    cursor_column?: string;
+                };
+            };
+            credentials: {
+                password: string;
+            };
+        } | {
+            name: string;
+            /** @enum {string} */
+            target: "event" | "user";
+            /** @enum {string} */
+            schedule: "hourly" | "daily";
+            enabled?: boolean;
+            /** @constant */
+            source: "s3";
+            config: {
+                bucket: string;
+                region: string;
+                key: string;
+                /** @enum {string} */
+                format: "csv" | "ndjson";
+                /** Format: uri */
+                endpoint?: string;
+                mapping: {
+                    external_id_column: string;
+                    event_name?: string;
+                    event_name_column?: string;
+                    occurred_at_column?: string;
+                    cursor_column?: string;
+                };
+            };
+            credentials: {
+                access_key_id: string;
+                secret_access_key: string;
+            };
+        } | {
+            name: string;
+            /** @enum {string} */
+            target: "event" | "user";
+            /** @enum {string} */
+            schedule: "hourly" | "daily";
+            enabled?: boolean;
+            /** @constant */
+            source: "google_sheets";
+            config: {
+                spreadsheet_id: string;
+                range: string;
+                mapping: {
+                    external_id_column: string;
+                    event_name?: string;
+                    event_name_column?: string;
+                    occurred_at_column?: string;
+                    cursor_column?: string;
+                };
+            };
+            credentials: {
+                service_account_json: string;
+            };
+        };
+        ReverseEtlConnectionTest: {
+            /** @constant */
+            source: "snowflake";
+            config: {
+                account: string;
+                user: string;
+                database: string;
+                schema: string;
+                warehouse: string;
+                role?: string;
+                query: string;
+                mapping: {
+                    external_id_column: string;
+                    event_name?: string;
+                    event_name_column?: string;
+                    occurred_at_column?: string;
+                    cursor_column?: string;
+                };
+            };
+            credentials: {
+                private_key: string;
+            };
+        } | {
+            /** @constant */
+            source: "bigquery";
+            config: {
+                project_id: string;
+                query: string;
+                mapping: {
+                    external_id_column: string;
+                    event_name?: string;
+                    event_name_column?: string;
+                    occurred_at_column?: string;
+                    cursor_column?: string;
+                };
+            };
+            credentials: {
+                service_account_json: string;
+            };
+        } | {
+            /** @constant */
+            source: "postgres";
+            config: {
+                host: string;
+                port?: number;
+                user: string;
+                database: string;
+                query: string;
+                mapping: {
+                    external_id_column: string;
+                    event_name?: string;
+                    event_name_column?: string;
+                    occurred_at_column?: string;
+                    cursor_column?: string;
+                };
+            };
+            credentials: {
+                password: string;
+            };
+        } | {
+            /** @constant */
+            source: "mysql";
+            config: {
+                host: string;
+                port?: number;
+                user: string;
+                database: string;
+                query: string;
+                mapping: {
+                    external_id_column: string;
+                    event_name?: string;
+                    event_name_column?: string;
+                    occurred_at_column?: string;
+                    cursor_column?: string;
+                };
+            };
+            credentials: {
+                password: string;
+            };
+        } | {
+            /** @constant */
+            source: "s3";
+            config: {
+                bucket: string;
+                region: string;
+                key: string;
+                /** @enum {string} */
+                format: "csv" | "ndjson";
+                /** Format: uri */
+                endpoint?: string;
+                mapping: {
+                    external_id_column: string;
+                    event_name?: string;
+                    event_name_column?: string;
+                    occurred_at_column?: string;
+                    cursor_column?: string;
+                };
+            };
+            credentials: {
+                access_key_id: string;
+                secret_access_key: string;
+            };
+        } | {
+            /** @constant */
+            source: "google_sheets";
+            config: {
+                spreadsheet_id: string;
+                range: string;
+                mapping: {
+                    external_id_column: string;
+                    event_name?: string;
+                    event_name_column?: string;
+                    occurred_at_column?: string;
+                    cursor_column?: string;
+                };
+            };
+            credentials: {
+                service_account_json: string;
+            };
+        };
+        ReverseEtlSync: {
+            id: string;
+            app_id: string;
+            name: string;
+            /** @enum {string} */
+            source: "snowflake" | "bigquery" | "postgres" | "mysql" | "s3" | "google_sheets";
+            /** @enum {string} */
+            target: "event" | "user";
+            config: {
+                [key: string]: unknown;
+            };
+            credentials_hint: string;
+            /** @enum {string} */
+            schedule: "hourly" | "daily";
+            enabled: boolean;
+            /** @enum {string} */
+            status: "active" | "paused" | "failing";
+            cursor: string | null;
+            consecutive_failures: number;
+            last_error: string | null;
+            last_run_at: string | null;
+            last_success_at: string | null;
+            next_run_at: string | null;
+            created_at: string;
+            updated_at: string;
+        };
+        ReverseEtlSyncList: {
+            data: {
+                id: string;
+                app_id: string;
+                name: string;
+                /** @enum {string} */
+                source: "snowflake" | "bigquery" | "postgres" | "mysql" | "s3" | "google_sheets";
+                /** @enum {string} */
+                target: "event" | "user";
+                config: {
+                    [key: string]: unknown;
+                };
+                credentials_hint: string;
+                /** @enum {string} */
+                schedule: "hourly" | "daily";
+                enabled: boolean;
+                /** @enum {string} */
+                status: "active" | "paused" | "failing";
+                cursor: string | null;
+                consecutive_failures: number;
+                last_error: string | null;
+                last_run_at: string | null;
+                last_success_at: string | null;
+                next_run_at: string | null;
+                created_at: string;
+                updated_at: string;
+            }[];
+        };
+        ReverseEtlRun: {
+            id: string;
+            sync_id: string;
+            /** @enum {string} */
+            trigger: "schedule" | "manual";
+            /** @enum {string} */
+            status: "queued" | "running" | "succeeded" | "failed";
+            row_count: number;
+            attempt: number;
+            error: string | null;
+            started_at: string | null;
+            finished_at: string | null;
+            duration_ms: number | null;
+            created_at: string;
+        };
+        ReverseEtlRunPage: {
+            data: {
+                id: string;
+                sync_id: string;
+                /** @enum {string} */
+                trigger: "schedule" | "manual";
+                /** @enum {string} */
+                status: "queued" | "running" | "succeeded" | "failed";
+                row_count: number;
+                attempt: number;
+                error: string | null;
+                started_at: string | null;
+                finished_at: string | null;
+                duration_ms: number | null;
+                created_at: string;
+            }[];
+            next_cursor: string | null;
+            has_more: boolean;
+        };
         Integration: {
             id: string;
             app_id: string;
             /** @enum {string} */
-            type: "segment" | "amplitude" | "mixpanel" | "ga4" | "posthog" | "rudderstack" | "appsflyer" | "adjust" | "revenuecat" | "zapier" | "slack";
+            type: "segment" | "amplitude" | "mixpanel" | "ga4" | "posthog" | "rudderstack" | "hubspot" | "appsflyer" | "adjust" | "revenuecat" | "zapier" | "slack";
             name: string;
             /** @enum {string} */
             status: "active" | "paused" | "error";
@@ -14391,7 +14942,7 @@ export interface components {
                 id: string;
                 app_id: string;
                 /** @enum {string} */
-                type: "segment" | "amplitude" | "mixpanel" | "ga4" | "posthog" | "rudderstack" | "appsflyer" | "adjust" | "revenuecat" | "zapier" | "slack";
+                type: "segment" | "amplitude" | "mixpanel" | "ga4" | "posthog" | "rudderstack" | "hubspot" | "appsflyer" | "adjust" | "revenuecat" | "zapier" | "slack";
                 name: string;
                 /** @enum {string} */
                 status: "active" | "paused" | "error";
@@ -14421,7 +14972,7 @@ export interface components {
             }[];
             catalog: {
                 /** @enum {string} */
-                type: "segment" | "amplitude" | "mixpanel" | "ga4" | "posthog" | "rudderstack" | "appsflyer" | "adjust" | "revenuecat" | "zapier" | "slack";
+                type: "segment" | "amplitude" | "mixpanel" | "ga4" | "posthog" | "rudderstack" | "hubspot" | "appsflyer" | "adjust" | "revenuecat" | "zapier" | "slack";
                 events: string[];
                 cohorts: boolean;
                 inbound: boolean;
@@ -18505,6 +19056,243 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["WarehouseExportRunPage"];
+                };
+            };
+        };
+    };
+    PublicReverseEtlController_list: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ReverseEtlSyncList"];
+                };
+            };
+        };
+    };
+    PublicReverseEtlController_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ReverseEtlCreate"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ReverseEtlSync"];
+                };
+            };
+        };
+    };
+    PublicReverseEtlController_test: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ReverseEtlConnectionTest"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WarehouseConnectionResult"];
+                };
+            };
+        };
+    };
+    PublicReverseEtlController_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                syncId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ReverseEtlSync"];
+                };
+            };
+        };
+    };
+    PublicReverseEtlController_remove: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                syncId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Ok"];
+                };
+            };
+        };
+    };
+    PublicReverseEtlController_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                syncId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateReverseEtlDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ReverseEtlSync"];
+                };
+            };
+        };
+    };
+    PublicReverseEtlController_testSaved: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                syncId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WarehouseConnectionResult"];
+                };
+            };
+        };
+    };
+    PublicReverseEtlController_run: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                syncId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            202: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ReverseEtlRun"];
+                };
+            };
+        };
+    };
+    PublicReverseEtlController_runs: {
+        parameters: {
+            query?: {
+                limit?: number;
+                cursor?: string;
+            };
+            header?: never;
+            path: {
+                syncId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ReverseEtlRunPage"];
                 };
             };
         };
