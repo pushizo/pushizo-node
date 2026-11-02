@@ -107,6 +107,7 @@ export type TemplateVersionList = Schemas['TemplateVersionList'];
 export type TemplateStats = Schemas['TemplateStats'];
 export type RenderPreview = Schemas['RenderPreview'];
 export type Campaign = Schemas['Campaign'];
+export type CampaignEmailRisk = Schemas['CampaignEmailRisk'];
 export type CampaignPage = Schemas['CampaignPage'];
 export type CampaignStats = Schemas['CampaignStats'];
 export type CampaignVariantStats = Schemas['CampaignVariantStats'];

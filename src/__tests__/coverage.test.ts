@@ -188,7 +188,8 @@ const TABLE: Record<string, (hs: Pushizo) => Promise<unknown>> = {
   'DELETE /v1/apps/{appId}/campaigns/{campaignId}': (hs) => hs.campaigns.delete('cmp_1'),
   'POST /v1/apps/{appId}/campaigns/{campaignId}/schedule': (hs) =>
     hs.campaigns.schedule('cmp_1', { send_at: '2026-11-01T09:00:00Z' }),
-  'POST /v1/apps/{appId}/campaigns/{campaignId}/send': (hs) => hs.campaigns.send('cmp_1'),
+  'POST /v1/apps/{appId}/campaigns/{campaignId}/send': (hs) => hs.campaigns.send('cmp_1', undefined, { force: true }),
+  'GET /v1/apps/{appId}/campaigns/{campaignId}/email-risk': (hs) => hs.campaigns.emailRisk('cmp_1'),
   'POST /v1/apps/{appId}/campaigns/{campaignId}/pause': (hs) => hs.campaigns.pause('cmp_1'),
   'POST /v1/apps/{appId}/campaigns/{campaignId}/resume': (hs) => hs.campaigns.resume('cmp_1'),
   'POST /v1/apps/{appId}/campaigns/{campaignId}/cancel': (hs) => hs.campaigns.cancel('cmp_1'),

@@ -1,5 +1,6 @@
 import type {
   Campaign,
+  CampaignEmailRisk,
   CampaignPage,
   CampaignStats,
   CampaignVariantStats,
@@ -31,15 +32,27 @@ export function createCampaigns(ctx: ResourceContext) {
       ctx.http.request<Campaign>({ method: 'PATCH', path: one(campaignId, appId), body }),
     delete: (campaignId: string, appId?: string) =>
       ctx.http.request<Ok>({ method: 'DELETE', path: one(campaignId, appId) }),
-    /** `send_at` veya `recurrence` (cron) ile zamanlar. */
-    schedule: (campaignId: string, body: ScheduleCampaignInput, appId?: string) =>
+    /**
+     * `send_at` veya `recurrence` (cron) ile zamanlar. E-posta liste koruması (409 `email_invalid_ratio`) yalnızca
+     * `admin` kapsamlı anahtarla `{ force: true }` ile aşılır.
+     */
+    schedule: (campaignId: string, body: ScheduleCampaignInput, appId?: string, options: { force?: boolean } = {}) =>
       ctx.http.request<Campaign>({
         method: 'POST',
         path: `${one(campaignId, appId)}/schedule`,
         body,
+        ...(options.force ? { query: { force: 'true' } } : {}),
       }),
-    /** Hemen gönder. */
-    send: action('send'),
+    /** Hemen gönder. E-posta liste koruması (409) `admin` kapsamıyla `{ force: true }` ile aşılır. */
+    send: (campaignId: string, appId?: string, options: { force?: boolean } = {}) =>
+      ctx.http.request<Campaign>({
+        method: 'POST',
+        path: `${one(campaignId, appId)}/send`,
+        ...(options.force ? { query: { force: 'true' } } : {}),
+      }),
+    /** E-posta liste riski: kitlenin denetim dağılımı, tahmini geçersiz oranı ve 7/30 gün bounce oranı. */
+    emailRisk: (campaignId: string, appId?: string) =>
+      ctx.http.request<CampaignEmailRisk>({ method: 'GET', path: `${one(campaignId, appId)}/email-risk` }),
     pause: action('pause'),
     resume: action('resume'),
     cancel: action('cancel'),

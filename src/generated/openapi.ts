@@ -1957,7 +1957,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** Zamanla */
+        /** Zamanla; e-posta liste koruması 409 → force=true (admin kapsamı) */
         post: operations["PublicCampaignsController_schedule"];
         delete?: never;
         options?: never;
@@ -1974,8 +1974,25 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** Hemen gönder */
+        /** Hemen gönder; e-posta liste koruması 409 → force=true (admin kapsamı) */
         post: operations["PublicCampaignsController_send"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/campaigns/{campaignId}/email-risk": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** E-posta liste riski (tahmini geçersiz oranı, 7/30 gün bounce oranı) */
+        get: operations["PublicCampaignsController_emailRisk"];
+        put?: never;
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -6107,6 +6124,7 @@ export interface components {
                 multiplier: number | null;
                 floor: number | null;
             };
+            max_invalid_ratio?: number | null;
             postmaster?: {
                 domain: string | null;
                 access_token?: string;
@@ -9698,6 +9716,10 @@ export interface components {
                 created_subscriptions?: number;
                 skipped?: number;
                 errors?: number;
+                rejected_emails?: number;
+                rejected_email_reasons?: {
+                    [key: string]: number;
+                };
             };
             error: string | null;
             error_report_url: string | null;
@@ -9721,6 +9743,10 @@ export interface components {
                     created_subscriptions?: number;
                     skipped?: number;
                     errors?: number;
+                    rejected_emails?: number;
+                    rejected_email_reasons?: {
+                        [key: string]: number;
+                    };
                 };
                 error: string | null;
                 error_report_url: string | null;
@@ -11782,6 +11808,20 @@ export interface components {
             next_cursor: string | null;
             has_more: boolean;
         };
+        CampaignEmailRisk: {
+            applies: boolean;
+            recipients: number;
+            flagged_invalid: number;
+            sendable: number;
+            valid: number;
+            unknown: number;
+            unchecked: number;
+            estimated_invalid_ratio: number;
+            max_invalid_ratio: number;
+            blocked: boolean;
+            bounce_rate_7d: number | null;
+            bounce_rate_30d: number | null;
+        };
         CampaignVariantStats: {
             ab_test: {
                 enabled?: boolean;
@@ -12883,6 +12923,7 @@ export interface components {
                 domain: string | null;
                 has_token: boolean;
             };
+            max_invalid_ratio: number;
         };
         PostmasterStats: {
             domain: string | null;
@@ -12898,6 +12939,148 @@ export interface components {
             detail: string | null;
             checks: string[];
             unknown: string[];
+        };
+        EmailHygieneRun: {
+            id: string;
+            app_id: string;
+            /** @enum {string} */
+            status: "queued" | "running" | "completed" | "failed";
+            total: number;
+            processed: number;
+            valid: number;
+            invalid: number;
+            unknown: number;
+            reasons: {
+                [key: string]: number;
+            };
+            error: string | null;
+            suppressed_count: number | null;
+            suppressed_at: string | null;
+            started_at: string | null;
+            completed_at: string | null;
+            created_at: string;
+            updated_at: string;
+        };
+        EmailHygieneStart: {
+            run: {
+                id: string;
+                app_id: string;
+                /** @enum {string} */
+                status: "queued" | "running" | "completed" | "failed";
+                total: number;
+                processed: number;
+                valid: number;
+                invalid: number;
+                unknown: number;
+                reasons: {
+                    [key: string]: number;
+                };
+                error: string | null;
+                suppressed_count: number | null;
+                suppressed_at: string | null;
+                started_at: string | null;
+                completed_at: string | null;
+                created_at: string;
+                updated_at: string;
+            };
+            created: boolean;
+        };
+        EmailHygieneSuppress: {
+            suppressed: number;
+            run: {
+                id: string;
+                app_id: string;
+                /** @enum {string} */
+                status: "queued" | "running" | "completed" | "failed";
+                total: number;
+                processed: number;
+                valid: number;
+                invalid: number;
+                unknown: number;
+                reasons: {
+                    [key: string]: number;
+                };
+                error: string | null;
+                suppressed_count: number | null;
+                suppressed_at: string | null;
+                started_at: string | null;
+                completed_at: string | null;
+                created_at: string;
+                updated_at: string;
+            };
+        };
+        EmailHygieneStatus: {
+            status: {
+                total: number;
+                valid: number;
+                invalid: number;
+                unknown: number;
+                pending: number;
+                unchecked: number;
+                invalid_by_reason: {
+                    [key: string]: number;
+                };
+                unsendable: number;
+            };
+            latest_run: {
+                id: string;
+                app_id: string;
+                /** @enum {string} */
+                status: "queued" | "running" | "completed" | "failed";
+                total: number;
+                processed: number;
+                valid: number;
+                invalid: number;
+                unknown: number;
+                reasons: {
+                    [key: string]: number;
+                };
+                error: string | null;
+                suppressed_count: number | null;
+                suppressed_at: string | null;
+                started_at: string | null;
+                completed_at: string | null;
+                created_at: string;
+                updated_at: string;
+            } | null;
+        };
+        EmailBounceStats: {
+            days: number;
+            target_rate: number;
+            suspend_rate: number;
+            rate_7d: {
+                sent: number;
+                bounced: number;
+                rate: number | null;
+            };
+            rate_30d: {
+                sent: number;
+                bounced: number;
+                rate: number | null;
+            };
+            trend: {
+                day: string;
+                sent: number;
+                bounced: number;
+                soft_bounced: number;
+                rate: number | null;
+            }[];
+            by_type: {
+                hard: number;
+                soft: number;
+                complaint: number;
+                blocked_before_send: number;
+            };
+            by_reason: {
+                code: string;
+                count: number;
+            }[];
+            top_domains: {
+                domain: string;
+                sent: number;
+                bounced: number;
+                rate: number | null;
+            }[];
         };
         SmsVerification: {
             id: string;
@@ -21928,7 +22111,9 @@ export interface operations {
     };
     PublicCampaignsController_schedule: {
         parameters: {
-            query?: never;
+            query?: {
+                force?: "true" | "false";
+            };
             header?: never;
             path: {
                 campaignId: string;
@@ -21957,7 +22142,9 @@ export interface operations {
     };
     PublicCampaignsController_send: {
         parameters: {
-            query?: never;
+            query?: {
+                force?: "true" | "false";
+            };
             header?: never;
             path: {
                 campaignId: string;
@@ -21976,6 +22163,31 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["Campaign"];
+                };
+            };
+        };
+    };
+    PublicCampaignsController_emailRisk: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                campaignId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CampaignEmailRisk"];
                 };
             };
         };
