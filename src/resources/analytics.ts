@@ -23,10 +23,15 @@ import type {
   ProvidersReport,
   QueryParams,
   RetentionReport,
+  ChannelScoreConfig,
+  ChannelScoreOverview,
+  ChannelScoreUser,
+  ChannelScoreUsersPage,
   RfmConfig,
   RfmOverview,
   RfmTransitions,
   RfmUsersPage,
+  UpdateChannelScoreConfigInput,
   UpdateRfmConfigInput,
   SubscriptionsReport,
   UpdateGlobalControlInput,
@@ -130,6 +135,24 @@ export function createGeofences(ctx: ResourceContext) {
     update: (geofenceId: string, body: UpdateGeofenceInput, appId?: string) =>
       ctx.http.request<Geofence>({ method: 'PATCH', path: `${base(appId)}/${encodeURIComponent(geofenceId)}`, body }),
     delete: (geofenceId: string, appId?: string) => ctx.http.request<Ok>({ method: 'DELETE', path: `${base(appId)}/${encodeURIComponent(geofenceId)}` }),
+  };
+}
+
+/** Kişi başına en iyi kanal: ayar, dağılım ve kullanıcı skorları. */
+export function createChannelScores(ctx: ResourceContext) {
+  const base = (appId?: string) => `${ctx.appPath(appId)}/channel-scores`;
+  return {
+    getConfig: (appId?: string) => ctx.http.request<ChannelScoreConfig>({ method: 'GET', path: `${base(appId)}/config` }),
+    /** Açıkken skorlar kayıttan sonra yeniden hesaplanır; kapatınca silinir. */
+    updateConfig: (body: UpdateChannelScoreConfigInput, appId?: string) => ctx.http.request<ChannelScoreConfig>({ method: 'PUT', path: `${base(appId)}/config`, body }),
+    /** Hesabı kuyruğa alır; ilerleme `status` alanından izlenir. */
+    compute: (appId?: string) => ctx.http.request<ChannelScoreConfig>({ method: 'POST', path: `${base(appId)}/compute` }),
+    overview: (appId?: string) => ctx.http.request<ChannelScoreOverview>({ method: 'GET', path: `${base(appId)}/overview` }),
+    /** En iyi kanalı belli kullanıcılar; `channel` ile süzülür, `next_cursor` ile sayfalanır. */
+    users: (params: QueryParams<'/v1/apps/{appId}/channel-scores/users', 'get'> = {}, appId?: string) =>
+      ctx.http.request<ChannelScoreUsersPage>({ method: 'GET', path: `${base(appId)}/users`, query: params }),
+    /** Tek kullanıcının kanal skorları. */
+    user: (userId: string, appId?: string) => ctx.http.request<ChannelScoreUser>({ method: 'GET', path: `${base(appId)}/users/${encodeURIComponent(userId)}` }),
   };
 }
 

@@ -1,7 +1,7 @@
 import { createHmac, randomUUID } from 'node:crypto';
 import { HttpClient, type HttpOptions } from './http.js';
 import { createAds } from './resources/ads.js';
-import { createAnalytics, createFeatureFlags, createGeofences, createGlobalControl, createRfm } from './resources/analytics.js';
+import { createAnalytics, createFeatureFlags, createGeofences, createGlobalControl, createChannelScores, createRfm } from './resources/analytics.js';
 import { createApiKeys } from './resources/api-keys.js';
 import { createIdentityKeys, createIdentityToken, type IdentityTokenOptions } from './resources/identity-keys.js';
 import { createLiveActivities } from './resources/live-activities.js';
@@ -601,6 +601,8 @@ export class Pushizo {
   readonly featureFlags = createFeatureFlags(this.resourceContext());
   /** Bölgeler: giriş ve çıkış olayları. */
   readonly geofences = createGeofences(this.resourceContext());
+  /** Kişi başına en iyi kanal. */
+  readonly channelScores = createChannelScores(this.resourceContext());
   /** RFM segmentasyonu ve segment geçişleri. */
   readonly rfm = createRfm(this.resourceContext());
   /** Dışa aktarma işleri. */

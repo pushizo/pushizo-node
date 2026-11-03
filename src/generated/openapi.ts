@@ -1106,6 +1106,98 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/apps/{appId}/channel-scores/config": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Kanal skoru ayarı */
+        get: operations["PublicChannelScoresController_config"];
+        /**
+         * Kanal skorunu ayarla
+         * @description Açıkken skorlar kayıttan sonra yeniden hesaplanır; kapatınca silinir.
+         */
+        put: operations["PublicChannelScoresController_update"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/channel-scores/compute": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Kanal skorlarını yeniden hesapla
+         * @description İş kuyruğa alınır; ilerleme `status` alanından izlenir.
+         */
+        post: operations["PublicChannelScoresController_compute"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/channel-scores/overview": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** En iyi kanal dağılımı */
+        get: operations["PublicChannelScoresController_overview"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/channel-scores/users": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** En iyi kanalı belli kullanıcılar */
+        get: operations["PublicChannelScoresController_users"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/channel-scores/users/{userId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Kullanıcının kanal skorları */
+        get: operations["PublicChannelScoresController_user"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/sdk/v1/apps/{appId}/errors": {
         parameters: {
             query?: never;
@@ -5292,6 +5384,12 @@ export interface components {
             value_property?: string | null;
             use_monetary?: boolean;
             window_days?: number;
+        };
+        UpdateChannelScoreConfigDto: {
+            enabled: boolean;
+            window_days?: number;
+            min_sends?: number;
+            count_email_opens?: boolean;
         };
         SdkErrorsDto: {
             errors: {
@@ -15533,6 +15631,59 @@ export interface components {
             }[];
             next_cursor: string | null;
         };
+        ChannelScoreConfig: {
+            configured: boolean;
+            enabled: boolean;
+            window_days: number;
+            min_sends: number;
+            count_email_opens: boolean;
+            /** @enum {string} */
+            status: "idle" | "queued" | "running" | "failed";
+            last_error: string | null;
+            last_computed_at: string | null;
+            scored_users: number;
+        };
+        ChannelScoreOverview: {
+            total: number;
+            low_population: boolean;
+            last_computed_at: string | null;
+            channels: {
+                /** @enum {string} */
+                channel: "push" | "email" | "whatsapp" | "rcs" | "sms";
+                best_users: number;
+                share: number;
+                sends: number;
+                engaged: number;
+                engagement_rate: number | null;
+            }[];
+        };
+        ChannelScoreUser: {
+            user_id: string;
+            external_id: string | null;
+            best_channel: ("push" | "email" | "whatsapp" | "rcs" | "sms") | null;
+            scores: {
+                /** @enum {string} */
+                channel: "push" | "email" | "whatsapp" | "rcs" | "sms";
+                sends: number;
+                engaged: number;
+                score: number;
+            }[];
+        };
+        ChannelScoreUsersPage: {
+            data: {
+                user_id: string;
+                external_id: string | null;
+                best_channel: ("push" | "email" | "whatsapp" | "rcs" | "sms") | null;
+                scores: {
+                    /** @enum {string} */
+                    channel: "push" | "email" | "whatsapp" | "rcs" | "sms";
+                    sends: number;
+                    engaged: number;
+                    score: number;
+                }[];
+            }[];
+            next_cursor: string | null;
+        };
         SsoConnection: {
             id: string;
             /** @enum {string} */
@@ -21801,6 +21952,159 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["RfmUsersPage"];
+                };
+            };
+        };
+    };
+    PublicChannelScoresController_config: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ChannelScoreConfig"];
+                };
+            };
+        };
+    };
+    PublicChannelScoresController_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateChannelScoreConfigDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ChannelScoreConfig"];
+                };
+            };
+        };
+    };
+    PublicChannelScoresController_compute: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            202: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ChannelScoreConfig"];
+                };
+            };
+        };
+    };
+    PublicChannelScoresController_overview: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ChannelScoreOverview"];
+                };
+            };
+        };
+    };
+    PublicChannelScoresController_users: {
+        parameters: {
+            query?: {
+                channel?: "push" | "email" | "whatsapp" | "rcs" | "sms";
+                limit?: number;
+                cursor?: string;
+            };
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ChannelScoreUsersPage"];
+                };
+            };
+        };
+    };
+    PublicChannelScoresController_user: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                userId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ChannelScoreUser"];
                 };
             };
         };
