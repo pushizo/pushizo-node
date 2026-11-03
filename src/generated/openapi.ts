@@ -3381,6 +3381,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/sdk/v1/apps/{appId}/placements/{key}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Gömülü yerleşim içeriği
+         * @description Önceliğe göre sıralı; gösterim içerik çizilince `in-app/{id}/events` ile bildirilir.
+         */
+        get: operations["SdkEngagementController_placement"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/sdk/v1/apps/{appId}/in-app/{messageId}/events": {
         parameters: {
             query?: never;
@@ -7173,6 +7193,7 @@ export interface components {
                 stop_after_interaction?: boolean;
             };
             journey_only?: boolean;
+            placement?: string | null;
             priority?: number;
             start_at?: string | null;
             end_at?: string | null;
@@ -7485,6 +7506,7 @@ export interface components {
                 stop_after_interaction?: boolean;
             };
             journey_only?: boolean;
+            placement?: string | null;
             priority?: number;
             start_at?: string | null;
             end_at?: string | null;
@@ -11642,6 +11664,7 @@ export interface components {
                 stop_after_interaction?: boolean;
             };
             journey_only: boolean;
+            placement: string | null;
             start_at: string | null;
             end_at: string | null;
             stats: {
@@ -11982,6 +12005,7 @@ export interface components {
                     stop_after_interaction?: boolean;
                 };
                 journey_only: boolean;
+                placement: string | null;
                 start_at: string | null;
                 end_at: string | null;
                 stats: {
@@ -26822,6 +26846,36 @@ export interface operations {
             header?: never;
             path: {
                 appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SdkInAppList"];
+                };
+            };
+        };
+    };
+    SdkEngagementController_placement: {
+        parameters: {
+            query: {
+                subscription_id: string;
+                token_hash?: string;
+                supports?: string;
+                limit?: number;
+            };
+            header?: never;
+            path: {
+                appId: string;
+                key: string;
             };
             cookie?: never;
         };
