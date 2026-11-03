@@ -12526,6 +12526,37 @@ export interface components {
             journey: {
                 name: string;
                 description: string;
+                trigger_event?: string | null;
+                steps: {
+                    type: string;
+                    hours?: number;
+                    title?: string;
+                    body?: string;
+                    event_name?: string;
+                }[];
+            } | null;
+            journey_edit: {
+                journey_id: string;
+                base_hash: string;
+                summary: string;
+                edits: {
+                    op: string;
+                    node_id: string;
+                    handle?: string;
+                    step?: {
+                        type: string;
+                        hours?: number;
+                        title?: string;
+                        body?: string;
+                        event_name?: string;
+                    };
+                    title?: string;
+                    body?: string;
+                    hours?: number;
+                }[];
+                targets: {
+                    [key: string]: string;
+                };
             } | null;
             meta: {
                 model: string;
