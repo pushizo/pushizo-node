@@ -4726,7 +4726,7 @@ export interface components {
         UpdateReverseEtlDto: {
             name?: string;
             /** @enum {string} */
-            schedule?: "hourly" | "daily";
+            schedule?: "every_5_minutes" | "hourly" | "daily";
             enabled?: boolean;
             config?: {
                 [key: string]: unknown;
@@ -14966,7 +14966,7 @@ export interface components {
             /** @enum {string} */
             target: "event" | "user";
             /** @enum {string} */
-            schedule: "hourly" | "daily";
+            schedule: "every_5_minutes" | "hourly" | "daily";
             enabled?: boolean;
             /** @constant */
             source: "snowflake";
@@ -14994,7 +14994,7 @@ export interface components {
             /** @enum {string} */
             target: "event" | "user";
             /** @enum {string} */
-            schedule: "hourly" | "daily";
+            schedule: "every_5_minutes" | "hourly" | "daily";
             enabled?: boolean;
             /** @constant */
             source: "bigquery";
@@ -15017,7 +15017,7 @@ export interface components {
             /** @enum {string} */
             target: "event" | "user";
             /** @enum {string} */
-            schedule: "hourly" | "daily";
+            schedule: "every_5_minutes" | "hourly" | "daily";
             enabled?: boolean;
             /** @constant */
             source: "postgres";
@@ -15026,6 +15026,7 @@ export interface components {
                 port?: number;
                 user: string;
                 database: string;
+                ca_certificate?: string;
                 query: string;
                 mapping: {
                     external_id_column: string;
@@ -15034,6 +15035,8 @@ export interface components {
                     occurred_at_column?: string;
                     cursor_column?: string;
                 };
+                /** @enum {string} */
+                preset?: "alloydb" | "cloud_sql" | "greenplum" | "materialize" | "motherduck";
             };
             credentials: {
                 password: string;
@@ -15043,7 +15046,7 @@ export interface components {
             /** @enum {string} */
             target: "event" | "user";
             /** @enum {string} */
-            schedule: "hourly" | "daily";
+            schedule: "every_5_minutes" | "hourly" | "daily";
             enabled?: boolean;
             /** @constant */
             source: "mysql";
@@ -15052,6 +15055,7 @@ export interface components {
                 port?: number;
                 user: string;
                 database: string;
+                ca_certificate?: string;
                 query: string;
                 mapping: {
                     external_id_column: string;
@@ -15060,6 +15064,8 @@ export interface components {
                     occurred_at_column?: string;
                     cursor_column?: string;
                 };
+                /** @enum {string} */
+                preset?: "singlestore";
             };
             credentials: {
                 password: string;
@@ -15069,7 +15075,7 @@ export interface components {
             /** @enum {string} */
             target: "event" | "user";
             /** @enum {string} */
-            schedule: "hourly" | "daily";
+            schedule: "every_5_minutes" | "hourly" | "daily";
             enabled?: boolean;
             /** @constant */
             source: "s3";
@@ -15098,13 +15104,209 @@ export interface components {
             /** @enum {string} */
             target: "event" | "user";
             /** @enum {string} */
-            schedule: "hourly" | "daily";
+            schedule: "every_5_minutes" | "hourly" | "daily";
             enabled?: boolean;
             /** @constant */
             source: "google_sheets";
             config: {
                 spreadsheet_id: string;
                 range: string;
+                mapping: {
+                    external_id_column: string;
+                    event_name?: string;
+                    event_name_column?: string;
+                    occurred_at_column?: string;
+                    cursor_column?: string;
+                };
+            };
+            credentials: {
+                service_account_json: string;
+            };
+        } | {
+            name: string;
+            /** @enum {string} */
+            target: "event" | "user";
+            /** @enum {string} */
+            schedule: "every_5_minutes" | "hourly" | "daily";
+            enabled?: boolean;
+            /** @constant */
+            source: "clickhouse";
+            config: {
+                host: string;
+                port?: number;
+                tls?: boolean;
+                database: string;
+                user: string;
+                query: string;
+                mapping: {
+                    external_id_column: string;
+                    event_name?: string;
+                    event_name_column?: string;
+                    occurred_at_column?: string;
+                    cursor_column?: string;
+                };
+            };
+            credentials: {
+                password: string;
+            };
+        } | {
+            name: string;
+            /** @enum {string} */
+            target: "event" | "user";
+            /** @enum {string} */
+            schedule: "every_5_minutes" | "hourly" | "daily";
+            enabled?: boolean;
+            /** @constant */
+            source: "sqlserver";
+            config: {
+                host: string;
+                port?: number;
+                user: string;
+                database: string;
+                ca_certificate?: string;
+                query: string;
+                mapping: {
+                    external_id_column: string;
+                    event_name?: string;
+                    event_name_column?: string;
+                    occurred_at_column?: string;
+                    cursor_column?: string;
+                };
+                /** @enum {string} */
+                preset?: "synapse";
+            };
+            credentials: {
+                password: string;
+            };
+        } | {
+            name: string;
+            /** @enum {string} */
+            target: "event" | "user";
+            /** @enum {string} */
+            schedule: "every_5_minutes" | "hourly" | "daily";
+            enabled?: boolean;
+            /** @constant */
+            source: "trino";
+            config: {
+                host: string;
+                port?: number;
+                tls?: boolean;
+                catalog: string;
+                schema?: string;
+                user: string;
+                /** @enum {string} */
+                preset?: "starburst_enterprise" | "starburst_galaxy";
+                query: string;
+                mapping: {
+                    external_id_column: string;
+                    event_name?: string;
+                    event_name_column?: string;
+                    occurred_at_column?: string;
+                    cursor_column?: string;
+                };
+            };
+            credentials: {
+                password: string;
+            };
+        } | {
+            name: string;
+            /** @enum {string} */
+            target: "event" | "user";
+            /** @enum {string} */
+            schedule: "every_5_minutes" | "hourly" | "daily";
+            enabled?: boolean;
+            /** @constant */
+            source: "athena";
+            config: {
+                region: string;
+                database: string;
+                workgroup?: string;
+                output_location?: string;
+                query: string;
+                mapping: {
+                    external_id_column: string;
+                    event_name?: string;
+                    event_name_column?: string;
+                    occurred_at_column?: string;
+                    cursor_column?: string;
+                };
+            };
+            credentials: {
+                access_key_id: string;
+                secret_access_key: string;
+            };
+        } | {
+            name: string;
+            /** @enum {string} */
+            target: "event" | "user";
+            /** @enum {string} */
+            schedule: "every_5_minutes" | "hourly" | "daily";
+            enabled?: boolean;
+            /** @constant */
+            source: "elasticsearch";
+            config: {
+                /** Format: uri */
+                endpoint: string;
+                index: string;
+                query?: {
+                    [key: string]: unknown;
+                };
+                mapping: {
+                    external_id_column: string;
+                    event_name?: string;
+                    event_name_column?: string;
+                    occurred_at_column?: string;
+                    cursor_column?: string;
+                };
+            };
+            credentials: {
+                api_key?: string;
+                username?: string;
+                password?: string;
+            };
+        } | {
+            name: string;
+            /** @enum {string} */
+            target: "event" | "user";
+            /** @enum {string} */
+            schedule: "every_5_minutes" | "hourly" | "daily";
+            enabled?: boolean;
+            /** @constant */
+            source: "kafka";
+            config: {
+                brokers: string[];
+                topic: string;
+                ssl?: boolean;
+                /** @enum {string} */
+                mechanism?: "plain" | "scram-sha-256" | "scram-sha-512";
+                /** @enum {string} */
+                start?: "earliest" | "latest";
+                /** @enum {string} */
+                preset?: "confluent";
+                mapping: {
+                    external_id_column: string;
+                    event_name?: string;
+                    event_name_column?: string;
+                    occurred_at_column?: string;
+                    cursor_column?: string;
+                };
+            };
+            credentials: {
+                username?: string;
+                password?: string;
+            };
+        } | {
+            name: string;
+            /** @enum {string} */
+            target: "event" | "user";
+            /** @enum {string} */
+            schedule: "every_5_minutes" | "hourly" | "daily";
+            enabled?: boolean;
+            /** @constant */
+            source: "pubsub";
+            config: {
+                project_id: string;
+                subscription: string;
                 mapping: {
                     external_id_column: string;
                     event_name?: string;
@@ -15164,6 +15366,7 @@ export interface components {
                 port?: number;
                 user: string;
                 database: string;
+                ca_certificate?: string;
                 query: string;
                 mapping: {
                     external_id_column: string;
@@ -15172,6 +15375,8 @@ export interface components {
                     occurred_at_column?: string;
                     cursor_column?: string;
                 };
+                /** @enum {string} */
+                preset?: "alloydb" | "cloud_sql" | "greenplum" | "materialize" | "motherduck";
             };
             credentials: {
                 password: string;
@@ -15184,6 +15389,7 @@ export interface components {
                 port?: number;
                 user: string;
                 database: string;
+                ca_certificate?: string;
                 query: string;
                 mapping: {
                     external_id_column: string;
@@ -15192,6 +15398,8 @@ export interface components {
                     occurred_at_column?: string;
                     cursor_column?: string;
                 };
+                /** @enum {string} */
+                preset?: "singlestore";
             };
             credentials: {
                 password: string;
@@ -15236,13 +15444,167 @@ export interface components {
             credentials: {
                 service_account_json: string;
             };
+        } | {
+            /** @constant */
+            source: "clickhouse";
+            config: {
+                host: string;
+                port?: number;
+                tls?: boolean;
+                database: string;
+                user: string;
+                query: string;
+                mapping: {
+                    external_id_column: string;
+                    event_name?: string;
+                    event_name_column?: string;
+                    occurred_at_column?: string;
+                    cursor_column?: string;
+                };
+            };
+            credentials: {
+                password: string;
+            };
+        } | {
+            /** @constant */
+            source: "sqlserver";
+            config: {
+                host: string;
+                port?: number;
+                user: string;
+                database: string;
+                ca_certificate?: string;
+                query: string;
+                mapping: {
+                    external_id_column: string;
+                    event_name?: string;
+                    event_name_column?: string;
+                    occurred_at_column?: string;
+                    cursor_column?: string;
+                };
+                /** @enum {string} */
+                preset?: "synapse";
+            };
+            credentials: {
+                password: string;
+            };
+        } | {
+            /** @constant */
+            source: "trino";
+            config: {
+                host: string;
+                port?: number;
+                tls?: boolean;
+                catalog: string;
+                schema?: string;
+                user: string;
+                /** @enum {string} */
+                preset?: "starburst_enterprise" | "starburst_galaxy";
+                query: string;
+                mapping: {
+                    external_id_column: string;
+                    event_name?: string;
+                    event_name_column?: string;
+                    occurred_at_column?: string;
+                    cursor_column?: string;
+                };
+            };
+            credentials: {
+                password: string;
+            };
+        } | {
+            /** @constant */
+            source: "athena";
+            config: {
+                region: string;
+                database: string;
+                workgroup?: string;
+                output_location?: string;
+                query: string;
+                mapping: {
+                    external_id_column: string;
+                    event_name?: string;
+                    event_name_column?: string;
+                    occurred_at_column?: string;
+                    cursor_column?: string;
+                };
+            };
+            credentials: {
+                access_key_id: string;
+                secret_access_key: string;
+            };
+        } | {
+            /** @constant */
+            source: "elasticsearch";
+            config: {
+                /** Format: uri */
+                endpoint: string;
+                index: string;
+                query?: {
+                    [key: string]: unknown;
+                };
+                mapping: {
+                    external_id_column: string;
+                    event_name?: string;
+                    event_name_column?: string;
+                    occurred_at_column?: string;
+                    cursor_column?: string;
+                };
+            };
+            credentials: {
+                api_key?: string;
+                username?: string;
+                password?: string;
+            };
+        } | {
+            /** @constant */
+            source: "kafka";
+            config: {
+                brokers: string[];
+                topic: string;
+                ssl?: boolean;
+                /** @enum {string} */
+                mechanism?: "plain" | "scram-sha-256" | "scram-sha-512";
+                /** @enum {string} */
+                start?: "earliest" | "latest";
+                /** @enum {string} */
+                preset?: "confluent";
+                mapping: {
+                    external_id_column: string;
+                    event_name?: string;
+                    event_name_column?: string;
+                    occurred_at_column?: string;
+                    cursor_column?: string;
+                };
+            };
+            credentials: {
+                username?: string;
+                password?: string;
+            };
+        } | {
+            /** @constant */
+            source: "pubsub";
+            config: {
+                project_id: string;
+                subscription: string;
+                mapping: {
+                    external_id_column: string;
+                    event_name?: string;
+                    event_name_column?: string;
+                    occurred_at_column?: string;
+                    cursor_column?: string;
+                };
+            };
+            credentials: {
+                service_account_json: string;
+            };
         };
         ReverseEtlSync: {
             id: string;
             app_id: string;
             name: string;
             /** @enum {string} */
-            source: "snowflake" | "bigquery" | "postgres" | "mysql" | "s3" | "google_sheets";
+            source: "snowflake" | "bigquery" | "postgres" | "mysql" | "s3" | "google_sheets" | "clickhouse" | "sqlserver" | "trino" | "athena" | "elasticsearch" | "kafka" | "pubsub";
             /** @enum {string} */
             target: "event" | "user";
             config: {
@@ -15250,7 +15612,7 @@ export interface components {
             };
             credentials_hint: string;
             /** @enum {string} */
-            schedule: "hourly" | "daily";
+            schedule: "every_5_minutes" | "hourly" | "daily";
             enabled: boolean;
             /** @enum {string} */
             status: "active" | "paused" | "failing";
@@ -15269,7 +15631,7 @@ export interface components {
                 app_id: string;
                 name: string;
                 /** @enum {string} */
-                source: "snowflake" | "bigquery" | "postgres" | "mysql" | "s3" | "google_sheets";
+                source: "snowflake" | "bigquery" | "postgres" | "mysql" | "s3" | "google_sheets" | "clickhouse" | "sqlserver" | "trino" | "athena" | "elasticsearch" | "kafka" | "pubsub";
                 /** @enum {string} */
                 target: "event" | "user";
                 config: {
@@ -15277,7 +15639,7 @@ export interface components {
                 };
                 credentials_hint: string;
                 /** @enum {string} */
-                schedule: "hourly" | "daily";
+                schedule: "every_5_minutes" | "hourly" | "daily";
                 enabled: boolean;
                 /** @enum {string} */
                 status: "active" | "paused" | "failing";
