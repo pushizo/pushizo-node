@@ -642,6 +642,64 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/apps/{appId}/promo-code-lists": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Promosyon kodu listeleri */
+        get: operations["PublicDynamicContentController_listPromoLists"];
+        put?: never;
+        /**
+         * Promosyon kodu listesi oluştur
+         * @description Şablonda `{% promo_code '<ad>' %}` teslimat başına tek kullanımlık kod verir. Kod kalmazsa teslimat `PromoCodeUnavailable` hatasıyla düşer.
+         */
+        post: operations["PublicDynamicContentController_createPromoList"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/promo-code-lists/{listId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Promosyon kodu listesi ayrıntısı */
+        get: operations["PublicDynamicContentController_getPromoList"];
+        put?: never;
+        post?: never;
+        /** Promosyon kodu listesini sil */
+        delete: operations["PublicDynamicContentController_deletePromoList"];
+        options?: never;
+        head?: never;
+        /** Promosyon kodu listesini güncelle (açıklama, son kullanma) */
+        patch: operations["PublicDynamicContentController_updatePromoList"];
+        trace?: never;
+    };
+    "/v1/apps/{appId}/promo-code-lists/{listId}/codes": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Listedeki kodlar ve atamaları */
+        get: operations["PublicDynamicContentController_promoCodes"];
+        put?: never;
+        /** CSV ile kod ekle (zaten olanlar atlanır) */
+        post: operations["PublicDynamicContentController_uploadPromoList"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/sdk/v1/apps/{appId}/errors": {
         parameters: {
             query?: never;
@@ -4624,6 +4682,15 @@ export interface components {
         };
         UpdateContentTableDto: {
             description?: string | null;
+        };
+        CreatePromoCodeListDto: {
+            name: string;
+            description?: string;
+            expires_at?: string | null;
+        };
+        UpdatePromoCodeListDto: {
+            description?: string | null;
+            expires_at?: string | null;
         };
         SdkErrorsDto: {
             errors: {
@@ -14282,6 +14349,60 @@ export interface components {
                 [key: string]: string;
             }[];
         };
+        PromoCodeList: {
+            id: string;
+            app_id: string;
+            name: string;
+            description: string | null;
+            expires_at: string | null;
+            total_count: number;
+            assigned_count: number;
+            available_count: number;
+            liquid: string;
+            created_at: string;
+            updated_at: string;
+        };
+        PromoCodeListList: {
+            data: {
+                id: string;
+                app_id: string;
+                name: string;
+                description: string | null;
+                expires_at: string | null;
+                total_count: number;
+                assigned_count: number;
+                available_count: number;
+                liquid: string;
+                created_at: string;
+                updated_at: string;
+            }[];
+        };
+        PromoCodeUploadResult: {
+            list: {
+                id: string;
+                app_id: string;
+                name: string;
+                description: string | null;
+                expires_at: string | null;
+                total_count: number;
+                assigned_count: number;
+                available_count: number;
+                liquid: string;
+                created_at: string;
+                updated_at: string;
+            };
+            added: number;
+            skipped: number;
+        };
+        PromoCodesPage: {
+            total: number;
+            data: {
+                code: string;
+                delivery_id: string | null;
+                message_id: string | null;
+                assigned_at: string | null;
+            }[];
+        };
         SsoConnection: {
             id: string;
             /** @enum {string} */
@@ -19394,6 +19515,202 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ContentTable"];
+                };
+            };
+        };
+    };
+    PublicDynamicContentController_listPromoLists: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PromoCodeListList"];
+                };
+            };
+        };
+    };
+    PublicDynamicContentController_createPromoList: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreatePromoCodeListDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PromoCodeList"];
+                };
+            };
+        };
+    };
+    PublicDynamicContentController_getPromoList: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                listId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PromoCodeList"];
+                };
+            };
+        };
+    };
+    PublicDynamicContentController_deletePromoList: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                listId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Ok"];
+                };
+            };
+        };
+    };
+    PublicDynamicContentController_updatePromoList: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                listId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdatePromoCodeListDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PromoCodeList"];
+                };
+            };
+        };
+    };
+    PublicDynamicContentController_promoCodes: {
+        parameters: {
+            query?: {
+                limit?: number;
+                offset?: number;
+                q?: string;
+                status?: "available" | "assigned";
+            };
+            header?: never;
+            path: {
+                listId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PromoCodesPage"];
+                };
+            };
+        };
+    };
+    PublicDynamicContentController_uploadPromoList: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                listId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "multipart/form-data": {
+                    /**
+                     * Format: binary
+                     * @description UTF-8 CSV; kodlar ilk sütunda, başlık isteğe bağlı. En fazla 1.000.000 kod, 20 MB.
+                     */
+                    file: string;
+                };
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PromoCodeUploadResult"];
                 };
             };
         };

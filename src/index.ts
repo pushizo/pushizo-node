@@ -9,7 +9,7 @@ import { createCampaigns } from './resources/campaigns.js';
 import type { ResourceContext } from './resources/context.js';
 import { createConversations, createSmsKeywords, createWhatsAppTemplates } from './resources/conversations.js';
 import { createExports, createImports } from './resources/data-transfer.js';
-import { createContentTables, createDataFeeds } from './resources/dynamic-content.js';
+import { createContentTables, createDataFeeds, createPromoCodeLists } from './resources/dynamic-content.js';
 import { createEmailDeliverability } from './resources/email-deliverability.js';
 import { createInAppMessages } from './resources/in-app-messages.js';
 import { createInbox } from './resources/inbox.js';
@@ -84,6 +84,7 @@ export type { CreateImportInput, ImportFile } from './resources/data-transfer.js
 export type {
   CreateContentTableInput,
   ReplaceContentTableRowsInput,
+  UploadPromoCodesInput,
 } from './resources/dynamic-content.js';
 export { createIdentityToken, type IdentityTokenOptions } from './resources/identity-keys.js';
 
@@ -607,6 +608,8 @@ export class Pushizo {
   readonly dataFeeds = createDataFeeds(this.resourceContext());
   /** İçerik tabloları: CSV ile yüklenen, şablonda `lookup` ile okunan tablolar. */
   readonly contentTables = createContentTables(this.resourceContext());
+  /** Promosyon kodu listeleri: şablonda `promo_code` ile teslimat başına tek kod. */
+  readonly promoCodeLists = createPromoCodeLists(this.resourceContext());
   /** Veri ambarı dışa aktarımları (BigQuery, Snowflake, S3 Parquet). */
   readonly warehouseExports = createWarehouseExports(this.resourceContext());
   /** Depodan içeri aktarım. */

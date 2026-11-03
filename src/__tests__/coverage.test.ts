@@ -289,6 +289,13 @@ const TABLE: Record<string, (hs: Pushizo) => Promise<unknown>> = {
     hs.contentTables.rows('ctb_1', { limit: 10, q: 'A1' }),
   'PUT /v1/apps/{appId}/content-tables/{tableId}/rows': (hs) =>
     hs.contentTables.replaceRows('ctb_1', { file: 'sku,ad\nA2,Defter\n' }),
+  'GET /v1/apps/{appId}/promo-code-lists': (hs) => hs.promoCodeLists.list(),
+  'POST /v1/apps/{appId}/promo-code-lists': (hs) => hs.promoCodeLists.create({ name: 'yaz_indirimi' }),
+  'GET /v1/apps/{appId}/promo-code-lists/{listId}': (hs) => hs.promoCodeLists.get('pcl_1'),
+  'PATCH /v1/apps/{appId}/promo-code-lists/{listId}': (hs) => hs.promoCodeLists.update('pcl_1', { description: 'Yaz' }),
+  'DELETE /v1/apps/{appId}/promo-code-lists/{listId}': (hs) => hs.promoCodeLists.delete('pcl_1'),
+  'POST /v1/apps/{appId}/promo-code-lists/{listId}/codes': (hs) => hs.promoCodeLists.uploadCodes('pcl_1', { file: 'code\nA1\n' }),
+  'GET /v1/apps/{appId}/promo-code-lists/{listId}/codes': (hs) => hs.promoCodeLists.codes('pcl_1', { limit: 10, status: 'assigned' }),
   // veri ambarı dışa aktarımları
   'GET /v1/apps/{appId}/warehouse-exports/tables': (hs) => hs.warehouseExports.tables(),
   'POST /v1/apps/{appId}/warehouse-exports/test-connection': (hs) =>

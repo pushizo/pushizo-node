@@ -3,14 +3,20 @@ import type {
   ContentTableList,
   ContentTableRows,
   CreateDataFeedInput,
+  CreatePromoCodeListInput,
   DataFeed,
   DataFeedList,
   DataFeedTestResult,
   Ok,
+  PromoCodeList,
+  PromoCodeListList,
+  PromoCodesPage,
+  PromoCodeUploadResult,
   QueryParams,
   TestDataFeedInput,
   UpdateContentTableInput,
   UpdateDataFeedInput,
+  UpdatePromoCodeListInput,
 } from '../types.js';
 import { enc, type ResourceContext } from './context.js';
 import { toBlob, type ImportFile } from './data-transfer.js';
@@ -106,5 +112,46 @@ export function createContentTables(ctx: ResourceContext) {
         path: `${one(tableId, appId)}/rows`,
         body: csvForm(input.file, input.filename, { key_column: input.key_column }),
       }),
+  };
+}
+
+export interface UploadPromoCodesInput {
+  /** Kodlar ilk sütunda, başlık isteğe bağlı. */
+  file: ImportFile;
+  /** Varsayılan: `File` ise kendi adı, değilse `table.csv`. */
+  filename?: string;
+}
+
+/**
+ * Promosyon kodu listeleri (ADR-0059): şablonda `{% promo_code '<ad>' %}` teslimat başına tek kullanımlık kod verir.
+ * Kod kalmazsa teslimat `PromoCodeUnavailable` hatasıyla düşer.
+ */
+export function createPromoCodeLists(ctx: ResourceContext) {
+  const base = (appId?: string) => `${ctx.appPath(appId)}/promo-code-lists`;
+  const one = (listId: string, appId?: string) => `${base(appId)}/${enc(listId)}`;
+  return {
+    list: (appId?: string) => ctx.http.request<PromoCodeListList>({ method: 'GET', path: base(appId) }),
+    create: (body: CreatePromoCodeListInput, appId?: string) =>
+      ctx.http.request<PromoCodeList>({ method: 'POST', path: base(appId), body }),
+    get: (listId: string, appId?: string) =>
+      ctx.http.request<PromoCodeList>({ method: 'GET', path: one(listId, appId) }),
+    /** Açıklamayı veya son kullanma tarihini günceller (`null` siler). */
+    update: (listId: string, body: UpdatePromoCodeListInput, appId?: string) =>
+      ctx.http.request<PromoCodeList>({ method: 'PATCH', path: one(listId, appId), body }),
+    delete: (listId: string, appId?: string) =>
+      ctx.http.request<Ok>({ method: 'DELETE', path: one(listId, appId) }),
+    /** CSV'den kod ekler (multipart); listede zaten olanlar atlanır. */
+    uploadCodes: (listId: string, input: UploadPromoCodesInput, appId?: string) =>
+      ctx.http.request<PromoCodeUploadResult>({
+        method: 'POST',
+        path: `${one(listId, appId)}/codes`,
+        body: csvForm(input.file, input.filename, {}),
+      }),
+    /** Kodları ve atamalarını sayfalı listeler (`limit`, `offset`, `q`, `status`). */
+    codes: (
+      listId: string,
+      params: QueryParams<'/v1/apps/{appId}/promo-code-lists/{listId}/codes', 'get'> = {},
+      appId?: string,
+    ) => ctx.http.request<PromoCodesPage>({ method: 'GET', path: `${one(listId, appId)}/codes`, query: params }),
   };
 }
