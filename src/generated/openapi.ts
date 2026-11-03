@@ -3263,6 +3263,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/apps/{appId}/journeys/{journeyId}/versions/{version}/restore": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Eski sürümü yeni taslak olarak geri yükle (yayındaki sürüm değişmez) */
+        post: operations["PublicJourneysController_restoreVersion"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/apps/{appId}/journeys/{journeyId}/publish": {
         parameters: {
             query?: never;
@@ -4714,7 +4731,7 @@ export interface components {
             name?: string;
             tables?: ("deliveries" | "delivery_events" | "events" | "conversions" | "users" | "subscriptions")[];
             /** @enum {string} */
-            schedule?: "hourly" | "daily";
+            schedule?: "every_15_minutes" | "hourly" | "daily";
             enabled?: boolean;
             config?: {
                 [key: string]: unknown;
@@ -13044,6 +13061,27 @@ export interface components {
                 updated_at: string;
             } | null;
         };
+        EmailProviderInsights: {
+            days: number;
+            providers: {
+                /** @enum {string} */
+                provider: "gmail" | "outlook" | "yahoo" | "other";
+                sent: number;
+                delivered: number;
+                opened: number;
+                clicked: number;
+                bounced: number;
+                complained: number;
+            }[];
+            trend: {
+                day: string;
+                /** @enum {string} */
+                provider: "gmail" | "outlook" | "yahoo" | "other";
+                sent: number;
+                delivered: number;
+                bounced: number;
+            }[];
+        };
         EmailBounceStats: {
             days: number;
             target_rate: number;
@@ -14635,7 +14673,7 @@ export interface components {
             name: string;
             tables: ("deliveries" | "delivery_events" | "events" | "conversions" | "users" | "subscriptions")[];
             /** @enum {string} */
-            schedule: "hourly" | "daily";
+            schedule: "every_15_minutes" | "hourly" | "daily";
             enabled?: boolean;
             /** @constant */
             destination: "bigquery";
@@ -14653,7 +14691,7 @@ export interface components {
             name: string;
             tables: ("deliveries" | "delivery_events" | "events" | "conversions" | "users" | "subscriptions")[];
             /** @enum {string} */
-            schedule: "hourly" | "daily";
+            schedule: "every_15_minutes" | "hourly" | "daily";
             enabled?: boolean;
             /** @constant */
             destination: "snowflake";
@@ -14674,7 +14712,7 @@ export interface components {
             name: string;
             tables: ("deliveries" | "delivery_events" | "events" | "conversions" | "users" | "subscriptions")[];
             /** @enum {string} */
-            schedule: "hourly" | "daily";
+            schedule: "every_15_minutes" | "hourly" | "daily";
             enabled?: boolean;
             /** @constant */
             destination: "s3_parquet";
@@ -14694,7 +14732,7 @@ export interface components {
             name: string;
             tables: ("deliveries" | "delivery_events" | "events" | "conversions" | "users" | "subscriptions")[];
             /** @enum {string} */
-            schedule: "hourly" | "daily";
+            schedule: "every_15_minutes" | "hourly" | "daily";
             enabled?: boolean;
             /** @constant */
             destination: "databricks";
@@ -14713,7 +14751,7 @@ export interface components {
             name: string;
             tables: ("deliveries" | "delivery_events" | "events" | "conversions" | "users" | "subscriptions")[];
             /** @enum {string} */
-            schedule: "hourly" | "daily";
+            schedule: "every_15_minutes" | "hourly" | "daily";
             enabled?: boolean;
             /** @constant */
             destination: "redshift";
@@ -14818,7 +14856,7 @@ export interface components {
             credentials_hint: string;
             tables: ("deliveries" | "delivery_events" | "events" | "conversions" | "users" | "subscriptions")[];
             /** @enum {string} */
-            schedule: "hourly" | "daily";
+            schedule: "every_15_minutes" | "hourly" | "daily";
             enabled: boolean;
             /** @enum {string} */
             status: "active" | "paused" | "failing";
@@ -14852,7 +14890,7 @@ export interface components {
                 credentials_hint: string;
                 tables: ("deliveries" | "delivery_events" | "events" | "conversions" | "users" | "subscriptions")[];
                 /** @enum {string} */
-                schedule: "hourly" | "daily";
+                schedule: "every_15_minutes" | "hourly" | "daily";
                 enabled: boolean;
                 /** @enum {string} */
                 status: "active" | "paused" | "failing";
@@ -25183,6 +25221,32 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["JourneyVersionList"];
+                };
+            };
+        };
+    };
+    PublicJourneysController_restoreVersion: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                journeyId: string;
+                version: number;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["JourneyDetail"];
                 };
             };
         };
