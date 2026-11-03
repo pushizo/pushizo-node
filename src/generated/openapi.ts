@@ -2067,6 +2067,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/apps/{appId}/analytics/paths": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Yol analizi
+         * @description Başlangıç olayından sonra veya önce kullanıcıların izlediği yollar.
+         */
+        post: operations["PublicAnalyticsController_paths"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/apps/{appId}/analytics/funnels": {
         parameters: {
             query?: never;
@@ -6072,6 +6092,31 @@ export interface components {
             };
             include_unsubscribed?: boolean;
         };
+        PathBodyDto: {
+            event: string;
+            /**
+             * @default after
+             * @enum {string}
+             */
+            direction: "after" | "before";
+            /** @default 3 */
+            depth: number;
+            /** @default 5 */
+            top: number;
+            /** @default 24 */
+            window_hours: number;
+            /** @default [] */
+            exclude: string[];
+            /** Format: date-time */
+            from?: string;
+            /** Format: date-time */
+            to?: string;
+            /**
+             * @default json
+             * @enum {string}
+             */
+            format: "json" | "csv";
+        };
         FunnelBodyDto: {
             steps: {
                 name: string;
@@ -9800,6 +9845,37 @@ export interface components {
                 steps: number[];
                 overall_rate: number | null;
             } | null;
+        };
+        PathReport: {
+            from: string;
+            to: string;
+            event: string;
+            /** @enum {string} */
+            direction: "after" | "before";
+            window_hours: number;
+            total_users: number;
+            truncated: boolean;
+            levels: {
+                step: number;
+                nodes: {
+                    id: string;
+                    name: string | null;
+                    /** @enum {string} */
+                    kind: "event" | "other" | "end";
+                    users: number;
+                    share: number;
+                }[];
+            }[];
+            links: {
+                source: string;
+                target: string;
+                users: number;
+            }[];
+            top_paths: {
+                path: string[];
+                users: number;
+                share: number;
+            }[];
         };
         ProvidersReport: {
             from: string;
@@ -24118,6 +24194,34 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ConversionsReport"];
+                };
+            };
+        };
+    };
+    PublicAnalyticsController_paths: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PathBodyDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PathReport"];
                 };
             };
         };

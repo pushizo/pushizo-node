@@ -5,6 +5,8 @@ import type {
   EventsReport,
   FunnelInput,
   FunnelReport,
+  PathInput,
+  PathReport,
   GlobalControl,
   GlobalControlReport,
   AppFlag,
@@ -79,6 +81,13 @@ export function createAnalytics(ctx: ResourceContext) {
     /** Retention kohortu: ilk görülme haftası × sonraki haftalarda aktiflik oranı (`weeks`). */
     retention: report<'/v1/apps/{appId}/analytics/retention', RetentionReport>('retention'),
     /** Sıralı adımlı huni raporu (`window_hours` içinde tamamlanan adımlar). */
+    /** Yol analizi: başlangıç olayından sonra veya önce izlenen yollar. */
+    paths: <F extends ReportFormat = 'json'>(body: Omit<PathInput, 'format'> & { format?: F }, appId?: string) =>
+      ctx.http.request<ReportResult<F, PathReport>>({
+        method: 'POST',
+        path: path(appId, 'paths'),
+        body: { format: 'json', ...body },
+      }),
     funnel: <F extends ReportFormat = 'json'>(
       body: Omit<FunnelInput, 'format'> & { format?: F },
       appId?: string,
