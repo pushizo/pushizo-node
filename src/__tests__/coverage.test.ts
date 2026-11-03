@@ -289,6 +289,12 @@ const TABLE: Record<string, (hs: Pushizo) => Promise<unknown>> = {
     hs.contentTables.rows('ctb_1', { limit: 10, q: 'A1' }),
   'PUT /v1/apps/{appId}/content-tables/{tableId}/rows': (hs) =>
     hs.contentTables.replaceRows('ctb_1', { file: 'sku,ad\nA2,Defter\n' }),
+  'GET /v1/apps/{appId}/feature-flags': (hs) => hs.featureFlags.list(),
+  'POST /v1/apps/{appId}/feature-flags': (hs) => hs.featureFlags.create({ key: 'yeni_sepet', name: 'Yeni sepet' }),
+  'POST /v1/apps/{appId}/feature-flags/evaluate': (hs) => hs.featureFlags.evaluate({ external_id: 'u1' }),
+  'GET /v1/apps/{appId}/feature-flags/{flagId}': (hs) => hs.featureFlags.get('ffl_1'),
+  'PATCH /v1/apps/{appId}/feature-flags/{flagId}': (hs) => hs.featureFlags.update('ffl_1', { enabled: true }),
+  'DELETE /v1/apps/{appId}/feature-flags/{flagId}': (hs) => hs.featureFlags.delete('ffl_1'),
   'GET /v1/apps/{appId}/geofences': (hs) => hs.geofences.list(),
   'POST /v1/apps/{appId}/geofences': (hs) => hs.geofences.create({ name: 'Mağaza', lat: 41, lng: 29, radius_m: 200 }),
   'GET /v1/apps/{appId}/geofences/{geofenceId}': (hs) => hs.geofences.get('gfn_1'),

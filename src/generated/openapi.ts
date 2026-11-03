@@ -332,6 +332,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/sdk/v1/apps/{appId}/feature-flags/evaluate": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Özellik bayraklarını değerlendir
+         * @description Değerler uygulama kimliğini bilen herkesçe okunabilir. `subscription_id` için sahiplik kuralları PATCH ile aynıdır.
+         */
+        post: operations["SdkController_featureFlags"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/sdk/v1/apps/{appId}/geofences": {
         parameters: {
             query?: never;
@@ -895,6 +915,63 @@ export interface paths {
         options?: never;
         head?: never;
         patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/feature-flags": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Özellik bayrakları */
+        get: operations["PublicAppFlagsController_list"];
+        put?: never;
+        /**
+         * Bayrak oluştur
+         * @description Değerler uygulama kimliğini bilen herkesçe okunabilir; gizli bilgi yazmayın.
+         */
+        post: operations["PublicAppFlagsController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/feature-flags/evaluate": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Bayrakları bir kullanıcı için değerlendir */
+        post: operations["PublicAppFlagsController_evaluate"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/feature-flags/{flagId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Bayrak ayrıntısı */
+        get: operations["PublicAppFlagsController_get"];
+        put?: never;
+        post?: never;
+        /** Bayrağı sil */
+        delete: operations["PublicAppFlagsController_remove"];
+        options?: never;
+        head?: never;
+        /** Bayrağı güncelle */
+        patch: operations["PublicAppFlagsController_update"];
         trace?: never;
     };
     "/v1/apps/{appId}/geofences": {
@@ -4848,6 +4925,12 @@ export interface components {
             app_version?: string | null;
             sdk_version?: string;
         };
+        SdkFlagsEvaluateDto: {
+            token_hash?: string;
+            identity_hash?: string;
+            subscription_id?: string;
+            subject?: string;
+        };
         SdkGeofenceEventsDto: {
             token_hash?: string;
             identity_hash?: string;
@@ -5120,6 +5203,52 @@ export interface components {
             purchase_events?: string[];
             item_property?: string;
             window_days?: number;
+        };
+        CreateAppFlagDto: {
+            key: string;
+            name: string;
+            description?: string | null;
+            enabled?: boolean;
+            /** @enum {string} */
+            value_type?: "boolean" | "string" | "number" | "json";
+            on_value?: boolean | number | string | unknown[] | {
+                [key: string]: unknown;
+            };
+            off_value?: boolean | number | string | unknown[] | {
+                [key: string]: unknown;
+            };
+            rollout_percent?: number;
+            segment_id?: string | null;
+            rollout_schedule?: {
+                /** Format: date-time */
+                at: string;
+                percent: number;
+            }[];
+        };
+        EvaluateAppFlagsDto: {
+            external_id?: string;
+            user_id?: string;
+            subject?: string;
+        };
+        UpdateAppFlagDto: {
+            name?: string;
+            description?: string | null;
+            enabled?: boolean;
+            /** @enum {string} */
+            value_type?: "boolean" | "string" | "number" | "json";
+            on_value?: boolean | number | string | unknown[] | {
+                [key: string]: unknown;
+            };
+            off_value?: boolean | number | string | unknown[] | {
+                [key: string]: unknown;
+            };
+            rollout_percent?: number;
+            segment_id?: string | null;
+            rollout_schedule?: {
+                /** Format: date-time */
+                at: string;
+                percent: number;
+            }[];
         };
         CreateGeofenceDto: {
             name: string;
@@ -8576,6 +8705,14 @@ export interface components {
                 };
                 last_active_at: string;
             }[];
+        };
+        SdkFeatureFlags: {
+            flags: {
+                [key: string]: {
+                    enabled: boolean;
+                    value: unknown;
+                };
+            };
         };
         SdkGeofenceList: {
             data: {
@@ -15223,6 +15360,68 @@ export interface components {
                 updated_at: string;
             }[];
         };
+        AppFlag: {
+            id: string;
+            app_id: string;
+            key: string;
+            name: string;
+            description: string | null;
+            enabled: boolean;
+            /** @enum {string} */
+            value_type: "boolean" | "string" | "number" | "json";
+            on_value: boolean | number | string | unknown[] | {
+                [key: string]: unknown;
+            };
+            off_value: boolean | number | string | unknown[] | {
+                [key: string]: unknown;
+            };
+            rollout_percent: number;
+            segment_id: string | null;
+            rollout_schedule: {
+                at: string;
+                percent: number;
+            }[];
+            created_at: string;
+            updated_at: string;
+        };
+        AppFlagList: {
+            data: {
+                id: string;
+                app_id: string;
+                key: string;
+                name: string;
+                description: string | null;
+                enabled: boolean;
+                /** @enum {string} */
+                value_type: "boolean" | "string" | "number" | "json";
+                on_value: boolean | number | string | unknown[] | {
+                    [key: string]: unknown;
+                };
+                off_value: boolean | number | string | unknown[] | {
+                    [key: string]: unknown;
+                };
+                rollout_percent: number;
+                segment_id: string | null;
+                rollout_schedule: {
+                    at: string;
+                    percent: number;
+                }[];
+                created_at: string;
+                updated_at: string;
+            }[];
+        };
+        AppFlagEvaluation: {
+            flags: {
+                [key: string]: {
+                    enabled: boolean;
+                    value: boolean | number | string | unknown[] | {
+                        [key: string]: unknown;
+                    };
+                    /** @enum {string} */
+                    reason: "on" | "disabled" | "segment" | "rollout";
+                };
+            };
+        };
         Geofence: {
             id: string;
             app_id: string;
@@ -19744,6 +19943,34 @@ export interface operations {
             };
         };
     };
+    SdkController_featureFlags: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SdkFlagsEvaluateDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SdkFeatureFlags"];
+                };
+            };
+        };
+    };
     SdkController_geofences: {
         parameters: {
             query: {
@@ -21105,6 +21332,165 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["RecommendationConfig"];
+                };
+            };
+        };
+    };
+    PublicAppFlagsController_list: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AppFlagList"];
+                };
+            };
+        };
+    };
+    PublicAppFlagsController_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateAppFlagDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AppFlag"];
+                };
+            };
+        };
+    };
+    PublicAppFlagsController_evaluate: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["EvaluateAppFlagsDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AppFlagEvaluation"];
+                };
+            };
+        };
+    };
+    PublicAppFlagsController_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                flagId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AppFlag"];
+                };
+            };
+        };
+    };
+    PublicAppFlagsController_remove: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                flagId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Ok"];
+                };
+            };
+        };
+    };
+    PublicAppFlagsController_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                flagId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateAppFlagDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AppFlag"];
                 };
             };
         };

@@ -7,6 +7,12 @@ import type {
   FunnelReport,
   GlobalControl,
   GlobalControlReport,
+  AppFlag,
+  AppFlagEvaluation,
+  AppFlagList,
+  CreateAppFlagInput,
+  EvaluateAppFlagsInput,
+  UpdateAppFlagInput,
   CreateGeofenceInput,
   Geofence,
   GeofenceList,
@@ -96,6 +102,21 @@ export function createGlobalControl(ctx: ResourceContext) {
     /** Dönüşüm karşılaştırması (`days`, `event`). */
     report: (params: QueryParams<'/v1/apps/{appId}/global-control/report', 'get'> = {}, appId?: string) =>
       ctx.http.request<GlobalControlReport>({ method: 'GET', path: `${base(appId)}/report`, query: params }),
+  };
+}
+
+/** Özellik bayrakları ve kademeli yayın. */
+export function createFeatureFlags(ctx: ResourceContext) {
+  const base = (appId?: string) => `${ctx.appPath(appId)}/feature-flags`;
+  const one = (flagId: string, appId?: string) => `${base(appId)}/${encodeURIComponent(flagId)}`;
+  return {
+    list: (appId?: string) => ctx.http.request<AppFlagList>({ method: 'GET', path: base(appId) }),
+    create: (body: CreateAppFlagInput, appId?: string) => ctx.http.request<AppFlag>({ method: 'POST', path: base(appId), body }),
+    get: (flagId: string, appId?: string) => ctx.http.request<AppFlag>({ method: 'GET', path: one(flagId, appId) }),
+    update: (flagId: string, body: UpdateAppFlagInput, appId?: string) => ctx.http.request<AppFlag>({ method: 'PATCH', path: one(flagId, appId), body }),
+    delete: (flagId: string, appId?: string) => ctx.http.request<Ok>({ method: 'DELETE', path: one(flagId, appId) }),
+    /** `external_id`, `user_id` veya `subject` için tüm bayrakların sonucu. */
+    evaluate: (body: EvaluateAppFlagsInput, appId?: string) => ctx.http.request<AppFlagEvaluation>({ method: 'POST', path: `${base(appId)}/evaluate`, body }),
   };
 }
 
