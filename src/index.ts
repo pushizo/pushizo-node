@@ -1,7 +1,7 @@
 import { createHmac, randomUUID } from 'node:crypto';
 import { HttpClient, type HttpOptions } from './http.js';
 import { createAds } from './resources/ads.js';
-import { createAnalytics } from './resources/analytics.js';
+import { createAnalytics, createGlobalControl } from './resources/analytics.js';
 import { createApiKeys } from './resources/api-keys.js';
 import { createIdentityKeys, createIdentityToken, type IdentityTokenOptions } from './resources/identity-keys.js';
 import { createLiveActivities } from './resources/live-activities.js';
@@ -594,6 +594,8 @@ export class Pushizo {
   readonly inbox = createInbox(this.resourceContext());
   /** Analitik raporları (JSON veya `format: 'csv'`). */
   readonly analytics = createAnalytics(this.resourceContext());
+  /** Genel kontrol grubu: pazarlama mesajlarının toplam etkisini ölçer. */
+  readonly globalControl = createGlobalControl(this.resourceContext());
   /** Dışa aktarma işleri. */
   readonly exports = createExports(this.resourceContext());
   /** İçe aktarma işleri (multipart CSV). */

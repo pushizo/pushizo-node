@@ -289,6 +289,10 @@ const TABLE: Record<string, (hs: Pushizo) => Promise<unknown>> = {
     hs.contentTables.rows('ctb_1', { limit: 10, q: 'A1' }),
   'PUT /v1/apps/{appId}/content-tables/{tableId}/rows': (hs) =>
     hs.contentTables.replaceRows('ctb_1', { file: 'sku,ad\nA2,Defter\n' }),
+  'GET /v1/apps/{appId}/global-control': (hs) => hs.globalControl.get(),
+  'PUT /v1/apps/{appId}/global-control': (hs) => hs.globalControl.update({ enabled: true, percent: 5 }),
+  'POST /v1/apps/{appId}/global-control/reset': (hs) => hs.globalControl.reset(),
+  'GET /v1/apps/{appId}/global-control/report': (hs) => hs.globalControl.report({ days: 30 }),
   'GET /v1/apps/{appId}/promo-code-lists': (hs) => hs.promoCodeLists.list(),
   'POST /v1/apps/{appId}/promo-code-lists': (hs) => hs.promoCodeLists.create({ name: 'yaz_indirimi' }),
   'GET /v1/apps/{appId}/promo-code-lists/{listId}': (hs) => hs.promoCodeLists.get('pcl_1'),

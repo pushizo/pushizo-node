@@ -1637,6 +1637,61 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/apps/{appId}/global-control": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Genel kontrol grubu ayarı */
+        get: operations["PublicGlobalControlController_get"];
+        /**
+         * Genel kontrol grubunu ayarla
+         * @description Gruptaki kullanıcılar kampanya, otomasyon ve uygulama içi mesajları almaz. API ve işlemsel gönderimler etkilenmez.
+         */
+        put: operations["PublicGlobalControlController_update"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/global-control/reset": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Grubu yeniden kur (üyelik değişir, ölçüm baştan başlar) */
+        post: operations["PublicGlobalControlController_reset"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/global-control/report": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Kontrol ve mesaj alan grubun dönüşüm karşılaştırması */
+        get: operations["PublicGlobalControlController_report"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/apps/{appId}/events/definitions": {
         parameters: {
             query?: never;
@@ -5395,6 +5450,10 @@ export interface components {
              */
             format: "json" | "csv";
         };
+        UpdateGlobalControlDto: {
+            enabled: boolean;
+            percent: number;
+        };
         PatchEventDefinitionDto: {
             display_name?: string | null;
             is_conversion?: boolean;
@@ -6580,6 +6639,7 @@ export interface components {
             audience?: {
                 included_segments?: string[];
                 excluded_segments?: string[];
+                global_control_exempt?: boolean;
             };
             frequency?: {
                 max_impressions?: number;
@@ -6891,6 +6951,7 @@ export interface components {
             audience?: {
                 included_segments?: string[];
                 excluded_segments?: string[];
+                global_control_exempt?: boolean;
             };
             frequency?: {
                 max_impressions?: number;
@@ -9138,6 +9199,34 @@ export interface components {
             }[];
             average: (number | null)[];
         };
+        GlobalControl: {
+            enabled: boolean;
+            percent: number;
+            started_at: string | null;
+        };
+        GlobalControlReport: {
+            enabled: boolean;
+            percent: number;
+            started_at: string | null;
+            from: string;
+            to: string;
+            events: string[];
+            control: {
+                users: number;
+                converted: number;
+                conversion_rate: number;
+            };
+            treatment: {
+                users: number;
+                converted: number;
+                conversion_rate: number;
+            };
+            lift_percent: number | null;
+            incremental_conversions: number;
+            p_value: number | null;
+            significant: boolean;
+            withheld_messages: number;
+        };
         IdentityKey: {
             id: string;
             kid: string;
@@ -11003,6 +11092,7 @@ export interface components {
             audience: {
                 included_segments?: string[];
                 excluded_segments?: string[];
+                global_control_exempt?: boolean;
             };
             frequency: {
                 max_impressions?: number;
@@ -11342,6 +11432,7 @@ export interface components {
                 audience: {
                     included_segments?: string[];
                     excluded_segments?: string[];
+                    global_control_exempt?: boolean;
                 };
                 frequency: {
                     max_impressions?: number;
@@ -12041,6 +12132,7 @@ export interface components {
                 priority?: 5 | 10;
                 collapse_id?: string;
                 frequency_cap_exempt?: boolean;
+                global_control_exempt?: boolean;
                 quiet_hours_exempt?: boolean;
                 one_per_user?: boolean;
             };
@@ -12146,6 +12238,7 @@ export interface components {
                     priority?: 5 | 10;
                     collapse_id?: string;
                     frequency_cap_exempt?: boolean;
+                    global_control_exempt?: boolean;
                     quiet_hours_exempt?: boolean;
                     one_per_user?: boolean;
                 };
@@ -12254,6 +12347,7 @@ export interface components {
                     priority?: 5 | 10;
                     collapse_id?: string;
                     frequency_cap_exempt?: boolean;
+                    global_control_exempt?: boolean;
                     quiet_hours_exempt?: boolean;
                     one_per_user?: boolean;
                 };
@@ -21841,6 +21935,109 @@ export interface operations {
             };
         };
     };
+    PublicGlobalControlController_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GlobalControl"];
+                };
+            };
+        };
+    };
+    PublicGlobalControlController_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateGlobalControlDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GlobalControl"];
+                };
+            };
+        };
+    };
+    PublicGlobalControlController_reset: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GlobalControl"];
+                };
+            };
+        };
+    };
+    PublicGlobalControlController_report: {
+        parameters: {
+            query?: {
+                days?: number;
+                event?: string;
+            };
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GlobalControlReport"];
+                };
+            };
+        };
+    };
     PublicEventsController_list: {
         parameters: {
             query?: {
@@ -22726,6 +22923,7 @@ export interface operations {
                         priority?: 5 | 10;
                         collapse_id?: string;
                         frequency_cap_exempt?: boolean;
+                        global_control_exempt?: boolean;
                         quiet_hours_exempt?: boolean;
                         one_per_user?: boolean;
                     };
@@ -22869,6 +23067,7 @@ export interface operations {
                         priority?: 5 | 10;
                         collapse_id?: string;
                         frequency_cap_exempt?: boolean;
+                        global_control_exempt?: boolean;
                         quiet_hours_exempt?: boolean;
                         one_per_user?: boolean;
                     };
@@ -26759,6 +26958,7 @@ export interface operations {
                         priority?: 5 | 10;
                         collapse_id?: string;
                         frequency_cap_exempt?: boolean;
+                        global_control_exempt?: boolean;
                         quiet_hours_exempt?: boolean;
                         one_per_user?: boolean;
                     };

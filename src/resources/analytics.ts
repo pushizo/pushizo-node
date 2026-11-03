@@ -5,12 +5,15 @@ import type {
   EventsReport,
   FunnelInput,
   FunnelReport,
+  GlobalControl,
+  GlobalControlReport,
   MessagesReport,
   OverviewStats,
   ProvidersReport,
   QueryParams,
   RetentionReport,
   SubscriptionsReport,
+  UpdateGlobalControlInput,
 } from '../types.js';
 import type { ResourceContext } from './context.js';
 
@@ -64,5 +67,24 @@ export function createAnalytics(ctx: ResourceContext) {
         path: path(appId, 'funnels'),
         body,
       }),
+  };
+}
+
+/**
+ * Genel kontrol grubu (ADR-0060): kullanıcıların sabit bir yüzdesi pazarlama mesajı almaz, dönüşümleri diğerleriyle
+ * karşılaştırılır. API ve işlemsel gönderimler etkilenmez.
+ */
+export function createGlobalControl(ctx: ResourceContext) {
+  const base = (appId?: string) => `${ctx.appPath(appId)}/global-control`;
+  return {
+    get: (appId?: string) => ctx.http.request<GlobalControl>({ method: 'GET', path: base(appId) }),
+    /** Etkinleştirme ve yüzde değişikliği ölçümü yeniden başlatır. */
+    update: (body: UpdateGlobalControlInput, appId?: string) =>
+      ctx.http.request<GlobalControl>({ method: 'PUT', path: base(appId), body }),
+    /** Üyelik yeniden seçilir, ölçüm baştan başlar. */
+    reset: (appId?: string) => ctx.http.request<GlobalControl>({ method: 'POST', path: `${base(appId)}/reset` }),
+    /** Dönüşüm karşılaştırması (`days`, `event`). */
+    report: (params: QueryParams<'/v1/apps/{appId}/global-control/report', 'get'> = {}, appId?: string) =>
+      ctx.http.request<GlobalControlReport>({ method: 'GET', path: `${base(appId)}/report`, query: params }),
   };
 }
