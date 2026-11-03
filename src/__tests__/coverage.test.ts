@@ -143,6 +143,12 @@ const TABLE: Record<string, (hs: Pushizo) => Promise<unknown>> = {
   'GET /v1/apps/{appId}/analytics/events': (hs) => hs.analytics.events({ name: 'purchase' }),
   'GET /v1/apps/{appId}/analytics/conversions': (hs) => hs.analytics.conversions(),
   'POST /v1/apps/{appId}/analytics/paths': (hs) => hs.analytics.paths({ event: 'signup' }),
+  'POST /v1/apps/{appId}/analytics/reports/run': (hs) => hs.analytics.runReport({ source: 'deliveries', metrics: ['sent'] }),
+  'GET /v1/apps/{appId}/analytics/reports': (hs) => hs.savedReports.list(),
+  'POST /v1/apps/{appId}/analytics/reports': (hs) => hs.savedReports.create({ name: 'Rapor', definition: { source: 'deliveries', metrics: ['sent'], dimensions: [], filters: {}, limit: 100 } }),
+  'GET /v1/apps/{appId}/analytics/reports/{id}': (hs) => hs.savedReports.get('rpt_1'),
+  'PATCH /v1/apps/{appId}/analytics/reports/{id}': (hs) => hs.savedReports.update('rpt_1', { name: 'Yeni' }),
+  'DELETE /v1/apps/{appId}/analytics/reports/{id}': (hs) => hs.savedReports.delete('rpt_1'),
   'POST /v1/apps/{appId}/analytics/funnels': (hs) =>
     hs.analytics.funnel({ steps: [{ name: 'a' }, { name: 'b' }] }),
   'GET /v1/apps/{appId}/analytics/providers': (hs) => hs.analytics.providers(),

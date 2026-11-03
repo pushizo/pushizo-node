@@ -2067,6 +2067,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/apps/{appId}/analytics/reports/run": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Rapor çalıştır
+         * @description Kaynak, metrik, boyut ve filtre seçilerek rapor üretir; alanlar izinli listeyle sınırlıdır.
+         */
+        post: operations["PublicAnalyticsController_runReport"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/apps/{appId}/analytics/paths": {
         parameters: {
             query?: never;
@@ -2208,6 +2228,43 @@ export interface paths {
         options?: never;
         head?: never;
         patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/analytics/reports": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Kaydedilmiş raporlar */
+        get: operations["PublicSavedReportsController_list"];
+        put?: never;
+        /** Raporu kaydet */
+        post: operations["PublicSavedReportsController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/analytics/reports/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Kaydedilmiş rapor */
+        get: operations["PublicSavedReportsController_get"];
+        put?: never;
+        post?: never;
+        /** Raporu sil */
+        delete: operations["PublicSavedReportsController_remove"];
+        options?: never;
+        head?: never;
+        /** Raporu güncelle */
+        patch: operations["PublicSavedReportsController_update"];
         trace?: never;
     };
     "/v1/apps/{appId}/events/definitions": {
@@ -6092,6 +6149,37 @@ export interface components {
             };
             include_unsubscribed?: boolean;
         };
+        ReportRunBodyDto: {
+            /** @enum {string} */
+            source: "deliveries" | "events" | "conversions";
+            metrics: ("sent" | "delivered" | "failed" | "opened" | "clicked" | "delivery_rate" | "open_rate" | "click_rate" | "failure_rate" | "count" | "unique_users" | "value_sum" | "value_avg" | "conversions" | "revenue")[];
+            /** @default [] */
+            dimensions: ("day" | "week" | "month" | "channel" | "provider" | "campaign" | "status" | "name" | "source" | "event_name" | "kind")[];
+            /** @default {} */
+            filters: {
+                [key: string]: string[];
+            };
+            sort?: {
+                by: string;
+                /**
+                 * @default desc
+                 * @enum {string}
+                 */
+                direction: "asc" | "desc";
+            };
+            /** @default 100 */
+            limit: number;
+            days?: number;
+            /** Format: date-time */
+            from?: string;
+            /** Format: date-time */
+            to?: string;
+            /**
+             * @default json
+             * @enum {string}
+             */
+            format: "json" | "csv";
+        };
         PathBodyDto: {
             event: string;
             /**
@@ -6142,6 +6230,64 @@ export interface components {
         UpdateGlobalControlDto: {
             enabled: boolean;
             percent: number;
+        };
+        CreateSavedReportDto: {
+            name: string;
+            definition: {
+                /** @enum {string} */
+                source: "deliveries" | "events" | "conversions";
+                metrics: ("sent" | "delivered" | "failed" | "opened" | "clicked" | "delivery_rate" | "open_rate" | "click_rate" | "failure_rate" | "count" | "unique_users" | "value_sum" | "value_avg" | "conversions" | "revenue")[];
+                /** @default [] */
+                dimensions: ("day" | "week" | "month" | "channel" | "provider" | "campaign" | "status" | "name" | "source" | "event_name" | "kind")[];
+                /** @default {} */
+                filters: {
+                    [key: string]: string[];
+                };
+                sort?: {
+                    by: string;
+                    /**
+                     * @default desc
+                     * @enum {string}
+                     */
+                    direction: "asc" | "desc";
+                };
+                /** @default 100 */
+                limit: number;
+                days?: number;
+                /** Format: date-time */
+                from?: string;
+                /** Format: date-time */
+                to?: string;
+            };
+        };
+        UpdateSavedReportDto: {
+            name?: string;
+            definition?: {
+                /** @enum {string} */
+                source: "deliveries" | "events" | "conversions";
+                metrics: ("sent" | "delivered" | "failed" | "opened" | "clicked" | "delivery_rate" | "open_rate" | "click_rate" | "failure_rate" | "count" | "unique_users" | "value_sum" | "value_avg" | "conversions" | "revenue")[];
+                /** @default [] */
+                dimensions: ("day" | "week" | "month" | "channel" | "provider" | "campaign" | "status" | "name" | "source" | "event_name" | "kind")[];
+                /** @default {} */
+                filters: {
+                    [key: string]: string[];
+                };
+                sort?: {
+                    by: string;
+                    /**
+                     * @default desc
+                     * @enum {string}
+                     */
+                    direction: "asc" | "desc";
+                };
+                /** @default 100 */
+                limit: number;
+                days?: number;
+                /** Format: date-time */
+                from?: string;
+                /** Format: date-time */
+                to?: string;
+            };
         };
         PatchEventDefinitionDto: {
             display_name?: string | null;
@@ -9846,6 +9992,24 @@ export interface components {
                 overall_rate: number | null;
             } | null;
         };
+        ReportResult: {
+            from: string;
+            to: string;
+            columns: {
+                key: string;
+                /** @enum {string} */
+                kind: "dimension" | "metric";
+                /** @enum {string} */
+                format: "text" | "date" | "number" | "percent";
+            }[];
+            rows: {
+                [key: string]: string | number | null;
+            }[];
+            totals: {
+                [key: string]: number | null;
+            } | null;
+            truncated: boolean;
+        };
         PathReport: {
             from: string;
             to: string;
@@ -9964,6 +10128,74 @@ export interface components {
             p_value: number | null;
             significant: boolean;
             withheld_messages: number;
+        };
+        SavedReport: {
+            id: string;
+            name: string;
+            definition: {
+                /** @enum {string} */
+                source: "deliveries" | "events" | "conversions";
+                metrics: ("sent" | "delivered" | "failed" | "opened" | "clicked" | "delivery_rate" | "open_rate" | "click_rate" | "failure_rate" | "count" | "unique_users" | "value_sum" | "value_avg" | "conversions" | "revenue")[];
+                /** @default [] */
+                dimensions: ("day" | "week" | "month" | "channel" | "provider" | "campaign" | "status" | "name" | "source" | "event_name" | "kind")[];
+                /** @default {} */
+                filters: {
+                    [key: string]: string[];
+                };
+                sort?: {
+                    by: string;
+                    /**
+                     * @default desc
+                     * @enum {string}
+                     */
+                    direction: "asc" | "desc";
+                };
+                /** @default 100 */
+                limit: number;
+                days?: number;
+                /** Format: date-time */
+                from?: string;
+                /** Format: date-time */
+                to?: string;
+            };
+            created_by: string | null;
+            created_at: string;
+            updated_at: string;
+        };
+        SavedReportList: {
+            data: {
+                id: string;
+                name: string;
+                definition: {
+                    /** @enum {string} */
+                    source: "deliveries" | "events" | "conversions";
+                    metrics: ("sent" | "delivered" | "failed" | "opened" | "clicked" | "delivery_rate" | "open_rate" | "click_rate" | "failure_rate" | "count" | "unique_users" | "value_sum" | "value_avg" | "conversions" | "revenue")[];
+                    /** @default [] */
+                    dimensions: ("day" | "week" | "month" | "channel" | "provider" | "campaign" | "status" | "name" | "source" | "event_name" | "kind")[];
+                    /** @default {} */
+                    filters: {
+                        [key: string]: string[];
+                    };
+                    sort?: {
+                        by: string;
+                        /**
+                         * @default desc
+                         * @enum {string}
+                         */
+                        direction: "asc" | "desc";
+                    };
+                    /** @default 100 */
+                    limit: number;
+                    days?: number;
+                    /** Format: date-time */
+                    from?: string;
+                    /** Format: date-time */
+                    to?: string;
+                };
+                created_by: string | null;
+                created_at: string;
+                updated_at: string;
+            }[];
         };
         IdentityKey: {
             id: string;
@@ -24198,6 +24430,34 @@ export interface operations {
             };
         };
     };
+    PublicAnalyticsController_runReport: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ReportRunBodyDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ReportResult"];
+                };
+            };
+        };
+    };
     PublicAnalyticsController_paths: {
         parameters: {
             query?: never;
@@ -24438,6 +24698,135 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["GlobalControlReport"];
+                };
+            };
+        };
+    };
+    PublicSavedReportsController_list: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SavedReportList"];
+                };
+            };
+        };
+    };
+    PublicSavedReportsController_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateSavedReportDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SavedReport"];
+                };
+            };
+        };
+    };
+    PublicSavedReportsController_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SavedReport"];
+                };
+            };
+        };
+    };
+    PublicSavedReportsController_remove: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            204: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    PublicSavedReportsController_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateSavedReportDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SavedReport"];
                 };
             };
         };

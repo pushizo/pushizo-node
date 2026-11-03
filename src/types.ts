@@ -134,6 +134,11 @@ export type EventsReport = Schemas['EventsReport'];
 export type ConversionsReport = Schemas['ConversionsReport'];
 export type FunnelReport = Schemas['FunnelReport'];
 export type PathReport = Schemas['PathReport'];
+export type ReportResultBody = Schemas['ReportResult'];
+export type SavedReport = Schemas['SavedReport'];
+export type SavedReportList = Schemas['SavedReportList'];
+export type SavedReportInput = JsonBody<'/v1/apps/{appId}/analytics/reports', 'post'>;
+export type SavedReportUpdateInput = JsonBody<'/v1/apps/{appId}/analytics/reports/{id}', 'patch'>;
 export type ProvidersReport = Schemas['ProvidersReport'];
 export type EngagementReport = Schemas['EngagementReport'];
 export type RetentionReport = Schemas['RetentionReport'];
@@ -257,6 +262,7 @@ export type InAppMessageStatus = JsonBody<
   '/v1/apps/{appId}/in-app-messages/{messageId}/status',
   'post'
 >['status'];
+export type ReportRunInput = WithDefaults<JsonBody<'/v1/apps/{appId}/analytics/reports/run', 'post'>, 'dimensions' | 'filters' | 'limit' | 'format'>;
 export type PathInput = WithDefaults<JsonBody<'/v1/apps/{appId}/analytics/paths', 'post'>, 'direction' | 'depth' | 'top' | 'window_hours' | 'exclude' | 'format'>;
 export type FunnelInput = WithDefaults<
   JsonBody<'/v1/apps/{appId}/analytics/funnels', 'post'>,

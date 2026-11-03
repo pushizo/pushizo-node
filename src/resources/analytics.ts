@@ -7,6 +7,12 @@ import type {
   FunnelReport,
   PathInput,
   PathReport,
+  ReportResultBody,
+  ReportRunInput,
+  SavedReport,
+  SavedReportInput,
+  SavedReportList,
+  SavedReportUpdateInput,
   GlobalControl,
   GlobalControlReport,
   AppFlag,
@@ -81,6 +87,13 @@ export function createAnalytics(ctx: ResourceContext) {
     /** Retention kohortu: ilk görülme haftası × sonraki haftalarda aktiflik oranı (`weeks`). */
     retention: report<'/v1/apps/{appId}/analytics/retention', RetentionReport>('retention'),
     /** Sıralı adımlı huni raporu (`window_hours` içinde tamamlanan adımlar). */
+    /** Rapor oluşturucu: kaynak, metrik, boyut ve filtre seçerek rapor üretir. */
+    runReport: <F extends ReportFormat = 'json'>(body: Omit<ReportRunInput, 'format'> & { format?: F }, appId?: string) =>
+      ctx.http.request<ReportResult<F, ReportResultBody>>({
+        method: 'POST',
+        path: path(appId, 'reports/run'),
+        body: { format: 'json', ...body },
+      }),
     /** Yol analizi: başlangıç olayından sonra veya önce izlenen yollar. */
     paths: <F extends ReportFormat = 'json'>(body: Omit<PathInput, 'format'> & { format?: F }, appId?: string) =>
       ctx.http.request<ReportResult<F, PathReport>>({
@@ -144,6 +157,18 @@ export function createGeofences(ctx: ResourceContext) {
     update: (geofenceId: string, body: UpdateGeofenceInput, appId?: string) =>
       ctx.http.request<Geofence>({ method: 'PATCH', path: `${base(appId)}/${encodeURIComponent(geofenceId)}`, body }),
     delete: (geofenceId: string, appId?: string) => ctx.http.request<Ok>({ method: 'DELETE', path: `${base(appId)}/${encodeURIComponent(geofenceId)}` }),
+  };
+}
+
+/** Kaydedilmiş raporlar; çalıştırmak için `analytics.runReport`. */
+export function createSavedReports(ctx: ResourceContext) {
+  const base = (appId?: string) => `${ctx.appPath(appId)}/analytics/reports`;
+  return {
+    list: (appId?: string) => ctx.http.request<SavedReportList>({ method: 'GET', path: base(appId) }),
+    get: (id: string, appId?: string) => ctx.http.request<SavedReport>({ method: 'GET', path: `${base(appId)}/${encodeURIComponent(id)}` }),
+    create: (body: SavedReportInput, appId?: string) => ctx.http.request<SavedReport>({ method: 'POST', path: base(appId), body }),
+    update: (id: string, body: SavedReportUpdateInput, appId?: string) => ctx.http.request<SavedReport>({ method: 'PATCH', path: `${base(appId)}/${encodeURIComponent(id)}`, body }),
+    delete: (id: string, appId?: string) => ctx.http.request<void>({ method: 'DELETE', path: `${base(appId)}/${encodeURIComponent(id)}` }),
   };
 }
 
