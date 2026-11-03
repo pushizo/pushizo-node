@@ -857,6 +857,46 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/apps/{appId}/geofences": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Bölgeler */
+        get: operations["PublicGeofencesController_list"];
+        put?: never;
+        /**
+         * Bölge oluştur
+         * @description Konum paylaşan abonelik bölgeye girip çıktığında `geofence_enter` ve `geofence_exit` olayları oluşur.
+         */
+        post: operations["PublicGeofencesController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/geofences/{geofenceId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Bölge ayrıntısı */
+        get: operations["PublicGeofencesController_get"];
+        put?: never;
+        post?: never;
+        /** Bölgeyi sil */
+        delete: operations["PublicGeofencesController_remove"];
+        options?: never;
+        head?: never;
+        /** Bölgeyi güncelle */
+        patch: operations["PublicGeofencesController_update"];
+        trace?: never;
+    };
     "/v1/apps/{appId}/rfm/config": {
         parameters: {
             query?: never;
@@ -5029,6 +5069,22 @@ export interface components {
             purchase_events?: string[];
             item_property?: string;
             window_days?: number;
+        };
+        CreateGeofenceDto: {
+            name: string;
+            lat: number;
+            lng: number;
+            radius_m: number;
+            cooldown_minutes?: number;
+            enabled?: boolean;
+        };
+        UpdateGeofenceDto: {
+            name?: string;
+            lat?: number;
+            lng?: number;
+            radius_m?: number;
+            cooldown_minutes?: number;
+            enabled?: boolean;
         };
         UpdateRfmConfigDto: {
             enabled: boolean;
@@ -15108,6 +15164,38 @@ export interface components {
                 updated_at: string;
             }[];
         };
+        Geofence: {
+            id: string;
+            app_id: string;
+            name: string;
+            lat: number;
+            lng: number;
+            radius_m: number;
+            cooldown_minutes: number;
+            enabled: boolean;
+            enter_count: number;
+            exit_count: number;
+            inside_count: number;
+            created_at: string;
+            updated_at: string;
+        };
+        GeofenceList: {
+            data: {
+                id: string;
+                app_id: string;
+                name: string;
+                lat: number;
+                lng: number;
+                radius_m: number;
+                cooldown_minutes: number;
+                enabled: boolean;
+                enter_count: number;
+                exit_count: number;
+                inside_count: number;
+                created_at: string;
+                updated_at: string;
+            }[];
+        };
         RfmConfig: {
             configured: boolean;
             enabled: boolean;
@@ -20901,6 +20989,137 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["RecommendationConfig"];
+                };
+            };
+        };
+    };
+    PublicGeofencesController_list: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GeofenceList"];
+                };
+            };
+        };
+    };
+    PublicGeofencesController_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateGeofenceDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Geofence"];
+                };
+            };
+        };
+    };
+    PublicGeofencesController_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                geofenceId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Geofence"];
+                };
+            };
+        };
+    };
+    PublicGeofencesController_remove: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                geofenceId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Ok"];
+                };
+            };
+        };
+    };
+    PublicGeofencesController_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                geofenceId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateGeofenceDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Geofence"];
                 };
             };
         };

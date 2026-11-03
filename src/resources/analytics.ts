@@ -7,6 +7,11 @@ import type {
   FunnelReport,
   GlobalControl,
   GlobalControlReport,
+  CreateGeofenceInput,
+  Geofence,
+  GeofenceList,
+  Ok,
+  UpdateGeofenceInput,
   MessagesReport,
   OverviewStats,
   ProvidersReport,
@@ -91,6 +96,19 @@ export function createGlobalControl(ctx: ResourceContext) {
     /** Dönüşüm karşılaştırması (`days`, `event`). */
     report: (params: QueryParams<'/v1/apps/{appId}/global-control/report', 'get'> = {}, appId?: string) =>
       ctx.http.request<GlobalControlReport>({ method: 'GET', path: `${base(appId)}/report`, query: params }),
+  };
+}
+
+/** Bölgeler: konum paylaşan abonelik girip çıktığında `geofence_enter` ve `geofence_exit` olayları oluşur. */
+export function createGeofences(ctx: ResourceContext) {
+  const base = (appId?: string) => `${ctx.appPath(appId)}/geofences`;
+  return {
+    list: (appId?: string) => ctx.http.request<GeofenceList>({ method: 'GET', path: base(appId) }),
+    create: (body: CreateGeofenceInput, appId?: string) => ctx.http.request<Geofence>({ method: 'POST', path: base(appId), body }),
+    get: (geofenceId: string, appId?: string) => ctx.http.request<Geofence>({ method: 'GET', path: `${base(appId)}/${encodeURIComponent(geofenceId)}` }),
+    update: (geofenceId: string, body: UpdateGeofenceInput, appId?: string) =>
+      ctx.http.request<Geofence>({ method: 'PATCH', path: `${base(appId)}/${encodeURIComponent(geofenceId)}`, body }),
+    delete: (geofenceId: string, appId?: string) => ctx.http.request<Ok>({ method: 'DELETE', path: `${base(appId)}/${encodeURIComponent(geofenceId)}` }),
   };
 }
 

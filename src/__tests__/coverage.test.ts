@@ -289,6 +289,11 @@ const TABLE: Record<string, (hs: Pushizo) => Promise<unknown>> = {
     hs.contentTables.rows('ctb_1', { limit: 10, q: 'A1' }),
   'PUT /v1/apps/{appId}/content-tables/{tableId}/rows': (hs) =>
     hs.contentTables.replaceRows('ctb_1', { file: 'sku,ad\nA2,Defter\n' }),
+  'GET /v1/apps/{appId}/geofences': (hs) => hs.geofences.list(),
+  'POST /v1/apps/{appId}/geofences': (hs) => hs.geofences.create({ name: 'Mağaza', lat: 41, lng: 29, radius_m: 200 }),
+  'GET /v1/apps/{appId}/geofences/{geofenceId}': (hs) => hs.geofences.get('gfn_1'),
+  'PATCH /v1/apps/{appId}/geofences/{geofenceId}': (hs) => hs.geofences.update('gfn_1', { enabled: false }),
+  'DELETE /v1/apps/{appId}/geofences/{geofenceId}': (hs) => hs.geofences.delete('gfn_1'),
   'GET /v1/apps/{appId}/rfm/config': (hs) => hs.rfm.getConfig(),
   'PUT /v1/apps/{appId}/rfm/config': (hs) => hs.rfm.updateConfig({ enabled: true, event_names: ['purchase'] }),
   'POST /v1/apps/{appId}/rfm/compute': (hs) => hs.rfm.compute(),
