@@ -7536,6 +7536,14 @@ export interface components {
             is_platform_admin: boolean;
             has_password: boolean;
             marketing_opt_in: boolean;
+            preferences: {
+                /** @enum {string} */
+                date_format: "auto" | "dmy" | "mdy" | "iso";
+                /** @enum {string} */
+                time_format: "auto" | "24h" | "12h";
+                /** @enum {string} */
+                table_density: "comfortable" | "compact";
+            };
             created_at: string;
         };
         Me: {
@@ -7550,6 +7558,14 @@ export interface components {
                 is_platform_admin: boolean;
                 has_password: boolean;
                 marketing_opt_in: boolean;
+                preferences: {
+                    /** @enum {string} */
+                    date_format: "auto" | "dmy" | "mdy" | "iso";
+                    /** @enum {string} */
+                    time_format: "auto" | "24h" | "12h";
+                    /** @enum {string} */
+                    table_density: "comfortable" | "compact";
+                };
                 created_at: string;
             };
             memberships: {
@@ -7578,6 +7594,14 @@ export interface components {
                 is_platform_admin: boolean;
                 has_password: boolean;
                 marketing_opt_in: boolean;
+                preferences: {
+                    /** @enum {string} */
+                    date_format: "auto" | "dmy" | "mdy" | "iso";
+                    /** @enum {string} */
+                    time_format: "auto" | "24h" | "12h";
+                    /** @enum {string} */
+                    table_density: "comfortable" | "compact";
+                };
                 created_at: string;
             };
         };
@@ -7621,6 +7645,14 @@ export interface components {
                 mfa_enabled: boolean;
                 is_platform_admin: boolean;
                 last_login_at: string | null;
+                preferences: {
+                    /** @enum {string} */
+                    date_format: "auto" | "dmy" | "mdy" | "iso";
+                    /** @enum {string} */
+                    time_format: "auto" | "24h" | "12h";
+                    /** @enum {string} */
+                    table_density: "comfortable" | "compact";
+                };
                 created_at: string;
                 updated_at: string;
             };
@@ -16596,6 +16628,14 @@ export interface components {
                 is_platform_admin: boolean;
                 has_password: boolean;
                 marketing_opt_in: boolean;
+                preferences: {
+                    /** @enum {string} */
+                    date_format: "auto" | "dmy" | "mdy" | "iso";
+                    /** @enum {string} */
+                    time_format: "auto" | "24h" | "12h";
+                    /** @enum {string} */
+                    table_density: "comfortable" | "compact";
+                };
                 created_at: string;
             };
             next: string | null;
