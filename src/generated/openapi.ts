@@ -332,6 +332,46 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/sdk/v1/apps/{appId}/geofences": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Cihazın izleyeceği en yakın bölgeler
+         * @description Arka plan bölge izleme için; bölge adı dönmez.
+         */
+        get: operations["SdkController_geofences"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/sdk/v1/apps/{appId}/subscriptions/{subscriptionId}/geofence-events": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * İşletim sisteminin bildirdiği bölge geçişleri
+         * @description Koordinat içermez. Konum rızası olmayan abonelikte yok sayılır. Sahiplik kuralları PATCH ile aynıdır.
+         */
+        post: operations["SdkController_geofenceEvents"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/sdk/v1/apps/{appId}/events": {
         parameters: {
             query?: never;
@@ -4808,6 +4848,17 @@ export interface components {
             app_version?: string | null;
             sdk_version?: string;
         };
+        SdkGeofenceEventsDto: {
+            token_hash?: string;
+            identity_hash?: string;
+            events: {
+                geofence_id: string;
+                /** @enum {string} */
+                transition: "enter" | "exit";
+                /** Format: date-time */
+                occurred_at?: string;
+            }[];
+        };
         SdkEventsDto: {
             events: {
                 name: string;
@@ -8524,6 +8575,14 @@ export interface components {
                     [key: string]: string;
                 };
                 last_active_at: string;
+            }[];
+        };
+        SdkGeofenceList: {
+            data: {
+                id: string;
+                lat: number;
+                lng: number;
+                radius_m: number;
             }[];
         };
         CleanupResult: {
@@ -19681,6 +19740,63 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["Ok"];
+                };
+            };
+        };
+    };
+    SdkController_geofences: {
+        parameters: {
+            query: {
+                lat: number;
+                lng: number;
+                limit?: number;
+            };
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SdkGeofenceList"];
+                };
+            };
+        };
+    };
+    SdkController_geofenceEvents: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+                subscriptionId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SdkGeofenceEventsDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EventsAccepted"];
                 };
             };
         };
