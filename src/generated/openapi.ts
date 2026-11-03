@@ -796,6 +796,67 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/apps/{appId}/catalogs/{catalogId}/recommendations": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Ürün önerileri
+         * @description Stokta olmayan ve kullanıcının satın aldığı ürünler çıkmaz. Sonuç yetmezse yedek kaynakla tamamlanır.
+         */
+        get: operations["PublicRecommendationsController_list"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/catalogs/{catalogId}/recommendations/config": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Öneri modeli */
+        get: operations["PublicRecommendationsController_config"];
+        /**
+         * Öneri modelini ayarla
+         * @description Model açıksa öneriler kayıttan sonra yeniden hesaplanır.
+         */
+        put: operations["PublicRecommendationsController_update"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/catalogs/{catalogId}/recommendations/compute": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Önerileri yeniden hesapla
+         * @description İş kuyruğa alınır; ilerleme `status` alanından izlenir.
+         */
+        post: operations["PublicRecommendationsController_compute"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/apps/{appId}/rfm/config": {
         parameters: {
             query?: never;
@@ -4961,6 +5022,13 @@ export interface components {
                     [key: string]: string;
                 };
             }[];
+        };
+        UpdateRecommendationConfigDto: {
+            enabled: boolean;
+            view_events?: string[];
+            purchase_events?: string[];
+            item_property?: string;
+            window_days?: number;
         };
         UpdateRfmConfigDto: {
             enabled: boolean;
@@ -13830,6 +13898,29 @@ export interface components {
                                 bottom: number;
                                 left: number;
                             };
+                        } | {
+                            id: string;
+                            /** @constant */
+                            type: "recommendations";
+                            catalog: string;
+                            /** @enum {string} */
+                            strategy: "personalized" | "popular" | "trending" | "similar" | "category" | "recently_viewed" | "new_arrivals";
+                            limit: number;
+                            /** @enum {string} */
+                            source?: "fixed" | "expression";
+                            value?: string;
+                            heading?: string;
+                            show_description?: boolean;
+                            show_price?: boolean;
+                            button_text?: string;
+                            /** @enum {string} */
+                            align?: "left" | "center" | "right";
+                            padding?: {
+                                top: number;
+                                right: number;
+                                bottom: number;
+                                left: number;
+                            };
                         })[];
                     }[];
                 }[];
@@ -14026,6 +14117,29 @@ export interface components {
                                 bottom: number;
                                 left: number;
                             };
+                        } | {
+                            id: string;
+                            /** @constant */
+                            type: "recommendations";
+                            catalog: string;
+                            /** @enum {string} */
+                            strategy: "personalized" | "popular" | "trending" | "similar" | "category" | "recently_viewed" | "new_arrivals";
+                            limit: number;
+                            /** @enum {string} */
+                            source?: "fixed" | "expression";
+                            value?: string;
+                            heading?: string;
+                            show_description?: boolean;
+                            show_price?: boolean;
+                            button_text?: string;
+                            /** @enum {string} */
+                            align?: "left" | "center" | "right";
+                            padding?: {
+                                top: number;
+                                right: number;
+                                bottom: number;
+                                left: number;
+                            };
                         })[];
                     }[];
                 };
@@ -14128,6 +14242,29 @@ export interface components {
                     /** @enum {string} */
                     source: "fixed" | "expression";
                     item: string;
+                    show_description?: boolean;
+                    show_price?: boolean;
+                    button_text?: string;
+                    /** @enum {string} */
+                    align?: "left" | "center" | "right";
+                    padding?: {
+                        top: number;
+                        right: number;
+                        bottom: number;
+                        left: number;
+                    };
+                } | {
+                    id: string;
+                    /** @constant */
+                    type: "recommendations";
+                    catalog: string;
+                    /** @enum {string} */
+                    strategy: "personalized" | "popular" | "trending" | "similar" | "category" | "recently_viewed" | "new_arrivals";
+                    limit: number;
+                    /** @enum {string} */
+                    source?: "fixed" | "expression";
+                    value?: string;
+                    heading?: string;
                     show_description?: boolean;
                     show_price?: boolean;
                     button_text?: string;
@@ -14286,6 +14423,29 @@ export interface components {
                                     bottom: number;
                                     left: number;
                                 };
+                            } | {
+                                id: string;
+                                /** @constant */
+                                type: "recommendations";
+                                catalog: string;
+                                /** @enum {string} */
+                                strategy: "personalized" | "popular" | "trending" | "similar" | "category" | "recently_viewed" | "new_arrivals";
+                                limit: number;
+                                /** @enum {string} */
+                                source?: "fixed" | "expression";
+                                value?: string;
+                                heading?: string;
+                                show_description?: boolean;
+                                show_price?: boolean;
+                                button_text?: string;
+                                /** @enum {string} */
+                                align?: "left" | "center" | "right";
+                                padding?: {
+                                    top: number;
+                                    right: number;
+                                    bottom: number;
+                                    left: number;
+                                };
                             })[];
                         }[];
                     };
@@ -14388,6 +14548,29 @@ export interface components {
                         /** @enum {string} */
                         source: "fixed" | "expression";
                         item: string;
+                        show_description?: boolean;
+                        show_price?: boolean;
+                        button_text?: string;
+                        /** @enum {string} */
+                        align?: "left" | "center" | "right";
+                        padding?: {
+                            top: number;
+                            right: number;
+                            bottom: number;
+                            left: number;
+                        };
+                    } | {
+                        id: string;
+                        /** @constant */
+                        type: "recommendations";
+                        catalog: string;
+                        /** @enum {string} */
+                        strategy: "personalized" | "popular" | "trending" | "similar" | "category" | "recently_viewed" | "new_arrivals";
+                        limit: number;
+                        /** @enum {string} */
+                        source?: "fixed" | "expression";
+                        value?: string;
+                        heading?: string;
                         show_description?: boolean;
                         show_price?: boolean;
                         button_text?: string;
@@ -14888,6 +15071,42 @@ export interface components {
                 updated_at: string;
             };
             upserted: number;
+        };
+        RecommendationConfig: {
+            configured: boolean;
+            enabled: boolean;
+            view_events: string[];
+            purchase_events: string[];
+            item_property: string;
+            window_days: number;
+            /** @enum {string} */
+            status: "idle" | "queued" | "running" | "failed";
+            last_error: string | null;
+            last_computed_at: string | null;
+            scored_items: number;
+            scored_users: number;
+        };
+        Recommendations: {
+            /** @enum {string} */
+            strategy: "personalized" | "popular" | "trending" | "similar" | "category" | "recently_viewed" | "new_arrivals";
+            source: ("personalized" | "popular" | "trending" | "similar" | "category" | "recently_viewed" | "new_arrivals") | null;
+            data: {
+                id: string;
+                title: string;
+                description: string | null;
+                image_url: string | null;
+                url: string | null;
+                price: number | null;
+                sale_price: number | null;
+                currency: string;
+                category: string | null;
+                brand: string | null;
+                in_stock: boolean;
+                attributes: {
+                    [key: string]: string;
+                };
+                updated_at: string;
+            }[];
         };
         RfmConfig: {
             configured: boolean;
@@ -18709,6 +18928,29 @@ export interface components {
                                 bottom: number;
                                 left: number;
                             };
+                        } | {
+                            id: string;
+                            /** @constant */
+                            type: "recommendations";
+                            catalog: string;
+                            /** @enum {string} */
+                            strategy: "personalized" | "popular" | "trending" | "similar" | "category" | "recently_viewed" | "new_arrivals";
+                            limit: number;
+                            /** @enum {string} */
+                            source?: "fixed" | "expression";
+                            value?: string;
+                            heading?: string;
+                            show_description?: boolean;
+                            show_price?: boolean;
+                            button_text?: string;
+                            /** @enum {string} */
+                            align?: "left" | "center" | "right";
+                            padding?: {
+                                top: number;
+                                right: number;
+                                bottom: number;
+                                left: number;
+                            };
                         })[];
                     }[];
                 }[];
@@ -20548,6 +20790,117 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["Ok"];
+                };
+            };
+        };
+    };
+    PublicRecommendationsController_list: {
+        parameters: {
+            query: {
+                strategy: "personalized" | "popular" | "trending" | "similar" | "category" | "recently_viewed" | "new_arrivals";
+                limit?: number;
+                user_id?: string;
+                external_id?: string;
+                item_id?: string;
+                category?: string;
+            };
+            header?: never;
+            path: {
+                catalogId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Recommendations"];
+                };
+            };
+        };
+    };
+    PublicRecommendationsController_config: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                catalogId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RecommendationConfig"];
+                };
+            };
+        };
+    };
+    PublicRecommendationsController_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                catalogId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateRecommendationConfigDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RecommendationConfig"];
+                };
+            };
+        };
+    };
+    PublicRecommendationsController_compute: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                catalogId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            202: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RecommendationConfig"];
                 };
             };
         };

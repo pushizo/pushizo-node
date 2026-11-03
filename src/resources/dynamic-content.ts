@@ -19,6 +19,9 @@ import type {
   PromoCodesPage,
   PromoCodeUploadResult,
   QueryParams,
+  RecommendationConfig,
+  Recommendations,
+  UpdateRecommendationConfigInput,
   TestDataFeedInput,
   UpdateCatalogInput,
   UpdateContentTableInput,
@@ -169,6 +172,22 @@ export interface UploadCatalogItemsInput {
   file: ImportFile;
   /** Varsayılan: `File` ise kendi adı, değilse `table.csv`. */
   filename?: string;
+}
+
+/** Katalog önerileri (ADR-0063): şablonda `{% recommendations '<ad>' strategy: … as liste %}`. */
+export function createRecommendations(ctx: ResourceContext) {
+  const base = (catalogId: string, appId?: string) => `${ctx.appPath(appId)}/catalogs/${enc(catalogId)}/recommendations`;
+  return {
+    /** Ürün önerileri (`strategy`, `limit`, `user_id`, `external_id`, `item_id`, `category`). */
+    list: (catalogId: string, params: QueryParams<'/v1/apps/{appId}/catalogs/{catalogId}/recommendations', 'get'>, appId?: string) =>
+      ctx.http.request<Recommendations>({ method: 'GET', path: base(catalogId, appId), query: params }),
+    getConfig: (catalogId: string, appId?: string) => ctx.http.request<RecommendationConfig>({ method: 'GET', path: `${base(catalogId, appId)}/config` }),
+    /** Model açıksa öneriler kayıttan sonra yeniden hesaplanır. */
+    updateConfig: (catalogId: string, body: UpdateRecommendationConfigInput, appId?: string) =>
+      ctx.http.request<RecommendationConfig>({ method: 'PUT', path: `${base(catalogId, appId)}/config`, body }),
+    /** Hesabı kuyruğa alır; ilerleme `status` alanından izlenir. */
+    compute: (catalogId: string, appId?: string) => ctx.http.request<RecommendationConfig>({ method: 'POST', path: `${base(catalogId, appId)}/compute` }),
+  };
 }
 
 /**
