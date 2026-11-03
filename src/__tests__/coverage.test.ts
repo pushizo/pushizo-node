@@ -289,6 +289,12 @@ const TABLE: Record<string, (hs: Pushizo) => Promise<unknown>> = {
     hs.contentTables.rows('ctb_1', { limit: 10, q: 'A1' }),
   'PUT /v1/apps/{appId}/content-tables/{tableId}/rows': (hs) =>
     hs.contentTables.replaceRows('ctb_1', { file: 'sku,ad\nA2,Defter\n' }),
+  'GET /v1/apps/{appId}/rfm/config': (hs) => hs.rfm.getConfig(),
+  'PUT /v1/apps/{appId}/rfm/config': (hs) => hs.rfm.updateConfig({ enabled: true, event_names: ['purchase'] }),
+  'POST /v1/apps/{appId}/rfm/compute': (hs) => hs.rfm.compute(),
+  'GET /v1/apps/{appId}/rfm/overview': (hs) => hs.rfm.overview(),
+  'GET /v1/apps/{appId}/rfm/transitions': (hs) => hs.rfm.transitions({ from: '2026-01-01' }),
+  'GET /v1/apps/{appId}/rfm/users': (hs) => hs.rfm.users({ segment: 'champions' }),
   'GET /v1/apps/{appId}/catalogs': (hs) => hs.catalogs.list(),
   'POST /v1/apps/{appId}/catalogs': (hs) => hs.catalogs.create({ name: 'urunler' }),
   'GET /v1/apps/{appId}/catalogs/{catalogId}': (hs) => hs.catalogs.get('ctl_1'),

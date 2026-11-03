@@ -796,6 +796,98 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/apps/{appId}/rfm/config": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** RFM modeli */
+        get: operations["PublicRfmController_config"];
+        /**
+         * RFM modelini ayarla
+         * @description Model açıksa skorlar kayıttan sonra yeniden hesaplanır.
+         */
+        put: operations["PublicRfmController_update"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/rfm/compute": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Skorları yeniden hesapla
+         * @description İş kuyruğa alınır; ilerleme `status` alanından izlenir.
+         */
+        post: operations["PublicRfmController_compute"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/rfm/overview": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Segment dağılımı */
+        get: operations["PublicRfmController_overview"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/rfm/transitions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** İki tarih arası segment geçişleri */
+        get: operations["PublicRfmController_transitions"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/rfm/users": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Skoru olan kullanıcılar */
+        get: operations["PublicRfmController_users"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/sdk/v1/apps/{appId}/errors": {
         parameters: {
             query?: never;
@@ -4869,6 +4961,13 @@ export interface components {
                     [key: string]: string;
                 };
             }[];
+        };
+        UpdateRfmConfigDto: {
+            enabled: boolean;
+            event_names: string[];
+            value_property?: string | null;
+            use_monetary?: boolean;
+            window_days?: number;
         };
         SdkErrorsDto: {
             errors: {
@@ -14790,6 +14889,61 @@ export interface components {
             };
             upserted: number;
         };
+        RfmConfig: {
+            configured: boolean;
+            enabled: boolean;
+            event_names: string[];
+            value_property: string | null;
+            use_monetary: boolean;
+            window_days: number;
+            /** @enum {string} */
+            status: "idle" | "queued" | "running" | "failed";
+            last_error: string | null;
+            first_computed_at: string | null;
+            last_computed_at: string | null;
+            scored_users: number;
+        };
+        RfmOverview: {
+            total: number;
+            low_population: boolean;
+            last_computed_at: string | null;
+            segments: {
+                /** @enum {string} */
+                segment: "champions" | "loyal" | "potential" | "new" | "promising" | "need_attention" | "about_to_sleep" | "at_risk" | "cant_lose" | "hibernating" | "lost";
+                users: number;
+                share: number;
+                avg_recency_days: number | null;
+                avg_frequency: number | null;
+                avg_monetary: number | null;
+            }[];
+        };
+        RfmTransitions: {
+            from: string;
+            to: string;
+            first_computed_at: string | null;
+            transitions: {
+                from: ("champions" | "loyal" | "potential" | "new" | "promising" | "need_attention" | "about_to_sleep" | "at_risk" | "cant_lose" | "hibernating" | "lost") | null;
+                to: ("champions" | "loyal" | "potential" | "new" | "promising" | "need_attention" | "about_to_sleep" | "at_risk" | "cant_lose" | "hibernating" | "lost") | null;
+                users: number;
+            }[];
+        };
+        RfmUsersPage: {
+            data: {
+                user_id: string;
+                external_id: string | null;
+                /** @enum {string} */
+                segment: "champions" | "loyal" | "potential" | "new" | "promising" | "need_attention" | "about_to_sleep" | "at_risk" | "cant_lose" | "hibernating" | "lost";
+                r: number;
+                f: number;
+                m: number | null;
+                recency_days: number;
+                frequency: number;
+                monetary: number;
+                last_event_at: string;
+                segment_since: string;
+            }[];
+            next_cursor: string | null;
+        };
         SsoConnection: {
             id: string;
             /** @enum {string} */
@@ -20394,6 +20548,161 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["Ok"];
+                };
+            };
+        };
+    };
+    PublicRfmController_config: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RfmConfig"];
+                };
+            };
+        };
+    };
+    PublicRfmController_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateRfmConfigDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RfmConfig"];
+                };
+            };
+        };
+    };
+    PublicRfmController_compute: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            202: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RfmConfig"];
+                };
+            };
+        };
+    };
+    PublicRfmController_overview: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RfmOverview"];
+                };
+            };
+        };
+    };
+    PublicRfmController_transitions: {
+        parameters: {
+            query?: {
+                from?: string;
+                to?: string;
+            };
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RfmTransitions"];
+                };
+            };
+        };
+    };
+    PublicRfmController_users: {
+        parameters: {
+            query?: {
+                segment?: "champions" | "loyal" | "potential" | "new" | "promising" | "need_attention" | "about_to_sleep" | "at_risk" | "cant_lose" | "hibernating" | "lost";
+                limit?: number;
+                cursor?: string;
+            };
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RfmUsersPage"];
                 };
             };
         };

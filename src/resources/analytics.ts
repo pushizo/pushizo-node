@@ -12,6 +12,11 @@ import type {
   ProvidersReport,
   QueryParams,
   RetentionReport,
+  RfmConfig,
+  RfmOverview,
+  RfmTransitions,
+  RfmUsersPage,
+  UpdateRfmConfigInput,
   SubscriptionsReport,
   UpdateGlobalControlInput,
 } from '../types.js';
@@ -86,5 +91,24 @@ export function createGlobalControl(ctx: ResourceContext) {
     /** Dönüşüm karşılaştırması (`days`, `event`). */
     report: (params: QueryParams<'/v1/apps/{appId}/global-control/report', 'get'> = {}, appId?: string) =>
       ctx.http.request<GlobalControlReport>({ method: 'GET', path: `${base(appId)}/report`, query: params }),
+  };
+}
+
+/** RFM segmentasyonu: model ayarı, segment dağılımı, geçişler ve kullanıcı listesi. */
+export function createRfm(ctx: ResourceContext) {
+  const base = (appId?: string) => `${ctx.appPath(appId)}/rfm`;
+  return {
+    getConfig: (appId?: string) => ctx.http.request<RfmConfig>({ method: 'GET', path: `${base(appId)}/config` }),
+    /** Model açıksa skorlar kayıttan sonra yeniden hesaplanır. */
+    updateConfig: (body: UpdateRfmConfigInput, appId?: string) => ctx.http.request<RfmConfig>({ method: 'PUT', path: `${base(appId)}/config`, body }),
+    /** Hesabı kuyruğa alır; ilerleme `status` alanından izlenir. */
+    compute: (appId?: string) => ctx.http.request<RfmConfig>({ method: 'POST', path: `${base(appId)}/compute` }),
+    overview: (appId?: string) => ctx.http.request<RfmOverview>({ method: 'GET', path: `${base(appId)}/overview` }),
+    /** İki tarih arası geçişler (`from`, `to`: YYYY-AA-GG). */
+    transitions: (params: QueryParams<'/v1/apps/{appId}/rfm/transitions', 'get'> = {}, appId?: string) =>
+      ctx.http.request<RfmTransitions>({ method: 'GET', path: `${base(appId)}/transitions`, query: params }),
+    /** Skoru olan kullanıcılar (`segment`, `limit`, `cursor`). */
+    users: (params: QueryParams<'/v1/apps/{appId}/rfm/users', 'get'> = {}, appId?: string) =>
+      ctx.http.request<RfmUsersPage>({ method: 'GET', path: `${base(appId)}/users`, query: params }),
   };
 }
