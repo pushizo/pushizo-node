@@ -1,7 +1,13 @@
 import type {
+  Catalog,
+  CatalogItem,
+  CatalogItemsPage,
+  CatalogList,
+  CatalogUpsertResult,
   ContentTable,
   ContentTableList,
   ContentTableRows,
+  CreateCatalogInput,
   CreateDataFeedInput,
   CreatePromoCodeListInput,
   DataFeed,
@@ -14,9 +20,11 @@ import type {
   PromoCodeUploadResult,
   QueryParams,
   TestDataFeedInput,
+  UpdateCatalogInput,
   UpdateContentTableInput,
   UpdateDataFeedInput,
   UpdatePromoCodeListInput,
+  UpsertCatalogItemsInput,
 } from '../types.js';
 import { enc, type ResourceContext } from './context.js';
 import { toBlob, type ImportFile } from './data-transfer.js';
@@ -153,5 +161,46 @@ export function createPromoCodeLists(ctx: ResourceContext) {
       params: QueryParams<'/v1/apps/{appId}/promo-code-lists/{listId}/codes', 'get'> = {},
       appId?: string,
     ) => ctx.http.request<PromoCodesPage>({ method: 'GET', path: `${one(listId, appId)}/codes`, query: params }),
+  };
+}
+
+export interface UploadCatalogItemsInput {
+  /** CSV: `id` ve `title` zorunlu. */
+  file: ImportFile;
+  /** Varsayılan: `File` ise kendi adı, değilse `table.csv`. */
+  filename?: string;
+}
+
+/**
+ * Ürün katalogları (ADR-0061): şablonda `{% catalog_item '<ad>' id: … as urun %}` ve `{% catalog_items '<ad>' ids: … as urunler %}`.
+ * Yazma işlemleri `upsert` yapar; listede olmayan ürünlere dokunmaz.
+ */
+export function createCatalogs(ctx: ResourceContext) {
+  const base = (appId?: string) => `${ctx.appPath(appId)}/catalogs`;
+  const one = (catalogId: string, appId?: string) => `${base(appId)}/${enc(catalogId)}`;
+  return {
+    list: (appId?: string) => ctx.http.request<CatalogList>({ method: 'GET', path: base(appId) }),
+    create: (body: CreateCatalogInput, appId?: string) => ctx.http.request<Catalog>({ method: 'POST', path: base(appId), body }),
+    get: (catalogId: string, appId?: string) => ctx.http.request<Catalog>({ method: 'GET', path: one(catalogId, appId) }),
+    update: (catalogId: string, body: UpdateCatalogInput, appId?: string) =>
+      ctx.http.request<Catalog>({ method: 'PATCH', path: one(catalogId, appId), body }),
+    delete: (catalogId: string, appId?: string) => ctx.http.request<Ok>({ method: 'DELETE', path: one(catalogId, appId) }),
+    /** Ürünleri sayfalı listeler (`limit`, `offset`, `q`, `category`). */
+    items: (catalogId: string, params: QueryParams<'/v1/apps/{appId}/catalogs/{catalogId}/items', 'get'> = {}, appId?: string) =>
+      ctx.http.request<CatalogItemsPage>({ method: 'GET', path: `${one(catalogId, appId)}/items`, query: params }),
+    /** En fazla 1000 ürünü ekler veya günceller. */
+    upsertItems: (catalogId: string, body: UpsertCatalogItemsInput, appId?: string) =>
+      ctx.http.request<CatalogUpsertResult>({ method: 'PUT', path: `${one(catalogId, appId)}/items`, body }),
+    /** CSV'den ürün ekler veya günceller (multipart). */
+    uploadItems: (catalogId: string, input: UploadCatalogItemsInput, appId?: string) =>
+      ctx.http.request<CatalogUpsertResult>({
+        method: 'POST',
+        path: `${one(catalogId, appId)}/items/upload`,
+        body: csvForm(input.file, input.filename, {}),
+      }),
+    getItem: (catalogId: string, itemId: string, appId?: string) =>
+      ctx.http.request<CatalogItem>({ method: 'GET', path: `${one(catalogId, appId)}/items/${enc(itemId)}` }),
+    deleteItem: (catalogId: string, itemId: string, appId?: string) =>
+      ctx.http.request<Ok>({ method: 'DELETE', path: `${one(catalogId, appId)}/items/${enc(itemId)}` }),
   };
 }

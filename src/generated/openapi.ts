@@ -700,6 +700,102 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/apps/{appId}/catalogs": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Ürün katalogları */
+        get: operations["PublicCatalogController_list"];
+        put?: never;
+        /**
+         * Katalog oluştur
+         * @description Şablonda `{% catalog_item '<ad>' id: custom_data.product_id as urun %}{{ urun.title }}`.
+         */
+        post: operations["PublicCatalogController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/catalogs/{catalogId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Katalog ayrıntısı */
+        get: operations["PublicCatalogController_get"];
+        put?: never;
+        post?: never;
+        /** Kataloğu sil */
+        delete: operations["PublicCatalogController_remove"];
+        options?: never;
+        head?: never;
+        /** Kataloğu güncelle */
+        patch: operations["PublicCatalogController_update"];
+        trace?: never;
+    };
+    "/v1/apps/{appId}/catalogs/{catalogId}/items": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Ürünler */
+        get: operations["PublicCatalogController_items"];
+        /**
+         * Ürünleri ekle veya güncelle (en fazla 1000)
+         * @description Listede olmayan ürünlere dokunulmaz. Listedeki ürünün verilmeyen alanları temizlenir.
+         */
+        put: operations["PublicCatalogController_upsert"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/catalogs/{catalogId}/items/upload": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** CSV ile ürün ekle veya güncelle */
+        post: operations["PublicCatalogController_upload"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/catalogs/{catalogId}/items/{itemId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Ürün ayrıntısı */
+        get: operations["PublicCatalogController_item"];
+        put?: never;
+        post?: never;
+        /** Ürünü sil */
+        delete: operations["PublicCatalogController_removeItem"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/sdk/v1/apps/{appId}/errors": {
         parameters: {
             query?: never;
@@ -4746,6 +4842,33 @@ export interface components {
         UpdatePromoCodeListDto: {
             description?: string | null;
             expires_at?: string | null;
+        };
+        CreateCatalogDto: {
+            name: string;
+            description?: string;
+            currency?: string;
+        };
+        UpdateCatalogDto: {
+            description?: string | null;
+            currency?: string;
+        };
+        UpsertCatalogItemsDto: {
+            items: {
+                id: string;
+                title: string;
+                description?: string | null;
+                image_url?: string | null;
+                url?: string | null;
+                price?: number | null;
+                sale_price?: number | null;
+                currency?: string;
+                category?: string | null;
+                brand?: string | null;
+                in_stock?: boolean;
+                attributes?: {
+                    [key: string]: string;
+                };
+            }[];
         };
         SdkErrorsDto: {
             errors: {
@@ -13589,6 +13712,25 @@ export interface components {
                             /** @constant */
                             type: "html";
                             html: string;
+                        } | {
+                            id: string;
+                            /** @constant */
+                            type: "product";
+                            catalog: string;
+                            /** @enum {string} */
+                            source: "fixed" | "expression";
+                            item: string;
+                            show_description?: boolean;
+                            show_price?: boolean;
+                            button_text?: string;
+                            /** @enum {string} */
+                            align?: "left" | "center" | "right";
+                            padding?: {
+                                top: number;
+                                right: number;
+                                bottom: number;
+                                left: number;
+                            };
                         })[];
                     }[];
                 }[];
@@ -13766,6 +13908,25 @@ export interface components {
                             /** @constant */
                             type: "html";
                             html: string;
+                        } | {
+                            id: string;
+                            /** @constant */
+                            type: "product";
+                            catalog: string;
+                            /** @enum {string} */
+                            source: "fixed" | "expression";
+                            item: string;
+                            show_description?: boolean;
+                            show_price?: boolean;
+                            button_text?: string;
+                            /** @enum {string} */
+                            align?: "left" | "center" | "right";
+                            padding?: {
+                                top: number;
+                                right: number;
+                                bottom: number;
+                                left: number;
+                            };
                         })[];
                     }[];
                 };
@@ -13860,6 +14021,25 @@ export interface components {
                     /** @constant */
                     type: "html";
                     html: string;
+                } | {
+                    id: string;
+                    /** @constant */
+                    type: "product";
+                    catalog: string;
+                    /** @enum {string} */
+                    source: "fixed" | "expression";
+                    item: string;
+                    show_description?: boolean;
+                    show_price?: boolean;
+                    button_text?: string;
+                    /** @enum {string} */
+                    align?: "left" | "center" | "right";
+                    padding?: {
+                        top: number;
+                        right: number;
+                        bottom: number;
+                        left: number;
+                    };
                 };
             };
             created_by: string | null;
@@ -13988,6 +14168,25 @@ export interface components {
                                 /** @constant */
                                 type: "html";
                                 html: string;
+                            } | {
+                                id: string;
+                                /** @constant */
+                                type: "product";
+                                catalog: string;
+                                /** @enum {string} */
+                                source: "fixed" | "expression";
+                                item: string;
+                                show_description?: boolean;
+                                show_price?: boolean;
+                                button_text?: string;
+                                /** @enum {string} */
+                                align?: "left" | "center" | "right";
+                                padding?: {
+                                    top: number;
+                                    right: number;
+                                    bottom: number;
+                                    left: number;
+                                };
                             })[];
                         }[];
                     };
@@ -14082,6 +14281,25 @@ export interface components {
                         /** @constant */
                         type: "html";
                         html: string;
+                    } | {
+                        id: string;
+                        /** @constant */
+                        type: "product";
+                        catalog: string;
+                        /** @enum {string} */
+                        source: "fixed" | "expression";
+                        item: string;
+                        show_description?: boolean;
+                        show_price?: boolean;
+                        button_text?: string;
+                        /** @enum {string} */
+                        align?: "left" | "center" | "right";
+                        padding?: {
+                            top: number;
+                            right: number;
+                            bottom: number;
+                            left: number;
+                        };
                     };
                 };
                 created_by: string | null;
@@ -14496,6 +14714,81 @@ export interface components {
                 message_id: string | null;
                 assigned_at: string | null;
             }[];
+        };
+        Catalog: {
+            id: string;
+            app_id: string;
+            name: string;
+            description: string | null;
+            currency: string;
+            item_count: number;
+            liquid: string;
+            created_at: string;
+            updated_at: string;
+        };
+        CatalogList: {
+            data: {
+                id: string;
+                app_id: string;
+                name: string;
+                description: string | null;
+                currency: string;
+                item_count: number;
+                liquid: string;
+                created_at: string;
+                updated_at: string;
+            }[];
+        };
+        CatalogItem: {
+            id: string;
+            title: string;
+            description: string | null;
+            image_url: string | null;
+            url: string | null;
+            price: number | null;
+            sale_price: number | null;
+            currency: string;
+            category: string | null;
+            brand: string | null;
+            in_stock: boolean;
+            attributes: {
+                [key: string]: string;
+            };
+            updated_at: string;
+        };
+        CatalogItemsPage: {
+            total: number;
+            data: {
+                id: string;
+                title: string;
+                description: string | null;
+                image_url: string | null;
+                url: string | null;
+                price: number | null;
+                sale_price: number | null;
+                currency: string;
+                category: string | null;
+                brand: string | null;
+                in_stock: boolean;
+                attributes: {
+                    [key: string]: string;
+                };
+                updated_at: string;
+            }[];
+        };
+        CatalogUpsertResult: {
+            catalog: {
+                id: string;
+                app_id: string;
+                name: string;
+                description: string | null;
+                currency: string;
+                item_count: number;
+                liquid: string;
+                created_at: string;
+                updated_at: string;
+            };
+            upserted: number;
         };
         SsoConnection: {
             id: string;
@@ -18243,6 +18536,25 @@ export interface components {
                             /** @constant */
                             type: "html";
                             html: string;
+                        } | {
+                            id: string;
+                            /** @constant */
+                            type: "product";
+                            catalog: string;
+                            /** @enum {string} */
+                            source: "fixed" | "expression";
+                            item: string;
+                            show_description?: boolean;
+                            show_price?: boolean;
+                            button_text?: string;
+                            /** @enum {string} */
+                            align?: "left" | "center" | "right";
+                            padding?: {
+                                top: number;
+                                right: number;
+                                bottom: number;
+                                left: number;
+                            };
                         })[];
                     }[];
                 }[];
@@ -19805,6 +20117,283 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["PromoCodeUploadResult"];
+                };
+            };
+        };
+    };
+    PublicCatalogController_list: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CatalogList"];
+                };
+            };
+        };
+    };
+    PublicCatalogController_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateCatalogDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Catalog"];
+                };
+            };
+        };
+    };
+    PublicCatalogController_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                catalogId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Catalog"];
+                };
+            };
+        };
+    };
+    PublicCatalogController_remove: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                catalogId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Ok"];
+                };
+            };
+        };
+    };
+    PublicCatalogController_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                catalogId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateCatalogDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Catalog"];
+                };
+            };
+        };
+    };
+    PublicCatalogController_items: {
+        parameters: {
+            query?: {
+                limit?: number;
+                offset?: number;
+                q?: string;
+                category?: string;
+            };
+            header?: never;
+            path: {
+                catalogId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CatalogItemsPage"];
+                };
+            };
+        };
+    };
+    PublicCatalogController_upsert: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                catalogId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpsertCatalogItemsDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CatalogUpsertResult"];
+                };
+            };
+        };
+    };
+    PublicCatalogController_upload: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                catalogId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "multipart/form-data": {
+                    /**
+                     * Format: binary
+                     * @description UTF-8 CSV. Zorunlu sütunlar: id, title. Bilinen: description, image_url, url, price, sale_price, currency, category, brand, in_stock. Diğerleri özellik olur. En fazla 100.000 satır, 20 MB.
+                     */
+                    file: string;
+                };
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CatalogUpsertResult"];
+                };
+            };
+        };
+    };
+    PublicCatalogController_item: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                catalogId: string;
+                itemId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CatalogItem"];
+                };
+            };
+        };
+    };
+    PublicCatalogController_removeItem: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                catalogId: string;
+                itemId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Ok"];
                 };
             };
         };
