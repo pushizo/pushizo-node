@@ -17019,7 +17019,7 @@ export interface components {
             id: string;
             app_id: string;
             /** @enum {string} */
-            type: "segment" | "amplitude" | "mixpanel" | "ga4" | "posthog" | "rudderstack" | "hubspot" | "appsflyer" | "adjust" | "revenuecat" | "zapier" | "slack" | "activecampaign" | "adobe_audience_manager";
+            type: "segment" | "amplitude" | "mixpanel" | "ga4" | "posthog" | "rudderstack" | "hubspot" | "appsflyer" | "adjust" | "revenuecat" | "zapier" | "slack" | "activecampaign" | "adobe_audience_manager" | "salesforce";
             name: string;
             /** @enum {string} */
             status: "active" | "paused" | "error";
@@ -17052,7 +17052,7 @@ export interface components {
                 id: string;
                 app_id: string;
                 /** @enum {string} */
-                type: "segment" | "amplitude" | "mixpanel" | "ga4" | "posthog" | "rudderstack" | "hubspot" | "appsflyer" | "adjust" | "revenuecat" | "zapier" | "slack" | "activecampaign" | "adobe_audience_manager";
+                type: "segment" | "amplitude" | "mixpanel" | "ga4" | "posthog" | "rudderstack" | "hubspot" | "appsflyer" | "adjust" | "revenuecat" | "zapier" | "slack" | "activecampaign" | "adobe_audience_manager" | "salesforce";
                 name: string;
                 /** @enum {string} */
                 status: "active" | "paused" | "error";
@@ -17082,7 +17082,7 @@ export interface components {
             }[];
             catalog: {
                 /** @enum {string} */
-                type: "segment" | "amplitude" | "mixpanel" | "ga4" | "posthog" | "rudderstack" | "hubspot" | "appsflyer" | "adjust" | "revenuecat" | "zapier" | "slack" | "activecampaign" | "adobe_audience_manager";
+                type: "segment" | "amplitude" | "mixpanel" | "ga4" | "posthog" | "rudderstack" | "hubspot" | "appsflyer" | "adjust" | "revenuecat" | "zapier" | "slack" | "activecampaign" | "adobe_audience_manager" | "salesforce";
                 events: string[];
                 cohorts: boolean;
                 inbound: boolean;
