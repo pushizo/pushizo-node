@@ -251,6 +251,7 @@ const TABLE: Record<string, (hs: Pushizo) => Promise<unknown>> = {
   'PATCH /v1/apps/{appId}/journeys/{journeyId}/nodes/{nodeId}': (hs) =>
     hs.journeys.updateNode('jrn_1', 'n1', { position: { x: 0, y: 0 } }),
   'GET /v1/apps/{appId}/journeys/{journeyId}/versions': (hs) => hs.journeys.versions('jrn_1'),
+  'POST /v1/apps/{appId}/journeys/{journeyId}/versions/{version}/restore': (hs) => hs.journeys.restoreVersion('jrn_1', 2),
   'POST /v1/apps/{appId}/journeys/{journeyId}/publish': (hs) => hs.journeys.publish('jrn_1'),
   'POST /v1/apps/{appId}/journeys/{journeyId}/pause': (hs) => hs.journeys.pause('jrn_1'),
   'POST /v1/apps/{appId}/journeys/{journeyId}/resume': (hs) => hs.journeys.resume('jrn_1'),

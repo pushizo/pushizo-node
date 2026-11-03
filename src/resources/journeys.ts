@@ -61,6 +61,12 @@ export function createJourneys(ctx: ResourceContext) {
         method: 'GET',
         path: `${one(journeyId, appId)}/versions`,
       }),
+    /** Eski sürümü yeni taslak olarak açar; yayındaki sürüm ve açık run'lar değişmez. */
+    restoreVersion: (journeyId: string, version: number, appId?: string) =>
+      ctx.http.request<JourneyDetail>({
+        method: 'POST',
+        path: `${one(journeyId, appId)}/versions/${version}/restore`,
+      }),
     /** Taslağı doğrulayıp yeni sürüm olarak yayınlar. */
     publish: action<JourneyPublishResult>('publish'),
     pause: action<JourneyDetail>('pause'),
