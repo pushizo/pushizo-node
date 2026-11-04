@@ -13,6 +13,12 @@ import type {
   SavedReportInput,
   SavedReportList,
   SavedReportUpdateInput,
+  CreateDecisionAgentInput,
+  DecisionAgent,
+  DecisionAgentList,
+  DecisionReport,
+  DecisionResult,
+  UpdateDecisionAgentInput,
   CreatePredictionInput,
   PredictionModel,
   PredictionModelList,
@@ -172,6 +178,22 @@ export function createGeofences(ctx: ResourceContext) {
     update: (geofenceId: string, body: UpdateGeofenceInput, appId?: string) =>
       ctx.http.request<Geofence>({ method: 'PATCH', path: `${base(appId)}/${encodeURIComponent(geofenceId)}`, body }),
     delete: (geofenceId: string, appId?: string) => ctx.http.request<Ok>({ method: 'DELETE', path: `${base(appId)}/${encodeURIComponent(geofenceId)}` }),
+  };
+}
+
+/** Kişi başına karar motoru: ajanlar, karar ve kazanç raporu. */
+export function createDecisionAgents(ctx: ResourceContext) {
+  const base = (appId?: string) => `${ctx.appPath(appId)}/decision-agents`;
+  return {
+    list: (appId?: string) => ctx.http.request<DecisionAgentList>({ method: 'GET', path: base(appId) }),
+    create: (body: CreateDecisionAgentInput, appId?: string) => ctx.http.request<DecisionAgent>({ method: 'POST', path: base(appId), body }),
+    get: (id: string, appId?: string) => ctx.http.request<DecisionAgent>({ method: 'GET', path: `${base(appId)}/${encodeURIComponent(id)}` }),
+    update: (id: string, body: UpdateDecisionAgentInput, appId?: string) => ctx.http.request<DecisionAgent>({ method: 'PATCH', path: `${base(appId)}/${encodeURIComponent(id)}`, body }),
+    delete: (id: string, appId?: string) => ctx.http.request<void>({ method: 'DELETE', path: `${base(appId)}/${encodeURIComponent(id)}` }),
+    /** Öğrenen politika ve kontrol grubu karşılaştırması. */
+    report: (id: string, appId?: string) => ctx.http.request<DecisionReport>({ method: 'GET', path: `${base(appId)}/${encodeURIComponent(id)}/report` }),
+    /** Kullanıcı için seçenek seçer ve kaydeder. */
+    decide: (id: string, externalId: string, appId?: string) => ctx.http.request<DecisionResult>({ method: 'POST', path: `${base(appId)}/${encodeURIComponent(id)}/decide`, body: { external_id: externalId } }),
   };
 }
 

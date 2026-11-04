@@ -1401,6 +1401,86 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/apps/{appId}/decision-agents": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Karar ajanları */
+        get: operations["PublicDecisionsController_list"];
+        put?: never;
+        /** Karar ajanı oluştur */
+        post: operations["PublicDecisionsController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/decision-agents/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Karar ajanı */
+        get: operations["PublicDecisionsController_get"];
+        put?: never;
+        post?: never;
+        /** Karar ajanını sil */
+        delete: operations["PublicDecisionsController_remove"];
+        options?: never;
+        head?: never;
+        /**
+         * Karar ajanını güncelle
+         * @description Seçenekler değiştirilemez: geçmiş öğrenme onlara bağlıdır. Yeni seçenekler için yeni ajan oluşturun.
+         */
+        patch: operations["PublicDecisionsController_update"];
+        trace?: never;
+    };
+    "/v1/apps/{appId}/decision-agents/{id}/report": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Kazanç raporu
+         * @description Öğrenen politika ve kontrol grubu karşılaştırması.
+         */
+        get: operations["PublicDecisionsController_report"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/decision-agents/{id}/decide": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Kullanıcı için karar al
+         * @description Karar kaydedilir, ödül olayı geldikçe ajan öğrenir.
+         */
+        post: operations["PublicDecisionsController_decide"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/sdk/v1/apps/{appId}/errors": {
         parameters: {
             query?: never;
@@ -5793,6 +5873,33 @@ export interface components {
             enabled?: boolean;
             event_names?: string[];
             horizon_days?: number;
+        };
+        CreateDecisionAgentDto: {
+            slug: string;
+            name: string;
+            arms: {
+                id: string;
+                label: string;
+            }[];
+            reward_events: string[];
+            /** @default 72 */
+            reward_window_hours: number;
+            /** @default 10 */
+            holdout_percent: number;
+            context_prediction?: string | null;
+            /** @default false */
+            use_best_channel: boolean;
+        };
+        UpdateDecisionAgentDto: {
+            name?: string;
+            /** @enum {string} */
+            status?: "active" | "paused";
+            reward_events?: string[];
+            reward_window_hours?: number;
+            holdout_percent?: number;
+        };
+        DecideDto: {
+            external_id: string;
         };
         SdkErrorsDto: {
             errors: {
@@ -16553,6 +16660,85 @@ export interface components {
             }[];
             next_cursor: string | null;
         };
+        DecisionAgent: {
+            id: string;
+            slug: string;
+            name: string;
+            arms: {
+                id: string;
+                label: string;
+            }[];
+            reward_events: string[];
+            reward_window_hours: number;
+            holdout_percent: number;
+            context_prediction: string | null;
+            use_best_channel: boolean;
+            /** @enum {string} */
+            status: "active" | "paused";
+            created_at: string;
+            updated_at: string;
+        };
+        DecisionAgentList: {
+            data: {
+                id: string;
+                slug: string;
+                name: string;
+                arms: {
+                    id: string;
+                    label: string;
+                }[];
+                reward_events: string[];
+                reward_window_hours: number;
+                holdout_percent: number;
+                context_prediction: string | null;
+                use_best_channel: boolean;
+                /** @enum {string} */
+                status: "active" | "paused";
+                created_at: string;
+                updated_at: string;
+            }[];
+        };
+        DecisionResult: {
+            arm_id: string;
+            label: string;
+            /** @enum {string} */
+            policy: "thompson" | "holdout";
+            context: string;
+        };
+        DecisionReport: {
+            agent_id: string;
+            days: number;
+            learned: {
+                assignments: number;
+                settled: number;
+                rewards: number;
+                rate: number | null;
+            };
+            holdout: {
+                assignments: number;
+                settled: number;
+                rewards: number;
+                rate: number | null;
+            };
+            lift: number | null;
+            p_value: number | null;
+            significant: boolean;
+            arms: {
+                id: string;
+                label: string;
+                share: number;
+                assignments: number;
+                settled: number;
+                rewards: number;
+                rate: number | null;
+            }[];
+            contexts: {
+                context: string;
+                arm_id: string;
+                settled: number;
+                rate: number | null;
+            }[];
+        };
         SsoConnection: {
             id: string;
             /** @enum {string} */
@@ -23473,6 +23659,189 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["PredictionUsersPage"];
+                };
+            };
+        };
+    };
+    PublicDecisionsController_list: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DecisionAgentList"];
+                };
+            };
+        };
+    };
+    PublicDecisionsController_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateDecisionAgentDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DecisionAgent"];
+                };
+            };
+        };
+    };
+    PublicDecisionsController_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DecisionAgent"];
+                };
+            };
+        };
+    };
+    PublicDecisionsController_remove: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            204: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    PublicDecisionsController_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateDecisionAgentDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DecisionAgent"];
+                };
+            };
+        };
+    };
+    PublicDecisionsController_report: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DecisionReport"];
+                };
+            };
+        };
+    };
+    PublicDecisionsController_decide: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["DecideDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DecisionResult"];
                 };
             };
         };
