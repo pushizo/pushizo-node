@@ -9779,6 +9779,57 @@ export interface components {
                 source: "sdk" | "api" | "system" | "import";
                 occurred_at: string;
             }[];
+            derived: {
+                wallet_passes: {
+                    id: string;
+                    template_id: string;
+                    status: string;
+                    barcode_value: string;
+                    values: {
+                        [key: string]: string;
+                    };
+                    created_at: string;
+                    updated_at: string;
+                }[];
+                rfm: {
+                    segment: string;
+                    segment_since: string;
+                    r: number;
+                    f: number;
+                    m: number | null;
+                    frequency: number;
+                    monetary: number;
+                    last_event_at: string;
+                    computed_at: string;
+                } | null;
+                predictions: {
+                    model: string;
+                    score: number;
+                    computed_at: string;
+                }[];
+                channel_scores: {
+                    channel: string;
+                    sends: number;
+                    engaged: number;
+                    score: number;
+                    is_best: boolean;
+                    computed_at: string;
+                }[];
+                decisions: {
+                    agent: string;
+                    arm_id: string;
+                    context: string;
+                    assigned_at: string;
+                    rewarded_at: string | null;
+                }[];
+                recommendations: {
+                    catalog_id: string;
+                    personalized: string[];
+                    recent: string[];
+                    purchased: string[];
+                    computed_at: string;
+                }[];
+            };
         };
         UserIdentity: {
             identity: {
