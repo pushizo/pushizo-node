@@ -16739,6 +16739,64 @@ export interface components {
                 rate: number | null;
             }[];
         };
+        CampaignAgentConfig: {
+            configured: boolean;
+            enabled: boolean;
+            /** @enum {string} */
+            goal: "retention" | "revenue" | "reactivation" | "engagement";
+            min_audience: number;
+            /** @enum {string} */
+            status: "idle" | "queued" | "running" | "failed";
+            last_run_at: string | null;
+        };
+        CampaignProposal: {
+            id: string;
+            /** @enum {string} */
+            kind: "churn_risk" | "likely_to_act" | "rfm_at_risk" | "inactive_30d" | "recent_clickers";
+            /** @enum {string} */
+            status: "pending" | "approved" | "dismissed" | "expired";
+            audience_size: number;
+            model_name: string | null;
+            draft: {
+                name: string;
+                title: string;
+                body: string;
+                language: string;
+            } | null;
+            segment_id: string | null;
+            campaign_id: string | null;
+            expires_at: string;
+            created_at: string;
+            decided_at: string | null;
+        };
+        CampaignProposalList: {
+            data: {
+                id: string;
+                /** @enum {string} */
+                kind: "churn_risk" | "likely_to_act" | "rfm_at_risk" | "inactive_30d" | "recent_clickers";
+                /** @enum {string} */
+                status: "pending" | "approved" | "dismissed" | "expired";
+                audience_size: number;
+                model_name: string | null;
+                draft: {
+                    name: string;
+                    title: string;
+                    body: string;
+                    language: string;
+                } | null;
+                segment_id: string | null;
+                campaign_id: string | null;
+                expires_at: string;
+                created_at: string;
+                decided_at: string | null;
+            }[];
+        };
+        CampaignProposalDraft: {
+            name: string;
+            title: string;
+            body: string;
+            language: string;
+        };
         SsoConnection: {
             id: string;
             /** @enum {string} */
