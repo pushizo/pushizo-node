@@ -1324,6 +1324,83 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/apps/{appId}/predictions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Öngörü modelleri */
+        get: operations["PublicPredictionsController_list"];
+        put?: never;
+        /**
+         * Öngörü modeli oluştur
+         * @description Eğitim kuyruğa alınır; sonuç `outcome` alanından izlenir.
+         */
+        post: operations["PublicPredictionsController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/predictions/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Öngörü modeli */
+        get: operations["PublicPredictionsController_get"];
+        put?: never;
+        post?: never;
+        /** Öngörü modelini sil */
+        delete: operations["PublicPredictionsController_remove"];
+        options?: never;
+        head?: never;
+        /**
+         * Öngörü modelini güncelle
+         * @description Olay veya ufuk değişirse yeniden eğitilir; kapatınca skorlar silinir.
+         */
+        patch: operations["PublicPredictionsController_update"];
+        trace?: never;
+    };
+    "/v1/apps/{appId}/predictions/{id}/compute": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Modeli yeniden eğit */
+        post: operations["PublicPredictionsController_compute"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/predictions/{id}/users": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Skoru olan kullanıcılar */
+        get: operations["PublicPredictionsController_users"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/sdk/v1/apps/{appId}/errors": {
         parameters: {
             query?: never;
@@ -5700,6 +5777,22 @@ export interface components {
             values?: {
                 [key: string]: string;
             };
+        };
+        CreatePredictionDto: {
+            slug: string;
+            name: string;
+            /** @enum {string} */
+            kind: "churn" | "event";
+            /** @default [] */
+            event_names: string[];
+            /** @default 30 */
+            horizon_days: number;
+        };
+        UpdatePredictionDto: {
+            name?: string;
+            enabled?: boolean;
+            event_names?: string[];
+            horizon_days?: number;
         };
         SdkErrorsDto: {
             errors: {
@@ -16368,6 +16461,98 @@ export interface components {
             }[];
             next_cursor: string | null;
         };
+        PredictionModel: {
+            id: string;
+            slug: string;
+            name: string;
+            /** @enum {string} */
+            kind: "churn" | "event";
+            event_names: string[];
+            horizon_days: number;
+            enabled: boolean;
+            /** @enum {string} */
+            status: "idle" | "queued" | "running" | "failed";
+            outcome: ("ready" | "insufficient_data" | "low_quality") | null;
+            last_computed_at: string | null;
+            scored_users: number;
+            metrics: {
+                auc: number | null;
+                base_rate: number | null;
+                train_users: number;
+                holdout_users: number;
+                positives: number;
+                negatives: number;
+                calibration: {
+                    /** @enum {string} */
+                    bucket: "low" | "medium" | "high";
+                    users: number;
+                    predicted: number | null;
+                    actual: number | null;
+                }[];
+                importance: {
+                    /** @enum {string} */
+                    feature: "recency_days" | "events_7" | "events_30" | "active_days_30" | "target_30" | "days_since_target" | "tenure_days" | "sent_30" | "engaged_30";
+                    weight: number;
+                }[];
+            } | null;
+            distribution: {
+                /** @enum {string} */
+                bucket: "low" | "medium" | "high";
+                users: number;
+            }[];
+        };
+        PredictionModelList: {
+            data: {
+                id: string;
+                slug: string;
+                name: string;
+                /** @enum {string} */
+                kind: "churn" | "event";
+                event_names: string[];
+                horizon_days: number;
+                enabled: boolean;
+                /** @enum {string} */
+                status: "idle" | "queued" | "running" | "failed";
+                outcome: ("ready" | "insufficient_data" | "low_quality") | null;
+                last_computed_at: string | null;
+                scored_users: number;
+                metrics: {
+                    auc: number | null;
+                    base_rate: number | null;
+                    train_users: number;
+                    holdout_users: number;
+                    positives: number;
+                    negatives: number;
+                    calibration: {
+                        /** @enum {string} */
+                        bucket: "low" | "medium" | "high";
+                        users: number;
+                        predicted: number | null;
+                        actual: number | null;
+                    }[];
+                    importance: {
+                        /** @enum {string} */
+                        feature: "recency_days" | "events_7" | "events_30" | "active_days_30" | "target_30" | "days_since_target" | "tenure_days" | "sent_30" | "engaged_30";
+                        weight: number;
+                    }[];
+                } | null;
+                distribution: {
+                    /** @enum {string} */
+                    bucket: "low" | "medium" | "high";
+                    users: number;
+                }[];
+            }[];
+        };
+        PredictionUsersPage: {
+            data: {
+                user_id: string;
+                external_id: string | null;
+                score: number;
+                /** @enum {string} */
+                bucket: "low" | "medium" | "high";
+            }[];
+            next_cursor: string | null;
+        };
         SsoConnection: {
             id: string;
             /** @enum {string} */
@@ -23105,6 +23290,189 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["WalletPass"];
+                };
+            };
+        };
+    };
+    PublicPredictionsController_list: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PredictionModelList"];
+                };
+            };
+        };
+    };
+    PublicPredictionsController_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreatePredictionDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PredictionModel"];
+                };
+            };
+        };
+    };
+    PublicPredictionsController_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PredictionModel"];
+                };
+            };
+        };
+    };
+    PublicPredictionsController_remove: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            204: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    PublicPredictionsController_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdatePredictionDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PredictionModel"];
+                };
+            };
+        };
+    };
+    PublicPredictionsController_compute: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            202: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PredictionModel"];
+                };
+            };
+        };
+    };
+    PublicPredictionsController_users: {
+        parameters: {
+            query?: {
+                bucket?: "low" | "medium" | "high";
+                limit?: number;
+                cursor?: string;
+            };
+            header?: never;
+            path: {
+                id: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PredictionUsersPage"];
                 };
             };
         };

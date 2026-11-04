@@ -13,6 +13,11 @@ import type {
   SavedReportInput,
   SavedReportList,
   SavedReportUpdateInput,
+  CreatePredictionInput,
+  PredictionModel,
+  PredictionModelList,
+  PredictionUsersPage,
+  UpdatePredictionInput,
   CreateWalletTemplateInput,
   IssueWalletPassInput,
   UpdateWalletConfigInput,
@@ -167,6 +172,22 @@ export function createGeofences(ctx: ResourceContext) {
     update: (geofenceId: string, body: UpdateGeofenceInput, appId?: string) =>
       ctx.http.request<Geofence>({ method: 'PATCH', path: `${base(appId)}/${encodeURIComponent(geofenceId)}`, body }),
     delete: (geofenceId: string, appId?: string) => ctx.http.request<Ok>({ method: 'DELETE', path: `${base(appId)}/${encodeURIComponent(geofenceId)}` }),
+  };
+}
+
+/** Öngörü modelleri: kayıp riski ve olay olasılığı. */
+export function createPredictions(ctx: ResourceContext) {
+  const base = (appId?: string) => `${ctx.appPath(appId)}/predictions`;
+  return {
+    list: (appId?: string) => ctx.http.request<PredictionModelList>({ method: 'GET', path: base(appId) }),
+    /** Eğitim kuyruğa alınır; sonuç `outcome` alanından izlenir. */
+    create: (body: CreatePredictionInput, appId?: string) => ctx.http.request<PredictionModel>({ method: 'POST', path: base(appId), body }),
+    get: (id: string, appId?: string) => ctx.http.request<PredictionModel>({ method: 'GET', path: `${base(appId)}/${encodeURIComponent(id)}` }),
+    update: (id: string, body: UpdatePredictionInput, appId?: string) => ctx.http.request<PredictionModel>({ method: 'PATCH', path: `${base(appId)}/${encodeURIComponent(id)}`, body }),
+    delete: (id: string, appId?: string) => ctx.http.request<void>({ method: 'DELETE', path: `${base(appId)}/${encodeURIComponent(id)}` }),
+    compute: (id: string, appId?: string) => ctx.http.request<PredictionModel>({ method: 'POST', path: `${base(appId)}/${encodeURIComponent(id)}/compute` }),
+    users: (id: string, params: QueryParams<'/v1/apps/{appId}/predictions/{id}/users', 'get'> = {}, appId?: string) =>
+      ctx.http.request<PredictionUsersPage>({ method: 'GET', path: `${base(appId)}/${encodeURIComponent(id)}/users`, query: params }),
   };
 }
 
