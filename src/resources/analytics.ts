@@ -13,6 +13,16 @@ import type {
   SavedReportInput,
   SavedReportList,
   SavedReportUpdateInput,
+  CreateWalletTemplateInput,
+  IssueWalletPassInput,
+  UpdateWalletConfigInput,
+  UpdateWalletPassInput,
+  UpdateWalletTemplateInput,
+  WalletConfig,
+  WalletPass,
+  WalletPassPage,
+  WalletTemplate,
+  WalletTemplateList,
   GlobalControl,
   GlobalControlReport,
   AppFlag,
@@ -157,6 +167,29 @@ export function createGeofences(ctx: ResourceContext) {
     update: (geofenceId: string, body: UpdateGeofenceInput, appId?: string) =>
       ctx.http.request<Geofence>({ method: 'PATCH', path: `${base(appId)}/${encodeURIComponent(geofenceId)}`, body }),
     delete: (geofenceId: string, appId?: string) => ctx.http.request<Ok>({ method: 'DELETE', path: `${base(appId)}/${encodeURIComponent(geofenceId)}` }),
+  };
+}
+
+/** Apple ve Google Wallet: yapılandırma, şablon ve kart. */
+export function createWallet(ctx: ResourceContext) {
+  const base = (appId?: string) => `${ctx.appPath(appId)}/wallet`;
+  return {
+    getConfig: (appId?: string) => ctx.http.request<WalletConfig>({ method: 'GET', path: `${base(appId)}/config` }),
+    /** Kimlik bilgisi doğrulanır, şifrelenir ve bir daha okunamaz. */
+    updateConfig: (body: UpdateWalletConfigInput, appId?: string) => ctx.http.request<WalletConfig>({ method: 'PUT', path: `${base(appId)}/config`, body }),
+    listTemplates: (appId?: string) => ctx.http.request<WalletTemplateList>({ method: 'GET', path: `${base(appId)}/templates` }),
+    createTemplate: (body: CreateWalletTemplateInput, appId?: string) => ctx.http.request<WalletTemplate>({ method: 'POST', path: `${base(appId)}/templates`, body }),
+    getTemplate: (id: string, appId?: string) => ctx.http.request<WalletTemplate>({ method: 'GET', path: `${base(appId)}/templates/${encodeURIComponent(id)}` }),
+    updateTemplate: (id: string, body: UpdateWalletTemplateInput, appId?: string) => ctx.http.request<WalletTemplate>({ method: 'PATCH', path: `${base(appId)}/templates/${encodeURIComponent(id)}`, body }),
+    deleteTemplate: (id: string, appId?: string) => ctx.http.request<void>({ method: 'DELETE', path: `${base(appId)}/templates/${encodeURIComponent(id)}` }),
+    listPasses: (params: QueryParams<'/v1/apps/{appId}/wallet/passes', 'get'> = {}, appId?: string) => ctx.http.request<WalletPassPage>({ method: 'GET', path: `${base(appId)}/passes`, query: params }),
+    /** Kullanıcılı kart şablon başına tektir; yanıttaki `url` kartı açar. */
+    issuePass: (body: IssueWalletPassInput, appId?: string) => ctx.http.request<WalletPass>({ method: 'POST', path: `${base(appId)}/passes`, body }),
+    getPass: (id: string, appId?: string) => ctx.http.request<WalletPass>({ method: 'GET', path: `${base(appId)}/passes/${encodeURIComponent(id)}` }),
+    /** Cihazdaki kart arka planda yenilenir. */
+    updatePass: (id: string, body: UpdateWalletPassInput, appId?: string) => ctx.http.request<WalletPass>({ method: 'PATCH', path: `${base(appId)}/passes/${encodeURIComponent(id)}`, body }),
+    /** Geri alınmaz; cihazdaki kart geçersiz görünür. */
+    voidPass: (id: string, appId?: string) => ctx.http.request<WalletPass>({ method: 'POST', path: `${base(appId)}/passes/${encodeURIComponent(id)}/void` }),
   };
 }
 

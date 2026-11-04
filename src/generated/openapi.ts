@@ -1198,6 +1198,132 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/apps/{appId}/wallet/config": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Wallet yapılandırması
+         * @description Kimlik bilgisi geri okunamaz, yalnızca durum döner.
+         */
+        get: operations["PublicWalletController_config"];
+        /** Wallet kimlik bilgilerini ayarla */
+        put: operations["PublicWalletController_updateConfig"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/wallet/templates": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Wallet şablonları */
+        get: operations["PublicWalletController_templates"];
+        put?: never;
+        /** Wallet şablonu oluştur */
+        post: operations["PublicWalletController_createTemplate"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/wallet/templates/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Wallet şablonu */
+        get: operations["PublicWalletController_template"];
+        put?: never;
+        post?: never;
+        /**
+         * Wallet şablonunu sil
+         * @description Verilmiş kartı olan şablon silinemez, arşivlenir.
+         */
+        delete: operations["PublicWalletController_removeTemplate"];
+        options?: never;
+        head?: never;
+        /**
+         * Wallet şablonunu güncelle
+         * @description Tasarım değişirse verilmiş kartlar da güncellenir.
+         */
+        patch: operations["PublicWalletController_updateTemplate"];
+        trace?: never;
+    };
+    "/v1/apps/{appId}/wallet/passes": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Verilmiş kartlar */
+        get: operations["PublicWalletController_passes"];
+        put?: never;
+        /**
+         * Kart ver
+         * @description Kullanıcılı kart şablon başına tektir; tekrar istek aynı kartı döndürür.
+         */
+        post: operations["PublicWalletController_issue"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/wallet/passes/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Kart */
+        get: operations["PublicWalletController_pass"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /**
+         * Kartı güncelle
+         * @description Cihazdaki kart arka planda yenilenir.
+         */
+        patch: operations["PublicWalletController_updatePass"];
+        trace?: never;
+    };
+    "/v1/apps/{appId}/wallet/passes/{id}/void": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Kartı iptal et
+         * @description Geri alınmaz; cihazdaki kart geçersiz görünür.
+         */
+        post: operations["PublicWalletController_voidPass"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/sdk/v1/apps/{appId}/errors": {
         parameters: {
             query?: never;
@@ -5467,6 +5593,113 @@ export interface components {
             window_days?: number;
             min_sends?: number;
             count_email_opens?: boolean;
+        };
+        UpdateWalletConfigDto: {
+            apple?: {
+                pass_type_id: string;
+                team_id: string;
+                certificate_pem: string;
+                private_key_pem: string;
+                key_passphrase?: string;
+                wwdr_pem: string;
+            } | null;
+            google?: {
+                issuer_id: string;
+                service_account_json: string;
+            } | null;
+        };
+        CreateWalletTemplateDto: {
+            slug: string;
+            name: string;
+            /** @enum {string} */
+            kind: "coupon" | "loyalty" | "event" | "generic";
+            design: {
+                title: string;
+                description: string;
+                organization: string;
+                /** @default #ffffff */
+                background_color: string;
+                /** @default #111111 */
+                foreground_color: string;
+                /** @default #555555 */
+                label_color: string;
+                /**
+                 * @default qr
+                 * @enum {string}
+                 */
+                barcode: "qr" | "pdf417" | "aztec" | "code128";
+                /** @default [] */
+                fields: {
+                    key: string;
+                    /** @default  */
+                    label: string;
+                    /** @default  */
+                    value: string;
+                    /**
+                     * @default secondary
+                     * @enum {string}
+                     */
+                    section: "header" | "primary" | "secondary" | "auxiliary" | "back";
+                }[];
+                expires_at?: string | null;
+                relevant_at?: string | null;
+            };
+            images?: {
+                [key: string]: string;
+            };
+        };
+        UpdateWalletTemplateDto: {
+            name?: string;
+            /** @enum {string} */
+            status?: "active" | "archived";
+            design?: {
+                title: string;
+                description: string;
+                organization: string;
+                /** @default #ffffff */
+                background_color: string;
+                /** @default #111111 */
+                foreground_color: string;
+                /** @default #555555 */
+                label_color: string;
+                /**
+                 * @default qr
+                 * @enum {string}
+                 */
+                barcode: "qr" | "pdf417" | "aztec" | "code128";
+                /** @default [] */
+                fields: {
+                    key: string;
+                    /** @default  */
+                    label: string;
+                    /** @default  */
+                    value: string;
+                    /**
+                     * @default secondary
+                     * @enum {string}
+                     */
+                    section: "header" | "primary" | "secondary" | "auxiliary" | "back";
+                }[];
+                expires_at?: string | null;
+                relevant_at?: string | null;
+            };
+            images?: {
+                [key: string]: string;
+            };
+        };
+        IssueWalletPassDto: {
+            template_id: string;
+            external_id?: string;
+            barcode_value?: string;
+            values?: {
+                [key: string]: string;
+            };
+        };
+        UpdateWalletPassDto: {
+            barcode_value?: string;
+            values?: {
+                [key: string]: string;
+            };
         };
         SdkErrorsDto: {
             errors: {
@@ -15992,6 +16225,149 @@ export interface components {
             }[];
             next_cursor: string | null;
         };
+        WalletConfig: {
+            apple: {
+                configured: boolean;
+                pass_type_id: string | null;
+                team_id: string | null;
+                certificate_expires_at: string | null;
+            };
+            google: {
+                configured: boolean;
+                issuer_id: string | null;
+            };
+        };
+        WalletTemplate: {
+            id: string;
+            slug: string;
+            name: string;
+            /** @enum {string} */
+            kind: "coupon" | "loyalty" | "event" | "generic";
+            /** @enum {string} */
+            status: "active" | "archived";
+            design: {
+                title: string;
+                description: string;
+                organization: string;
+                /** @default #ffffff */
+                background_color: string;
+                /** @default #111111 */
+                foreground_color: string;
+                /** @default #555555 */
+                label_color: string;
+                /**
+                 * @default qr
+                 * @enum {string}
+                 */
+                barcode: "qr" | "pdf417" | "aztec" | "code128";
+                /** @default [] */
+                fields: {
+                    key: string;
+                    /** @default  */
+                    label: string;
+                    /** @default  */
+                    value: string;
+                    /**
+                     * @default secondary
+                     * @enum {string}
+                     */
+                    section: "header" | "primary" | "secondary" | "auxiliary" | "back";
+                }[];
+                expires_at?: string | null;
+                relevant_at?: string | null;
+            };
+            images: string[];
+            passes: number;
+            created_at: string;
+            updated_at: string;
+        };
+        WalletTemplateList: {
+            data: {
+                id: string;
+                slug: string;
+                name: string;
+                /** @enum {string} */
+                kind: "coupon" | "loyalty" | "event" | "generic";
+                /** @enum {string} */
+                status: "active" | "archived";
+                design: {
+                    title: string;
+                    description: string;
+                    organization: string;
+                    /** @default #ffffff */
+                    background_color: string;
+                    /** @default #111111 */
+                    foreground_color: string;
+                    /** @default #555555 */
+                    label_color: string;
+                    /**
+                     * @default qr
+                     * @enum {string}
+                     */
+                    barcode: "qr" | "pdf417" | "aztec" | "code128";
+                    /** @default [] */
+                    fields: {
+                        key: string;
+                        /** @default  */
+                        label: string;
+                        /** @default  */
+                        value: string;
+                        /**
+                         * @default secondary
+                         * @enum {string}
+                         */
+                        section: "header" | "primary" | "secondary" | "auxiliary" | "back";
+                    }[];
+                    expires_at?: string | null;
+                    relevant_at?: string | null;
+                };
+                images: string[];
+                passes: number;
+                created_at: string;
+                updated_at: string;
+            }[];
+        };
+        WalletPass: {
+            id: string;
+            template_id: string;
+            user_id: string | null;
+            external_id: string | null;
+            barcode_value: string;
+            values: {
+                [key: string]: string;
+            };
+            /** @enum {string} */
+            status: "active" | "voided";
+            url: string;
+            apple_url: string;
+            google_url: string;
+            apple_devices: number;
+            version: number;
+            created_at: string;
+            updated_at: string;
+        };
+        WalletPassPage: {
+            data: {
+                id: string;
+                template_id: string;
+                user_id: string | null;
+                external_id: string | null;
+                barcode_value: string;
+                values: {
+                    [key: string]: string;
+                };
+                /** @enum {string} */
+                status: "active" | "voided";
+                url: string;
+                apple_url: string;
+                google_url: string;
+                apple_devices: number;
+                version: number;
+                created_at: string;
+                updated_at: string;
+            }[];
+            next_cursor: string | null;
+        };
         SsoConnection: {
             id: string;
             /** @enum {string} */
@@ -22413,6 +22789,322 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ChannelScoreUser"];
+                };
+            };
+        };
+    };
+    PublicWalletController_config: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WalletConfig"];
+                };
+            };
+        };
+    };
+    PublicWalletController_updateConfig: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateWalletConfigDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WalletConfig"];
+                };
+            };
+        };
+    };
+    PublicWalletController_templates: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WalletTemplateList"];
+                };
+            };
+        };
+    };
+    PublicWalletController_createTemplate: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateWalletTemplateDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WalletTemplate"];
+                };
+            };
+        };
+    };
+    PublicWalletController_template: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WalletTemplate"];
+                };
+            };
+        };
+    };
+    PublicWalletController_removeTemplate: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            204: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    PublicWalletController_updateTemplate: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateWalletTemplateDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WalletTemplate"];
+                };
+            };
+        };
+    };
+    PublicWalletController_passes: {
+        parameters: {
+            query?: {
+                template_id?: string;
+                limit?: number;
+                cursor?: string;
+            };
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WalletPassPage"];
+                };
+            };
+        };
+    };
+    PublicWalletController_issue: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["IssueWalletPassDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WalletPass"];
+                };
+            };
+        };
+    };
+    PublicWalletController_pass: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WalletPass"];
+                };
+            };
+        };
+    };
+    PublicWalletController_updatePass: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateWalletPassDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WalletPass"];
+                };
+            };
+        };
+    };
+    PublicWalletController_voidPass: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WalletPass"];
                 };
             };
         };
