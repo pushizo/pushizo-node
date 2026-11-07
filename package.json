@@ -1,6 +1,6 @@
 {
   "name": "@pushizo/node",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Pushizo Node.js sunucu SDK'sı: public API'nin tamamı (bildirim, kullanıcı, segment, şablon, kampanya, analitik, veri aktarımı, webhook…) OpenAPI tipleri ile",
   "license": "MIT",
   "homepage": "https://docs.pushizo.com/docs/sdk/node",
