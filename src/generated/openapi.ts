@@ -4013,6 +4013,40 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/sdk/v1/apps/{appId}/users/{userId}/cards": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** İçerik kartı akışı (sabitlenmiş, öncelik, yeni sırasıyla; abonelik kullanıcıya ait olmalı) */
+        get: operations["SdkEngagementController_cardsList"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/sdk/v1/apps/{appId}/users/{userId}/cards/{itemId}/{event}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Kart olayı: impression (gösterim), click (tıklama) veya dismiss (kapatma) */
+        post: operations["SdkEngagementController_cardEvent"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/sdk/v1/apps/{appId}/users/{userId}/inbox/{itemId}": {
         parameters: {
             query?: never;
@@ -6659,6 +6693,15 @@ export interface components {
             };
             add_to_inbox?: boolean;
             inbox_ttl?: number;
+            content_card?: {
+                /** @enum {string} */
+                type: "classic" | "captioned_image" | "image_only";
+                pinned?: boolean;
+                priority?: number;
+                button_text?: {
+                    [key: string]: string;
+                };
+            };
             frequency_cap_exempt?: boolean;
             quiet_hours_exempt?: boolean;
             one_per_user?: boolean;
@@ -6918,6 +6961,15 @@ export interface components {
                 disable_sms_link_shortening?: boolean;
                 add_to_inbox?: boolean;
                 inbox_ttl?: number;
+                content_card?: {
+                    /** @enum {string} */
+                    type: "classic" | "captioned_image" | "image_only";
+                    pinned?: boolean;
+                    priority?: number;
+                    button_text?: {
+                        [key: string]: string;
+                    };
+                };
                 thread_id?: string;
                 ios_relevance_score?: number;
                 target_content_identifier?: string;
@@ -7093,6 +7145,15 @@ export interface components {
                 disable_sms_link_shortening?: boolean;
                 add_to_inbox?: boolean;
                 inbox_ttl?: number;
+                content_card?: {
+                    /** @enum {string} */
+                    type: "classic" | "captioned_image" | "image_only";
+                    pinned?: boolean;
+                    priority?: number;
+                    button_text?: {
+                        [key: string]: string;
+                    };
+                };
                 thread_id?: string;
                 ios_relevance_score?: number;
                 target_content_identifier?: string;
@@ -7287,6 +7348,15 @@ export interface components {
                 disable_sms_link_shortening?: boolean;
                 add_to_inbox?: boolean;
                 inbox_ttl?: number;
+                content_card?: {
+                    /** @enum {string} */
+                    type: "classic" | "captioned_image" | "image_only";
+                    pinned?: boolean;
+                    priority?: number;
+                    button_text?: {
+                        [key: string]: string;
+                    };
+                };
                 thread_id?: string;
                 ios_relevance_score?: number;
                 target_content_identifier?: string;
@@ -13310,6 +13380,49 @@ export interface components {
             archived_at: string | null;
             expires_at: string | null;
             created_at: string;
+        };
+        ContentCard: {
+            id: string;
+            message_id: string | null;
+            /** @enum {string} */
+            type: "classic" | "captioned_image" | "image_only";
+            title: string | null;
+            body: string | null;
+            url: string | null;
+            image_url: string | null;
+            button_text: string | null;
+            data: {
+                [key: string]: string;
+            };
+            pinned: boolean;
+            priority: number;
+            viewed: boolean;
+            clicked: boolean;
+            expires_at: string | null;
+            created_at: string;
+        };
+        ContentCardList: {
+            data: {
+                id: string;
+                message_id: string | null;
+                /** @enum {string} */
+                type: "classic" | "captioned_image" | "image_only";
+                title: string | null;
+                body: string | null;
+                url: string | null;
+                image_url: string | null;
+                button_text: string | null;
+                data: {
+                    [key: string]: string;
+                };
+                pinned: boolean;
+                priority: number;
+                viewed: boolean;
+                clicked: boolean;
+                expires_at: string | null;
+                created_at: string;
+            }[];
+            unviewed_count: number;
         };
         InboxReadAllResult: {
             updated: number;
@@ -29764,6 +29877,67 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["InboxItem"];
+                };
+            };
+        };
+    };
+    SdkEngagementController_cardsList: {
+        parameters: {
+            query: {
+                subscription_id: string;
+                identity_hash?: string;
+                token_hash?: string;
+                limit?: number;
+            };
+            header?: never;
+            path: {
+                appId: string;
+                userId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ContentCardList"];
+                };
+            };
+        };
+    };
+    SdkEngagementController_cardEvent: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+                userId: string;
+                itemId: string;
+                event: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SdkInboxActionDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ContentCard"];
                 };
             };
         };
