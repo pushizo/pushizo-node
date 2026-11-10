@@ -1106,6 +1106,78 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/apps/{appId}/affinity/config": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** İlgi modeli */
+        get: operations["PublicAffinityController_config"];
+        /**
+         * İlgi modelini ayarla
+         * @description Model açıksa ilgiler kayıttan sonra yeniden hesaplanır.
+         */
+        put: operations["PublicAffinityController_update"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/affinity/compute": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** İlgileri yeniden hesapla */
+        post: operations["PublicAffinityController_compute"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/affinity/overview": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Özellik başına en yaygın ilgiler */
+        get: operations["PublicAffinityController_overview"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/affinity/users/{userId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Kişinin ilgileri ve haftalık sıklık sınırı */
+        get: operations["PublicAffinityController_user"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/apps/{appId}/channel-scores/config": {
         parameters: {
             query?: never;
@@ -5765,6 +5837,15 @@ export interface components {
             use_monetary?: boolean;
             window_days?: number;
         };
+        UpdateAffinityConfigDto: {
+            enabled: boolean;
+            attributes: string[];
+            events: {
+                [key: string]: number;
+            };
+            window_days?: number;
+            half_life_days?: number;
+        };
         UpdateChannelScoreConfigDto: {
             enabled: boolean;
             window_days?: number;
@@ -6143,6 +6224,11 @@ export interface components {
                 /** @enum {string} */
                 ipCapture?: "off" | "full" | "masked";
                 ipRetentionDays?: number;
+                adaptiveFrequency?: {
+                    enabled: boolean;
+                    min: number;
+                    max: number;
+                };
                 allowedOrigins?: string[];
                 campaignApprovalRequired?: boolean;
                 webPush?: {
@@ -9555,6 +9641,8 @@ export interface components {
             merged_into: string | null;
             last_ip: string | null;
             last_ip_at: string | null;
+            last_sentiment: ("positive" | "negative" | "neutral") | null;
+            last_sentiment_at: string | null;
             created_at: string;
             updated_at: string;
             subscription_count: number;
@@ -9577,6 +9665,8 @@ export interface components {
             merged_into: string | null;
             last_ip: string | null;
             last_ip_at: string | null;
+            last_sentiment: ("positive" | "negative" | "neutral") | null;
+            last_sentiment_at: string | null;
             created_at: string;
             updated_at: string;
             subscription_count: number;
@@ -9650,6 +9740,8 @@ export interface components {
                 merged_into: string | null;
                 last_ip: string | null;
                 last_ip_at: string | null;
+                last_sentiment: ("positive" | "negative" | "neutral") | null;
+                last_sentiment_at: string | null;
                 created_at: string;
                 updated_at: string;
                 subscription_count: number;
@@ -9742,6 +9834,8 @@ export interface components {
                 merged_into: string | null;
                 last_ip: string | null;
                 last_ip_at: string | null;
+                last_sentiment: ("positive" | "negative" | "neutral") | null;
+                last_sentiment_at: string | null;
                 created_at: string;
                 updated_at: string;
                 subscription_count: number;
@@ -9860,6 +9954,18 @@ export interface components {
                     purchased: string[];
                     computed_at: string;
                 }[];
+                affinities: {
+                    attribute: string;
+                    value: string;
+                    score: number;
+                    rank: number;
+                    computed_at: string;
+                }[];
+                frequency_cap: {
+                    weekly_cap: number;
+                    engagement: number;
+                    computed_at: string;
+                } | null;
             };
         };
         UserIdentity: {
@@ -10978,6 +11084,11 @@ export interface components {
                 /** @enum {string} */
                 ipCapture?: "off" | "full" | "masked";
                 ipRetentionDays?: number;
+                adaptiveFrequency?: {
+                    enabled: boolean;
+                    min: number;
+                    max: number;
+                };
                 allowedOrigins?: string[];
                 campaignApprovalRequired?: boolean;
                 webPush?: {
@@ -11157,6 +11268,11 @@ export interface components {
                     /** @enum {string} */
                     ipCapture?: "off" | "full" | "masked";
                     ipRetentionDays?: number;
+                    adaptiveFrequency?: {
+                        enabled: boolean;
+                        min: number;
+                        max: number;
+                    };
                     allowedOrigins?: string[];
                     campaignApprovalRequired?: boolean;
                     webPush?: {
@@ -16518,6 +16634,45 @@ export interface components {
                 segment_since: string;
             }[];
             next_cursor: string | null;
+        };
+        AffinityConfig: {
+            configured: boolean;
+            enabled: boolean;
+            attributes: string[];
+            events: {
+                [key: string]: number;
+            };
+            window_days: number;
+            half_life_days: number;
+            /** @enum {string} */
+            status: "idle" | "queued" | "running" | "failed";
+            last_error: string | null;
+            last_computed_at: string | null;
+            scored_users: number;
+        };
+        AffinityOverview: {
+            last_computed_at: string | null;
+            scored_users: number;
+            attributes: {
+                attribute: string;
+                values: {
+                    value: string;
+                    users: number;
+                    top_users: number;
+                }[];
+            }[];
+        };
+        UserAffinity: {
+            user_id: string;
+            affinities: {
+                attribute: string;
+                value: string;
+                score: number;
+                rank: number;
+            }[];
+            weekly_cap: number | null;
+            engagement: number | null;
+            computed_at: string | null;
         };
         ChannelScoreConfig: {
             configured: boolean;
@@ -23212,6 +23367,131 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["RfmUsersPage"];
+                };
+            };
+        };
+    };
+    PublicAffinityController_config: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AffinityConfig"];
+                };
+            };
+        };
+    };
+    PublicAffinityController_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateAffinityConfigDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AffinityConfig"];
+                };
+            };
+        };
+    };
+    PublicAffinityController_compute: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            202: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AffinityConfig"];
+                };
+            };
+        };
+    };
+    PublicAffinityController_overview: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AffinityOverview"];
+                };
+            };
+        };
+    };
+    PublicAffinityController_user: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                userId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["UserAffinity"];
                 };
             };
         };

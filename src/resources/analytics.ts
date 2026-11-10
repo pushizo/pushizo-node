@@ -63,6 +63,10 @@ import type {
   RfmUsersPage,
   UpdateChannelScoreConfigInput,
   UpdateRfmConfigInput,
+  AffinityConfig,
+  AffinityOverview,
+  UpdateAffinityConfigInput,
+  UserAffinity,
   SubscriptionsReport,
   UpdateGlobalControlInput,
 } from '../types.js';
@@ -266,6 +270,21 @@ export function createChannelScores(ctx: ResourceContext) {
       ctx.http.request<ChannelScoreUsersPage>({ method: 'GET', path: `${base(appId)}/users`, query: params }),
     /** Tek kullanıcının kanal skorları. */
     user: (userId: string, appId?: string) => ctx.http.request<ChannelScoreUser>({ method: 'GET', path: `${base(appId)}/users/${encodeURIComponent(userId)}` }),
+  };
+}
+
+/** İlgi etiketleri (ADR-0081): model ayarı, hesap, özellik başına yaygın ilgiler ve kişinin ilgileri. */
+export function createAffinity(ctx: ResourceContext) {
+  const base = (appId?: string) => `${ctx.appPath(appId)}/affinity`;
+  return {
+    getConfig: (appId?: string) => ctx.http.request<AffinityConfig>({ method: 'GET', path: `${base(appId)}/config` }),
+    /** Model açıksa ilgiler kayıttan sonra yeniden hesaplanır. */
+    updateConfig: (body: UpdateAffinityConfigInput, appId?: string) => ctx.http.request<AffinityConfig>({ method: 'PUT', path: `${base(appId)}/config`, body }),
+    /** Hesabı kuyruğa alır; ilerleme `status` alanından izlenir. */
+    compute: (appId?: string) => ctx.http.request<AffinityConfig>({ method: 'POST', path: `${base(appId)}/compute` }),
+    overview: (appId?: string) => ctx.http.request<AffinityOverview>({ method: 'GET', path: `${base(appId)}/overview` }),
+    /** Kişinin ilgileri ve kişisel haftalık sıklık sınırı. */
+    user: (userId: string, appId?: string) => ctx.http.request<UserAffinity>({ method: 'GET', path: `${base(appId)}/users/${encodeURIComponent(userId)}` }),
   };
 }
 

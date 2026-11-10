@@ -344,6 +344,11 @@ export type RfmOverview = Schemas['RfmOverview'];
 export type RfmTransitions = Schemas['RfmTransitions'];
 export type RfmUsersPage = Schemas['RfmUsersPage'];
 export type UpdateRfmConfigInput = JsonBody<'/v1/apps/{appId}/rfm/config', 'put'>;
+/** İlgi etiketleri (ADR-0081). */
+export type AffinityConfig = Schemas['AffinityConfig'];
+export type AffinityOverview = Schemas['AffinityOverview'];
+export type UserAffinity = Schemas['UserAffinity'];
+export type UpdateAffinityConfigInput = JsonBody<'/v1/apps/{appId}/affinity/config', 'put'>;
 export type PromoCodeList = Schemas['PromoCodeList'];
 export type PromoCodeListList = Schemas['PromoCodeListList'];
 export type PromoCodesPage = Schemas['PromoCodesPage'];
