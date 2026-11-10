@@ -13,6 +13,7 @@ import type {
   SavedReportInput,
   SavedReportList,
   SavedReportUpdateInput,
+  UninstallReport,
   CreateDecisionAgentInput,
   DecisionAgent,
   DecisionAgentList,
@@ -101,6 +102,8 @@ export function createAnalytics(ctx: ResourceContext) {
     subscriptions: report<'/v1/apps/{appId}/analytics/subscriptions', SubscriptionsReport>(
       'subscriptions',
     ),
+    /** Uygulama kaldırma: günlük seri, iOS/Android kırılımı, kaldırmadan önceki son mesaj (ADR-0080). */
+    uninstalls: report<'/v1/apps/{appId}/analytics/uninstalls', UninstallReport>('uninstalls'),
     events: report<'/v1/apps/{appId}/analytics/events', EventsReport>('events'),
     conversions: report<'/v1/apps/{appId}/analytics/conversions', ConversionsReport>('conversions'),
     providers: report<'/v1/apps/{appId}/analytics/providers', ProvidersReport>('providers'),

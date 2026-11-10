@@ -2316,6 +2316,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/apps/{appId}/analytics/uninstalls": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Uygulama kaldırma raporu
+         * @description Mobil push sağlayıcısının "cihaz kayıtlı değil" yanıtından sayılır.
+         */
+        get: operations["PublicAnalyticsController_uninstallReport"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/apps/{appId}/analytics/events": {
         parameters: {
             query?: never;
@@ -6120,6 +6140,9 @@ export interface components {
                 };
                 defaultTtlSeconds?: number;
                 identityVerificationRequired?: boolean;
+                /** @enum {string} */
+                ipCapture?: "off" | "full" | "masked";
+                ipRetentionDays?: number;
                 allowedOrigins?: string[];
                 campaignApprovalRequired?: boolean;
                 webPush?: {
@@ -9530,6 +9553,8 @@ export interface components {
             session_count: number;
             usage_seconds: number;
             merged_into: string | null;
+            last_ip: string | null;
+            last_ip_at: string | null;
             created_at: string;
             updated_at: string;
             subscription_count: number;
@@ -9550,6 +9575,8 @@ export interface components {
             session_count: number;
             usage_seconds: number;
             merged_into: string | null;
+            last_ip: string | null;
+            last_ip_at: string | null;
             created_at: string;
             updated_at: string;
             subscription_count: number;
@@ -9621,6 +9648,8 @@ export interface components {
                 session_count: number;
                 usage_seconds: number;
                 merged_into: string | null;
+                last_ip: string | null;
+                last_ip_at: string | null;
                 created_at: string;
                 updated_at: string;
                 subscription_count: number;
@@ -9711,6 +9740,8 @@ export interface components {
                 session_count: number;
                 usage_seconds: number;
                 merged_into: string | null;
+                last_ip: string | null;
+                last_ip_at: string | null;
                 created_at: string;
                 updated_at: string;
                 subscription_count: number;
@@ -10406,6 +10437,35 @@ export interface components {
                 unsubscribed: number;
             }[];
         };
+        UninstallReport: {
+            from: string;
+            to: string;
+            totals: {
+                uninstalls: number;
+                active: number;
+                rate: number | null;
+            };
+            previous: {
+                uninstalls: number;
+                active: number;
+                rate: number | null;
+            } | null;
+            rows: {
+                date: string;
+                uninstalls: number;
+            }[];
+            by_channel: {
+                channel: string;
+                uninstalls: number;
+                active: number;
+            }[];
+            last_messages: {
+                campaign_id: string | null;
+                name: string | null;
+                source: string;
+                uninstalls: number;
+            }[];
+        };
         EventsReport: {
             from: string;
             to: string;
@@ -10915,6 +10975,9 @@ export interface components {
                 };
                 defaultTtlSeconds?: number;
                 identityVerificationRequired?: boolean;
+                /** @enum {string} */
+                ipCapture?: "off" | "full" | "masked";
+                ipRetentionDays?: number;
                 allowedOrigins?: string[];
                 campaignApprovalRequired?: boolean;
                 webPush?: {
@@ -11091,6 +11154,9 @@ export interface components {
                     };
                     defaultTtlSeconds?: number;
                     identityVerificationRequired?: boolean;
+                    /** @enum {string} */
+                    ipCapture?: "off" | "full" | "masked";
+                    ipRetentionDays?: number;
                     allowedOrigins?: string[];
                     campaignApprovalRequired?: boolean;
                     webPush?: {
@@ -13522,6 +13588,12 @@ export interface components {
                 open_rate: number;
                 click_rate: number;
                 conversion_rate: number;
+                goals: {
+                    event: string;
+                    primary: boolean;
+                    converted: number;
+                    conversion_rate: number;
+                }[];
             }[];
             leader: string | null;
             significance: {
@@ -13536,6 +13608,10 @@ export interface components {
             name: string;
             labels: string[];
             category: string | null;
+            goals: {
+                primary?: string;
+                secondary?: string[];
+            };
             ab_test: {
                 enabled?: boolean;
                 test_percentage?: number;
@@ -13588,6 +13664,8 @@ export interface components {
                 priority?: 5 | 10;
                 collapse_id?: string;
                 frequency_cap_exempt?: boolean;
+                /** @enum {string} */
+                frequency_priority?: "low" | "normal" | "high";
                 global_control_exempt?: boolean;
                 quiet_hours_exempt?: boolean;
                 one_per_user?: boolean;
@@ -13642,6 +13720,10 @@ export interface components {
                 name: string;
                 labels: string[];
                 category: string | null;
+                goals: {
+                    primary?: string;
+                    secondary?: string[];
+                };
                 ab_test: {
                     enabled?: boolean;
                     test_percentage?: number;
@@ -13694,6 +13776,8 @@ export interface components {
                     priority?: 5 | 10;
                     collapse_id?: string;
                     frequency_cap_exempt?: boolean;
+                    /** @enum {string} */
+                    frequency_priority?: "low" | "normal" | "high";
                     global_control_exempt?: boolean;
                     quiet_hours_exempt?: boolean;
                     one_per_user?: boolean;
@@ -13751,6 +13835,10 @@ export interface components {
                 name: string;
                 labels: string[];
                 category: string | null;
+                goals: {
+                    primary?: string;
+                    secondary?: string[];
+                };
                 ab_test: {
                     enabled?: boolean;
                     test_percentage?: number;
@@ -13803,6 +13891,8 @@ export interface components {
                     priority?: 5 | 10;
                     collapse_id?: string;
                     frequency_cap_exempt?: boolean;
+                    /** @enum {string} */
+                    frequency_priority?: "low" | "normal" | "high";
                     global_control_exempt?: boolean;
                     quiet_hours_exempt?: boolean;
                     one_per_user?: boolean;
@@ -13857,6 +13947,12 @@ export interface components {
                 failure_rate: number | null;
                 conversion_rate: number | null;
             };
+            goals: {
+                event: string;
+                primary: boolean;
+                converted: number;
+                conversion_rate: number | null;
+            }[];
             channels: {
                 /** @enum {string} */
                 channel: "ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs";
@@ -24926,6 +25022,7 @@ export interface operations {
                 cursor?: string;
                 sort?: "last_active_at" | "-last_active_at";
                 q?: string;
+                ip?: string;
                 tag?: string;
                 last_active_after?: string;
                 last_active_before?: string;
@@ -25903,6 +26000,35 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["SubscriptionsReport"];
+                };
+            };
+        };
+    };
+    PublicAnalyticsController_uninstallReport: {
+        parameters: {
+            query?: {
+                from?: string;
+                to?: string;
+                compare?: "true" | "false";
+                format?: "json" | "csv";
+            };
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["UninstallReport"];
                 };
             };
         };
@@ -27223,6 +27349,11 @@ export interface operations {
                     labels?: string[];
                     /** @description Tercih kategorisi anahtarı; kapalı kullanıcılar bastırılır */
                     category?: string | null;
+                    /** @description Dönüşüm hedefleri (ADR-0080): birincil A/B kazananını belirler; olaylar dönüşüm olayı olarak tanımlı olmalı. */
+                    goals?: {
+                        primary?: string;
+                        secondary?: string[];
+                    };
                     ab_test?: {
                         enabled?: boolean;
                         test_percentage?: number;
@@ -27254,6 +27385,8 @@ export interface operations {
                         priority?: 5 | 10;
                         collapse_id?: string;
                         frequency_cap_exempt?: boolean;
+                        /** @enum {string} */
+                        frequency_priority?: "low" | "normal" | "high";
                         global_control_exempt?: boolean;
                         quiet_hours_exempt?: boolean;
                         one_per_user?: boolean;
@@ -27367,6 +27500,11 @@ export interface operations {
                     labels?: string[];
                     /** @description Tercih kategorisi anahtarı; kapalı kullanıcılar bastırılır */
                     category?: string | null;
+                    /** @description Dönüşüm hedefleri (ADR-0080): birincil A/B kazananını belirler; olaylar dönüşüm olayı olarak tanımlı olmalı. */
+                    goals?: {
+                        primary?: string;
+                        secondary?: string[];
+                    };
                     ab_test?: {
                         enabled?: boolean;
                         test_percentage?: number;
@@ -27398,6 +27536,8 @@ export interface operations {
                         priority?: 5 | 10;
                         collapse_id?: string;
                         frequency_cap_exempt?: boolean;
+                        /** @enum {string} */
+                        frequency_priority?: "low" | "normal" | "high";
                         global_control_exempt?: boolean;
                         quiet_hours_exempt?: boolean;
                         one_per_user?: boolean;
@@ -31288,6 +31428,11 @@ export interface operations {
                     labels?: string[];
                     /** @description Tercih kategorisi anahtarı; kapalı kullanıcılar bastırılır */
                     category?: string | null;
+                    /** @description Dönüşüm hedefleri (ADR-0080): birincil A/B kazananını belirler; olaylar dönüşüm olayı olarak tanımlı olmalı. */
+                    goals?: {
+                        primary?: string;
+                        secondary?: string[];
+                    };
                     ab_test?: {
                         enabled?: boolean;
                         test_percentage?: number;
@@ -31319,6 +31464,8 @@ export interface operations {
                         priority?: 5 | 10;
                         collapse_id?: string;
                         frequency_cap_exempt?: boolean;
+                        /** @enum {string} */
+                        frequency_priority?: "low" | "normal" | "high";
                         global_control_exempt?: boolean;
                         quiet_hours_exempt?: boolean;
                         one_per_user?: boolean;

@@ -140,6 +140,7 @@ const TABLE: Record<string, (hs: Pushizo) => Promise<unknown>> = {
   'GET /v1/apps/{appId}/analytics/overview': (hs) => hs.analytics.overview({ range: '30d' }),
   'GET /v1/apps/{appId}/analytics/messages': (hs) => hs.analytics.messages(),
   'GET /v1/apps/{appId}/analytics/subscriptions': (hs) => hs.analytics.subscriptions(),
+  'GET /v1/apps/{appId}/analytics/uninstalls': (hs) => hs.analytics.uninstalls(),
   'GET /v1/apps/{appId}/analytics/events': (hs) => hs.analytics.events({ name: 'purchase' }),
   'GET /v1/apps/{appId}/analytics/conversions': (hs) => hs.analytics.conversions(),
   'POST /v1/apps/{appId}/analytics/paths': (hs) => hs.analytics.paths({ event: 'signup' }),

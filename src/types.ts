@@ -130,6 +130,8 @@ export type InboxReadAllResult = Schemas['InboxReadAllResult'];
 export type OverviewStats = Schemas['OverviewStats'];
 export type MessagesReport = Schemas['MessagesReport'];
 export type SubscriptionsReport = Schemas['SubscriptionsReport'];
+/** Uygulama kaldırma raporu (ADR-0080). */
+export type UninstallReport = Schemas['UninstallReport'];
 export type EventsReport = Schemas['EventsReport'];
 export type ConversionsReport = Schemas['ConversionsReport'];
 export type FunnelReport = Schemas['FunnelReport'];
