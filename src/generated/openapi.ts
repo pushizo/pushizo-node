@@ -14182,6 +14182,14 @@ export interface components {
                 converted: number;
                 conversion_rate: number | null;
             }[];
+            cards: {
+                created: number;
+                viewed: number;
+                clicked: number;
+                dismissed: number;
+                view_rate: number | null;
+                click_rate: number | null;
+            } | null;
             channels: {
                 /** @enum {string} */
                 channel: "ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs";
