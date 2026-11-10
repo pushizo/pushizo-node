@@ -541,6 +541,12 @@ const TABLE: Record<string, (hs: Pushizo) => Promise<unknown>> = {
   'PATCH /v1/apps/{appId}/web-campaigns/{campaignId}': (hs) => hs.webCampaigns.update('wcm_1', { priority: 5 }),
   'GET /v1/apps/{appId}/web-campaigns/{campaignId}/report': (hs) => hs.webCampaigns.report('wcm_1', { days: 7 }),
   'POST /v1/apps/{appId}/web-campaigns/{campaignId}/status': (hs) => hs.webCampaigns.setStatus('wcm_1', 'active'),
+  'GET /v1/apps/{appId}/web-personalizations': (hs) => hs.webPersonalizations.list({ status: 'active' }),
+  'POST /v1/apps/{appId}/web-personalizations': (hs) => hs.webPersonalizations.create({ name: 'Başlık', changes: [{ action: 'text', selector: 'h1', text: { tr: 'Merhaba' } }] }),
+  'GET /v1/apps/{appId}/web-personalizations/{personalizationId}': (hs) => hs.webPersonalizations.get('wpz_1'),
+  'PATCH /v1/apps/{appId}/web-personalizations/{personalizationId}': (hs) => hs.webPersonalizations.update('wpz_1', { priority: 5 }),
+  'GET /v1/apps/{appId}/web-personalizations/{personalizationId}/report': (hs) => hs.webPersonalizations.report('wpz_1', { days: 7 }),
+  'POST /v1/apps/{appId}/web-personalizations/{personalizationId}/status': (hs) => hs.webPersonalizations.setStatus('wpz_1', 'active'),
   'GET /v1/apps/{appId}/forms': (hs) => hs.forms.list(),
   'POST /v1/apps/{appId}/forms': (hs) =>
     hs.forms.create({ name: 'Bülten', fields: [{ id: 'email', type: 'email', label: { tr: 'E-posta' }, required: true }] }),

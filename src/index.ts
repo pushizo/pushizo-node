@@ -21,7 +21,7 @@ import { createTemplates } from './resources/templates.js';
 import { createReverseEtl } from './resources/reverse-etl.js';
 import { createVerify } from './resources/verify.js';
 import { createWarehouseExports } from './resources/warehouse-exports.js';
-import { createForms, createLandingPages, createSurveys, createWebCampaigns } from './resources/web-growth.js';
+import { createForms, createLandingPages, createSurveys, createWebCampaigns, createWebPersonalizations } from './resources/web-growth.js';
 import type {
   AddSubscriptionInput,
   App,
@@ -657,6 +657,8 @@ export class Pushizo {
   readonly ads = createAds(this.resourceContext());
   /** Web kampanyaları: pop-up/banner/slide-in, durum geçişi ve günlük rapor (ADR-0039). */
   readonly webCampaigns = createWebCampaigns(this.resourceContext());
+  /** Web sayfası kişiselleştirme (ADR-0083). */
+  readonly webPersonalizations = createWebPersonalizations(this.resourceContext());
   /** Formlar: tanım, gönderimler ve sunucu tarafı gönderim. */
   readonly forms = createForms(this.resourceContext());
   /** Anketler: NPS/CSAT raporu, yanıtlar ve sunucu tarafı yanıt. */

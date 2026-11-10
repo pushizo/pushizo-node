@@ -5105,6 +5105,40 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/sdk/v1/apps/{appId}/web-personalizations": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Yayındaki kişiselleştirme deneyimleri (koşul/varyant SDK'da değerlendirilir). ETag ve 60 sn önbellek. */
+        get: operations["SdkWebPersonalizationsController_list"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/sdk/v1/apps/{appId}/web-personalizations/{personalizationId}/events": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Kişiselleştirme maruz kalma / dönüşüm olayı */
+        post: operations["SdkWebPersonalizationsController_event"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/apps/{appId}/web-campaigns": {
         parameters: {
             query?: never;
@@ -5169,6 +5203,76 @@ export interface paths {
         put?: never;
         /** Yayınla / duraklat / arşivle */
         post: operations["PublicWebCampaignsController_status"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/web-personalizations": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Web kişiselleştirme deneyimleri */
+        get: operations["PublicWebPersonalizationsController_list"];
+        put?: never;
+        /** Kişiselleştirme deneyimi oluştur (taslak) */
+        post: operations["PublicWebPersonalizationsController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/web-personalizations/{personalizationId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Kişiselleştirme deneyimi detayı ve istatistikleri */
+        get: operations["PublicWebPersonalizationsController_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /** Kişiselleştirme deneyimini düzenle */
+        patch: operations["PublicWebPersonalizationsController_update"];
+        trace?: never;
+    };
+    "/v1/apps/{appId}/web-personalizations/{personalizationId}/report": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Günlük seri */
+        get: operations["PublicWebPersonalizationsController_report"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/web-personalizations/{personalizationId}/status": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Yayınla / duraklat / arşivle */
+        post: operations["PublicWebPersonalizationsController_status"];
         delete?: never;
         options?: never;
         head?: never;
@@ -8608,6 +8712,14 @@ export interface components {
             token_hash?: string;
             web_campaign_id?: string;
         };
+        SdkWebPersonalizationEventDto: {
+            /** @enum {string} */
+            type: "impression" | "conversion";
+            visitor_id: string;
+            variant_id?: string;
+            subscription_id?: string;
+            token_hash?: string;
+        };
         CreateWebCampaignDto: {
             name: string;
             display: {
@@ -8989,6 +9101,250 @@ export interface components {
             end_at?: string | null;
         };
         WebCampaignStatusDto: {
+            /** @enum {string} */
+            status: "draft" | "active" | "paused" | "archived";
+        };
+        CreateWebPersonalizationDto: {
+            name: string;
+            changes?: ({
+                /** @constant */
+                action: "text";
+                selector: string;
+                text: {
+                    [key: string]: string;
+                };
+            } | {
+                /** @constant */
+                action: "image";
+                selector: string;
+                url: string;
+                alt?: {
+                    [key: string]: string;
+                };
+            } | {
+                /** @constant */
+                action: "link";
+                selector: string;
+                url: string;
+                text?: {
+                    [key: string]: string;
+                };
+                new_tab?: boolean;
+            } | {
+                /** @constant */
+                action: "hide";
+                selector: string;
+            } | {
+                /** @constant */
+                action: "show";
+                selector: string;
+            })[];
+            variants?: {
+                id: string;
+                name: string;
+                weight_percent: number;
+                changes: ({
+                    /** @constant */
+                    action: "text";
+                    selector: string;
+                    text: {
+                        [key: string]: string;
+                    };
+                } | {
+                    /** @constant */
+                    action: "image";
+                    selector: string;
+                    url: string;
+                    alt?: {
+                        [key: string]: string;
+                    };
+                } | {
+                    /** @constant */
+                    action: "link";
+                    selector: string;
+                    url: string;
+                    text?: {
+                        [key: string]: string;
+                    };
+                    new_tab?: boolean;
+                } | {
+                    /** @constant */
+                    action: "hide";
+                    selector: string;
+                } | {
+                    /** @constant */
+                    action: "show";
+                    selector: string;
+                })[];
+            }[];
+            conditions?: {
+                url_rules?: {
+                    /** @enum {string} */
+                    op: "equals" | "contains" | "starts_with" | "not_contains" | "matches";
+                    value: string;
+                }[];
+                utm_rules?: {
+                    /** @enum {string} */
+                    param: "utm_source" | "utm_medium" | "utm_campaign" | "utm_term" | "utm_content";
+                    /** @enum {string} */
+                    op: "equals" | "contains" | "exists";
+                    value?: string;
+                }[];
+                visits?: {
+                    /** @enum {string} */
+                    op: "gte" | "lte" | "eq";
+                    value: number;
+                };
+            };
+            targeting?: {
+                included_segments?: string[];
+                excluded_segments?: string[];
+                /** @enum {string} */
+                visitor?: "all" | "new" | "returning";
+                devices?: ("desktop" | "mobile" | "tablet")[];
+            };
+            goal?: ({
+                /** @constant */
+                type: "event";
+                event: string;
+            } | {
+                /** @constant */
+                type: "page";
+                url: {
+                    /** @enum {string} */
+                    op: "equals" | "contains" | "starts_with" | "not_contains" | "matches";
+                    value: string;
+                };
+            } | {
+                /** @constant */
+                type: "click";
+                selector: string;
+            }) | null;
+            priority?: number;
+            start_at?: string | null;
+            end_at?: string | null;
+        };
+        UpdateWebPersonalizationDto: {
+            name?: string;
+            changes?: ({
+                /** @constant */
+                action: "text";
+                selector: string;
+                text: {
+                    [key: string]: string;
+                };
+            } | {
+                /** @constant */
+                action: "image";
+                selector: string;
+                url: string;
+                alt?: {
+                    [key: string]: string;
+                };
+            } | {
+                /** @constant */
+                action: "link";
+                selector: string;
+                url: string;
+                text?: {
+                    [key: string]: string;
+                };
+                new_tab?: boolean;
+            } | {
+                /** @constant */
+                action: "hide";
+                selector: string;
+            } | {
+                /** @constant */
+                action: "show";
+                selector: string;
+            })[];
+            variants?: {
+                id: string;
+                name: string;
+                weight_percent: number;
+                changes: ({
+                    /** @constant */
+                    action: "text";
+                    selector: string;
+                    text: {
+                        [key: string]: string;
+                    };
+                } | {
+                    /** @constant */
+                    action: "image";
+                    selector: string;
+                    url: string;
+                    alt?: {
+                        [key: string]: string;
+                    };
+                } | {
+                    /** @constant */
+                    action: "link";
+                    selector: string;
+                    url: string;
+                    text?: {
+                        [key: string]: string;
+                    };
+                    new_tab?: boolean;
+                } | {
+                    /** @constant */
+                    action: "hide";
+                    selector: string;
+                } | {
+                    /** @constant */
+                    action: "show";
+                    selector: string;
+                })[];
+            }[];
+            conditions?: {
+                url_rules?: {
+                    /** @enum {string} */
+                    op: "equals" | "contains" | "starts_with" | "not_contains" | "matches";
+                    value: string;
+                }[];
+                utm_rules?: {
+                    /** @enum {string} */
+                    param: "utm_source" | "utm_medium" | "utm_campaign" | "utm_term" | "utm_content";
+                    /** @enum {string} */
+                    op: "equals" | "contains" | "exists";
+                    value?: string;
+                }[];
+                visits?: {
+                    /** @enum {string} */
+                    op: "gte" | "lte" | "eq";
+                    value: number;
+                };
+            };
+            targeting?: {
+                included_segments?: string[];
+                excluded_segments?: string[];
+                /** @enum {string} */
+                visitor?: "all" | "new" | "returning";
+                devices?: ("desktop" | "mobile" | "tablet")[];
+            };
+            goal?: ({
+                /** @constant */
+                type: "event";
+                event: string;
+            } | {
+                /** @constant */
+                type: "page";
+                url: {
+                    /** @enum {string} */
+                    op: "equals" | "contains" | "starts_with" | "not_contains" | "matches";
+                    value: string;
+                };
+            } | {
+                /** @constant */
+                type: "click";
+                selector: string;
+            }) | null;
+            priority?: number;
+            start_at?: string | null;
+            end_at?: string | null;
+        };
+        WebPersonalizationStatusDto: {
             /** @enum {string} */
             status: "draft" | "active" | "paused" | "archived";
         };
@@ -21068,6 +21424,391 @@ export interface components {
                 published_by: string | null;
             }[];
         };
+        WebPersonalization: {
+            id: string;
+            app_id: string;
+            name: string;
+            /** @enum {string} */
+            status: "draft" | "active" | "paused" | "archived";
+            priority: number;
+            changes: ({
+                /** @constant */
+                action: "text";
+                selector: string;
+                text: {
+                    [key: string]: string;
+                };
+            } | {
+                /** @constant */
+                action: "image";
+                selector: string;
+                url: string;
+                alt?: {
+                    [key: string]: string;
+                };
+            } | {
+                /** @constant */
+                action: "link";
+                selector: string;
+                url: string;
+                text?: {
+                    [key: string]: string;
+                };
+                new_tab?: boolean;
+            } | {
+                /** @constant */
+                action: "hide";
+                selector: string;
+            } | {
+                /** @constant */
+                action: "show";
+                selector: string;
+            })[];
+            variants: {
+                id: string;
+                name: string;
+                weight_percent: number;
+                changes: ({
+                    /** @constant */
+                    action: "text";
+                    selector: string;
+                    text: {
+                        [key: string]: string;
+                    };
+                } | {
+                    /** @constant */
+                    action: "image";
+                    selector: string;
+                    url: string;
+                    alt?: {
+                        [key: string]: string;
+                    };
+                } | {
+                    /** @constant */
+                    action: "link";
+                    selector: string;
+                    url: string;
+                    text?: {
+                        [key: string]: string;
+                    };
+                    new_tab?: boolean;
+                } | {
+                    /** @constant */
+                    action: "hide";
+                    selector: string;
+                } | {
+                    /** @constant */
+                    action: "show";
+                    selector: string;
+                })[];
+            }[];
+            ab_test: {
+                winner_variant_id: string | null;
+                decided_at: string | null;
+                decided_by: string | null;
+            };
+            conditions: {
+                url_rules?: {
+                    /** @enum {string} */
+                    op: "equals" | "contains" | "starts_with" | "not_contains" | "matches";
+                    value: string;
+                }[];
+                utm_rules?: {
+                    /** @enum {string} */
+                    param: "utm_source" | "utm_medium" | "utm_campaign" | "utm_term" | "utm_content";
+                    /** @enum {string} */
+                    op: "equals" | "contains" | "exists";
+                    value?: string;
+                }[];
+                visits?: {
+                    /** @enum {string} */
+                    op: "gte" | "lte" | "eq";
+                    value: number;
+                };
+            };
+            targeting: {
+                included_segments?: string[];
+                excluded_segments?: string[];
+                /** @enum {string} */
+                visitor?: "all" | "new" | "returning";
+                devices?: ("desktop" | "mobile" | "tablet")[];
+            };
+            goal: ({
+                /** @constant */
+                type: "event";
+                event: string;
+            } | {
+                /** @constant */
+                type: "page";
+                url: {
+                    /** @enum {string} */
+                    op: "equals" | "contains" | "starts_with" | "not_contains" | "matches";
+                    value: string;
+                };
+            } | {
+                /** @constant */
+                type: "click";
+                selector: string;
+            }) | null;
+            start_at: string | null;
+            end_at: string | null;
+            stats: {
+                visitors: number;
+                conversions: number;
+                conversion_rate: number;
+            };
+            variant_stats: {
+                visitors: number;
+                conversions: number;
+                conversion_rate: number;
+                variant_id: string;
+            }[];
+            variant_significance: {
+                leader: string | null;
+                p_value: number;
+                significant: boolean;
+            } | null;
+            created_at: string;
+            updated_at: string;
+        };
+        WebPersonalizationPage: {
+            data: {
+                id: string;
+                app_id: string;
+                name: string;
+                /** @enum {string} */
+                status: "draft" | "active" | "paused" | "archived";
+                priority: number;
+                changes: ({
+                    /** @constant */
+                    action: "text";
+                    selector: string;
+                    text: {
+                        [key: string]: string;
+                    };
+                } | {
+                    /** @constant */
+                    action: "image";
+                    selector: string;
+                    url: string;
+                    alt?: {
+                        [key: string]: string;
+                    };
+                } | {
+                    /** @constant */
+                    action: "link";
+                    selector: string;
+                    url: string;
+                    text?: {
+                        [key: string]: string;
+                    };
+                    new_tab?: boolean;
+                } | {
+                    /** @constant */
+                    action: "hide";
+                    selector: string;
+                } | {
+                    /** @constant */
+                    action: "show";
+                    selector: string;
+                })[];
+                variants: {
+                    id: string;
+                    name: string;
+                    weight_percent: number;
+                    changes: ({
+                        /** @constant */
+                        action: "text";
+                        selector: string;
+                        text: {
+                            [key: string]: string;
+                        };
+                    } | {
+                        /** @constant */
+                        action: "image";
+                        selector: string;
+                        url: string;
+                        alt?: {
+                            [key: string]: string;
+                        };
+                    } | {
+                        /** @constant */
+                        action: "link";
+                        selector: string;
+                        url: string;
+                        text?: {
+                            [key: string]: string;
+                        };
+                        new_tab?: boolean;
+                    } | {
+                        /** @constant */
+                        action: "hide";
+                        selector: string;
+                    } | {
+                        /** @constant */
+                        action: "show";
+                        selector: string;
+                    })[];
+                }[];
+                ab_test: {
+                    winner_variant_id: string | null;
+                    decided_at: string | null;
+                    decided_by: string | null;
+                };
+                conditions: {
+                    url_rules?: {
+                        /** @enum {string} */
+                        op: "equals" | "contains" | "starts_with" | "not_contains" | "matches";
+                        value: string;
+                    }[];
+                    utm_rules?: {
+                        /** @enum {string} */
+                        param: "utm_source" | "utm_medium" | "utm_campaign" | "utm_term" | "utm_content";
+                        /** @enum {string} */
+                        op: "equals" | "contains" | "exists";
+                        value?: string;
+                    }[];
+                    visits?: {
+                        /** @enum {string} */
+                        op: "gte" | "lte" | "eq";
+                        value: number;
+                    };
+                };
+                targeting: {
+                    included_segments?: string[];
+                    excluded_segments?: string[];
+                    /** @enum {string} */
+                    visitor?: "all" | "new" | "returning";
+                    devices?: ("desktop" | "mobile" | "tablet")[];
+                };
+                goal: ({
+                    /** @constant */
+                    type: "event";
+                    event: string;
+                } | {
+                    /** @constant */
+                    type: "page";
+                    url: {
+                        /** @enum {string} */
+                        op: "equals" | "contains" | "starts_with" | "not_contains" | "matches";
+                        value: string;
+                    };
+                } | {
+                    /** @constant */
+                    type: "click";
+                    selector: string;
+                }) | null;
+                start_at: string | null;
+                end_at: string | null;
+                stats: {
+                    visitors: number;
+                    conversions: number;
+                    conversion_rate: number;
+                };
+                variant_stats: {
+                    visitors: number;
+                    conversions: number;
+                    conversion_rate: number;
+                    variant_id: string;
+                }[];
+                variant_significance: {
+                    leader: string | null;
+                    p_value: number;
+                    significant: boolean;
+                } | null;
+                created_at: string;
+                updated_at: string;
+            }[];
+            next_cursor: string | null;
+            has_more: boolean;
+        };
+        WebPersonalizationReport: {
+            personalization_id: string;
+            days: number;
+            daily: {
+                date: string;
+                visitors: number;
+                conversions: number;
+            }[];
+            totals: {
+                visitors: number;
+                conversions: number;
+                conversion_rate: number;
+            };
+        };
+        SdkWebPersonalizationList: {
+            data: {
+                id: string;
+                priority: number;
+                conditions: {
+                    url_rules?: {
+                        /** @enum {string} */
+                        op: "equals" | "contains" | "starts_with" | "not_contains" | "matches";
+                        value: string;
+                    }[];
+                    utm_rules?: {
+                        /** @enum {string} */
+                        param: "utm_source" | "utm_medium" | "utm_campaign" | "utm_term" | "utm_content";
+                        /** @enum {string} */
+                        op: "equals" | "contains" | "exists";
+                        value?: string;
+                    }[];
+                    visits?: {
+                        /** @enum {string} */
+                        op: "gte" | "lte" | "eq";
+                        value: number;
+                    };
+                };
+                targeting: {
+                    /** @enum {string} */
+                    visitor: "all" | "new" | "returning";
+                    devices: ("desktop" | "mobile" | "tablet")[];
+                };
+                changes: {
+                    selector: string;
+                    /** @enum {string} */
+                    action: "text" | "image" | "link" | "hide" | "show";
+                    text: string | null;
+                    url: string | null;
+                    alt: string | null;
+                    new_tab: boolean;
+                }[];
+                variants: {
+                    id: string;
+                    weight_percent: number;
+                    changes: {
+                        selector: string;
+                        /** @enum {string} */
+                        action: "text" | "image" | "link" | "hide" | "show";
+                        text: string | null;
+                        url: string | null;
+                        alt: string | null;
+                        new_tab: boolean;
+                    }[];
+                }[];
+                winner_variant_id: string | null;
+                goal: ({
+                    /** @constant */
+                    type: "event";
+                    event: string;
+                } | {
+                    /** @constant */
+                    type: "page";
+                    url: {
+                        /** @enum {string} */
+                        op: "equals" | "contains" | "starts_with" | "not_contains" | "matches";
+                        value: string;
+                    };
+                } | {
+                    /** @constant */
+                    type: "click";
+                    selector: string;
+                }) | null;
+                end_at: string | null;
+            }[];
+            editor_origins: string[];
+            language: string;
+        };
     };
     responses: never;
     parameters: never;
@@ -32238,6 +32979,63 @@ export interface operations {
             };
         };
     };
+    SdkWebPersonalizationsController_list: {
+        parameters: {
+            query?: {
+                subscription_id?: string;
+                token_hash?: string;
+                language?: string;
+            };
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SdkWebPersonalizationList"];
+                };
+            };
+        };
+    };
+    SdkWebPersonalizationsController_event: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+                personalizationId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SdkWebPersonalizationEventDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Ok"];
+                };
+            };
+        };
+    };
     PublicWebCampaignsController_list: {
         parameters: {
             query?: {
@@ -32400,6 +33198,172 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["WebCampaign"];
+                };
+            };
+        };
+    };
+    PublicWebPersonalizationsController_list: {
+        parameters: {
+            query?: {
+                limit?: number;
+                cursor?: string;
+                status?: "draft" | "active" | "paused" | "archived";
+            };
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WebPersonalizationPage"];
+                };
+            };
+        };
+    };
+    PublicWebPersonalizationsController_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateWebPersonalizationDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WebPersonalization"];
+                };
+            };
+        };
+    };
+    PublicWebPersonalizationsController_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                personalizationId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WebPersonalization"];
+                };
+            };
+        };
+    };
+    PublicWebPersonalizationsController_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                personalizationId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateWebPersonalizationDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WebPersonalization"];
+                };
+            };
+        };
+    };
+    PublicWebPersonalizationsController_report: {
+        parameters: {
+            query?: {
+                days?: number;
+            };
+            header?: never;
+            path: {
+                personalizationId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WebPersonalizationReport"];
+                };
+            };
+        };
+    };
+    PublicWebPersonalizationsController_status: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                personalizationId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["WebPersonalizationStatusDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WebPersonalization"];
                 };
             };
         };

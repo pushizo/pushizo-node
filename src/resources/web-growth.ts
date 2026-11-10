@@ -22,6 +22,12 @@ import type {
   WebCampaignPage,
   WebCampaignReport,
   WebCampaignStatus,
+  CreateWebPersonalizationInput,
+  UpdateWebPersonalizationInput,
+  WebPersonalization,
+  WebPersonalizationPage,
+  WebPersonalizationReport,
+  WebPersonalizationStatus,
 } from '../types.js';
 import { enc, type ResourceContext } from './context.js';
 
@@ -52,6 +58,30 @@ export function createWebCampaigns(ctx: ResourceContext) {
     /** Yayınla (`active`), duraklat (`paused`), arşivle (`archived`) veya taslağa al (`draft`). */
     setStatus: (campaignId: string, status: WebCampaignStatus, appId?: string) =>
       ctx.http.request<WebCampaign>({ method: 'POST', path: `${one(campaignId, appId)}/status`, body: { status } }),
+  };
+}
+
+/**
+ * Web sayfası kişiselleştirme (ADR-0083): sayfa öğelerini (CSS seçici) kişiye göre değiştiren deneyimler; taslak
+ * oluşturma, düzenleme, durum geçişi ve günlük maruz kalma/dönüşüm raporu. Growth+ planı gerekir.
+ */
+export function createWebPersonalizations(ctx: ResourceContext) {
+  const base = (appId?: string) => `${ctx.appPath(appId)}/web-personalizations`;
+  const one = (id: string, appId?: string) => `${base(appId)}/${enc(id)}`;
+  return {
+    list: (params: QueryParams<'/v1/apps/{appId}/web-personalizations', 'get'> = {}, appId?: string) =>
+      ctx.http.request<WebPersonalizationPage>({ method: 'GET', path: base(appId), query: params }),
+    /** Deneyim taslak olarak oluşur; yayın için `setStatus(id, 'active')`. */
+    create: (body: CreateWebPersonalizationInput, appId?: string) =>
+      ctx.http.request<WebPersonalization>({ method: 'POST', path: base(appId), body }),
+    get: (id: string, appId?: string) => ctx.http.request<WebPersonalization>({ method: 'GET', path: one(id, appId) }),
+    update: (id: string, body: UpdateWebPersonalizationInput, appId?: string) =>
+      ctx.http.request<WebPersonalization>({ method: 'PATCH', path: one(id, appId), body }),
+    /** Son `days` günün maruz kalan ve dönüşen tekil ziyaretçi serisi. */
+    report: (id: string, params: QueryParams<'/v1/apps/{appId}/web-personalizations/{personalizationId}/report', 'get'> = {}, appId?: string) =>
+      ctx.http.request<WebPersonalizationReport>({ method: 'GET', path: `${one(id, appId)}/report`, query: params }),
+    setStatus: (id: string, status: WebPersonalizationStatus, appId?: string) =>
+      ctx.http.request<WebPersonalization>({ method: 'POST', path: `${one(id, appId)}/status`, body: { status } }),
   };
 }
 
