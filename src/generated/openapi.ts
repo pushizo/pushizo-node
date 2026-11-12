@@ -6439,9 +6439,9 @@ export interface components {
                     simulation?: boolean;
                     completed_at?: string | null;
                     version?: number;
-                    platforms?: ("ios" | "android" | "huawei" | "web")[];
+                    platforms?: ("ios" | "android" | "huawei" | "web" | "amazon" | "windows" | "email" | "sms")[];
                     /** @enum {string} */
-                    framework?: "native" | "flutter" | "react-native" | "unity" | "capacitor" | "cordova" | "maui";
+                    framework?: "native" | "flutter" | "react-native" | "expo" | "kmp" | "unity" | "capacitor" | "cordova" | "maui";
                     /** @enum {string} */
                     web_integration?: "code" | "wordpress";
                 };
@@ -11587,9 +11587,9 @@ export interface components {
                     simulation?: boolean;
                     completed_at?: string | null;
                     version?: number;
-                    platforms?: ("ios" | "android" | "huawei" | "web")[];
+                    platforms?: ("ios" | "android" | "huawei" | "web" | "amazon" | "windows" | "email" | "sms")[];
                     /** @enum {string} */
-                    framework?: "native" | "flutter" | "react-native" | "unity" | "capacitor" | "cordova" | "maui";
+                    framework?: "native" | "flutter" | "react-native" | "expo" | "kmp" | "unity" | "capacitor" | "cordova" | "maui";
                     /** @enum {string} */
                     web_integration?: "code" | "wordpress";
                 };
@@ -11771,9 +11771,9 @@ export interface components {
                         simulation?: boolean;
                         completed_at?: string | null;
                         version?: number;
-                        platforms?: ("ios" | "android" | "huawei" | "web")[];
+                        platforms?: ("ios" | "android" | "huawei" | "web" | "amazon" | "windows" | "email" | "sms")[];
                         /** @enum {string} */
-                        framework?: "native" | "flutter" | "react-native" | "unity" | "capacitor" | "cordova" | "maui";
+                        framework?: "native" | "flutter" | "react-native" | "expo" | "kmp" | "unity" | "capacitor" | "cordova" | "maui";
                         /** @enum {string} */
                         web_integration?: "code" | "wordpress";
                     };
