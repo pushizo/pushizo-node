@@ -1178,6 +1178,94 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/apps/{appId}/ai-agents": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** AI ajanları */
+        get: operations["PublicAiAgentsController_list"];
+        put?: never;
+        /** AI ajanı oluştur */
+        post: operations["PublicAiAgentsController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/ai-agents/runs": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** AI ajanı çalışma kayıtları */
+        get: operations["PublicAiAgentsController_runs"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/ai-agents/{agentId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** AI ajanı */
+        get: operations["PublicAiAgentsController_get"];
+        put?: never;
+        post?: never;
+        /** AI ajanını sil */
+        delete: operations["PublicAiAgentsController_remove"];
+        options?: never;
+        head?: never;
+        /** AI ajanını güncelle */
+        patch: operations["PublicAiAgentsController_update"];
+        trace?: never;
+    };
+    "/v1/apps/{appId}/ai-agents/{agentId}/rotate-secret": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Araç imza anahtarını yenile */
+        post: operations["PublicAiAgentsController_rotate"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/ai-agents/{agentId}/metrics": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** AI ajanı ölçümleri (son 30 gün) */
+        get: operations["PublicAiAgentsController_metrics"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/apps/{appId}/channel-scores/config": {
         parameters: {
             query?: never;
@@ -5983,6 +6071,70 @@ export interface components {
             };
             window_days?: number;
             half_life_days?: number;
+        };
+        CreateAiAgentDto: {
+            name: string;
+            enabled?: boolean;
+            channels?: ("whatsapp" | "sms" | "rcs" | "chat")[];
+            instructions?: string;
+            faq?: {
+                question: string;
+                answer: string;
+            }[];
+            tools?: {
+                name: string;
+                description: string;
+                /** Format: uri */
+                url: string;
+                params?: {
+                    name: string;
+                    description?: string;
+                    required?: boolean;
+                }[];
+            }[];
+            handoff?: {
+                keywords?: string[];
+                max_bot_replies?: number;
+                on_negative_sentiment?: boolean;
+                message?: string;
+            };
+            limits?: {
+                monthly_token_cap?: number;
+                max_steps?: number;
+            };
+            ai_sentiment?: boolean;
+        };
+        UpdateAiAgentDto: {
+            name?: string;
+            enabled?: boolean;
+            channels?: ("whatsapp" | "sms" | "rcs" | "chat")[];
+            instructions?: string;
+            faq?: {
+                question: string;
+                answer: string;
+            }[];
+            tools?: {
+                name: string;
+                description: string;
+                /** Format: uri */
+                url: string;
+                params?: {
+                    name: string;
+                    description?: string;
+                    required?: boolean;
+                }[];
+            }[];
+            handoff?: {
+                keywords?: string[];
+                max_bot_replies?: number;
+                on_negative_sentiment?: boolean;
+                message?: string;
+            };
+            limits?: {
+                monthly_token_cap?: number;
+                max_steps?: number;
+            };
+            ai_sentiment?: boolean;
         };
         UpdateChannelScoreConfigDto: {
             enabled: boolean;
@@ -17151,6 +17303,171 @@ export interface components {
             engagement: number | null;
             computed_at: string | null;
         };
+        AiAgent: {
+            id: string;
+            app_id: string;
+            name: string;
+            enabled: boolean;
+            channels: ("whatsapp" | "sms" | "rcs" | "chat")[];
+            instructions: string;
+            faq: {
+                question: string;
+                answer: string;
+            }[];
+            tools: {
+                name: string;
+                description: string;
+                url: string;
+                params: {
+                    name: string;
+                    description: string;
+                    required: boolean;
+                }[];
+            }[];
+            handoff: {
+                keywords: string[];
+                max_bot_replies: number;
+                on_negative_sentiment: boolean;
+                message: string;
+            };
+            limits: {
+                monthly_token_cap: number;
+                max_steps: number;
+            };
+            ai_sentiment: boolean;
+            has_tool_secret: boolean;
+            usage: {
+                tokens_this_month: number;
+                period_start: string;
+            };
+            created_at: string;
+            updated_at: string;
+        };
+        AiAgentWithSecret: {
+            id: string;
+            app_id: string;
+            name: string;
+            enabled: boolean;
+            channels: ("whatsapp" | "sms" | "rcs" | "chat")[];
+            instructions: string;
+            faq: {
+                question: string;
+                answer: string;
+            }[];
+            tools: {
+                name: string;
+                description: string;
+                url: string;
+                params: {
+                    name: string;
+                    description: string;
+                    required: boolean;
+                }[];
+            }[];
+            handoff: {
+                keywords: string[];
+                max_bot_replies: number;
+                on_negative_sentiment: boolean;
+                message: string;
+            };
+            limits: {
+                monthly_token_cap: number;
+                max_steps: number;
+            };
+            ai_sentiment: boolean;
+            has_tool_secret: boolean;
+            usage: {
+                tokens_this_month: number;
+                period_start: string;
+            };
+            created_at: string;
+            updated_at: string;
+            tool_secret: string | null;
+        };
+        AiAgentList: {
+            data: {
+                id: string;
+                app_id: string;
+                name: string;
+                enabled: boolean;
+                channels: ("whatsapp" | "sms" | "rcs" | "chat")[];
+                instructions: string;
+                faq: {
+                    question: string;
+                    answer: string;
+                }[];
+                tools: {
+                    name: string;
+                    description: string;
+                    url: string;
+                    params: {
+                        name: string;
+                        description: string;
+                        required: boolean;
+                    }[];
+                }[];
+                handoff: {
+                    keywords: string[];
+                    max_bot_replies: number;
+                    on_negative_sentiment: boolean;
+                    message: string;
+                };
+                limits: {
+                    monthly_token_cap: number;
+                    max_steps: number;
+                };
+                ai_sentiment: boolean;
+                has_tool_secret: boolean;
+                usage: {
+                    tokens_this_month: number;
+                    period_start: string;
+                };
+                created_at: string;
+                updated_at: string;
+            }[];
+        };
+        AiAgentRunList: {
+            data: {
+                id: string;
+                agent_id: string;
+                conversation_id: string;
+                /** @enum {string} */
+                status: "pending" | "replied" | "handed_off" | "skipped_cap" | "failed";
+                steps: {
+                    /** @enum {string} */
+                    kind: "reply" | "tool" | "handoff";
+                    tool?: string;
+                    status?: number | null;
+                    ok?: boolean;
+                    duration_ms?: number;
+                }[];
+                input_tokens: number;
+                output_tokens: number;
+                handoff_reason: string | null;
+                error: string | null;
+                created_at: string;
+                finished_at: string | null;
+            }[];
+            next_cursor: string | null;
+            has_more: boolean;
+        };
+        AiAgentMetrics: {
+            period_days: number;
+            runs: number;
+            replied: number;
+            handed_off: number;
+            skipped_cap: number;
+            failed: number;
+            conversations: number;
+            resolution_rate: number;
+            avg_steps: number;
+            tool_calls: number;
+            tool_error_rate: number;
+            tokens: number;
+            handoff_reasons: {
+                [key: string]: number;
+            };
+        };
         ChannelScoreConfig: {
             configured: boolean;
             enabled: boolean;
@@ -24354,6 +24671,215 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["UserAffinity"];
+                };
+            };
+        };
+    };
+    PublicAiAgentsController_list: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AiAgentList"];
+                };
+            };
+        };
+    };
+    PublicAiAgentsController_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateAiAgentDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AiAgentWithSecret"];
+                };
+            };
+        };
+    };
+    PublicAiAgentsController_runs: {
+        parameters: {
+            query?: {
+                agent_id?: string;
+                conversation_id?: string;
+                status?: "pending" | "replied" | "handed_off" | "skipped_cap" | "failed";
+                limit?: number;
+                cursor?: string;
+            };
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AiAgentRunList"];
+                };
+            };
+        };
+    };
+    PublicAiAgentsController_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                agentId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AiAgent"];
+                };
+            };
+        };
+    };
+    PublicAiAgentsController_remove: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                agentId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            204: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    PublicAiAgentsController_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                agentId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateAiAgentDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AiAgent"];
+                };
+            };
+        };
+    };
+    PublicAiAgentsController_rotate: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                agentId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AiAgentWithSecret"];
+                };
+            };
+        };
+    };
+    PublicAiAgentsController_metrics: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                agentId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AiAgentMetrics"];
                 };
             };
         };

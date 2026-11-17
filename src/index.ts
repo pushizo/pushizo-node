@@ -7,7 +7,7 @@ import { createIdentityKeys, createIdentityToken, type IdentityTokenOptions } fr
 import { createLiveActivities } from './resources/live-activities.js';
 import { createCampaigns } from './resources/campaigns.js';
 import type { ResourceContext } from './resources/context.js';
-import { createConversations, createSmsKeywords, createWhatsAppTemplates } from './resources/conversations.js';
+import { createAiAgents, createConversations, createSmsKeywords, createWhatsAppTemplates } from './resources/conversations.js';
 import { createExports, createImports } from './resources/data-transfer.js';
 import { createCatalogs, createContentTables, createDataFeeds, createPromoCodeLists, createRecommendations } from './resources/dynamic-content.js';
 import { createEmailDeliverability } from './resources/email-deliverability.js';
@@ -643,6 +643,8 @@ export class Pushizo {
   readonly verify = createVerify(this.resourceContext());
   /** İki yönlü konuşmalar (SMS, WhatsApp, RCS). */
   readonly conversations = createConversations(this.resourceContext());
+  /** Konuşmalı AI ajanı: SSS ve webhook araçlarıyla otomatik yanıt, temsilciye devir (ADR-0085). */
+  readonly aiAgents = createAiAgents(this.resourceContext());
   /** Gelen mesaj anahtar kelimeleri. */
   readonly smsKeywords = createSmsKeywords(this.resourceContext());
   /** WhatsApp Business şablonları. */
