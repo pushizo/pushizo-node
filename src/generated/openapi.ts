@@ -6323,6 +6323,179 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/sdk/v1/apps/{appId}/search": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Site içi arama: sonuçlar ve (mode=answer ise) sitenin kendi içeriğinden kaynak gösteren AI yanıtı. AI yanıtı verilemezse yalnız sonuçlar döner. */
+        post: operations["SdkSiteSearchController_search"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/sdk/v1/apps/{appId}/search/events": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Arama olayı: tıklanan sonuç */
+        post: operations["SdkSiteSearchController_event"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/site-search": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Site araması ayarları, dizin durumu ve AI kullanımı */
+        get: operations["PublicSiteSearchController_overview"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/site-search/settings": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /** Site araması ayarlarını güncelle */
+        patch: operations["PublicSiteSearchController_updateSettings"];
+        trace?: never;
+    };
+    "/v1/apps/{appId}/site-search/sources": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Arama kaynakları */
+        get: operations["PublicSiteSearchController_sources"];
+        put?: never;
+        /** Arama kaynağı ekle */
+        post: operations["PublicSiteSearchController_createSource"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/site-search/sources/{sourceId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /** Arama kaynağını ve sayfalarını sil */
+        delete: operations["PublicSiteSearchController_removeSource"];
+        options?: never;
+        head?: never;
+        /** Arama kaynağını düzenle */
+        patch: operations["PublicSiteSearchController_updateSource"];
+        trace?: never;
+    };
+    "/v1/apps/{appId}/site-search/sources/{sourceId}/crawl": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Kaynağı şimdi yeniden tara */
+        post: operations["PublicSiteSearchController_crawl"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/site-search/documents": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Dizindeki belgeler */
+        get: operations["PublicSiteSearchController_documents"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/site-search/documents/{documentKey}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** Belgeyi dizine yükle veya değiştir (anahtar app içinde tekildir) */
+        put: operations["PublicSiteSearchController_putDocument"];
+        post?: never;
+        /** Belgeyi dizinden sil (belge kimliği veya anahtarı) */
+        delete: operations["PublicSiteSearchController_removeDocument"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/site-search/report": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Arama raporu */
+        get: operations["PublicSiteSearchController_report"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -10909,6 +11082,55 @@ export interface components {
                 [key: string]: string | boolean | number | string[];
             };
             external_id?: string;
+        };
+        SiteSearchRequestDto: {
+            query: string;
+            /** @enum {string} */
+            mode?: "search" | "answer";
+            language?: string;
+            limit?: number;
+        };
+        SiteSearchEventDto: {
+            query_id: string;
+            /** @enum {string} */
+            type: "click";
+            url: string;
+            position?: number;
+        };
+        UpdateSiteSearchSettingsDto: {
+            enabled?: boolean;
+            ai_answers?: boolean;
+            allowed_origins?: string[];
+            language?: string;
+            monthly_token_cap?: number;
+            query_retention_days?: number;
+        };
+        CreateSiteSearchSourceDto: {
+            name: string;
+            /** @enum {string} */
+            kind: "sitemap" | "urls";
+            url?: string;
+            urls?: string[];
+            max_pages?: number;
+            refresh_hours?: number | null;
+            enabled?: boolean;
+        };
+        UpdateSiteSearchSourceDto: {
+            name?: string;
+            /** @enum {string} */
+            kind?: "sitemap" | "urls";
+            url?: string;
+            urls?: string[];
+            max_pages?: number;
+            refresh_hours?: number | null;
+            enabled?: boolean;
+        };
+        PutSiteSearchDocumentDto: {
+            url: string;
+            title?: string;
+            content?: string;
+            html?: string;
+            language?: string;
         };
         Account: {
             id: string;
@@ -24416,6 +24638,243 @@ export interface components {
             }[];
             editor_origins: string[];
             language: string;
+        };
+        SiteSearchOverview: {
+            settings: {
+                enabled: boolean;
+                ai_answers: boolean;
+                allowed_origins: string[];
+                language: string;
+                text_search_config: string;
+                monthly_token_cap: number;
+                query_retention_days: number;
+                updated_at: string | null;
+            };
+            index: {
+                documents: number;
+                chunks: number;
+                sources: number;
+                last_indexed_at: string | null;
+            };
+            usage: {
+                tokens_this_month: number;
+                monthly_token_cap: number;
+                period_start: string;
+            };
+            ai: {
+                available: boolean;
+                reason: ("disabled" | "unavailable" | "cap_reached") | null;
+            };
+        };
+        SiteSearchSource: {
+            id: string;
+            name: string;
+            /** @enum {string} */
+            kind: "sitemap" | "urls";
+            url: string | null;
+            urls: string[];
+            max_pages: number;
+            refresh_hours: number | null;
+            enabled: boolean;
+            /** @enum {string} */
+            status: "idle" | "queued" | "crawling" | "ok" | "partial" | "failed";
+            documents: number;
+            crawl_requested_at: string | null;
+            last_crawled_at: string | null;
+            next_crawl_at: string | null;
+            last_error: string | null;
+            stats: {
+                pages_found: number;
+                pages_indexed: number;
+                pages_unchanged: number;
+                pages_skipped: number;
+                pages_failed: number;
+                pages_removed: number;
+                duration_ms: number;
+            };
+            created_at: string;
+            updated_at: string;
+        };
+        SiteSearchSourceList: {
+            data: {
+                id: string;
+                name: string;
+                /** @enum {string} */
+                kind: "sitemap" | "urls";
+                url: string | null;
+                urls: string[];
+                max_pages: number;
+                refresh_hours: number | null;
+                enabled: boolean;
+                /** @enum {string} */
+                status: "idle" | "queued" | "crawling" | "ok" | "partial" | "failed";
+                documents: number;
+                crawl_requested_at: string | null;
+                last_crawled_at: string | null;
+                next_crawl_at: string | null;
+                last_error: string | null;
+                stats: {
+                    pages_found: number;
+                    pages_indexed: number;
+                    pages_unchanged: number;
+                    pages_skipped: number;
+                    pages_failed: number;
+                    pages_removed: number;
+                    duration_ms: number;
+                };
+                created_at: string;
+                updated_at: string;
+            }[];
+        };
+        SiteSearchCrawlRequest: {
+            queued: boolean;
+            source: {
+                id: string;
+                name: string;
+                /** @enum {string} */
+                kind: "sitemap" | "urls";
+                url: string | null;
+                urls: string[];
+                max_pages: number;
+                refresh_hours: number | null;
+                enabled: boolean;
+                /** @enum {string} */
+                status: "idle" | "queued" | "crawling" | "ok" | "partial" | "failed";
+                documents: number;
+                crawl_requested_at: string | null;
+                last_crawled_at: string | null;
+                next_crawl_at: string | null;
+                last_error: string | null;
+                stats: {
+                    pages_found: number;
+                    pages_indexed: number;
+                    pages_unchanged: number;
+                    pages_skipped: number;
+                    pages_failed: number;
+                    pages_removed: number;
+                    duration_ms: number;
+                };
+                created_at: string;
+                updated_at: string;
+            };
+        };
+        SiteSearchDocument: {
+            id: string;
+            key: string;
+            source_id: string | null;
+            url: string;
+            title: string;
+            language: string | null;
+            chunks: number;
+            chars: number;
+            indexed_at: string;
+            created_at: string;
+        };
+        SiteSearchDocumentPage: {
+            data: {
+                id: string;
+                key: string;
+                source_id: string | null;
+                url: string;
+                title: string;
+                language: string | null;
+                chunks: number;
+                chars: number;
+                indexed_at: string;
+                created_at: string;
+            }[];
+            next_cursor: string | null;
+            has_more: boolean;
+        };
+        SiteSearchDocumentResult: {
+            /** @enum {string} */
+            outcome: "created" | "updated" | "unchanged";
+            document: {
+                id: string;
+                key: string;
+                source_id: string | null;
+                url: string;
+                title: string;
+                language: string | null;
+                chunks: number;
+                chars: number;
+                indexed_at: string;
+                created_at: string;
+            };
+        };
+        SiteSearchResponse: {
+            query_id: string;
+            /** @enum {string} */
+            mode: "search" | "answer";
+            results: {
+                id: string;
+                url: string;
+                title: string;
+                heading: string;
+                snippet: string;
+                snippet_html: string;
+            }[];
+            answer: {
+                text: string;
+                sources: {
+                    id: string;
+                    url: string;
+                    title: string;
+                }[];
+            } | null;
+            answer_status: ("answered" | "not_found") | null;
+            answers_available: boolean;
+        };
+        SiteSearchPreview: {
+            query_id: string;
+            /** @enum {string} */
+            mode: "search" | "answer";
+            results: {
+                id: string;
+                url: string;
+                title: string;
+                heading: string;
+                snippet: string;
+                snippet_html: string;
+            }[];
+            answer: {
+                text: string;
+                sources: {
+                    id: string;
+                    url: string;
+                    title: string;
+                }[];
+            } | null;
+            answer_status: ("answered" | "not_found") | null;
+            answers_available: boolean;
+            fallback_reason: ("disabled" | "unavailable" | "cap_reached" | "rate_limited" | "blocked" | "no_results") | null;
+        };
+        SiteSearchReport: {
+            period_days: number;
+            searches: number;
+            zero_results: number;
+            click_through_rate: number;
+            answers_requested: number;
+            answered: number;
+            not_found: number;
+            answer_fallbacks: number;
+            tokens: number;
+            top_queries: {
+                query: string;
+                searches: number;
+                clicks: number;
+                avg_results: number;
+            }[];
+            zero_result_queries: {
+                query: string;
+                searches: number;
+            }[];
+            daily: {
+                date: string;
+                searches: number;
+                zero_results: number;
+                answered: number;
+            }[];
         };
     };
     responses: never;
@@ -38227,6 +38686,354 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["LandingPage"];
+                };
+            };
+        };
+    };
+    SdkSiteSearchController_search: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SiteSearchRequestDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SiteSearchResponse"];
+                };
+            };
+        };
+    };
+    SdkSiteSearchController_event: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SiteSearchEventDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Ok"];
+                };
+            };
+        };
+    };
+    PublicSiteSearchController_overview: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SiteSearchOverview"];
+                };
+            };
+        };
+    };
+    PublicSiteSearchController_updateSettings: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateSiteSearchSettingsDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SiteSearchOverview"];
+                };
+            };
+        };
+    };
+    PublicSiteSearchController_sources: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SiteSearchSourceList"];
+                };
+            };
+        };
+    };
+    PublicSiteSearchController_createSource: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateSiteSearchSourceDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SiteSearchSource"];
+                };
+            };
+        };
+    };
+    PublicSiteSearchController_removeSource: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                sourceId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Ok"];
+                };
+            };
+        };
+    };
+    PublicSiteSearchController_updateSource: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                sourceId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateSiteSearchSourceDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SiteSearchSource"];
+                };
+            };
+        };
+    };
+    PublicSiteSearchController_crawl: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                sourceId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SiteSearchCrawlRequest"];
+                };
+            };
+        };
+    };
+    PublicSiteSearchController_documents: {
+        parameters: {
+            query?: {
+                source_id?: string;
+                q?: string;
+                limit?: number;
+                cursor?: string;
+            };
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SiteSearchDocumentPage"];
+                };
+            };
+        };
+    };
+    PublicSiteSearchController_putDocument: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                documentKey: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PutSiteSearchDocumentDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SiteSearchDocumentResult"];
+                };
+            };
+        };
+    };
+    PublicSiteSearchController_removeDocument: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                documentKey: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Ok"];
+                };
+            };
+        };
+    };
+    PublicSiteSearchController_report: {
+        parameters: {
+            query?: {
+                days?: number;
+            };
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SiteSearchReport"];
                 };
             };
         };

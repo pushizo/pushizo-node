@@ -566,3 +566,17 @@ export type SurveyStatus = JsonBody<'/v1/apps/{appId}/surveys/{surveyId}/status'
 export type SubmitSurveyResponseInput = JsonBody<'/v1/apps/{appId}/surveys/{surveyId}/responses', 'post'>;
 export type LandingPage = Schemas['LandingPage'];
 export type LandingPageList = Schemas['LandingPageList'];
+
+// Site içi AI arama (ADR-0093)
+export type SiteSearchOverview = Schemas['SiteSearchOverview'];
+export type SiteSearchSource = Schemas['SiteSearchSource'];
+export type SiteSearchSourceList = Schemas['SiteSearchSourceList'];
+export type SiteSearchCrawlRequest = Schemas['SiteSearchCrawlRequest'];
+export type SiteSearchDocument = Schemas['SiteSearchDocument'];
+export type SiteSearchDocumentPage = Schemas['SiteSearchDocumentPage'];
+export type SiteSearchDocumentResult = Schemas['SiteSearchDocumentResult'];
+export type SiteSearchReport = Schemas['SiteSearchReport'];
+export type UpdateSiteSearchSettingsInput = JsonBody<'/v1/apps/{appId}/site-search/settings', 'patch'>;
+export type CreateSiteSearchSourceInput = JsonBody<'/v1/apps/{appId}/site-search/sources', 'post'>;
+export type UpdateSiteSearchSourceInput = JsonBody<'/v1/apps/{appId}/site-search/sources/{sourceId}', 'patch'>;
+export type PutSiteSearchDocumentInput = JsonBody<'/v1/apps/{appId}/site-search/documents/{documentKey}', 'put'>;
