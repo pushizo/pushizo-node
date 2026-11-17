@@ -11,6 +11,7 @@ import type {
   LandingPageList,
   LandingPageVersions,
   Ok,
+  JsonBody,
   QueryParams,
   SubmitFormInput,
   SubmitSurveyResponseInput,
@@ -158,6 +159,9 @@ export function createSurveys(ctx: ResourceContext) {
       params: QueryParams<'/v1/apps/{appId}/surveys/{surveyId}/responses', 'get'> = {},
       appId?: string,
     ) => ctx.http.request<SurveyResponsePage>({ method: 'GET', path: `${one(surveyId, appId)}/responses`, query: params }),
+    /** Anketi HTML in-app mesajına dönüştürür (oluştur/güncelle); `publish: true` ile hemen yayınlar (anket aktif olmalı). */
+    distributeInApp: (surveyId: string, body: JsonBody<'/v1/apps/{appId}/surveys/{surveyId}/distribute/in-app', 'post'> = {}, appId?: string) =>
+      ctx.http.request<Survey>({ method: 'POST', path: `${one(surveyId, appId)}/distribute/in-app`, body }),
     /** Sunucu tarafı yanıt; `external_id` ile kullanıcıya bağlanır. */
     respond: (surveyId: string, body: SubmitSurveyResponseInput, appId?: string) =>
       ctx.http.request<SurveyResponseResult>({ method: 'POST', path: `${one(surveyId, appId)}/responses`, body }),

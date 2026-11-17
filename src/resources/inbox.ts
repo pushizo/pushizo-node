@@ -9,6 +9,8 @@ import type {
   InboxReadAllResult,
   InboxSettings,
   InboxTeamList,
+  JsonBody,
+  JsonResponse,
   Ok,
   QueryParams,
   UpdateCannedResponseInput,
@@ -18,7 +20,7 @@ import { enc, type ResourceContext } from './context.js';
 
 /**
  * Kullanıcının bildirim kutusu (inbox; alias `label`/`value` ile adreslenir) ve ekip gelen kutusu yönetimi:
- * hazır yanıtlar, takımlar, temsilciler, ayarlar ve metrikler (ADR-0040).
+ * hazır yanıtlar, takımlar, atama kuralları, temsilciler, ayarlar ve metrikler (ADR-0040).
  */
 export function createInbox(ctx: ResourceContext) {
   const base = (label: string, value: string, appId?: string) =>
@@ -65,6 +67,34 @@ export function createInbox(ctx: ResourceContext) {
       ctx.http.request<Ok>({ method: 'DELETE', path: `${canned(appId)}/${enc(cannedId)}` }),
     /** Gelen kutusu takımları. */
     listTeams: (appId?: string) => ctx.http.request<InboxTeamList>({ method: 'GET', path: `${team(appId)}/teams` }),
+    /** Takım oluşturur; `member_ids` yanıt rolüne sahip org üyeleri olmalıdır. */
+    createTeam: (body: JsonBody<'/v1/apps/{appId}/inbox/teams', 'post'>, appId?: string) =>
+      ctx.http.request<JsonResponse<'/v1/apps/{appId}/inbox/teams', 'post'>>({ method: 'POST', path: `${team(appId)}/teams`, body }),
+    updateTeam: (teamId: string, body: JsonBody<'/v1/apps/{appId}/inbox/teams/{teamId}', 'patch'>, appId?: string) =>
+      ctx.http.request<JsonResponse<'/v1/apps/{appId}/inbox/teams/{teamId}', 'patch'>>({ method: 'PATCH', path: `${team(appId)}/teams/${enc(teamId)}`, body }),
+    /** Takımı siler; konuşmaların takım ataması kalkar. */
+    deleteTeam: (teamId: string, appId?: string) => ctx.http.request<Ok>({ method: 'DELETE', path: `${team(appId)}/teams/${enc(teamId)}` }),
+    /** Atama kuralları (sırayla değerlendirilir). */
+    listAssignmentRules: (appId?: string) =>
+      ctx.http.request<JsonResponse<'/v1/apps/{appId}/inbox/assignment-rules', 'get'>>({ method: 'GET', path: `${team(appId)}/assignment-rules` }),
+    /** Atama kuralı: kanal/dil/etiket koşulu; round-robin, en az yük veya yalnızca takım. */
+    createAssignmentRule: (body: JsonBody<'/v1/apps/{appId}/inbox/assignment-rules', 'post'>, appId?: string) =>
+      ctx.http.request<JsonResponse<'/v1/apps/{appId}/inbox/assignment-rules', 'post'>>({ method: 'POST', path: `${team(appId)}/assignment-rules`, body }),
+    updateAssignmentRule: (ruleId: string, body: JsonBody<'/v1/apps/{appId}/inbox/assignment-rules/{ruleId}', 'patch'>, appId?: string) =>
+      ctx.http.request<JsonResponse<'/v1/apps/{appId}/inbox/assignment-rules/{ruleId}', 'patch'>>({
+        method: 'PATCH',
+        path: `${team(appId)}/assignment-rules/${enc(ruleId)}`,
+        body,
+      }),
+    deleteAssignmentRule: (ruleId: string, appId?: string) =>
+      ctx.http.request<Ok>({ method: 'DELETE', path: `${team(appId)}/assignment-rules/${enc(ruleId)}` }),
+    /** Temsilci yönlendirme profili: eşzamanlı konuşma sınırı ve diller. */
+    updateAgent: (accountId: string, body: JsonBody<'/v1/apps/{appId}/inbox/agents/{accountId}', 'patch'>, appId?: string) =>
+      ctx.http.request<JsonResponse<'/v1/apps/{appId}/inbox/agents/{accountId}', 'patch'>>({
+        method: 'PATCH',
+        path: `${team(appId)}/agents/${enc(accountId)}`,
+        body,
+      }),
     /** Temsilciler ve varlık (presence) durumu. */
     listAgents: (appId?: string) => ctx.http.request<InboxAgentList>({ method: 'GET', path: `${team(appId)}/agents` }),
     /** Sohbet widget'ı, mesai saatleri, yönlendirme ve e-posta yanıtı ayarları. */

@@ -16,7 +16,7 @@ import { createCatalogs, createContentTables, createDataFeeds, createPromoCodeLi
 import { createEmailDeliverability } from './resources/email-deliverability.js';
 import { createInAppMessages } from './resources/in-app-messages.js';
 import { createInbox } from './resources/inbox.js';
-import { createMcpDrafts, createZapier } from './resources/integrations.js';
+import { createIntegrations, createMcpDrafts, createZapier } from './resources/integrations.js';
 import { createJourneys } from './resources/journeys.js';
 import { createPreferences } from './resources/preferences.js';
 import { createSegments, createSqlSegments, createWarehouseSegments } from './resources/segments.js';
@@ -49,6 +49,8 @@ import type {
   EventDefinitionDetail,
   EventDefinitionList,
   EventsAccepted,
+  JsonBody,
+  JsonResponse,
   ExportJob,
   MemberList,
   Message,
@@ -216,6 +218,9 @@ export class Pushizo {
         path: '/v1/organization/audit-logs',
         query: params,
       }),
+    /** Public API istek logları (son 7 gün; `app_id`, `status_class`, `method` filtreleri ve cursor). */
+    logs: (params: QueryParams<'/v1/organization/logs', 'get'> & { app_id?: string } = {}) =>
+      this.http.request<JsonResponse<'/v1/organization/logs', 'get'>>({ method: 'GET', path: '/v1/organization/logs', query: params }),
     /** Organizasyon kullanımı ve plan kotaları (org geneli `analytics:read`/`admin` anahtarı). */
     usage: (params: QueryParams<'/v1/organization/usage', 'get'> = {}) =>
       this.http.request<UsageReport>({
@@ -230,6 +235,13 @@ export class Pushizo {
     /** Org geneli admin anahtarı gerektirir. */
     create: (body: CreateAppInput) =>
       this.http.request<App>({ method: 'POST', path: '/v1/apps', body }),
+    /** SDK hata raporları (son 7 gün; `platform`, `level` filtreleri ve cursor; `admin`). */
+    sdkErrors: (params: QueryParams<'/v1/apps/{appId}/sdk-errors', 'get'> = {}, appId?: string) =>
+      this.http.request<JsonResponse<'/v1/apps/{appId}/sdk-errors', 'get'>>({
+        method: 'GET',
+        path: `/v1/apps/${enc(this.app(appId))}/sdk-errors`,
+        query: params,
+      }),
     get: (appId?: string) =>
       this.http.request<App>({ method: 'GET', path: `/v1/apps/${enc(this.app(appId))}` }),
     update: (body: UpdateAppInput, appId?: string) =>
@@ -304,6 +316,13 @@ export class Pushizo {
         method: 'POST',
         path: `/v1/notifications/${enc(messageId)}/export_events`,
         query: { app_id: this.app(appId) },
+      }),
+    /** Mesaj izleme (`admin`): `msg_`/`dlv_`/`sub_` kimliği, external_id veya token'ın son 8 karakteri. */
+    trace: (q: string, appId?: string) =>
+      this.http.request<JsonResponse<'/v1/apps/{appId}/trace', 'get'>>({
+        method: 'GET',
+        path: `/v1/apps/${enc(this.app(appId))}/trace`,
+        query: { q },
       }),
     deliveries: (
       messageId: string,
@@ -381,6 +400,26 @@ export class Pushizo {
         method: 'DELETE',
         path: `/v1/apps/${enc(this.app(appId))}/users/by/${enc(label)}/${enc(value)}/identity/${enc(aliasLabel)}`,
       }),
+    /** Olay ve teslimat zaman çizelgesi (en yeni 40 kayıt). */
+    timeline: (label: string, value: string, appId?: string) =>
+      this.http.request<JsonResponse<'/v1/apps/{appId}/users/by/{label}/{value}/timeline', 'get'>>({
+        method: 'GET',
+        path: `/v1/apps/${enc(this.app(appId))}/users/by/${enc(label)}/${enc(value)}/timeline`,
+      }),
+    /** Kullanıcının son olayları (`limit` 1–200). */
+    events: (label: string, value: string, params: QueryParams<'/v1/apps/{appId}/users/by/{label}/{value}/events', 'get'> = {}, appId?: string) =>
+      this.http.request<JsonResponse<'/v1/apps/{appId}/users/by/{label}/{value}/events', 'get'>>({
+        method: 'GET',
+        path: `/v1/apps/${enc(this.app(appId))}/users/by/${enc(label)}/${enc(value)}/events`,
+        query: params,
+      }),
+    /** Kullanıcının son mesajları (teslimatlar, en yeni önce; `limit` 1–100). */
+    messages: (label: string, value: string, params: QueryParams<'/v1/apps/{appId}/users/by/{label}/{value}/messages', 'get'> = {}, appId?: string) =>
+      this.http.request<JsonResponse<'/v1/apps/{appId}/users/by/{label}/{value}/messages', 'get'>>({
+        method: 'GET',
+        path: `/v1/apps/${enc(this.app(appId))}/users/by/${enc(label)}/${enc(value)}/messages`,
+        query: params,
+      }),
     addSubscription: (label: string, value: string, body: AddSubscriptionInput, appId?: string) =>
       this.http.request<Subscription>({
         method: 'POST',
@@ -390,6 +429,20 @@ export class Pushizo {
   };
 
   readonly subscriptions = {
+    /** Abonelik listesi (kanal/durum/test cihazı filtreleri, cursor); token'ın yalnızca son 8 karakteri döner. */
+    list: (params: QueryParams<'/v1/apps/{appId}/subscriptions', 'get'> = {}, appId?: string) =>
+      this.http.request<JsonResponse<'/v1/apps/{appId}/subscriptions', 'get'>>({
+        method: 'GET',
+        path: `/v1/apps/${enc(this.app(appId))}/subscriptions`,
+        query: params,
+      }),
+    /** Toplu temizlik: `invalid` (varsayılan) veya `unsubscribed` durumundaki abonelikleri kalıcı olarak siler. */
+    cleanup: (body: JsonBody<'/v1/apps/{appId}/subscriptions/cleanup', 'post'> = {}, appId?: string) =>
+      this.http.request<JsonResponse<'/v1/apps/{appId}/subscriptions/cleanup', 'post'>>({
+        method: 'POST',
+        path: `/v1/apps/${enc(this.app(appId))}/subscriptions/cleanup`,
+        body,
+      }),
     get: (subscriptionId: string, appId?: string) =>
       this.http.request<Subscription>({
         method: 'GET',
@@ -450,6 +503,13 @@ export class Pushizo {
         method: 'GET',
         path: `/v1/apps/${enc(this.app(appId))}/events/definitions/${enc(name)}`,
       }),
+    /** Son olaylar (kullanıcı kimliği ve özelliklerle); `name`, `since` ve `limit` ile süzülür. */
+    recent: (params: QueryParams<'/v1/apps/{appId}/events/recent', 'get'> = {}, appId?: string) =>
+      this.http.request<JsonResponse<'/v1/apps/{appId}/events/recent', 'get'>>({
+        method: 'GET',
+        path: `/v1/apps/${enc(this.app(appId))}/events/recent`,
+        query: params,
+      }),
     /** Görünen ad ve dönüşüm işareti (`is_conversion`). */
     updateDefinition: (name: string, body: PatchEventDefinitionInput, appId?: string) =>
       this.http.request<EventDefinition>({
@@ -470,6 +530,18 @@ export class Pushizo {
         method: 'PUT',
         path: `/v1/apps/${enc(this.app(appId))}/channels/${channel}`,
         body,
+      }),
+    /** Kanal özeti: yalnız sağlayıcı ve durum (`users:read`). */
+    status: (appId?: string) =>
+      this.http.request<JsonResponse<'/v1/apps/{appId}/channels/status', 'get'>>({
+        method: 'GET',
+        path: `/v1/apps/${enc(this.app(appId))}/channels/status`,
+      }),
+    /** E-posta gönderici alan adının SPF/DKIM/DMARC kayıtlarını doğrular. */
+    verifyEmailDns: (appId?: string) =>
+      this.http.request<JsonResponse<'/v1/apps/{appId}/channels/email/verify-dns', 'post'>>({
+        method: 'POST',
+        path: `/v1/apps/${enc(this.app(appId))}/channels/email/verify-dns`,
       }),
     validate: (channel: Channel, appId?: string) =>
       this.http.request<ChannelValidation>({
@@ -587,6 +659,25 @@ export class Pushizo {
         method: 'POST',
         path: `/v1/apps/${enc(this.app(appId))}/webhooks/deliveries/${enc(deliveryId)}/replay`,
       }),
+    /** Abone olunabilecek olay türleri. */
+    eventTypes: (appId?: string) =>
+      this.http.request<JsonResponse<'/v1/apps/{appId}/webhooks/event-types', 'get'>>({
+        method: 'GET',
+        path: `/v1/apps/${enc(this.app(appId))}/webhooks/event-types`,
+      }),
+    /** Teslim detayı (gövde dahil). */
+    getDelivery: (deliveryId: string, appId?: string) =>
+      this.http.request<WebhookDeliveryDetail>({
+        method: 'GET',
+        path: `/v1/apps/${enc(this.app(appId))}/webhooks/deliveries/${enc(deliveryId)}`,
+      }),
+    /** Başarısız/ölü teslimleri toplu yeniden gönderir (en fazla 1000; `status`, `from`, `to`). */
+    replayFailed: (webhookId: string, body: JsonBody<'/v1/apps/{appId}/webhooks/{webhookId}/replay', 'post'> = {}, appId?: string) =>
+      this.http.request<JsonResponse<'/v1/apps/{appId}/webhooks/{webhookId}/replay', 'post'>>({
+        method: 'POST',
+        path: `/v1/apps/${enc(this.app(appId))}/webhooks/${enc(webhookId)}/replay`,
+        body,
+      }),
     /** Gövde şablonu ve filtreleri örnek olay verisiyle dener (gönderim yapmaz). */
     preview: (body: WebhookPreviewInput, appId?: string) =>
       this.http.request<WebhookPreviewResult>({
@@ -682,6 +773,8 @@ export class Pushizo {
   readonly emailDeliverability = createEmailDeliverability(this.resourceContext());
   /** Zapier REST Hook entegrasyonu. */
   readonly zapier = createZapier(this.resourceContext());
+  /** Hazır entegrasyonlar: durum, çalışma geçmişi, bağlantı testi ve cohort senkronu (`admin`). */
+  readonly integrations = createIntegrations(this.resourceContext());
   /** MCP onaylı mod: kampanya ve segment taslakları. */
   readonly mcp = createMcpDrafts(this.resourceContext());
   /** Reklam hesapları, kitleler (ADR-0037), kampanya raporlama, atribüsyon ve bütçe uyarıları (ADR-0038). */

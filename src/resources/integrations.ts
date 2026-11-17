@@ -12,6 +12,8 @@ import type {
   CreateWebPersonalizationInput,
   InAppMessage,
   IntegrationOk,
+  JsonResponse,
+  QueryParams,
   JourneyDetail,
   LandingPage,
   McpTestSendInput,
@@ -49,6 +51,33 @@ export function createZapier(ctx: ResourceContext) {
         path: `${base(appId)}/samples`,
         query: params,
       }),
+  };
+}
+
+/**
+ * Hazır entegrasyonlar (ADR-0031, ADR-0095): bağlı entegrasyonların durumu, çalışma geçmişi, bağlantı testi ve cohort
+ * senkronu (`admin`). Bağlama/güncelleme (kimlik bilgisi) ve bağlantıyı kesme dashboard'dan yapılır.
+ */
+export function createIntegrations(ctx: ResourceContext) {
+  const base = (appId?: string) => `${ctx.appPath(appId)}/integrations`;
+  const one = (type: string, appId?: string) => `${base(appId)}/${enc(type)}`;
+  return {
+    /** Bağlı entegrasyonlar ve katalog. */
+    list: (appId?: string) => ctx.http.request<JsonResponse<'/v1/apps/{appId}/integrations', 'get'>>({ method: 'GET', path: base(appId) }),
+    /** Entegrasyon ayrıntısı; kimlik bilgisi maskeli döner. */
+    get: (type: string, appId?: string) =>
+      ctx.http.request<JsonResponse<'/v1/apps/{appId}/integrations/{type}', 'get'>>({ method: 'GET', path: one(type, appId) }),
+    /** Son çalışmalar: senkron, olay gönderimi, gelen istekler ve testler. */
+    runs: (type: string, params: QueryParams<'/v1/apps/{appId}/integrations/{type}/runs', 'get'> = {}, appId?: string) =>
+      ctx.http.request<JsonResponse<'/v1/apps/{appId}/integrations/{type}/runs', 'get'>>({ method: 'GET', path: `${one(type, appId)}/runs`, query: params }),
+    test: (type: string, appId?: string) =>
+      ctx.http.request<JsonResponse<'/v1/apps/{appId}/integrations/{type}/test', 'post'>>({ method: 'POST', path: `${one(type, appId)}/test` }),
+    /** Cohort senkronunu şimdi kuyruğa alır (202). */
+    sync: (type: string, appId?: string) =>
+      ctx.http.request<JsonResponse<'/v1/apps/{appId}/integrations/{type}/sync', 'post'>>({ method: 'POST', path: `${one(type, appId)}/sync` }),
+    /** Zapier REST Hook abonelikleri. */
+    zapierHooks: (appId?: string) =>
+      ctx.http.request<JsonResponse<'/v1/apps/{appId}/integrations/zapier/hooks', 'get'>>({ method: 'GET', path: `${base(appId)}/zapier/hooks` }),
   };
 }
 

@@ -2369,6 +2369,40 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/apps/{appId}/sdk-errors": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** SDK hata raporları (son 7 gün, cursor) */
+        get: operations["PublicSdkErrorsController_list"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/webhooks/event-types": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Abone olunabilecek olay türleri */
+        get: operations["PublicWebhooksController_eventTypes"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/apps/{appId}/webhooks": {
         parameters: {
             query?: never;
@@ -2466,6 +2500,40 @@ export interface paths {
         };
         /** Teslim geçmişi (cursor; durum/olay türü filtresi) */
         get: operations["PublicWebhooksController_deliveries"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/webhooks/{webhookId}/replay": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Başarısız/ölü teslimleri toplu yeniden gönder (en fazla 1000) */
+        post: operations["PublicWebhooksController_bulkReplay"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/webhooks/deliveries/{deliveryId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Teslim detayı (gövde dahil) */
+        get: operations["PublicWebhooksController_delivery"];
         put?: never;
         post?: never;
         delete?: never;
@@ -2769,6 +2837,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/organization/logs": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Public API istek logları (org geneli admin anahtarı; son 7 gün, cursor) */
+        get: operations["PublicApiController_requestLogs"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/apps": {
         parameters: {
             query?: never;
@@ -2894,6 +2979,57 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/apps/{appId}/users/by/{label}/{value}/timeline": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Kullanıcının olay ve teslimat zaman çizelgesi (en yeni 40 kayıt) */
+        get: operations["PublicUsersController_timeline"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/users/by/{label}/{value}/events": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Kullanıcının son olayları */
+        get: operations["PublicUsersController_userEvents"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/users/by/{label}/{value}/messages": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Kullanıcının son mesajları (teslimatlar, en yeni önce) */
+        get: operations["PublicUsersController_userMessages"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/apps/{appId}/users/by/{label}/{value}/identity/{aliasLabel}": {
         parameters: {
             query?: never;
@@ -2922,6 +3058,40 @@ export interface paths {
         put?: never;
         /** Kullanıcıya abonelik ekle */
         post: operations["PublicUsersController_addSubscription"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/subscriptions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Abonelik listesi (kanal/durum/test cihazı filtreleri; token yalnızca son 8 karakter) */
+        get: operations["PublicUsersController_listSubscriptions"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/subscriptions/cleanup": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Toplu temizlik: geçersiz (veya abonelikten çıkmış) kayıtları sil */
+        post: operations["PublicUsersController_cleanupSubscriptions"];
         delete?: never;
         options?: never;
         head?: never;
@@ -3032,6 +3202,40 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/apps/{appId}/channels/status": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Kanal özeti (yalnız sağlayıcı ve durum; yapılandırma ayrıntısı dönmez) */
+        get: operations["PublicChannelsController_status"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/channels/email/verify-dns": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Gönderici alan adı SPF/DKIM/DMARC doğrulaması */
+        post: operations["PublicChannelsController_verifyDns"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/apps/{appId}/channels/{channel}": {
         parameters: {
             query?: never;
@@ -3128,6 +3332,40 @@ export interface paths {
         };
         /** Abone bazlı teslimat sonuçları (cursor) */
         get: operations["PublicNotificationsController_deliveries"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/trace": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Mesaj izleme: msg_/dlv_/sub_ ID, external_id veya token son 8 karakteri */
+        get: operations["PublicMessageTraceController_trace"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/analytics/sessions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Son 14 gün oturum hacmi ve tekil kullanıcı (günlük toplamlar) */
+        get: operations["PublicAnalyticsController_sessions"];
         put?: never;
         post?: never;
         delete?: never;
@@ -3494,6 +3732,23 @@ export interface paths {
         head?: never;
         /** Görünen ad / dönüşüm işareti */
         patch: operations["PublicEventsController_patch"];
+        trace?: never;
+    };
+    "/v1/apps/{appId}/events/recent": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Son olaylar (kullanıcı kimliği ve özelliklerle; ad ve zaman filtresi) */
+        get: operations["PublicEventsController_recent"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
         trace?: never;
     };
     "/v1/apps/{appId}/exports": {
@@ -4154,6 +4409,23 @@ export interface paths {
         patch: operations["PublicConversationsController_setStatus"];
         trace?: never;
     };
+    "/v1/apps/{appId}/conversations/{conversationId}/contact": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Kişi profili: özellikler, etiketler, abonelikler (maskeli), son olaylar, diğer konuşmalar */
+        get: operations["PublicConversationsController_contact"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/apps/{appId}/conversations/{conversationId}/messages": {
         parameters: {
             query?: never;
@@ -4527,11 +4799,66 @@ export interface paths {
         /** Takımlar */
         get: operations["PublicInboxController_teams"];
         put?: never;
-        post?: never;
+        /** Takım oluştur (üyeler yanıt rolüne sahip org üyeleri) */
+        post: operations["PublicInboxController_createTeam"];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/inbox/teams/{teamId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /** Takımı sil (konuşmaların takım ataması kalkar) */
+        delete: operations["PublicInboxController_deleteTeam"];
+        options?: never;
+        head?: never;
+        /** Takımı güncelle */
+        patch: operations["PublicInboxController_updateTeam"];
+        trace?: never;
+    };
+    "/v1/apps/{appId}/inbox/assignment-rules": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Atama kuralları (sırayla değerlendirilir) */
+        get: operations["PublicInboxController_rules"];
+        put?: never;
+        /** Atama kuralı oluştur (kanal/dil/etiket koşulu; round-robin, en az yük veya yalnızca takım) */
+        post: operations["PublicInboxController_createRule"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/inbox/assignment-rules/{ruleId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /** Atama kuralını sil */
+        delete: operations["PublicInboxController_deleteRule"];
+        options?: never;
+        head?: never;
+        /** Atama kuralını güncelle (sıra dahil) */
+        patch: operations["PublicInboxController_updateRule"];
         trace?: never;
     };
     "/v1/apps/{appId}/inbox/agents": {
@@ -4549,6 +4876,23 @@ export interface paths {
         options?: never;
         head?: never;
         patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/inbox/agents/{accountId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /** Temsilci yönlendirme profili: eşzamanlı konuşma sınırı ve diller */
+        patch: operations["PublicInboxController_updateAgent"];
         trace?: never;
     };
     "/v1/apps/{appId}/inbox/settings": {
@@ -4667,6 +5011,108 @@ export interface paths {
         };
         /** Isındırma planı gün × sağlayıcı kullanımı */
         get: operations["PublicDeliverabilityController_usage"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/email-deliverability/hygiene": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Liste temizliği durumu: e-posta aboneliklerinin denetim dağılımı ve son doğrulama çalıştırması */
+        get: operations["PublicDeliverabilityController_hygiene"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/email-deliverability/hygiene-runs": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Listeyi doğrula: tüm e-posta aboneliklerini toplu, hız sınırlı doğrula (etkin çalıştırma varsa o döner) */
+        post: operations["PublicDeliverabilityController_startHygiene"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/email-deliverability/hygiene-runs/{runId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Liste doğrulama çalıştırması (ilerleme ve özet) */
+        get: operations["PublicDeliverabilityController_hygieneRun"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/email-deliverability/hygiene-runs/{runId}/suppress": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Doğrulamada geçersiz bulunan adresleri bastır (abonelik invalid + suppression list) */
+        post: operations["PublicDeliverabilityController_suppressHygiene"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/email-deliverability/insights": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Posta sağlayıcısı bazında (Gmail, Outlook, Yahoo, diğer) teslim, açılma, tıklama, bounce ve şikâyet sayıları */
+        get: operations["PublicDeliverabilityController_insights"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/email-deliverability/bounces": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** E-posta bounce eğilimi (%2 hedef), tür/neden dağılımı ve en çok bounce alan alıcı alan adları */
+        get: operations["PublicDeliverabilityController_bounces"];
         put?: never;
         post?: never;
         delete?: never;
@@ -5446,7 +5892,8 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get?: never;
+        /** Zapier REST Hook abonelikleri */
+        get: operations["PublicIntegrationsController_hooks"];
         put?: never;
         /** REST Hook aboneliği (Zap açıldı) */
         post: operations["PublicZapierController_subscribe"];
@@ -5482,6 +5929,108 @@ export interface paths {
         };
         /** Tetik örnekleri (performList): son kayıtlar, abonelik gövdesiyle aynı biçim */
         get: operations["PublicZapierController_samples"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/integrations": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Bağlı entegrasyonlar ve katalog */
+        get: operations["PublicIntegrationsController_list"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/integrations/{type}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Entegrasyon ayrıntısı (kimlik bilgisi maskeli) */
+        get: operations["PublicIntegrationsController_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/integrations/{type}/runs": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Son çalışmalar (senkron, olay gönderimi, gelen istekler, test) */
+        get: operations["PublicIntegrationsController_runs"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/integrations/{type}/test": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Bağlantı testi */
+        post: operations["PublicIntegrationsController_test"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/integrations/{type}/sync": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Cohort senkronunu şimdi çalıştır (worker en geç 1 dk içinde) */
+        post: operations["PublicIntegrationsController_sync"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/ads/platforms": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Reklam platformları (etkin/mock, tanımlayıcılar, lookalike desteği) */
+        get: operations["PublicAdsController_platforms"];
         put?: never;
         post?: never;
         delete?: never;
@@ -5605,7 +6154,8 @@ export interface paths {
         /** Kampanya / reklam seti / reklam listesi ve metrikler */
         get: operations["PublicAdsReportingController_list"];
         put?: never;
-        post?: never;
+        /** Reklam kampanyası oluştur: kampanya + reklam seti (Pushizo kitlesi) + kreatif/reklam */
+        post: operations["PublicAdsReportingController_create"];
         delete?: never;
         options?: never;
         head?: never;
@@ -5628,6 +6178,110 @@ export interface paths {
         head?: never;
         /** Durum ve günlük bütçe değişikliği */
         patch: operations["PublicAdsReportingController_update"];
+        trace?: never;
+    };
+    "/v1/apps/{appId}/ads/campaigns/{entityId}/preview": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Kreatif önizlemesi (platform önizleme bağlantısı + kreatif özeti) */
+        get: operations["PublicAdsReportingController_preview"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/ads/accounts/{accountId}/pages": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Meta: hesabın tanıtabildiği Facebook sayfaları */
+        get: operations["PublicAdsReportingController_pages"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/ads/creatives": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Yüklenen kreatif görselleri */
+        get: operations["PublicAdsReportingController_creatives"];
+        put?: never;
+        /** Kreatif görsel yükle (multipart `file`: PNG/JPEG, en çok 5 MB) */
+        post: operations["PublicAdsReportingController_upload"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/ads/settings": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Raporlama para birimi (org) ve atribüsyon varsayılanları (app) */
+        get: operations["PublicAdsReportingController_settings"];
+        /** Raporlama para birimi ve atribüsyon varsayılanlarını güncelle */
+        put: operations["PublicAdsReportingController_updateSettings"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/ads/conversions-api/configs/{configId}/test": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Platform test aracına sentetik test olayı gönder */
+        post: operations["PublicAdsReportingController_testCapi"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/ads/conversions-api/deliveries/{deliveryId}/retry": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Başarısız teslimi yeniden dene */
+        post: operations["PublicAdsReportingController_retryCapi"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
         trace?: never;
     };
     "/v1/apps/{appId}/ads/accounts/{accountId}/refresh": {
@@ -6356,6 +7010,23 @@ export interface paths {
         put?: never;
         /** Etkinleştir / kapat */
         post: operations["PublicSurveysController_status"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/surveys/{surveyId}/distribute/in-app": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** In-app dağıtımı: anketi HTML in-app mesajına dönüştür (oluştur/güncelle, isteğe bağlı yayınla) */
+        post: operations["PublicSurveysController_distribute"];
         delete?: never;
         options?: never;
         head?: never;
@@ -7976,6 +8647,14 @@ export interface components {
                 }[];
             } | null;
         };
+        BulkReplayDto: {
+            /** @enum {string} */
+            status?: "failed" | "dead" | "failed_or_dead";
+            /** Format: date-time */
+            from?: string;
+            /** Format: date-time */
+            to?: string;
+        };
         UpdateWarehouseExportDto: {
             name?: string;
             tables?: ("deliveries" | "delivery_events" | "events" | "conversions" | "users" | "subscriptions")[];
@@ -8318,6 +8997,10 @@ export interface components {
                 /** Format: date-time */
                 at?: string;
             };
+        };
+        PublicCleanupSubscriptionsDto: {
+            /** @enum {string} */
+            status?: "invalid" | "unsubscribed";
         };
         PatchSubscriptionDto: {
             token?: string;
@@ -9579,6 +10262,52 @@ export interface components {
             body?: string;
             language?: string | null;
         };
+        TeamInputDto: {
+            name: string;
+            description?: string | null;
+            member_ids?: string[];
+        };
+        TeamUpdateDto: {
+            name?: string;
+            description?: string | null;
+            member_ids?: string[];
+        };
+        AssignmentRuleInputDto: {
+            name: string;
+            enabled?: boolean;
+            position?: number;
+            conditions?: {
+                channels?: ("sms" | "whatsapp" | "rcs" | "telegram" | "viber" | "email" | "chat")[];
+                languages?: string[];
+                tags?: {
+                    [key: string]: string;
+                };
+            };
+            /** @enum {string} */
+            strategy?: "round_robin" | "least_busy" | "team_only";
+            team_id?: string | null;
+            agent_ids?: string[];
+        };
+        AssignmentRuleUpdateDto: {
+            name?: string;
+            enabled?: boolean;
+            position?: number;
+            conditions?: {
+                channels?: ("sms" | "whatsapp" | "rcs" | "telegram" | "viber" | "email" | "chat")[];
+                languages?: string[];
+                tags?: {
+                    [key: string]: string;
+                };
+            };
+            /** @enum {string} */
+            strategy?: "round_robin" | "least_busy" | "team_only";
+            team_id?: string | null;
+            agent_ids?: string[];
+        };
+        AgentUpdateDto: {
+            max_concurrent?: number | null;
+            languages?: string[];
+        };
         InboxSettingsUpdateDto: {
             widget?: {
                 enabled?: boolean;
@@ -9680,6 +10409,7 @@ export interface components {
                 other: number;
             } | null;
         };
+        StartHygieneDto: Record<string, never>;
         StartVerifyDto: {
             phone: string;
             locale?: string;
@@ -10440,6 +11170,46 @@ export interface components {
             name?: string;
             country: string;
             ratio: number;
+        };
+        CreateAdCampaignDto: {
+            ad_account_id: string;
+            audience_id: string;
+            name: string;
+            /** @enum {string} */
+            objective: "traffic" | "conversions" | "leads" | "awareness";
+            /** @enum {string} */
+            optimization_goal?: "clicks" | "landing_page_views" | "conversions" | "reach" | "impressions";
+            daily_budget: string | number;
+            /** Format: date-time */
+            start_at?: string;
+            /** Format: date-time */
+            end_at?: string;
+            countries: string[];
+            /** @enum {string} */
+            status?: "active" | "paused";
+            pixel_id?: string;
+            creative?: {
+                headline: string;
+                long_headline?: string;
+                primary_text: string;
+                description?: string;
+                /** Format: uri */
+                link_url: string;
+                /** @enum {string} */
+                call_to_action: "LEARN_MORE" | "SHOP_NOW" | "SIGN_UP" | "SUBSCRIBE" | "DOWNLOAD" | "CONTACT_US" | "BOOK_NOW" | "GET_OFFER";
+                image_id?: string;
+                square_image_id?: string;
+                page_id?: string;
+                business_name?: string;
+            };
+        };
+        AdReportingSettingsInputDto: {
+            reporting_currency?: string;
+            /** @enum {string} */
+            attribution_model?: "last_click" | "first_click" | "linear" | "time_decay";
+            window_days?: number;
+            half_life_days?: number;
+            conversion_events?: string[];
         };
         UpdateAdCampaignDto: {
             /** @enum {string} */
@@ -11535,6 +12305,44 @@ export interface components {
         SurveyStatusDto: {
             /** @enum {string} */
             status: "draft" | "active" | "closed";
+        };
+        SurveyInAppDto: {
+            triggers?: ({
+                /** @constant */
+                kind: "session_start";
+            } | {
+                /** @constant */
+                kind: "session_duration";
+                seconds: number;
+            } | {
+                /** @constant */
+                kind: "event";
+                name: string;
+            } | {
+                /** @constant */
+                kind: "screen";
+                name: string;
+            } | {
+                /** @constant */
+                kind: "trigger";
+                key: string;
+                /** @enum {string} */
+                op: "eq" | "neq" | "exists" | "gt" | "lt";
+                value?: string | number;
+            })[];
+            audience?: {
+                included_segments?: string[];
+                excluded_segments?: string[];
+                global_control_exempt?: boolean;
+            };
+            frequency?: {
+                max_impressions?: number;
+                min_interval_seconds?: number;
+                stop_after_interaction?: boolean;
+            };
+            /** @enum {string} */
+            layout?: "modal" | "banner_bottom" | "fullscreen";
+            publish?: boolean;
         };
         PublicSurveyResponseDto: {
             answers: {
@@ -12726,6 +13534,15 @@ export interface components {
                 occurred_at: string;
             }[];
         };
+        UserTimeline: {
+            data: {
+                /** @enum {string} */
+                kind: "event" | "delivery";
+                at: string;
+                title: string;
+                detail: string;
+            }[];
+        };
         UserExport: {
             exported_at: string;
             user: {
@@ -13756,6 +14573,13 @@ export interface components {
                 retention: (number | null)[];
             }[];
             average: (number | null)[];
+        };
+        SessionVolume: {
+            days: {
+                day: string;
+                sessions: number;
+                users: number;
+            }[];
         };
         GlobalControl: {
             enabled: boolean;
@@ -30728,6 +31552,59 @@ export interface operations {
             };
         };
     };
+    PublicSdkErrorsController_list: {
+        parameters: {
+            query?: {
+                limit?: number;
+                cursor?: string;
+                platform?: string;
+                level?: "error" | "warning";
+            };
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SdkErrorPage"];
+                };
+            };
+        };
+    };
+    PublicWebhooksController_eventTypes: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WebhookEventTypes"];
+                };
+            };
+        };
+    };
     PublicWebhooksController_list: {
         parameters: {
             query?: never;
@@ -30963,6 +31840,60 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["WebhookDeliveryPage"];
+                };
+            };
+        };
+    };
+    PublicWebhooksController_bulkReplay: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                webhookId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["BulkReplayDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WebhookBulkReplayResult"];
+                };
+            };
+        };
+    };
+    PublicWebhooksController_delivery: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                deliveryId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WebhookDeliveryDetail"];
                 };
             };
         };
@@ -31564,6 +32495,34 @@ export interface operations {
             };
         };
     };
+    PublicApiController_requestLogs: {
+        parameters: {
+            query?: {
+                limit?: number;
+                cursor?: string;
+                app_id?: string;
+                status_class?: "2xx" | "4xx" | "5xx";
+                method?: "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RequestLogPage"];
+                };
+            };
+        };
+    };
     PublicApiController_list: {
         parameters: {
             query?: never;
@@ -31930,6 +32889,88 @@ export interface operations {
             };
         };
     };
+    PublicUsersController_timeline: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                label: string;
+                value: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["UserTimeline"];
+                };
+            };
+        };
+    };
+    PublicUsersController_userEvents: {
+        parameters: {
+            query?: {
+                limit?: number;
+            };
+            header?: never;
+            path: {
+                label: string;
+                value: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EventList"];
+                };
+            };
+        };
+    };
+    PublicUsersController_userMessages: {
+        parameters: {
+            query?: {
+                limit?: number;
+            };
+            header?: never;
+            path: {
+                label: string;
+                value: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["UserMessageList"];
+                };
+            };
+        };
+    };
     PublicUsersController_removeAlias: {
         parameters: {
             query?: never;
@@ -31983,6 +33024,65 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["Subscription"];
+                };
+            };
+        };
+    };
+    PublicUsersController_listSubscriptions: {
+        parameters: {
+            query?: {
+                limit?: number;
+                cursor?: string;
+                channel?: "ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs" | "telegram" | "viber";
+                status?: "subscribed" | "unsubscribed" | "invalid" | "pending";
+                test_device?: "true" | "false";
+                since?: string;
+            };
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SubscriptionList"];
+                };
+            };
+        };
+    };
+    PublicUsersController_cleanupSubscriptions: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PublicCleanupSubscriptionsDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CleanupResult"];
                 };
             };
         };
@@ -32198,6 +33298,74 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ChannelList"];
+                };
+            };
+        };
+    };
+    PublicChannelsController_status: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ChannelStatusList"];
+                };
+            };
+        };
+    };
+    PublicChannelsController_verifyDns: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        domain: string;
+                        checked_at: string;
+                        spf: {
+                            ok: boolean;
+                            record: string | null;
+                            expected: string;
+                        };
+                        dkim: {
+                            ok: boolean;
+                            selector: string;
+                            record: string | null;
+                            expected: string;
+                        };
+                        dmarc: {
+                            ok: boolean;
+                            record: string | null;
+                            expected: string;
+                        };
+                        issues: string[];
+                    };
                 };
             };
         };
@@ -32577,6 +33745,56 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["DeliveryList"];
+                };
+            };
+        };
+    };
+    PublicMessageTraceController_trace: {
+        parameters: {
+            query: {
+                q: string;
+            };
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TraceResult"];
+                };
+            };
+        };
+    };
+    PublicAnalyticsController_sessions: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SessionVolume"];
                 };
             };
         };
@@ -33265,6 +34483,34 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["EventDefinition"];
+                };
+            };
+        };
+    };
+    PublicEventsController_recent: {
+        parameters: {
+            query?: {
+                name?: string;
+                limit?: number;
+                since?: string;
+            };
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RecentEvents"];
                 };
             };
         };
@@ -34797,6 +36043,31 @@ export interface operations {
             };
         };
     };
+    PublicConversationsController_contact: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                conversationId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ConversationContact"];
+                };
+            };
+        };
+    };
     PublicConversationsController_messages: {
         parameters: {
             query?: {
@@ -35558,6 +36829,194 @@ export interface operations {
             };
         };
     };
+    PublicInboxController_createTeam: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["TeamInputDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["InboxTeam"];
+                };
+            };
+        };
+    };
+    PublicInboxController_deleteTeam: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                teamId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Ok"];
+                };
+            };
+        };
+    };
+    PublicInboxController_updateTeam: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                teamId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["TeamUpdateDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["InboxTeam"];
+                };
+            };
+        };
+    };
+    PublicInboxController_rules: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AssignmentRuleList"];
+                };
+            };
+        };
+    };
+    PublicInboxController_createRule: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AssignmentRuleInputDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AssignmentRule"];
+                };
+            };
+        };
+    };
+    PublicInboxController_deleteRule: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                ruleId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Ok"];
+                };
+            };
+        };
+    };
+    PublicInboxController_updateRule: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                ruleId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AssignmentRuleUpdateDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AssignmentRule"];
+                };
+            };
+        };
+    };
     PublicInboxController_agents: {
         parameters: {
             query?: never;
@@ -35578,6 +37037,35 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["InboxAgentList"];
+                };
+            };
+        };
+    };
+    PublicInboxController_updateAgent: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                accountId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AgentUpdateDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["InboxAgent"];
                 };
             };
         };
@@ -35896,6 +37384,164 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["EmailWarmupUsage"];
+                };
+            };
+        };
+    };
+    PublicDeliverabilityController_hygiene: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EmailHygieneStatus"];
+                };
+            };
+        };
+    };
+    PublicDeliverabilityController_startHygiene: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["StartHygieneDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EmailHygieneStart"];
+                };
+            };
+        };
+    };
+    PublicDeliverabilityController_hygieneRun: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                runId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EmailHygieneRun"];
+                };
+            };
+        };
+    };
+    PublicDeliverabilityController_suppressHygiene: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                runId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["StartHygieneDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EmailHygieneSuppress"];
+                };
+            };
+        };
+    };
+    PublicDeliverabilityController_insights: {
+        parameters: {
+            query?: {
+                days?: number;
+            };
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EmailProviderInsights"];
+                };
+            };
+        };
+    };
+    PublicDeliverabilityController_bounces: {
+        parameters: {
+            query?: {
+                days?: number;
+            };
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EmailBounceStats"];
                 };
             };
         };
@@ -37491,6 +39137,30 @@ export interface operations {
             };
         };
     };
+    PublicIntegrationsController_hooks: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ZapierHookList"];
+                };
+            };
+        };
+    };
     PublicZapierController_subscribe: {
         parameters: {
             query?: never;
@@ -37567,6 +39237,156 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ZapierSamples"];
+                };
+            };
+        };
+    };
+    PublicIntegrationsController_list: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["IntegrationList"];
+                };
+            };
+        };
+    };
+    PublicIntegrationsController_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                type: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Integration"];
+                };
+            };
+        };
+    };
+    PublicIntegrationsController_runs: {
+        parameters: {
+            query?: {
+                limit?: number;
+            };
+            header?: never;
+            path: {
+                type: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["IntegrationRunList"];
+                };
+            };
+        };
+    };
+    PublicIntegrationsController_test: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                type: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["IntegrationTestResult"];
+                };
+            };
+        };
+    };
+    PublicIntegrationsController_sync: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                type: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            202: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["IntegrationSyncResult"];
+                };
+            };
+        };
+    };
+    PublicAdsController_platforms: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdPlatformList"];
                 };
             };
         };
@@ -37848,6 +39668,34 @@ export interface operations {
             };
         };
     };
+    PublicAdsReportingController_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateAdCampaignDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdCampaignCreated"];
+                };
+            };
+        };
+    };
     PublicAdsReportingController_get: {
         parameters: {
             query?: never;
@@ -37898,6 +39746,208 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["AdEntity"];
+                };
+            };
+        };
+    };
+    PublicAdsReportingController_preview: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                entityId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdCampaignPreview"];
+                };
+            };
+        };
+    };
+    PublicAdsReportingController_pages: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                accountId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdPageList"];
+                };
+            };
+        };
+    };
+    PublicAdsReportingController_creatives: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data?: components["schemas"]["AdCreative"][];
+                    };
+                };
+            };
+        };
+    };
+    PublicAdsReportingController_upload: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            201: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdCreative"];
+                };
+            };
+        };
+    };
+    PublicAdsReportingController_settings: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdReportingSettings"];
+                };
+            };
+        };
+    };
+    PublicAdsReportingController_updateSettings: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AdReportingSettingsInputDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdReportingSettings"];
+                };
+            };
+        };
+    };
+    PublicAdsReportingController_testCapi: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                configId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdCapiTestResult"];
+                };
+            };
+        };
+    };
+    PublicAdsReportingController_retryCapi: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                deliveryId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdCapiDelivery"];
                 };
             };
         };
@@ -39564,6 +41614,35 @@ export interface operations {
         requestBody: {
             content: {
                 "application/json": components["schemas"]["SurveyStatusDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Survey"];
+                };
+            };
+        };
+    };
+    PublicSurveysController_distribute: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                surveyId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SurveyInAppDto"];
             };
         };
         responses: {

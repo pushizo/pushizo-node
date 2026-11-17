@@ -1,5 +1,6 @@
 import type { paths as PublicPaths } from '../generated/openapi.js';
 import type {
+  JsonResponse,
   ConversionsReport,
   EngagementReport,
   EventsReport,
@@ -115,6 +116,9 @@ export function createAnalytics(ctx: ResourceContext) {
     conversions: report<'/v1/apps/{appId}/analytics/conversions', ConversionsReport>('conversions'),
     providers: report<'/v1/apps/{appId}/analytics/providers', ProvidersReport>('providers'),
     engagement: report<'/v1/apps/{appId}/analytics/engagement', EngagementReport>('engagement'),
+    /** Son 14 gün oturum hacmi ve tekil kullanıcı (günlük toplamlar). */
+    sessions: (appId?: string) =>
+      ctx.http.request<JsonResponse<'/v1/apps/{appId}/analytics/sessions', 'get'>>({ method: 'GET', path: path(appId, 'sessions') }),
     /** Retention kohortu: ilk görülme haftası × sonraki haftalarda aktiflik oranı (`weeks`). */
     retention: report<'/v1/apps/{appId}/analytics/retention', RetentionReport>('retention'),
     /** Sıralı adımlı huni raporu (`window_hours` içinde tamamlanan adımlar). */

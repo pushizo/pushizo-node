@@ -22,6 +22,8 @@ import type {
   CreateAdAlertRuleInput,
   CreateAdAudienceInput,
   CreateLookalikeInput,
+  JsonBody,
+  JsonResponse,
   QueryParams,
   SyncAdAudienceInput,
   UpdateAdAlertRuleInput,
@@ -29,11 +31,18 @@ import type {
   UpdateAdCampaignInput,
 } from '../types.js';
 import { enc, type ResourceContext } from './context.js';
+import { toBlob, type ImportFile } from './data-transfer.js';
+
+/** Kreatif görsel yüklemesi (PNG/JPEG, en çok 5 MB). */
+export interface UploadAdCreativeInput {
+  file: ImportFile;
+  filename?: string;
+}
 
 /**
  * Reklam hesapları ve reklam kitleleri (ADR-0037); kampanya raporlama, atribüsyon/LTV raporları, Conversions API
- * teslim geçmişi ve bütçe uyarıları (ADR-0038). Hesap bağlama OAuth ile dashboard'dan yapılır; API yalnızca
- * listeler. Kitleye yalnızca `ads_personalization` rızası olan kullanıcıların SHA-256 özetleri gönderilir.
+ * teslim geçmişi ve bütçe uyarıları (ADR-0038); kampanya oluşturma, kreatifler ve raporlama ayarları (ADR-0095).
+ * Hesap bağlama OAuth ile dashboard'dan yapılır; API yalnızca listeler. Kitleye yalnızca `ads_personalization` rızası olan kullanıcıların SHA-256 özetleri gönderilir.
  */
 export function createAds(ctx: ResourceContext) {
   const base = (appId?: string) => `${ctx.appPath(appId)}/ads`;
@@ -41,6 +50,9 @@ export function createAds(ctx: ResourceContext) {
   const entity = (id: string, appId?: string) => `${base(appId)}/campaigns/${enc(id)}`;
   const rule = (id: string, appId?: string) => `${base(appId)}/alert-rules/${enc(id)}`;
   return {
+    /** Reklam platformları: etkin/mock, tanımlayıcılar ve lookalike desteği. */
+    listPlatforms: (appId?: string) =>
+      ctx.http.request<JsonResponse<'/v1/apps/{appId}/ads/platforms', 'get'>>({ method: 'GET', path: `${base(appId)}/platforms` }),
     /** Bağlı reklam hesapları (belirteçler dönmez). */
     listAccounts: (appId?: string) => ctx.http.request<AdAccountList>({ method: 'GET', path: `${base(appId)}/accounts` }),
     listAudiences: (params: AdAudienceListParams = {}, appId?: string) =>
@@ -76,6 +88,31 @@ export function createAds(ctx: ResourceContext) {
     /** Durum (`active`/`paused`) ve günlük bütçe değişikliği reklam platformuna da yazılır. */
     updateCampaign: (entityId: string, body: UpdateAdCampaignInput, appId?: string) =>
       ctx.http.request<AdEntity>({ method: 'PATCH', path: entity(entityId, appId), body }),
+    /** Kampanya + reklam seti (Pushizo kitlesi) + isteğe bağlı kreatif/reklam oluşturur; reklam platformuna yazılır. */
+    createCampaign: (body: JsonBody<'/v1/apps/{appId}/ads/campaigns', 'post'>, appId?: string) =>
+      ctx.http.request<JsonResponse<'/v1/apps/{appId}/ads/campaigns', 'post'>>({ method: 'POST', path: `${base(appId)}/campaigns`, body }),
+    /** Kreatif önizlemesi: platform önizleme bağlantısı ve kreatif özeti. */
+    previewCampaign: (entityId: string, appId?: string) =>
+      ctx.http.request<JsonResponse<'/v1/apps/{appId}/ads/campaigns/{entityId}/preview', 'get'>>({ method: 'GET', path: `${entity(entityId, appId)}/preview` }),
+    /** Meta: hesabın tanıtabildiği Facebook sayfaları. */
+    listPages: (accountId: string, appId?: string) =>
+      ctx.http.request<JsonResponse<'/v1/apps/{appId}/ads/accounts/{accountId}/pages', 'get'>>({
+        method: 'GET',
+        path: `${base(appId)}/accounts/${enc(accountId)}/pages`,
+      }),
+    listCreatives: (appId?: string) =>
+      ctx.http.request<JsonResponse<'/v1/apps/{appId}/ads/creatives', 'get'>>({ method: 'GET', path: `${base(appId)}/creatives` }),
+    /** Kreatif görsel yükler (multipart `file`). */
+    uploadCreative: (input: UploadAdCreativeInput, appId?: string) => {
+      const form = new FormData();
+      form.set('file', toBlob(input.file), input.filename ?? (typeof File !== 'undefined' && input.file instanceof File ? input.file.name : 'creative.png'));
+      return ctx.http.request<JsonResponse<'/v1/apps/{appId}/ads/creatives', 'post'>>({ method: 'POST', path: `${base(appId)}/creatives`, body: form });
+    },
+    /** Raporlama para birimi (org) ve atribüsyon varsayılanları (app). */
+    getSettings: (appId?: string) =>
+      ctx.http.request<JsonResponse<'/v1/apps/{appId}/ads/settings', 'get'>>({ method: 'GET', path: `${base(appId)}/settings` }),
+    updateSettings: (body: JsonBody<'/v1/apps/{appId}/ads/settings', 'put'>, appId?: string) =>
+      ctx.http.request<JsonResponse<'/v1/apps/{appId}/ads/settings', 'put'>>({ method: 'PUT', path: `${base(appId)}/settings`, body }),
     /** Hesabın kampanyalarını ve metriklerini şimdi yeniler (202, kuyruğa alınır). */
     refreshAccount: (accountId: string, appId?: string) =>
       ctx.http.request<AdRefreshQueued>({ method: 'POST', path: `${base(appId)}/accounts/${enc(accountId)}/refresh` }),
@@ -96,6 +133,18 @@ export function createAds(ctx: ResourceContext) {
       params: QueryParams<'/v1/apps/{appId}/ads/conversions-api/deliveries', 'get'> = {},
       appId?: string,
     ) => ctx.http.request<AdCapiDeliveryList>({ method: 'GET', path: `${base(appId)}/conversions-api/deliveries`, query: params }),
+    /** Platform test aracına sentetik test olayı gönderir. */
+    testCapiConfig: (configId: string, appId?: string) =>
+      ctx.http.request<JsonResponse<'/v1/apps/{appId}/ads/conversions-api/configs/{configId}/test', 'post'>>({
+        method: 'POST',
+        path: `${base(appId)}/conversions-api/configs/${enc(configId)}/test`,
+      }),
+    /** Başarısız Conversions API teslimini yeniden dener. */
+    retryCapiDelivery: (deliveryId: string, appId?: string) =>
+      ctx.http.request<JsonResponse<'/v1/apps/{appId}/ads/conversions-api/deliveries/{deliveryId}/retry', 'post'>>({
+        method: 'POST',
+        path: `${base(appId)}/conversions-api/deliveries/${enc(deliveryId)}/retry`,
+      }),
     listAlertRules: (appId?: string) =>
       ctx.http.request<AdBudgetAlertRuleList>({ method: 'GET', path: `${base(appId)}/alert-rules` }),
     /** Bütçe uyarı kuralı: günlük harcama, ROAS düşüşü veya bütçe tükenmesi eşiği. */

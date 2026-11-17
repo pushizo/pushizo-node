@@ -17,6 +17,7 @@ import type {
   ConversationTagsResult,
   CreateSmsKeywordInput,
   Ok,
+  JsonResponse,
   QueryParams,
   SmsKeyword,
   SmsKeywordList,
@@ -73,6 +74,12 @@ export function createConversations(ctx: ResourceContext) {
     updateTags: (conversationId: string, body: ConversationTagsInput, appId?: string) =>
       ctx.http.request<ConversationTagsResult>({ method: 'POST', path: `${one(conversationId, appId)}/tags`, body }),
     /** Zaman çizelgesi: atama, durum değişikliği, ilk yanıt ve bot devri olayları. */
+    /** Kişi profili: özellikler, etiketler, abonelikler (maskeli), son olaylar ve diğer konuşmalar. */
+    contact: (conversationId: string, appId?: string) =>
+      ctx.http.request<JsonResponse<'/v1/apps/{appId}/conversations/{conversationId}/contact', 'get'>>({
+        method: 'GET',
+        path: `${one(conversationId, appId)}/contact`,
+      }),
     activity: (conversationId: string, appId?: string) =>
       ctx.http.request<ConversationActivity>({ method: 'GET', path: `${one(conversationId, appId)}/activity` }),
   };
