@@ -6,6 +6,7 @@ import { createApiKeys } from './resources/api-keys.js';
 import { createIdentityKeys, createIdentityToken, type IdentityTokenOptions } from './resources/identity-keys.js';
 import { createLiveActivities } from './resources/live-activities.js';
 import { createCampaigns } from './resources/campaigns.js';
+import { createCompanies } from './resources/companies.js';
 import type { ResourceContext } from './resources/context.js';
 import { createAiAgents, createConversations, createSmsKeywords, createWhatsAppTemplates } from './resources/conversations.js';
 import { createExports, createImports } from './resources/data-transfer.js';
@@ -583,6 +584,8 @@ export class Pushizo {
   readonly segments = createSegments(this.resourceContext());
   /** SQL sorgu ve SQL segment: izinli görünümlerde salt okunur SELECT, sorgudan segment (ADR-0087). */
   readonly sqlSegments = createSqlSegments(this.resourceContext());
+  /** Şirket/hesap nesneleri (B2B): şirketler, kişi ↔ şirket üyeliği ve rol (ADR-0090). */
+  readonly companies = createCompanies(this.resourceContext());
   /** Şablonlar: CRUD, sürümler, render önizlemesi ve app'ler arası kopyalama. */
   readonly templates = createTemplates(this.resourceContext());
   /** Kampanyalar: CRUD, yaşam döngüsü, istatistik, teslimat ve mesajlar. */

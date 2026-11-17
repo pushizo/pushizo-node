@@ -1178,6 +1178,170 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/apps/{appId}/companies": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Şirket listesi
+         * @description Ad, harici kimlik veya alan adında arama; en yeni önce.
+         */
+        get: operations["PublicCompaniesController_list"];
+        put?: never;
+        /**
+         * Şirket oluştur/güncelle (external_id ile)
+         * @description Aynı external_id varsa ad, alan adı ve özellikler güncellenir; özellikler merge-patch (null siler).
+         */
+        post: operations["PublicCompaniesController_upsert"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/companies/batch": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Şirketleri toplu oluştur/güncelle
+         * @description İstek başına en çok 1000 şirket; her biri external_id ile upsert edilir.
+         */
+        post: operations["PublicCompaniesController_batch"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/companies/{companyId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Şirket detayı */
+        get: operations["PublicCompaniesController_get"];
+        put?: never;
+        post?: never;
+        /**
+         * Şirketi sil
+         * @description Üyelikler silinir; kişiler kalır.
+         */
+        delete: operations["PublicCompaniesController_remove"];
+        options?: never;
+        head?: never;
+        /** Şirketi güncelle */
+        patch: operations["PublicCompaniesController_update"];
+        trace?: never;
+    };
+    "/v1/apps/{appId}/companies/{companyId}/members": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Şirketin kişileri */
+        get: operations["PublicCompaniesController_members"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/companies/{companyId}/members/batch": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Şirkete toplu kişi ekle
+         * @description Kişi user_id veya kişinin external_id değeriyle verilir; bulunamayanlar yanıtta listelenir.
+         */
+        post: operations["PublicCompaniesController_batchMembers"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/companies/{companyId}/members/{userId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /**
+         * Kişiyi şirkete bağla veya rolünü değiştir
+         * @description Rol verilmezse yeni üyelik member olur, mevcut üyelik rolünü korur.
+         */
+        put: operations["PublicCompaniesController_setMember"];
+        post?: never;
+        /** Kişiyi şirketten çıkar */
+        delete: operations["PublicCompaniesController_removeMember"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/users/{userId}/companies": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Kişinin şirketleri
+         * @description En son bağlanan şirket önce (şablonda company bu şirkettir).
+         */
+        get: operations["PublicCompaniesController_forUser"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/users/by/{label}/{value}/companies": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Kişinin şirketleri (external_id veya alias ile)
+         * @description label: hs_id, external_id veya özel alias etiketi.
+         */
+        get: operations["PublicCompaniesController_forUserAlias"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/apps/{appId}/ai-agents": {
         parameters: {
             query?: never;
@@ -6175,6 +6339,42 @@ export interface components {
             window_days?: number;
             half_life_days?: number;
         };
+        UpsertCompanyDto: {
+            external_id: string;
+            name?: string | null;
+            domain?: string | null;
+            properties?: {
+                [key: string]: unknown;
+            };
+        };
+        BatchUpsertCompaniesDto: {
+            companies: {
+                external_id: string;
+                name?: string | null;
+                domain?: string | null;
+                properties?: {
+                    [key: string]: unknown;
+                };
+            }[];
+        };
+        UpdateCompanyDto: {
+            external_id?: string;
+            name?: string | null;
+            domain?: string | null;
+            properties?: {
+                [key: string]: unknown;
+            };
+        };
+        BatchMembersDto: {
+            members: {
+                user_id?: string;
+                external_id?: string;
+                role?: string;
+            }[];
+        };
+        SetMemberDto: {
+            role?: string;
+        };
         CreateAiAgentDto: {
             name: string;
             enabled?: boolean;
@@ -10678,6 +10878,13 @@ export interface components {
                     engagement: number;
                     computed_at: string;
                 } | null;
+                companies: {
+                    company_id: string;
+                    external_id: string;
+                    name: string | null;
+                    role: string;
+                    joined_at: string;
+                }[];
             };
         };
         UserIdentity: {
@@ -17436,6 +17643,88 @@ export interface components {
             weekly_cap: number | null;
             engagement: number | null;
             computed_at: string | null;
+        };
+        Company: {
+            id: string;
+            external_id: string;
+            name: string | null;
+            domain: string | null;
+            properties: {
+                [key: string]: unknown;
+            };
+            member_count: number;
+            created_at: string;
+            updated_at: string;
+        };
+        CompanyList: {
+            data: {
+                id: string;
+                external_id: string;
+                name: string | null;
+                domain: string | null;
+                properties: {
+                    [key: string]: unknown;
+                };
+                member_count: number;
+                created_at: string;
+                updated_at: string;
+            }[];
+            next_cursor: string | null;
+            has_more: boolean;
+        };
+        CompanyBatchResult: {
+            created: number;
+            updated: number;
+            data: {
+                id: string;
+                external_id: string;
+                created: boolean;
+            }[];
+        };
+        CompanyMember: {
+            company_id: string;
+            user_id: string;
+            external_id: string | null;
+            role: string;
+            created_at: string;
+            updated_at: string;
+        };
+        CompanyMemberList: {
+            data: {
+                company_id: string;
+                user_id: string;
+                external_id: string | null;
+                role: string;
+                created_at: string;
+                updated_at: string;
+            }[];
+            next_cursor: string | null;
+            has_more: boolean;
+        };
+        CompanyMemberBatchResult: {
+            added: number;
+            updated: number;
+            not_found: {
+                index: number;
+                user_id: string | null;
+                external_id: string | null;
+            }[];
+        };
+        UserCompanyList: {
+            data: {
+                company: {
+                    id: string;
+                    external_id: string;
+                    name: string | null;
+                    domain: string | null;
+                    properties: {
+                        [key: string]: unknown;
+                    };
+                };
+                role: string;
+                created_at: string;
+                updated_at: string;
+            }[];
         };
         AiAgent: {
             id: string;
@@ -24880,6 +25169,336 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["UserAffinity"];
+                };
+            };
+        };
+    };
+    PublicCompaniesController_list: {
+        parameters: {
+            query?: {
+                limit?: number;
+                cursor?: string;
+                q?: string;
+                external_id?: string;
+                domain?: string;
+            };
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CompanyList"];
+                };
+            };
+        };
+    };
+    PublicCompaniesController_upsert: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpsertCompanyDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Company"];
+                };
+            };
+        };
+    };
+    PublicCompaniesController_batch: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["BatchUpsertCompaniesDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CompanyBatchResult"];
+                };
+            };
+        };
+    };
+    PublicCompaniesController_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                companyId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Company"];
+                };
+            };
+        };
+    };
+    PublicCompaniesController_remove: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                companyId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Ok"];
+                };
+            };
+        };
+    };
+    PublicCompaniesController_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                companyId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateCompanyDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Company"];
+                };
+            };
+        };
+    };
+    PublicCompaniesController_members: {
+        parameters: {
+            query?: {
+                limit?: number;
+                cursor?: string;
+                role?: string;
+            };
+            header?: never;
+            path: {
+                companyId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CompanyMemberList"];
+                };
+            };
+        };
+    };
+    PublicCompaniesController_batchMembers: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                companyId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["BatchMembersDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CompanyMemberBatchResult"];
+                };
+            };
+        };
+    };
+    PublicCompaniesController_setMember: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                companyId: string;
+                userId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SetMemberDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CompanyMember"];
+                };
+            };
+        };
+    };
+    PublicCompaniesController_removeMember: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                companyId: string;
+                userId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Ok"];
+                };
+            };
+        };
+    };
+    PublicCompaniesController_forUser: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                userId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["UserCompanyList"];
+                };
+            };
+        };
+    };
+    PublicCompaniesController_forUserAlias: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                label: string;
+                value: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["UserCompanyList"];
                 };
             };
         };
