@@ -3207,6 +3207,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/apps/{appId}/analytics/android-delivery": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Android teslimat sağlığı raporu
+         * @description Üretici ve ROM bazında gönderildi, teslim alındı, açıldı sayıları ile gönderimden cihaza ulaşmaya kadar geçen süre. Teslim alındı cihazdaki SDK alındısından, kısıt özeti SDK teşhisinden hesaplanır.
+         */
+        get: operations["PublicAnalyticsController_androidDeliveryReport"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/apps/{appId}/analytics/events": {
         parameters: {
             query?: never;
@@ -6354,6 +6374,19 @@ export interface components {
                 form_factor?: "phone" | "watch";
                 /** @enum {string} */
                 push_kind?: "alert" | "voip" | "app_clip";
+                manufacturer?: string;
+                brand?: string;
+                rom?: string;
+                rom_version?: string;
+                delivery?: {
+                    battery_optimization_exempt?: boolean;
+                    background_restricted?: boolean;
+                    channel_blocked?: boolean;
+                    power_save_mode?: boolean;
+                    data_saver?: boolean;
+                    /** @enum {string} */
+                    standby_bucket?: "exempted" | "active" | "working_set" | "frequent" | "rare" | "restricted";
+                };
             };
             test_device?: boolean;
             user?: {
@@ -6391,6 +6424,19 @@ export interface components {
                 form_factor?: "phone" | "watch";
                 /** @enum {string} */
                 push_kind?: "alert" | "voip" | "app_clip";
+                manufacturer?: string;
+                brand?: string;
+                rom?: string;
+                rom_version?: string;
+                delivery?: {
+                    battery_optimization_exempt?: boolean;
+                    background_restricted?: boolean;
+                    channel_blocked?: boolean;
+                    power_save_mode?: boolean;
+                    data_saver?: boolean;
+                    /** @enum {string} */
+                    standby_bucket?: "exempted" | "active" | "working_set" | "frequent" | "rare" | "restricted";
+                };
             };
             opted_in?: boolean;
             location?: {
@@ -6476,6 +6522,11 @@ export interface components {
                 token_hash?: string;
                 identity_hash?: string;
             }[];
+        };
+        ReceivedDto: {
+            /** Format: date-time */
+            received_at?: string;
+            deprioritized?: boolean;
         };
         OpenedDto: {
             button_id?: string;
@@ -7808,6 +7859,19 @@ export interface components {
                     form_factor?: "phone" | "watch";
                     /** @enum {string} */
                     push_kind?: "alert" | "voip" | "app_clip";
+                    manufacturer?: string;
+                    brand?: string;
+                    rom?: string;
+                    rom_version?: string;
+                    delivery?: {
+                        battery_optimization_exempt?: boolean;
+                        background_restricted?: boolean;
+                        channel_blocked?: boolean;
+                        power_save_mode?: boolean;
+                        data_saver?: boolean;
+                        /** @enum {string} */
+                        standby_bucket?: "exempted" | "active" | "working_set" | "frequent" | "rare" | "restricted";
+                    };
                 };
                 /** @enum {string} */
                 status?: "subscribed" | "unsubscribed";
@@ -7864,6 +7928,19 @@ export interface components {
                 form_factor?: "phone" | "watch";
                 /** @enum {string} */
                 push_kind?: "alert" | "voip" | "app_clip";
+                manufacturer?: string;
+                brand?: string;
+                rom?: string;
+                rom_version?: string;
+                delivery?: {
+                    battery_optimization_exempt?: boolean;
+                    background_restricted?: boolean;
+                    channel_blocked?: boolean;
+                    power_save_mode?: boolean;
+                    data_saver?: boolean;
+                    /** @enum {string} */
+                    standby_bucket?: "exempted" | "active" | "working_set" | "frequent" | "rare" | "restricted";
+                };
             };
             /** @enum {string} */
             status?: "subscribed" | "unsubscribed";
@@ -7892,6 +7969,19 @@ export interface components {
                 form_factor?: "phone" | "watch";
                 /** @enum {string} */
                 push_kind?: "alert" | "voip" | "app_clip";
+                manufacturer?: string;
+                brand?: string;
+                rom?: string;
+                rom_version?: string;
+                delivery?: {
+                    battery_optimization_exempt?: boolean;
+                    background_restricted?: boolean;
+                    channel_blocked?: boolean;
+                    power_save_mode?: boolean;
+                    data_saver?: boolean;
+                    /** @enum {string} */
+                    standby_bucket?: "exempted" | "active" | "working_set" | "frequent" | "rare" | "restricted";
+                };
             };
             /** @enum {string} */
             status?: "subscribed" | "unsubscribed";
@@ -11465,6 +11555,19 @@ export interface components {
                 form_factor?: "phone" | "watch";
                 /** @enum {string} */
                 push_kind?: "alert" | "voip" | "app_clip";
+                manufacturer?: string;
+                brand?: string;
+                rom?: string;
+                rom_version?: string;
+                delivery?: {
+                    battery_optimization_exempt?: boolean;
+                    background_restricted?: boolean;
+                    channel_blocked?: boolean;
+                    power_save_mode?: boolean;
+                    data_saver?: boolean;
+                    /** @enum {string} */
+                    standby_bucket?: "exempted" | "active" | "working_set" | "frequent" | "rare" | "restricted";
+                };
             };
             test_device: boolean;
             test_device_name: string | null;
@@ -11562,6 +11665,19 @@ export interface components {
                     form_factor?: "phone" | "watch";
                     /** @enum {string} */
                     push_kind?: "alert" | "voip" | "app_clip";
+                    manufacturer?: string;
+                    brand?: string;
+                    rom?: string;
+                    rom_version?: string;
+                    delivery?: {
+                        battery_optimization_exempt?: boolean;
+                        background_restricted?: boolean;
+                        channel_blocked?: boolean;
+                        power_save_mode?: boolean;
+                        data_saver?: boolean;
+                        /** @enum {string} */
+                        standby_bucket?: "exempted" | "active" | "working_set" | "frequent" | "rare" | "restricted";
+                    };
                 };
                 test_device: boolean;
                 test_device_name: string | null;
@@ -11638,6 +11754,19 @@ export interface components {
                     form_factor?: "phone" | "watch";
                     /** @enum {string} */
                     push_kind?: "alert" | "voip" | "app_clip";
+                    manufacturer?: string;
+                    brand?: string;
+                    rom?: string;
+                    rom_version?: string;
+                    delivery?: {
+                        battery_optimization_exempt?: boolean;
+                        background_restricted?: boolean;
+                        channel_blocked?: boolean;
+                        power_save_mode?: boolean;
+                        data_saver?: boolean;
+                        /** @enum {string} */
+                        standby_bucket?: "exempted" | "active" | "working_set" | "frequent" | "rare" | "restricted";
+                    };
                 };
                 test_device: boolean;
                 test_device_name: string | null;
@@ -11731,6 +11860,19 @@ export interface components {
                         form_factor?: "phone" | "watch";
                         /** @enum {string} */
                         push_kind?: "alert" | "voip" | "app_clip";
+                        manufacturer?: string;
+                        brand?: string;
+                        rom?: string;
+                        rom_version?: string;
+                        delivery?: {
+                            battery_optimization_exempt?: boolean;
+                            background_restricted?: boolean;
+                            channel_blocked?: boolean;
+                            power_save_mode?: boolean;
+                            data_saver?: boolean;
+                            /** @enum {string} */
+                            standby_bucket?: "exempted" | "active" | "working_set" | "frequent" | "rare" | "restricted";
+                        };
                     };
                     test_device: boolean;
                     test_device_name: string | null;
@@ -12438,6 +12580,81 @@ export interface components {
                 source: string;
                 uninstalls: number;
             }[];
+        };
+        AndroidDeliveryReport: {
+            from: string;
+            to: string;
+            devices: {
+                total: number;
+                reporting: number;
+                reporting_rate: number | null;
+                restricted: number;
+                restricted_rate: number | null;
+                background_restricted: number;
+                battery_optimized: number;
+                low_standby_bucket: number;
+                power_save: number;
+                data_saver: number;
+                channel_blocked: number;
+                notifications_blocked: number;
+                aggressive_vendor: number;
+                aggressive_vendor_rate: number | null;
+            };
+            totals: {
+                sent: number;
+                delivered: number;
+                opened: number;
+                delivery_rate: number | null;
+                open_rate: number | null;
+                median_delay_seconds: number | null;
+                p90_delay_seconds: number | null;
+            };
+            previous: {
+                sent: number;
+                delivered: number;
+                opened: number;
+                delivery_rate: number | null;
+                open_rate: number | null;
+                median_delay_seconds: number | null;
+                p90_delay_seconds: number | null;
+            } | null;
+            deprioritized: number;
+            aggressive: {
+                sent: number;
+                delivered: number;
+                delivery_rate: number | null;
+            };
+            others: {
+                sent: number;
+                delivered: number;
+                delivery_rate: number | null;
+            };
+            vendors: {
+                vendor: string;
+                aggressive: boolean;
+                devices: number;
+                reporting: number;
+                restricted: number;
+                battery_optimized: number;
+                sent: number;
+                delivered: number;
+                opened: number;
+                delivery_rate: number | null;
+                open_rate: number | null;
+                median_delay_seconds: number | null;
+                p90_delay_seconds: number | null;
+                deprioritized: number;
+            }[];
+            roms: {
+                rom: string;
+                devices: number;
+                restricted: number;
+                sent: number;
+                delivered: number;
+                delivery_rate: number | null;
+                median_delay_seconds: number | null;
+            }[];
+            recommendations: ("upgrade_sdk" | "vendor_guidance" | "background_restricted" | "battery_exemption" | "deprioritized" | "notifications_blocked")[];
         };
         EventsReport: {
             from: string;
@@ -24909,7 +25126,11 @@ export interface operations {
             };
             cookie?: never;
         };
-        requestBody?: never;
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["ReceivedDto"];
+            };
+        };
         responses: {
             200: {
                 headers: {
@@ -31313,6 +31534,35 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["UninstallReport"];
+                };
+            };
+        };
+    };
+    PublicAnalyticsController_androidDeliveryReport: {
+        parameters: {
+            query?: {
+                from?: string;
+                to?: string;
+                compare?: "true" | "false";
+                format?: "json" | "csv";
+            };
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AndroidDeliveryReport"];
                 };
             };
         };

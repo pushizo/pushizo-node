@@ -133,6 +133,8 @@ export type MessagesReport = Schemas['MessagesReport'];
 export type SubscriptionsReport = Schemas['SubscriptionsReport'];
 /** Uygulama kaldırma raporu (ADR-0080). */
 export type UninstallReport = Schemas['UninstallReport'];
+/** Android teslimat sağlığı raporu (ADR-0092). */
+export type AndroidDeliveryReport = Schemas['AndroidDeliveryReport'];
 export type EventsReport = Schemas['EventsReport'];
 export type ConversionsReport = Schemas['ConversionsReport'];
 export type FunnelReport = Schemas['FunnelReport'];

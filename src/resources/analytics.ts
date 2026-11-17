@@ -13,6 +13,7 @@ import type {
   SavedReportInput,
   SavedReportList,
   SavedReportUpdateInput,
+  AndroidDeliveryReport,
   UninstallReport,
   CreateDecisionAgentInput,
   DecisionAgent,
@@ -108,6 +109,8 @@ export function createAnalytics(ctx: ResourceContext) {
     ),
     /** Uygulama kaldırma: günlük seri, iOS/Android kırılımı, kaldırmadan önceki son mesaj (ADR-0080). */
     uninstalls: report<'/v1/apps/{appId}/analytics/uninstalls', UninstallReport>('uninstalls'),
+    /** Android teslimat sağlığı: üretici/ROM bazında teslim oranı, gecikme ve arka plan kısıtı özeti (ADR-0092). */
+    androidDelivery: report<'/v1/apps/{appId}/analytics/android-delivery', AndroidDeliveryReport>('android-delivery'),
     events: report<'/v1/apps/{appId}/analytics/events', EventsReport>('events'),
     conversions: report<'/v1/apps/{appId}/analytics/conversions', ConversionsReport>('conversions'),
     providers: report<'/v1/apps/{appId}/analytics/providers', ProvidersReport>('providers'),
