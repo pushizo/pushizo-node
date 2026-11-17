@@ -16,6 +16,18 @@ import type {
   SqlSegmentList,
   UpdateSegmentInput,
   UpdateSqlSegmentInput,
+  CreateWarehouseConnectionInput,
+  CreateWarehouseSegmentInput,
+  PreviewWarehouseQueryInput,
+  UpdateWarehouseConnectionInput,
+  UpdateWarehouseSegmentInput,
+  WarehouseSegmentConnection,
+  WarehouseSegmentConnectionList,
+  WarehouseSegmentConnectionTest,
+  WarehouseSegmentList,
+  WarehouseSegmentOptions,
+  WarehouseSegmentPreview,
+  WarehouseSegmentRunList,
 } from '../types.js';
 import { enc, type ResourceContext } from './context.js';
 
@@ -76,5 +88,40 @@ export function createSqlSegments(ctx: ResourceContext) {
       ctx.http.request<Segment>({ method: 'PATCH', path: `${base(appId)}/segments/${enc(segmentId)}`, body }),
     refreshSegment: (segmentId: string, appId?: string) =>
       ctx.http.request<Segment>({ method: 'POST', path: `${base(appId)}/segments/${enc(segmentId)}/refresh` }),
+  };
+}
+
+/**
+ * Zero-copy ambar segmenti (ADR-0091): BigQuery, Snowflake veya Databricks üzerinde çalışan sorgudan yalnız kişi
+ * kimlikleriyle statik segment. Bağlantı, önizleme ve yazma `admin`; okuma `segments:read`. Growth+ plan özelliği
+ * `warehouse_segments`. Yenileme worker'da çalışır: oluşturma ve `refreshSegment` yenilemeyi kuyruğa alır.
+ */
+export function createWarehouseSegments(ctx: ResourceContext) {
+  const base = (appId?: string) => `${ctx.appPath(appId)}/warehouse-segments`;
+  return {
+    /** Motorlar, kimlik türleri, Snowflake ambar boyutları, yenileme aralıkları ve sınırlar. */
+    options: (appId?: string) => ctx.http.request<WarehouseSegmentOptions>({ method: 'GET', path: `${base(appId)}/options` }),
+    listConnections: (appId?: string) => ctx.http.request<WarehouseSegmentConnectionList>({ method: 'GET', path: `${base(appId)}/connections` }),
+    /** Bağlantı oluşturur; kimlik bilgisi şifreli saklanır ve yanıtta yalnız ipucu döner. */
+    createConnection: (body: CreateWarehouseConnectionInput, appId?: string) =>
+      ctx.http.request<WarehouseSegmentConnection>({ method: 'POST', path: `${base(appId)}/connections`, body }),
+    getConnection: (connectionId: string, appId?: string) =>
+      ctx.http.request<WarehouseSegmentConnection>({ method: 'GET', path: `${base(appId)}/connections/${enc(connectionId)}` }),
+    updateConnection: (connectionId: string, body: UpdateWarehouseConnectionInput, appId?: string) =>
+      ctx.http.request<WarehouseSegmentConnection>({ method: 'PATCH', path: `${base(appId)}/connections/${enc(connectionId)}`, body }),
+    deleteConnection: (connectionId: string, appId?: string) => ctx.http.request<Ok>({ method: 'DELETE', path: `${base(appId)}/connections/${enc(connectionId)}` }),
+    testConnection: (connectionId: string, appId?: string) =>
+      ctx.http.request<WarehouseSegmentConnectionTest>({ method: 'POST', path: `${base(appId)}/connections/${enc(connectionId)}/test` }),
+    /** `dry_run`: maliyet tahmini; `sample`: en çok 20 örnek kimlik ve eşleşme sayısı. */
+    preview: (body: PreviewWarehouseQueryInput, appId?: string) => ctx.http.request<WarehouseSegmentPreview>({ method: 'POST', path: `${base(appId)}/preview`, body }),
+    listSegments: (appId?: string) => ctx.http.request<WarehouseSegmentList>({ method: 'GET', path: `${base(appId)}/segments` }),
+    createSegment: (body: CreateWarehouseSegmentInput, appId?: string) => ctx.http.request<Segment>({ method: 'POST', path: `${base(appId)}/segments`, body }),
+    updateSegment: (segmentId: string, body: UpdateWarehouseSegmentInput, appId?: string) =>
+      ctx.http.request<Segment>({ method: 'PATCH', path: `${base(appId)}/segments/${enc(segmentId)}`, body }),
+    refreshSegment: (segmentId: string, appId?: string) =>
+      ctx.http.request<Segment>({ method: 'POST', path: `${base(appId)}/segments/${enc(segmentId)}/refresh` }),
+    /** Ambar sorgu kaydı (`segment_id`, `connection_id`, `status`, `limit`, `cursor`). */
+    runs: (params: QueryParams<'/v1/apps/{appId}/warehouse-segments/runs', 'get'> = {}, appId?: string) =>
+      ctx.http.request<WarehouseSegmentRunList>({ method: 'GET', path: `${base(appId)}/runs`, query: params }),
   };
 }

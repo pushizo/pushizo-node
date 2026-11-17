@@ -16,7 +16,7 @@ import { createInbox } from './resources/inbox.js';
 import { createMcpDrafts, createZapier } from './resources/integrations.js';
 import { createJourneys } from './resources/journeys.js';
 import { createPreferences } from './resources/preferences.js';
-import { createSegments, createSqlSegments } from './resources/segments.js';
+import { createSegments, createSqlSegments, createWarehouseSegments } from './resources/segments.js';
 import { createTemplates } from './resources/templates.js';
 import { createReverseEtl } from './resources/reverse-etl.js';
 import { createVerify } from './resources/verify.js';
@@ -583,6 +583,8 @@ export class Pushizo {
   readonly segments = createSegments(this.resourceContext());
   /** SQL sorgu ve SQL segment: izinli görünümlerde salt okunur SELECT, sorgudan segment (ADR-0087). */
   readonly sqlSegments = createSqlSegments(this.resourceContext());
+  /** Zero-copy ambar segmenti: BigQuery/Snowflake/Databricks sorgusundan yalnız kimliklerle segment (ADR-0091). */
+  readonly warehouseSegments = createWarehouseSegments(this.resourceContext());
   /** Şablonlar: CRUD, sürümler, render önizlemesi ve app'ler arası kopyalama. */
   readonly templates = createTemplates(this.resourceContext());
   /** Kampanyalar: CRUD, yaşam döngüsü, istatistik, teslimat ve mesajlar. */
