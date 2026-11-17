@@ -3671,6 +3671,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/apps/{appId}/segments/{segmentId}/refresh": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Statik segment üyeliklerini yeniden hesapla */
+        post: operations["PublicSegmentsController_refresh"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/apps/{appId}/segments/{segmentId}/estimate": {
         parameters: {
             query?: never;
@@ -3770,6 +3787,23 @@ export interface paths {
         get: operations["PublicTemplatesController_versions"];
         put?: never;
         post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/templates/{templateId}/versions/{version}/revert": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Eski sürümü geçerli yap */
+        post: operations["PublicTemplatesController_revert"];
         delete?: never;
         options?: never;
         head?: never;
@@ -5856,6 +5890,74 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/apps/{appId}/mcp/web-campaign-drafts": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Web kampanyası taslağı oluştur (MCP onaylı mod; yayımlanmaz) */
+        post: operations["McpDraftsController_createWebCampaignDraft"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/mcp/web-personalization-drafts": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Web kişiselleştirme taslağı oluştur (MCP onaylı mod; yayımlanmaz) */
+        post: operations["McpDraftsController_createWebPersonalizationDraft"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/mcp/survey-drafts": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Anket taslağı oluştur (MCP onaylı mod; etkinleştirilmez) */
+        post: operations["McpDraftsController_createSurveyDraft"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/mcp/landing-page-drafts": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Landing sayfası taslağı oluştur (MCP onaylı mod; yayımlanmaz) */
+        post: operations["McpDraftsController_createLandingPageDraft"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/apps/{appId}/mcp/test-sends": {
         parameters: {
             query?: never;
@@ -6004,7 +6106,8 @@ export interface paths {
         get: operations["PublicWebCampaignsController_get"];
         put?: never;
         post?: never;
-        delete?: never;
+        /** Web kampanyasını sil (olaylarıyla birlikte) */
+        delete: operations["PublicWebCampaignsController_remove"];
         options?: never;
         head?: never;
         /** Web kampanyasını düzenle */
@@ -6045,6 +6148,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/apps/{appId}/web-campaigns/{campaignId}/winner": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** A/B kazananını seç (SDK yalnızca kazanan görünümü sunar) */
+        post: operations["PublicWebCampaignsController_winner"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/apps/{appId}/web-personalizations": {
         parameters: {
             query?: never;
@@ -6074,7 +6194,8 @@ export interface paths {
         get: operations["PublicWebPersonalizationsController_get"];
         put?: never;
         post?: never;
-        delete?: never;
+        /** Kişiselleştirme deneyimini sil (olaylarıyla birlikte) */
+        delete: operations["PublicWebPersonalizationsController_remove"];
         options?: never;
         head?: never;
         /** Kişiselleştirme deneyimini düzenle */
@@ -6115,6 +6236,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/apps/{appId}/web-personalizations/{personalizationId}/winner": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** A/B kazananını seç (SDK yalnız kazananın değişikliklerini uygular) */
+        post: operations["PublicWebPersonalizationsController_winner"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/apps/{appId}/forms": {
         parameters: {
             query?: never;
@@ -6144,10 +6282,12 @@ export interface paths {
         get: operations["PublicFormsController_get"];
         put?: never;
         post?: never;
-        delete?: never;
+        /** Formu sil (gönderimleriyle birlikte) */
+        delete: operations["PublicFormsController_remove"];
         options?: never;
         head?: never;
-        patch?: never;
+        /** Formu düzenle */
+        patch: operations["PublicFormsController_update"];
         trace?: never;
     };
     "/v1/apps/{appId}/forms/{formId}/submissions": {
@@ -6197,10 +6337,12 @@ export interface paths {
         get: operations["PublicSurveysController_get"];
         put?: never;
         post?: never;
-        delete?: never;
+        /** Anketi sil (yanıtları ve bağlı in-app mesajıyla birlikte) */
+        delete: operations["PublicSurveysController_remove"];
         options?: never;
         head?: never;
-        patch?: never;
+        /** Anketi düzenle (bağlı in-app mesajı yenilenir) */
+        patch: operations["PublicSurveysController_update"];
         trace?: never;
     };
     "/v1/apps/{appId}/surveys/{surveyId}/status": {
@@ -6265,7 +6407,8 @@ export interface paths {
         /** Landing sayfaları */
         get: operations["PublicLandingPagesController_list"];
         put?: never;
-        post?: never;
+        /** Landing sayfası oluştur (taslak) */
+        post: operations["PublicLandingPagesController_create"];
         delete?: never;
         options?: never;
         head?: never;
@@ -6283,10 +6426,12 @@ export interface paths {
         get: operations["PublicLandingPagesController_get"];
         put?: never;
         post?: never;
-        delete?: never;
+        /** Landing sayfasını sil */
+        delete: operations["PublicLandingPagesController_remove"];
         options?: never;
         head?: never;
-        patch?: never;
+        /** Taslağı düzenle (yayındaki sürüm değişmez) */
+        patch: operations["PublicLandingPagesController_update"];
         trace?: never;
     };
     "/v1/apps/{appId}/landing-pages/{pageId}/publish": {
@@ -6317,6 +6462,57 @@ export interface paths {
         put?: never;
         /** Yayından kaldır */
         post: operations["PublicLandingPagesController_unpublish"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/landing-pages/{pageId}/archive": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Arşivle (yayından kalkar, kotadan düşer) */
+        post: operations["PublicLandingPagesController_archive"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/landing-pages/{pageId}/versions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Yayın sürümleri */
+        get: operations["PublicLandingPagesController_versions"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/landing-pages/{pageId}/versions/{version}/restore": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Sürümü taslağa geri yükle */
+        post: operations["PublicLandingPagesController_restore"];
         delete?: never;
         options?: never;
         head?: never;
@@ -10292,59 +10488,6 @@ export interface components {
                 referrer?: string;
             }[];
         };
-        TestPushDto: {
-            subscription_ids?: string[];
-            headings?: {
-                [key: string]: string;
-            };
-            contents: {
-                [key: string]: string;
-            };
-            url?: string;
-            data?: {
-                [key: string]: string;
-            };
-        };
-        SdkWebCampaignEventDto: {
-            /** @enum {string} */
-            type: "impression" | "click" | "close" | "conversion";
-            visitor_id: string;
-            variant_id?: string;
-            button_id?: string;
-            subscription_id?: string;
-            token_hash?: string;
-        };
-        SdkFormSubmitDto: {
-            values: {
-                [key: string]: string | boolean | number | string[];
-            };
-            visitor_id?: string;
-            subscription_id?: string;
-            token_hash?: string;
-            identity_hash?: string;
-            web_campaign_id?: string;
-            page_url?: string;
-            language?: string;
-            website?: string;
-            elapsed_ms?: number;
-        };
-        SdkSurveyResponseDto: {
-            answers: {
-                [key: string]: string | boolean | number | string[];
-            };
-            visitor_id?: string;
-            subscription_id?: string;
-            token_hash?: string;
-            web_campaign_id?: string;
-        };
-        SdkWebPersonalizationEventDto: {
-            /** @enum {string} */
-            type: "impression" | "conversion";
-            visitor_id: string;
-            variant_id?: string;
-            subscription_id?: string;
-            token_hash?: string;
-        };
         CreateWebCampaignDto: {
             name: string;
             display: {
@@ -10534,6 +10677,420 @@ export interface components {
             priority?: number;
             start_at?: string | null;
             end_at?: string | null;
+        };
+        CreateWebPersonalizationDto: {
+            name: string;
+            changes?: ({
+                /** @constant */
+                action: "text";
+                selector: string;
+                text: {
+                    [key: string]: string;
+                };
+            } | {
+                /** @constant */
+                action: "image";
+                selector: string;
+                url: string;
+                alt?: {
+                    [key: string]: string;
+                };
+            } | {
+                /** @constant */
+                action: "link";
+                selector: string;
+                url: string;
+                text?: {
+                    [key: string]: string;
+                };
+                new_tab?: boolean;
+            } | {
+                /** @constant */
+                action: "hide";
+                selector: string;
+            } | {
+                /** @constant */
+                action: "show";
+                selector: string;
+            })[];
+            variants?: {
+                id: string;
+                name: string;
+                weight_percent: number;
+                changes: ({
+                    /** @constant */
+                    action: "text";
+                    selector: string;
+                    text: {
+                        [key: string]: string;
+                    };
+                } | {
+                    /** @constant */
+                    action: "image";
+                    selector: string;
+                    url: string;
+                    alt?: {
+                        [key: string]: string;
+                    };
+                } | {
+                    /** @constant */
+                    action: "link";
+                    selector: string;
+                    url: string;
+                    text?: {
+                        [key: string]: string;
+                    };
+                    new_tab?: boolean;
+                } | {
+                    /** @constant */
+                    action: "hide";
+                    selector: string;
+                } | {
+                    /** @constant */
+                    action: "show";
+                    selector: string;
+                })[];
+            }[];
+            conditions?: {
+                url_rules?: {
+                    /** @enum {string} */
+                    op: "equals" | "contains" | "starts_with" | "not_contains" | "matches";
+                    value: string;
+                }[];
+                utm_rules?: {
+                    /** @enum {string} */
+                    param: "utm_source" | "utm_medium" | "utm_campaign" | "utm_term" | "utm_content";
+                    /** @enum {string} */
+                    op: "equals" | "contains" | "exists";
+                    value?: string;
+                }[];
+                visits?: {
+                    /** @enum {string} */
+                    op: "gte" | "lte" | "eq";
+                    value: number;
+                };
+            };
+            targeting?: {
+                included_segments?: string[];
+                excluded_segments?: string[];
+                /** @enum {string} */
+                visitor?: "all" | "new" | "returning";
+                devices?: ("desktop" | "mobile" | "tablet")[];
+            };
+            goal?: ({
+                /** @constant */
+                type: "event";
+                event: string;
+            } | {
+                /** @constant */
+                type: "page";
+                url: {
+                    /** @enum {string} */
+                    op: "equals" | "contains" | "starts_with" | "not_contains" | "matches";
+                    value: string;
+                };
+            } | {
+                /** @constant */
+                type: "click";
+                selector: string;
+            }) | null;
+            priority?: number;
+            start_at?: string | null;
+            end_at?: string | null;
+        };
+        CreateSurveyDto: {
+            name: string;
+            questions: {
+                id: string;
+                /** @enum {string} */
+                type: "nps" | "csat" | "single_choice" | "multiple_choice" | "text";
+                text: {
+                    [key: string]: string;
+                };
+                required?: boolean;
+                options?: {
+                    value: string;
+                    label: {
+                        [key: string]: string;
+                    };
+                }[];
+                low_label?: {
+                    [key: string]: string;
+                };
+                high_label?: {
+                    [key: string]: string;
+                };
+                placeholder?: {
+                    [key: string]: string;
+                };
+            }[];
+            settings?: {
+                thank_you?: {
+                    [key: string]: string;
+                };
+                submit_label?: {
+                    [key: string]: string;
+                };
+                write_properties?: boolean;
+                allow_multiple?: boolean;
+                default_language?: string;
+            };
+        };
+        CreateLandingPageDto: {
+            name: string;
+            slug: string;
+            document: {
+                /** @constant */
+                version: 1;
+                settings: {
+                    width?: number;
+                    background_color?: string;
+                    content_background_color?: string;
+                    text_color?: string;
+                    link_color?: string;
+                    /** @enum {string} */
+                    font_family?: "system" | "arial" | "georgia" | "verdana" | "trebuchet" | "courier";
+                    dark_mode?: {
+                        background_color?: string;
+                        content_background_color?: string;
+                        text_color?: string;
+                        link_color?: string;
+                    };
+                };
+                sections: {
+                    id: string;
+                    /** @constant */
+                    type: "section";
+                    background_color?: string;
+                    background_image?: string;
+                    padding?: {
+                        top: number;
+                        right: number;
+                        bottom: number;
+                        left: number;
+                    };
+                    stack_on_mobile?: boolean;
+                    columns: {
+                        id: string;
+                        width_percent?: number;
+                        background_color?: string;
+                        /** @enum {string} */
+                        vertical_align?: "top" | "middle" | "bottom";
+                        padding?: {
+                            top: number;
+                            right: number;
+                            bottom: number;
+                            left: number;
+                        };
+                        blocks: ({
+                            id: string;
+                            /** @constant */
+                            type: "text";
+                            html: string;
+                            /** @enum {string} */
+                            align?: "left" | "center" | "right";
+                            font_size?: number;
+                            line_height?: number;
+                            color?: string;
+                            padding?: {
+                                top: number;
+                                right: number;
+                                bottom: number;
+                                left: number;
+                            };
+                        } | {
+                            id: string;
+                            /** @constant */
+                            type: "image";
+                            src: string;
+                            alt: string;
+                            decorative?: boolean;
+                            href?: string;
+                            width?: number;
+                            /** @enum {string} */
+                            align?: "left" | "center" | "right";
+                            padding?: {
+                                top: number;
+                                right: number;
+                                bottom: number;
+                                left: number;
+                            };
+                        } | {
+                            id: string;
+                            /** @constant */
+                            type: "button";
+                            text: string;
+                            href: string;
+                            background_color?: string;
+                            text_color?: string;
+                            /** @enum {string} */
+                            align?: "left" | "center" | "right";
+                            border_radius?: number;
+                            font_size?: number;
+                            full_width?: boolean;
+                            padding?: {
+                                top: number;
+                                right: number;
+                                bottom: number;
+                                left: number;
+                            };
+                        } | {
+                            id: string;
+                            /** @constant */
+                            type: "divider";
+                            color?: string;
+                            thickness?: number;
+                            width_percent?: number;
+                            padding?: {
+                                top: number;
+                                right: number;
+                                bottom: number;
+                                left: number;
+                            };
+                        } | {
+                            id: string;
+                            /** @constant */
+                            type: "spacer";
+                            height: number;
+                        } | {
+                            id: string;
+                            /** @constant */
+                            type: "social";
+                            /** @enum {string} */
+                            align?: "left" | "center" | "right";
+                            icon_size?: number;
+                            items: {
+                                /** @enum {string} */
+                                network: "facebook" | "x" | "instagram" | "linkedin" | "youtube" | "pinterest" | "github" | "web";
+                                href: string;
+                                label?: string;
+                            }[];
+                        } | {
+                            id: string;
+                            /** @constant */
+                            type: "html";
+                            html: string;
+                        } | {
+                            id: string;
+                            /** @constant */
+                            type: "product";
+                            catalog: string;
+                            /** @enum {string} */
+                            source: "fixed" | "expression";
+                            item: string;
+                            show_description?: boolean;
+                            show_price?: boolean;
+                            button_text?: string;
+                            /** @enum {string} */
+                            align?: "left" | "center" | "right";
+                            padding?: {
+                                top: number;
+                                right: number;
+                                bottom: number;
+                                left: number;
+                            };
+                        } | {
+                            id: string;
+                            /** @constant */
+                            type: "recommendations";
+                            catalog: string;
+                            /** @enum {string} */
+                            strategy: "personalized" | "popular" | "trending" | "similar" | "category" | "recently_viewed" | "new_arrivals";
+                            limit: number;
+                            /** @enum {string} */
+                            source?: "fixed" | "expression";
+                            value?: string;
+                            heading?: string;
+                            show_description?: boolean;
+                            show_price?: boolean;
+                            button_text?: string;
+                            /** @enum {string} */
+                            align?: "left" | "center" | "right";
+                            padding?: {
+                                top: number;
+                                right: number;
+                                bottom: number;
+                                left: number;
+                            };
+                        })[];
+                    }[];
+                }[];
+            };
+            seo?: {
+                title?: string;
+                description?: string;
+                og_image?: string;
+                canonical_url?: string;
+                noindex?: boolean;
+            };
+            settings?: {
+                language?: string;
+                form_id?: string | null;
+                form_section_id?: string | null;
+                cookie_consent?: {
+                    enabled: boolean;
+                    text?: string;
+                    accept_label?: string;
+                    reject_label?: string;
+                    policy_url?: string;
+                };
+                web_sdk?: boolean;
+                favicon_url?: string;
+            };
+            custom_domain_id?: string | null;
+        };
+        TestPushDto: {
+            subscription_ids?: string[];
+            headings?: {
+                [key: string]: string;
+            };
+            contents: {
+                [key: string]: string;
+            };
+            url?: string;
+            data?: {
+                [key: string]: string;
+            };
+        };
+        SdkWebCampaignEventDto: {
+            /** @enum {string} */
+            type: "impression" | "click" | "close" | "conversion";
+            visitor_id: string;
+            variant_id?: string;
+            button_id?: string;
+            subscription_id?: string;
+            token_hash?: string;
+        };
+        SdkFormSubmitDto: {
+            values: {
+                [key: string]: string | boolean | number | string[];
+            };
+            visitor_id?: string;
+            subscription_id?: string;
+            token_hash?: string;
+            identity_hash?: string;
+            web_campaign_id?: string;
+            page_url?: string;
+            language?: string;
+            website?: string;
+            elapsed_ms?: number;
+        };
+        SdkSurveyResponseDto: {
+            answers: {
+                [key: string]: string | boolean | number | string[];
+            };
+            visitor_id?: string;
+            subscription_id?: string;
+            token_hash?: string;
+            web_campaign_id?: string;
+        };
+        SdkWebPersonalizationEventDto: {
+            /** @enum {string} */
+            type: "impression" | "conversion";
+            visitor_id: string;
+            variant_id?: string;
+            subscription_id?: string;
+            token_hash?: string;
         };
         UpdateWebCampaignDto: {
             name?: string;
@@ -10729,125 +11286,8 @@ export interface components {
             /** @enum {string} */
             status: "draft" | "active" | "paused" | "archived";
         };
-        CreateWebPersonalizationDto: {
-            name: string;
-            changes?: ({
-                /** @constant */
-                action: "text";
-                selector: string;
-                text: {
-                    [key: string]: string;
-                };
-            } | {
-                /** @constant */
-                action: "image";
-                selector: string;
-                url: string;
-                alt?: {
-                    [key: string]: string;
-                };
-            } | {
-                /** @constant */
-                action: "link";
-                selector: string;
-                url: string;
-                text?: {
-                    [key: string]: string;
-                };
-                new_tab?: boolean;
-            } | {
-                /** @constant */
-                action: "hide";
-                selector: string;
-            } | {
-                /** @constant */
-                action: "show";
-                selector: string;
-            })[];
-            variants?: {
-                id: string;
-                name: string;
-                weight_percent: number;
-                changes: ({
-                    /** @constant */
-                    action: "text";
-                    selector: string;
-                    text: {
-                        [key: string]: string;
-                    };
-                } | {
-                    /** @constant */
-                    action: "image";
-                    selector: string;
-                    url: string;
-                    alt?: {
-                        [key: string]: string;
-                    };
-                } | {
-                    /** @constant */
-                    action: "link";
-                    selector: string;
-                    url: string;
-                    text?: {
-                        [key: string]: string;
-                    };
-                    new_tab?: boolean;
-                } | {
-                    /** @constant */
-                    action: "hide";
-                    selector: string;
-                } | {
-                    /** @constant */
-                    action: "show";
-                    selector: string;
-                })[];
-            }[];
-            conditions?: {
-                url_rules?: {
-                    /** @enum {string} */
-                    op: "equals" | "contains" | "starts_with" | "not_contains" | "matches";
-                    value: string;
-                }[];
-                utm_rules?: {
-                    /** @enum {string} */
-                    param: "utm_source" | "utm_medium" | "utm_campaign" | "utm_term" | "utm_content";
-                    /** @enum {string} */
-                    op: "equals" | "contains" | "exists";
-                    value?: string;
-                }[];
-                visits?: {
-                    /** @enum {string} */
-                    op: "gte" | "lte" | "eq";
-                    value: number;
-                };
-            };
-            targeting?: {
-                included_segments?: string[];
-                excluded_segments?: string[];
-                /** @enum {string} */
-                visitor?: "all" | "new" | "returning";
-                devices?: ("desktop" | "mobile" | "tablet")[];
-            };
-            goal?: ({
-                /** @constant */
-                type: "event";
-                event: string;
-            } | {
-                /** @constant */
-                type: "page";
-                url: {
-                    /** @enum {string} */
-                    op: "equals" | "contains" | "starts_with" | "not_contains" | "matches";
-                    value: string;
-                };
-            } | {
-                /** @constant */
-                type: "click";
-                selector: string;
-            }) | null;
-            priority?: number;
-            start_at?: string | null;
-            end_at?: string | null;
+        WebCampaignWinnerDto: {
+            variant_id: string;
         };
         UpdateWebPersonalizationDto: {
             name?: string;
@@ -10973,6 +11413,9 @@ export interface components {
             /** @enum {string} */
             status: "draft" | "active" | "paused" | "archived";
         };
+        WebPersonalizationWinnerDto: {
+            variant_id: string;
+        };
         CreateFormDto: {
             name: string;
             fields: {
@@ -11035,9 +11478,73 @@ export interface components {
             page_url?: string;
             language?: string;
         };
-        CreateSurveyDto: {
-            name: string;
-            questions: {
+        UpdateFormDto: {
+            name?: string;
+            fields?: {
+                id: string;
+                /** @enum {string} */
+                type: "email" | "phone" | "first_name" | "last_name" | "full_name" | "text" | "textarea" | "select" | "radio" | "checkbox" | "consent";
+                label: {
+                    [key: string]: string;
+                };
+                placeholder?: {
+                    [key: string]: string;
+                };
+                required?: boolean;
+                options?: {
+                    value: string;
+                    label: {
+                        [key: string]: string;
+                    };
+                }[];
+                maps_to?: string;
+                max_length?: number;
+                policy_url?: string;
+            }[];
+            settings?: {
+                submit_label?: {
+                    [key: string]: string;
+                };
+                success_message?: {
+                    [key: string]: string;
+                };
+                redirect_url?: string;
+                tags?: {
+                    [key: string]: string;
+                };
+                subscribe?: {
+                    email?: boolean;
+                    sms?: boolean;
+                };
+                double_opt_in?: {
+                    enabled: boolean;
+                    subject?: {
+                        [key: string]: string;
+                    };
+                    body?: {
+                        [key: string]: string;
+                    };
+                };
+                event_name?: string;
+                captcha?: boolean;
+                default_language?: string;
+            };
+            /** @enum {string} */
+            status?: "active" | "archived";
+        };
+        SurveyStatusDto: {
+            /** @enum {string} */
+            status: "draft" | "active" | "closed";
+        };
+        PublicSurveyResponseDto: {
+            answers: {
+                [key: string]: string | boolean | number | string[];
+            };
+            external_id?: string;
+        };
+        UpdateSurveyDto: {
+            name?: string;
+            questions?: {
                 id: string;
                 /** @enum {string} */
                 type: "nps" | "csat" | "single_choice" | "multiple_choice" | "text";
@@ -11073,15 +11580,208 @@ export interface components {
                 default_language?: string;
             };
         };
-        SurveyStatusDto: {
-            /** @enum {string} */
-            status: "draft" | "active" | "closed";
-        };
-        PublicSurveyResponseDto: {
-            answers: {
-                [key: string]: string | boolean | number | string[];
+        UpdateLandingPageDto: {
+            name?: string;
+            slug?: string;
+            document?: {
+                /** @constant */
+                version: 1;
+                settings: {
+                    width?: number;
+                    background_color?: string;
+                    content_background_color?: string;
+                    text_color?: string;
+                    link_color?: string;
+                    /** @enum {string} */
+                    font_family?: "system" | "arial" | "georgia" | "verdana" | "trebuchet" | "courier";
+                    dark_mode?: {
+                        background_color?: string;
+                        content_background_color?: string;
+                        text_color?: string;
+                        link_color?: string;
+                    };
+                };
+                sections: {
+                    id: string;
+                    /** @constant */
+                    type: "section";
+                    background_color?: string;
+                    background_image?: string;
+                    padding?: {
+                        top: number;
+                        right: number;
+                        bottom: number;
+                        left: number;
+                    };
+                    stack_on_mobile?: boolean;
+                    columns: {
+                        id: string;
+                        width_percent?: number;
+                        background_color?: string;
+                        /** @enum {string} */
+                        vertical_align?: "top" | "middle" | "bottom";
+                        padding?: {
+                            top: number;
+                            right: number;
+                            bottom: number;
+                            left: number;
+                        };
+                        blocks: ({
+                            id: string;
+                            /** @constant */
+                            type: "text";
+                            html: string;
+                            /** @enum {string} */
+                            align?: "left" | "center" | "right";
+                            font_size?: number;
+                            line_height?: number;
+                            color?: string;
+                            padding?: {
+                                top: number;
+                                right: number;
+                                bottom: number;
+                                left: number;
+                            };
+                        } | {
+                            id: string;
+                            /** @constant */
+                            type: "image";
+                            src: string;
+                            alt: string;
+                            decorative?: boolean;
+                            href?: string;
+                            width?: number;
+                            /** @enum {string} */
+                            align?: "left" | "center" | "right";
+                            padding?: {
+                                top: number;
+                                right: number;
+                                bottom: number;
+                                left: number;
+                            };
+                        } | {
+                            id: string;
+                            /** @constant */
+                            type: "button";
+                            text: string;
+                            href: string;
+                            background_color?: string;
+                            text_color?: string;
+                            /** @enum {string} */
+                            align?: "left" | "center" | "right";
+                            border_radius?: number;
+                            font_size?: number;
+                            full_width?: boolean;
+                            padding?: {
+                                top: number;
+                                right: number;
+                                bottom: number;
+                                left: number;
+                            };
+                        } | {
+                            id: string;
+                            /** @constant */
+                            type: "divider";
+                            color?: string;
+                            thickness?: number;
+                            width_percent?: number;
+                            padding?: {
+                                top: number;
+                                right: number;
+                                bottom: number;
+                                left: number;
+                            };
+                        } | {
+                            id: string;
+                            /** @constant */
+                            type: "spacer";
+                            height: number;
+                        } | {
+                            id: string;
+                            /** @constant */
+                            type: "social";
+                            /** @enum {string} */
+                            align?: "left" | "center" | "right";
+                            icon_size?: number;
+                            items: {
+                                /** @enum {string} */
+                                network: "facebook" | "x" | "instagram" | "linkedin" | "youtube" | "pinterest" | "github" | "web";
+                                href: string;
+                                label?: string;
+                            }[];
+                        } | {
+                            id: string;
+                            /** @constant */
+                            type: "html";
+                            html: string;
+                        } | {
+                            id: string;
+                            /** @constant */
+                            type: "product";
+                            catalog: string;
+                            /** @enum {string} */
+                            source: "fixed" | "expression";
+                            item: string;
+                            show_description?: boolean;
+                            show_price?: boolean;
+                            button_text?: string;
+                            /** @enum {string} */
+                            align?: "left" | "center" | "right";
+                            padding?: {
+                                top: number;
+                                right: number;
+                                bottom: number;
+                                left: number;
+                            };
+                        } | {
+                            id: string;
+                            /** @constant */
+                            type: "recommendations";
+                            catalog: string;
+                            /** @enum {string} */
+                            strategy: "personalized" | "popular" | "trending" | "similar" | "category" | "recently_viewed" | "new_arrivals";
+                            limit: number;
+                            /** @enum {string} */
+                            source?: "fixed" | "expression";
+                            value?: string;
+                            heading?: string;
+                            show_description?: boolean;
+                            show_price?: boolean;
+                            button_text?: string;
+                            /** @enum {string} */
+                            align?: "left" | "center" | "right";
+                            padding?: {
+                                top: number;
+                                right: number;
+                                bottom: number;
+                                left: number;
+                            };
+                        })[];
+                    }[];
+                }[];
             };
-            external_id?: string;
+            seo?: {
+                title?: string;
+                description?: string;
+                og_image?: string;
+                canonical_url?: string;
+                noindex?: boolean;
+            };
+            settings?: {
+                language?: string;
+                form_id?: string | null;
+                form_section_id?: string | null;
+                cookie_consent?: {
+                    enabled: boolean;
+                    text?: string;
+                    accept_label?: string;
+                    reject_label?: string;
+                    policy_url?: string;
+                };
+                web_sdk?: boolean;
+                favicon_url?: string;
+            };
+            custom_domain_id?: string | null;
         };
         SiteSearchRequestDto: {
             query: string;
@@ -22716,208 +23416,6 @@ export interface components {
         SdkAttributionAccepted: {
             accepted: number;
         };
-        OAuthConsentContext: {
-            client: {
-                client_id: string;
-                client_name: string;
-                client_uri: string | null;
-                redirect_host: string;
-            };
-            requested_scopes: string[];
-            available_scopes: string[];
-            deny_url: string;
-            organizations: {
-                id: string;
-                name: string;
-                slug: string;
-                role: string;
-                org_wide_allowed: boolean;
-                grantable_scopes: string[];
-                apps: {
-                    id: string;
-                    name: string;
-                }[];
-            }[];
-        };
-        OAuthApproveResult: {
-            redirect_to: string;
-        };
-        CellList: {
-            enabled: boolean;
-            current_cell_id: string | null;
-            control_plane: boolean;
-            control_plane_dashboard_url: string | null;
-            cells: {
-                id: string;
-                name: string;
-                api_url: string;
-                dashboard_url: string;
-            }[];
-        };
-        CellOrgList: {
-            data: {
-                id: string;
-                name: string;
-                slug: string;
-                /** @enum {string} */
-                role: "owner" | "admin" | "developer" | "marketer" | "analyst" | "billing" | "viewer" | "composer" | "agent";
-                region: string | null;
-                dashboard_url: string | null;
-                local: boolean;
-            }[];
-            unavailable_cells: string[];
-        };
-        CellHandoff: {
-            url: string;
-            expires_at: string;
-        };
-        CellHandoffResult: {
-            account: {
-                id: string;
-                email: string;
-                name: string;
-                locale: string;
-                timezone: string;
-                email_verified: boolean;
-                mfa_enabled: boolean;
-                is_platform_admin: boolean;
-                has_password: boolean;
-                marketing_opt_in: boolean;
-                preferences: {
-                    /** @enum {string} */
-                    date_format: "auto" | "dmy" | "mdy" | "iso";
-                    /** @enum {string} */
-                    time_format: "auto" | "24h" | "12h";
-                    /** @enum {string} */
-                    table_density: "comfortable" | "compact";
-                };
-                created_at: string;
-            };
-            next: string | null;
-        };
-        CustomDomain: {
-            id: string;
-            /** @enum {string} */
-            kind: "dashboard" | "tracking" | "preference_center" | "status_page" | "landing";
-            hostname: string;
-            /** @enum {string} */
-            status: "pending" | "verified" | "active" | "failed";
-            verification: {
-                txt_name: string;
-                txt_value: string;
-                cname_target: string | null;
-            };
-            last_error: string | null;
-            last_checked_at: string | null;
-            verified_at: string | null;
-            activated_at: string | null;
-            created_at: string;
-        };
-        CustomDomainList: {
-            data: {
-                id: string;
-                /** @enum {string} */
-                kind: "dashboard" | "tracking" | "preference_center" | "status_page" | "landing";
-                hostname: string;
-                /** @enum {string} */
-                status: "pending" | "verified" | "active" | "failed";
-                verification: {
-                    txt_name: string;
-                    txt_value: string;
-                    cname_target: string | null;
-                };
-                last_error: string | null;
-                last_checked_at: string | null;
-                verified_at: string | null;
-                activated_at: string | null;
-                created_at: string;
-            }[];
-        };
-        ResellerChildOrg: {
-            id: string;
-            name: string;
-            slug: string;
-            plan_code: string;
-            /** @enum {string} */
-            status: "active" | "suspended" | "deleted";
-            suspended_reason: string | null;
-            members: number;
-            /** @enum {string} */
-            access: "owner" | "member" | "support" | "none";
-            region: string | null;
-            created_at: string;
-        };
-        ResellerChildOrgList: {
-            data: {
-                id: string;
-                name: string;
-                slug: string;
-                plan_code: string;
-                /** @enum {string} */
-                status: "active" | "suspended" | "deleted";
-                suspended_reason: string | null;
-                members: number;
-                /** @enum {string} */
-                access: "owner" | "member" | "support" | "none";
-                region: string | null;
-                created_at: string;
-            }[];
-        };
-        ResellerStatement: {
-            month: string;
-            currency: string;
-            items: {
-                org_id: string;
-                name: string;
-                slug: string;
-                plan_code: string;
-                status: string;
-                amount: number;
-                messages_sent: number;
-                events_ingested: number;
-                api_requests: number;
-                active_subscriptions: number;
-                mau: number;
-            }[];
-            totals: {
-                amount: number;
-                messages_sent: number;
-                events_ingested: number;
-                child_orgs: number;
-            };
-        };
-        Branding: {
-            product_name: string | null;
-            logo_url: string | null;
-            primary_color: string | null;
-            secondary_color: string | null;
-            support_email: string | null;
-            hide_powered_by: boolean;
-            effective: {
-                product_name: string;
-                logo_url: string | null;
-                primary_color: string | null;
-                secondary_color: string | null;
-                support_email: string | null;
-                powered_by: boolean;
-                inherited: boolean;
-            };
-            features: {
-                white_label: boolean;
-                hide_powered_by: boolean;
-            };
-        };
-        BrandResolution: {
-            /** @enum {string} */
-            kind: "dashboard" | "tracking" | "preference_center" | "status_page";
-            org_slug: string;
-            product_name: string;
-            logo_url: string | null;
-            primary_color: string | null;
-            secondary_color: string | null;
-            support_email: string | null;
-            powered_by: boolean;
-        };
         WebCampaign: {
             id: string;
             app_id: string;
@@ -24638,6 +25136,208 @@ export interface components {
             }[];
             editor_origins: string[];
             language: string;
+        };
+        OAuthConsentContext: {
+            client: {
+                client_id: string;
+                client_name: string;
+                client_uri: string | null;
+                redirect_host: string;
+            };
+            requested_scopes: string[];
+            available_scopes: string[];
+            deny_url: string;
+            organizations: {
+                id: string;
+                name: string;
+                slug: string;
+                role: string;
+                org_wide_allowed: boolean;
+                grantable_scopes: string[];
+                apps: {
+                    id: string;
+                    name: string;
+                }[];
+            }[];
+        };
+        OAuthApproveResult: {
+            redirect_to: string;
+        };
+        CellList: {
+            enabled: boolean;
+            current_cell_id: string | null;
+            control_plane: boolean;
+            control_plane_dashboard_url: string | null;
+            cells: {
+                id: string;
+                name: string;
+                api_url: string;
+                dashboard_url: string;
+            }[];
+        };
+        CellOrgList: {
+            data: {
+                id: string;
+                name: string;
+                slug: string;
+                /** @enum {string} */
+                role: "owner" | "admin" | "developer" | "marketer" | "analyst" | "billing" | "viewer" | "composer" | "agent";
+                region: string | null;
+                dashboard_url: string | null;
+                local: boolean;
+            }[];
+            unavailable_cells: string[];
+        };
+        CellHandoff: {
+            url: string;
+            expires_at: string;
+        };
+        CellHandoffResult: {
+            account: {
+                id: string;
+                email: string;
+                name: string;
+                locale: string;
+                timezone: string;
+                email_verified: boolean;
+                mfa_enabled: boolean;
+                is_platform_admin: boolean;
+                has_password: boolean;
+                marketing_opt_in: boolean;
+                preferences: {
+                    /** @enum {string} */
+                    date_format: "auto" | "dmy" | "mdy" | "iso";
+                    /** @enum {string} */
+                    time_format: "auto" | "24h" | "12h";
+                    /** @enum {string} */
+                    table_density: "comfortable" | "compact";
+                };
+                created_at: string;
+            };
+            next: string | null;
+        };
+        CustomDomain: {
+            id: string;
+            /** @enum {string} */
+            kind: "dashboard" | "tracking" | "preference_center" | "status_page" | "landing";
+            hostname: string;
+            /** @enum {string} */
+            status: "pending" | "verified" | "active" | "failed";
+            verification: {
+                txt_name: string;
+                txt_value: string;
+                cname_target: string | null;
+            };
+            last_error: string | null;
+            last_checked_at: string | null;
+            verified_at: string | null;
+            activated_at: string | null;
+            created_at: string;
+        };
+        CustomDomainList: {
+            data: {
+                id: string;
+                /** @enum {string} */
+                kind: "dashboard" | "tracking" | "preference_center" | "status_page" | "landing";
+                hostname: string;
+                /** @enum {string} */
+                status: "pending" | "verified" | "active" | "failed";
+                verification: {
+                    txt_name: string;
+                    txt_value: string;
+                    cname_target: string | null;
+                };
+                last_error: string | null;
+                last_checked_at: string | null;
+                verified_at: string | null;
+                activated_at: string | null;
+                created_at: string;
+            }[];
+        };
+        ResellerChildOrg: {
+            id: string;
+            name: string;
+            slug: string;
+            plan_code: string;
+            /** @enum {string} */
+            status: "active" | "suspended" | "deleted";
+            suspended_reason: string | null;
+            members: number;
+            /** @enum {string} */
+            access: "owner" | "member" | "support" | "none";
+            region: string | null;
+            created_at: string;
+        };
+        ResellerChildOrgList: {
+            data: {
+                id: string;
+                name: string;
+                slug: string;
+                plan_code: string;
+                /** @enum {string} */
+                status: "active" | "suspended" | "deleted";
+                suspended_reason: string | null;
+                members: number;
+                /** @enum {string} */
+                access: "owner" | "member" | "support" | "none";
+                region: string | null;
+                created_at: string;
+            }[];
+        };
+        ResellerStatement: {
+            month: string;
+            currency: string;
+            items: {
+                org_id: string;
+                name: string;
+                slug: string;
+                plan_code: string;
+                status: string;
+                amount: number;
+                messages_sent: number;
+                events_ingested: number;
+                api_requests: number;
+                active_subscriptions: number;
+                mau: number;
+            }[];
+            totals: {
+                amount: number;
+                messages_sent: number;
+                events_ingested: number;
+                child_orgs: number;
+            };
+        };
+        Branding: {
+            product_name: string | null;
+            logo_url: string | null;
+            primary_color: string | null;
+            secondary_color: string | null;
+            support_email: string | null;
+            hide_powered_by: boolean;
+            effective: {
+                product_name: string;
+                logo_url: string | null;
+                primary_color: string | null;
+                secondary_color: string | null;
+                support_email: string | null;
+                powered_by: boolean;
+                inherited: boolean;
+            };
+            features: {
+                white_label: boolean;
+                hide_powered_by: boolean;
+            };
+        };
+        BrandResolution: {
+            /** @enum {string} */
+            kind: "dashboard" | "tracking" | "preference_center" | "status_page";
+            org_slug: string;
+            product_name: string;
+            logo_url: string | null;
+            primary_color: string | null;
+            secondary_color: string | null;
+            support_email: string | null;
+            powered_by: boolean;
         };
         SiteSearchOverview: {
             settings: {
@@ -33005,6 +33705,31 @@ export interface operations {
             };
         };
     };
+    PublicSegmentsController_refresh: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                segmentId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Segment"];
+                };
+            };
+        };
+    };
     PublicSegmentsController_estimate: {
         parameters: {
             query?: {
@@ -33244,6 +33969,32 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["TemplateVersionList"];
+                };
+            };
+        };
+    };
+    PublicTemplatesController_revert: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                templateId: string;
+                version: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Template"];
                 };
             };
         };
@@ -37719,6 +38470,118 @@ export interface operations {
             };
         };
     };
+    McpDraftsController_createWebCampaignDraft: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateWebCampaignDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WebCampaign"];
+                };
+            };
+        };
+    };
+    McpDraftsController_createWebPersonalizationDraft: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateWebPersonalizationDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WebPersonalization"];
+                };
+            };
+        };
+    };
+    McpDraftsController_createSurveyDraft: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateSurveyDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Survey"];
+                };
+            };
+        };
+    };
+    McpDraftsController_createLandingPageDraft: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateLandingPageDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LandingPage"];
+                };
+            };
+        };
+    };
     McpDraftsController_testSend: {
         parameters: {
             query?: never;
@@ -38000,6 +38863,31 @@ export interface operations {
             };
         };
     };
+    PublicWebCampaignsController_remove: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                campaignId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Ok"];
+                };
+            };
+        };
+    };
     PublicWebCampaignsController_update: {
         parameters: {
             query?: never;
@@ -38069,6 +38957,35 @@ export interface operations {
         requestBody: {
             content: {
                 "application/json": components["schemas"]["WebCampaignStatusDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WebCampaign"];
+                };
+            };
+        };
+    };
+    PublicWebCampaignsController_winner: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                campaignId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["WebCampaignWinnerDto"];
             };
         };
         responses: {
@@ -38166,6 +39083,31 @@ export interface operations {
             };
         };
     };
+    PublicWebPersonalizationsController_remove: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                personalizationId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Ok"];
+                };
+            };
+        };
+    };
     PublicWebPersonalizationsController_update: {
         parameters: {
             query?: never;
@@ -38251,6 +39193,35 @@ export interface operations {
             };
         };
     };
+    PublicWebPersonalizationsController_winner: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                personalizationId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["WebPersonalizationWinnerDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WebPersonalization"];
+                };
+            };
+        };
+    };
     PublicFormsController_list: {
         parameters: {
             query?: {
@@ -38318,6 +39289,60 @@ export interface operations {
             cookie?: never;
         };
         requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Form"];
+                };
+            };
+        };
+    };
+    PublicFormsController_remove: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                formId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Ok"];
+                };
+            };
+        };
+    };
+    PublicFormsController_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                formId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateFormDto"];
+            };
+        };
         responses: {
             200: {
                 headers: {
@@ -38458,6 +39483,60 @@ export interface operations {
             cookie?: never;
         };
         requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Survey"];
+                };
+            };
+        };
+    };
+    PublicSurveysController_remove: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                surveyId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Ok"];
+                };
+            };
+        };
+    };
+    PublicSurveysController_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                surveyId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateSurveyDto"];
+            };
+        };
         responses: {
             200: {
                 headers: {
@@ -38615,6 +39694,34 @@ export interface operations {
             };
         };
     };
+    PublicLandingPagesController_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateLandingPageDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LandingPage"];
+                };
+            };
+        };
+    };
     PublicLandingPagesController_get: {
         parameters: {
             query?: never;
@@ -38626,6 +39733,60 @@ export interface operations {
             cookie?: never;
         };
         requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LandingPage"];
+                };
+            };
+        };
+    };
+    PublicLandingPagesController_remove: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                pageId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Ok"];
+                };
+            };
+        };
+    };
+    PublicLandingPagesController_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                pageId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateLandingPageDto"];
+            };
+        };
         responses: {
             200: {
                 headers: {
@@ -38671,6 +39832,82 @@ export interface operations {
             header?: never;
             path: {
                 pageId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LandingPage"];
+                };
+            };
+        };
+    };
+    PublicLandingPagesController_archive: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                pageId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LandingPage"];
+                };
+            };
+        };
+    };
+    PublicLandingPagesController_versions: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                pageId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LandingPageVersions"];
+                };
+            };
+        };
+    };
+    PublicLandingPagesController_restore: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                pageId: string;
+                version: number;
                 appId: string;
             };
             cookie?: never;

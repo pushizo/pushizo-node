@@ -555,6 +555,7 @@ export type FormPage = Schemas['FormPage'];
 export type FormSubmissionPage = Schemas['FormSubmissionPage'];
 export type FormSubmitResult = Schemas['FormSubmitResult'];
 export type CreateFormInput = JsonBody<'/v1/apps/{appId}/forms', 'post'>;
+export type UpdateFormInput = JsonBody<'/v1/apps/{appId}/forms/{formId}', 'patch'>;
 export type SubmitFormInput = JsonBody<'/v1/apps/{appId}/forms/{formId}/submissions', 'post'>;
 export type Survey = Schemas['Survey'];
 export type SurveyPage = Schemas['SurveyPage'];
@@ -562,10 +563,14 @@ export type SurveyReport = Schemas['SurveyReport'];
 export type SurveyResponsePage = Schemas['SurveyResponsePage'];
 export type SurveyResponseResult = Schemas['SurveyResponseResult'];
 export type CreateSurveyInput = JsonBody<'/v1/apps/{appId}/surveys', 'post'>;
+export type UpdateSurveyInput = JsonBody<'/v1/apps/{appId}/surveys/{surveyId}', 'patch'>;
 export type SurveyStatus = JsonBody<'/v1/apps/{appId}/surveys/{surveyId}/status', 'post'>['status'];
 export type SubmitSurveyResponseInput = JsonBody<'/v1/apps/{appId}/surveys/{surveyId}/responses', 'post'>;
 export type LandingPage = Schemas['LandingPage'];
 export type LandingPageList = Schemas['LandingPageList'];
+export type LandingPageVersions = Schemas['LandingPageVersions'];
+export type CreateLandingPageInput = JsonBody<'/v1/apps/{appId}/landing-pages', 'post'>;
+export type UpdateLandingPageInput = JsonBody<'/v1/apps/{appId}/landing-pages/{pageId}', 'patch'>;
 
 // Site içi AI arama (ADR-0093)
 export type SiteSearchOverview = Schemas['SiteSearchOverview'];

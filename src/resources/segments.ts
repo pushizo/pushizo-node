@@ -58,6 +58,9 @@ export function createSegments(ctx: ResourceContext) {
         method: 'GET',
         path: `${base(appId)}/${enc(segmentId)}/campaigns`,
       }),
+    /** Statik segmentin üyeliklerini yeniden hesaplar (dinamik segmentte 400). */
+    refresh: (segmentId: string, appId?: string) =>
+      ctx.http.request<Segment>({ method: 'POST', path: `${base(appId)}/${enc(segmentId)}/refresh` }),
     /** Tahmini sayım (10 dk önbellek); `force: true` önbelleği atlayıp tam sayım yapar. */
     estimate: (segmentId: string, options: { force?: boolean } = {}, appId?: string) =>
       ctx.http.request<SegmentEstimate>({

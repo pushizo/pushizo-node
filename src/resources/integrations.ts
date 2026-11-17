@@ -3,15 +3,23 @@ import type {
   CreateCampaignDraftInput,
   CreateInAppDraftInput,
   CreateJourneyDraftInput,
+  CreateLandingPageInput,
   CreateNotificationResult,
   CreateSegmentInput,
+  CreateSurveyInput,
   CreateTemplateDraftInput,
+  CreateWebCampaignInput,
+  CreateWebPersonalizationInput,
   InAppMessage,
   IntegrationOk,
   JourneyDetail,
+  LandingPage,
   McpTestSendInput,
   Segment,
+  Survey,
   Template,
+  WebCampaign,
+  WebPersonalization,
   ZapierHook,
   ZapierMe,
   ZapierSamples,
@@ -65,6 +73,18 @@ export function createMcpDrafts(ctx: ResourceContext) {
     /** In-app mesaj `draft` oluşur; etkinleştirilmez. */
     createInAppDraft: (body: CreateInAppDraftInput, appId?: string) =>
       ctx.http.request<InAppMessage>({ method: 'POST', path: `${base(appId)}/in-app-drafts`, body }),
+    /** Web kampanyası `draft` oluşur; yayımlanmaz. */
+    createWebCampaignDraft: (body: CreateWebCampaignInput, appId?: string) =>
+      ctx.http.request<WebCampaign>({ method: 'POST', path: `${base(appId)}/web-campaign-drafts`, body }),
+    /** Web kişiselleştirme deneyimi `draft` oluşur; yayımlanmaz (Growth+). */
+    createWebPersonalizationDraft: (body: CreateWebPersonalizationInput, appId?: string) =>
+      ctx.http.request<WebPersonalization>({ method: 'POST', path: `${base(appId)}/web-personalization-drafts`, body }),
+    /** Anket `draft` oluşur; etkinleştirilmez. */
+    createSurveyDraft: (body: CreateSurveyInput, appId?: string) =>
+      ctx.http.request<Survey>({ method: 'POST', path: `${base(appId)}/survey-drafts`, body }),
+    /** Landing sayfası `draft` oluşur; yayımlanmaz. */
+    createLandingPageDraft: (body: CreateLandingPageInput, appId?: string) =>
+      ctx.http.request<LandingPage>({ method: 'POST', path: `${base(appId)}/landing-page-drafts`, body }),
     /** Yalnızca test cihazları. Seçilen abonelikler test cihazı değilse API 403 döner. */
     sendTest: (body: McpTestSendInput, appId?: string) =>
       ctx.http.request<CreateNotificationResult>({ method: 'POST', path: `${base(appId)}/test-sends`, body }),

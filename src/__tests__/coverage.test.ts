@@ -202,6 +202,7 @@ const TABLE: Record<string, (hs: Pushizo) => Promise<unknown>> = {
   'DELETE /v1/apps/{appId}/segments/{segmentId}': (hs) => hs.segments.delete('seg_1'),
   'GET /v1/apps/{appId}/segments/{segmentId}/campaigns': (hs) => hs.segments.usedBy('seg_1'),
   'POST /v1/apps/{appId}/segments/{segmentId}/estimate': (hs) => hs.segments.estimate('seg_1'),
+  'POST /v1/apps/{appId}/segments/{segmentId}/refresh': (hs) => hs.segments.refresh('seg_1'),
   // şablonlar
   'GET /v1/apps/{appId}/templates': (hs) => hs.templates.list(),
   'POST /v1/apps/{appId}/templates': (hs) =>
@@ -213,6 +214,7 @@ const TABLE: Record<string, (hs: Pushizo) => Promise<unknown>> = {
   'POST /v1/apps/{appId}/templates/{templateId}/copy_to_app': (hs) =>
     hs.templates.copyToApp('tpl_1', { target_app_id: 'app_2' }),
   'GET /v1/apps/{appId}/templates/{templateId}/versions': (hs) => hs.templates.versions('tpl_1'),
+  'POST /v1/apps/{appId}/templates/{templateId}/versions/{version}/revert': (hs) => hs.templates.revert('tpl_1', 1),
   'GET /v1/apps/{appId}/templates/{templateId}/stats': (hs) => hs.templates.stats('tpl_1'),
   'POST /v1/apps/{appId}/templates/{templateId}/render': (hs) => hs.templates.render('tpl_1'),
   // kampanyalar
@@ -614,6 +616,13 @@ const TABLE: Record<string, (hs: Pushizo) => Promise<unknown>> = {
       display: { layout: 'modal', blocks: [{ type: 'title', text: { tr: 'Yeni' } }] },
     }),
   'POST /v1/apps/{appId}/mcp/test-sends': (hs) => hs.mcp.sendTest({ contents: { tr: 'Test' } }),
+  'POST /v1/apps/{appId}/mcp/web-campaign-drafts': (hs) => hs.mcp.createWebCampaignDraft(webCampaignInput),
+  'POST /v1/apps/{appId}/mcp/web-personalization-drafts': (hs) =>
+    hs.mcp.createWebPersonalizationDraft({ name: 'Başlık', changes: [{ action: 'text', selector: 'h1', text: { tr: 'Merhaba' } }] }),
+  'POST /v1/apps/{appId}/mcp/survey-drafts': (hs) =>
+    hs.mcp.createSurveyDraft({ name: 'NPS', questions: [{ id: 'nps', type: 'nps', text: { tr: 'Bizi tavsiye eder misiniz?' } }] }),
+  'POST /v1/apps/{appId}/mcp/landing-page-drafts': (hs) =>
+    hs.mcp.createLandingPageDraft({ name: 'Kış kampanyası', slug: 'kis-kampanyasi', document: { version: 1, settings: { width: 640, font_family: 'system' }, sections: [] } }),
   // web büyüme: web kampanyaları, formlar, anketler ve landing sayfaları (ADR-0039)
   'GET /v1/apps/{appId}/web-campaigns': (hs) => hs.webCampaigns.list({ status: 'active' }),
   'POST /v1/apps/{appId}/web-campaigns': (hs) => hs.webCampaigns.create(webCampaignInput),
@@ -621,16 +630,22 @@ const TABLE: Record<string, (hs: Pushizo) => Promise<unknown>> = {
   'PATCH /v1/apps/{appId}/web-campaigns/{campaignId}': (hs) => hs.webCampaigns.update('wcm_1', { priority: 5 }),
   'GET /v1/apps/{appId}/web-campaigns/{campaignId}/report': (hs) => hs.webCampaigns.report('wcm_1', { days: 7 }),
   'POST /v1/apps/{appId}/web-campaigns/{campaignId}/status': (hs) => hs.webCampaigns.setStatus('wcm_1', 'active'),
+  'POST /v1/apps/{appId}/web-campaigns/{campaignId}/winner': (hs) => hs.webCampaigns.selectWinner('wcm_1', 'b'),
+  'DELETE /v1/apps/{appId}/web-campaigns/{campaignId}': (hs) => hs.webCampaigns.delete('wcm_1'),
   'GET /v1/apps/{appId}/web-personalizations': (hs) => hs.webPersonalizations.list({ status: 'active' }),
   'POST /v1/apps/{appId}/web-personalizations': (hs) => hs.webPersonalizations.create({ name: 'Başlık', changes: [{ action: 'text', selector: 'h1', text: { tr: 'Merhaba' } }] }),
   'GET /v1/apps/{appId}/web-personalizations/{personalizationId}': (hs) => hs.webPersonalizations.get('wpz_1'),
   'PATCH /v1/apps/{appId}/web-personalizations/{personalizationId}': (hs) => hs.webPersonalizations.update('wpz_1', { priority: 5 }),
   'GET /v1/apps/{appId}/web-personalizations/{personalizationId}/report': (hs) => hs.webPersonalizations.report('wpz_1', { days: 7 }),
   'POST /v1/apps/{appId}/web-personalizations/{personalizationId}/status': (hs) => hs.webPersonalizations.setStatus('wpz_1', 'active'),
+  'POST /v1/apps/{appId}/web-personalizations/{personalizationId}/winner': (hs) => hs.webPersonalizations.selectWinner('wpz_1', 'b'),
+  'DELETE /v1/apps/{appId}/web-personalizations/{personalizationId}': (hs) => hs.webPersonalizations.delete('wpz_1'),
   'GET /v1/apps/{appId}/forms': (hs) => hs.forms.list(),
   'POST /v1/apps/{appId}/forms': (hs) =>
     hs.forms.create({ name: 'Bülten', fields: [{ id: 'email', type: 'email', label: { tr: 'E-posta' }, required: true }] }),
   'GET /v1/apps/{appId}/forms/{formId}': (hs) => hs.forms.get('frm_1'),
+  'PATCH /v1/apps/{appId}/forms/{formId}': (hs) => hs.forms.update('frm_1', { name: 'Bülten v2' }),
+  'DELETE /v1/apps/{appId}/forms/{formId}': (hs) => hs.forms.delete('frm_1'),
   'GET /v1/apps/{appId}/forms/{formId}/submissions': (hs) =>
     hs.forms.listSubmissions('frm_1', { status: 'confirmed', limit: 50 }),
   'POST /v1/apps/{appId}/forms/{formId}/submissions': (hs) =>
@@ -639,6 +654,8 @@ const TABLE: Record<string, (hs: Pushizo) => Promise<unknown>> = {
   'POST /v1/apps/{appId}/surveys': (hs) =>
     hs.surveys.create({ name: 'NPS', questions: [{ id: 'q1', type: 'nps', text: { tr: 'Bizi önerir misiniz?' } }] }),
   'GET /v1/apps/{appId}/surveys/{surveyId}': (hs) => hs.surveys.get('srv_1'),
+  'PATCH /v1/apps/{appId}/surveys/{surveyId}': (hs) => hs.surveys.update('srv_1', { name: 'NPS v2' }),
+  'DELETE /v1/apps/{appId}/surveys/{surveyId}': (hs) => hs.surveys.delete('srv_1'),
   'POST /v1/apps/{appId}/surveys/{surveyId}/status': (hs) => hs.surveys.setStatus('srv_1', 'active'),
   'GET /v1/apps/{appId}/surveys/{surveyId}/report': (hs) => hs.surveys.report('srv_1', { days: 30 }),
   'GET /v1/apps/{appId}/surveys/{surveyId}/responses': (hs) =>
@@ -649,6 +666,13 @@ const TABLE: Record<string, (hs: Pushizo) => Promise<unknown>> = {
   'GET /v1/apps/{appId}/landing-pages/{pageId}': (hs) => hs.landingPages.get('lp_1'),
   'POST /v1/apps/{appId}/landing-pages/{pageId}/publish': (hs) => hs.landingPages.publish('lp_1'),
   'POST /v1/apps/{appId}/landing-pages/{pageId}/unpublish': (hs) => hs.landingPages.unpublish('lp_1'),
+  'POST /v1/apps/{appId}/landing-pages': (hs) =>
+    hs.landingPages.create({ name: 'Kış kampanyası', slug: 'kis-kampanyasi', document: { version: 1, settings: { width: 640, font_family: 'system' }, sections: [] } }),
+  'PATCH /v1/apps/{appId}/landing-pages/{pageId}': (hs) => hs.landingPages.update('lp_1', { name: 'Bahar kampanyası' }),
+  'POST /v1/apps/{appId}/landing-pages/{pageId}/archive': (hs) => hs.landingPages.archive('lp_1'),
+  'GET /v1/apps/{appId}/landing-pages/{pageId}/versions': (hs) => hs.landingPages.versions('lp_1'),
+  'POST /v1/apps/{appId}/landing-pages/{pageId}/versions/{version}/restore': (hs) => hs.landingPages.restoreVersion('lp_1', 1),
+  'DELETE /v1/apps/{appId}/landing-pages/{pageId}': (hs) => hs.landingPages.delete('lp_1'),
 };
 
 /** `/v1/apps/{appId}/x/{id}` → ^/v1/apps/[^/]+/x/[^/]+$ */

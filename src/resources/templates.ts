@@ -44,6 +44,9 @@ export function createTemplates(ctx: ResourceContext) {
         method: 'GET',
         path: `${one(templateId, appId)}/versions`,
       }),
+    /** Eski bir sürümü geçerli sürüm yapar. */
+    revert: (templateId: string, version: number, appId?: string) =>
+      ctx.http.request<Template>({ method: 'POST', path: `${one(templateId, appId)}/versions/${version}/revert` }),
     /** Örnek kullanıcı verisiyle kanal bazlı render önizlemesi (gönderim yapmaz). */
     render: (templateId: string, body: RenderTemplateInput = {}, appId?: string) =>
       ctx.http.request<RenderPreview>({
