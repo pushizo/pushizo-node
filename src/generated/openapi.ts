@@ -1266,6 +1266,188 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/apps/{appId}/data-pipelines/transforms": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Veri dönüştürmeleri */
+        get: operations["PublicDataPipelinesController_listTransforms"];
+        put?: never;
+        /** Veri dönüştürmesi oluştur */
+        post: operations["PublicDataPipelinesController_createTransform"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/data-pipelines/transforms/preview": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Dönüştürme önizlemesi (örnek kayıtla kuru çalıştırma) */
+        post: operations["PublicDataPipelinesController_preview"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/data-pipelines/transforms/{transformId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Veri dönüştürmesi */
+        get: operations["PublicDataPipelinesController_getTransform"];
+        put?: never;
+        post?: never;
+        /** Veri dönüştürmesini sil */
+        delete: operations["PublicDataPipelinesController_removeTransform"];
+        options?: never;
+        head?: never;
+        /** Veri dönüştürmesini güncelle */
+        patch: operations["PublicDataPipelinesController_updateTransform"];
+        trace?: never;
+    };
+    "/v1/apps/{appId}/data-pipelines/sources": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Veri kaynakları (webhook ve HTTP pull) */
+        get: operations["PublicDataPipelinesController_listSources"];
+        put?: never;
+        /**
+         * Veri kaynağı oluştur
+         * @description Webhook kaynağının imza/erişim anahtarı yalnız bu yanıtta döner.
+         */
+        post: operations["PublicDataPipelinesController_createSource"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/data-pipelines/sources/{sourceId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Veri kaynağı */
+        get: operations["PublicDataPipelinesController_getSource"];
+        put?: never;
+        post?: never;
+        /** Veri kaynağını sil */
+        delete: operations["PublicDataPipelinesController_removeSource"];
+        options?: never;
+        head?: never;
+        /** Veri kaynağını güncelle */
+        patch: operations["PublicDataPipelinesController_updateSource"];
+        trace?: never;
+    };
+    "/v1/apps/{appId}/data-pipelines/sources/{sourceId}/rotate-secret": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Webhook kaynağı anahtarını yenile */
+        post: operations["PublicDataPipelinesController_rotate"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/data-pipelines/sources/{sourceId}/run": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** HTTP pull kaynağını şimdi çalıştır */
+        post: operations["PublicDataPipelinesController_run"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/data-pipelines/quarantine": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Karantinadaki kayıtlar */
+        get: operations["PublicDataPipelinesController_quarantine"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/data-pipelines/quarantine/reprocess": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Karantinadaki kayıtları yeniden işle
+         * @description Kimlik verilmezse bekleyen en eski 500 kayıt işlenir.
+         */
+        post: operations["PublicDataPipelinesController_reprocess"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/data-pipelines/quarantine/discard": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Karantinadaki kayıtları yeniden işlemeden kapat */
+        post: operations["PublicDataPipelinesController_discard"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/apps/{appId}/channel-scores/config": {
         parameters: {
             query?: never;
@@ -6135,6 +6317,283 @@ export interface components {
                 max_steps?: number;
             };
             ai_sentiment?: boolean;
+        };
+        CreateDataTransformDto: {
+            name: string;
+            description?: string;
+            enabled?: boolean;
+            /** @enum {string} */
+            target: "event" | "person";
+            /** @enum {string} */
+            kind: "rules" | "javascript";
+            position?: number;
+            rules?: ({
+                /** @constant */
+                op: "map";
+                from: string;
+                to: string;
+            } | {
+                /** @constant */
+                op: "rename";
+                from: string;
+                to: string;
+            } | {
+                /** @constant */
+                op: "remove";
+                path: string;
+            } | {
+                /** @constant */
+                op: "set";
+                path: string;
+                value: unknown;
+            } | {
+                /** @constant */
+                op: "template";
+                path: string;
+                template: string;
+            } | {
+                /** @constant */
+                op: "compute";
+                path: string;
+                /** @enum {string} */
+                fn: "lower" | "upper" | "trim" | "length" | "round" | "abs" | "add" | "multiply" | "now";
+                from?: string;
+                operand?: number;
+            } | {
+                /** @constant */
+                op: "cast";
+                path: string;
+                /** @enum {string} */
+                to: "string" | "number" | "integer" | "boolean" | "date";
+                /** @enum {string} */
+                on_error?: "fail" | "null" | "keep";
+            } | {
+                /** @constant */
+                op: "filter";
+                /** @enum {string} */
+                action: "drop" | "keep";
+                /** @enum {string} */
+                match?: "all" | "any";
+                conditions: {
+                    path: string;
+                    /** @enum {string} */
+                    operator: "eq" | "neq" | "gt" | "gte" | "lt" | "lte" | "contains" | "starts_with" | "ends_with" | "in" | "exists" | "not_exists";
+                    value?: unknown;
+                }[];
+            })[];
+            code?: string;
+            sources?: ("sdk" | "api" | "import" | "system" | "webhook_source" | "pull_source")[];
+            event_names?: string[];
+        };
+        PreviewDataTransformDto: {
+            /** @enum {string} */
+            target: "event" | "person";
+            /** @enum {string} */
+            source?: "sdk" | "api" | "import" | "system" | "webhook_source" | "pull_source";
+            records: {
+                [key: string]: unknown;
+            }[];
+            transform?: {
+                /** @enum {string} */
+                kind: "rules" | "javascript";
+                rules?: ({
+                    /** @constant */
+                    op: "map";
+                    from: string;
+                    to: string;
+                } | {
+                    /** @constant */
+                    op: "rename";
+                    from: string;
+                    to: string;
+                } | {
+                    /** @constant */
+                    op: "remove";
+                    path: string;
+                } | {
+                    /** @constant */
+                    op: "set";
+                    path: string;
+                    value: unknown;
+                } | {
+                    /** @constant */
+                    op: "template";
+                    path: string;
+                    template: string;
+                } | {
+                    /** @constant */
+                    op: "compute";
+                    path: string;
+                    /** @enum {string} */
+                    fn: "lower" | "upper" | "trim" | "length" | "round" | "abs" | "add" | "multiply" | "now";
+                    from?: string;
+                    operand?: number;
+                } | {
+                    /** @constant */
+                    op: "cast";
+                    path: string;
+                    /** @enum {string} */
+                    to: "string" | "number" | "integer" | "boolean" | "date";
+                    /** @enum {string} */
+                    on_error?: "fail" | "null" | "keep";
+                } | {
+                    /** @constant */
+                    op: "filter";
+                    /** @enum {string} */
+                    action: "drop" | "keep";
+                    /** @enum {string} */
+                    match?: "all" | "any";
+                    conditions: {
+                        path: string;
+                        /** @enum {string} */
+                        operator: "eq" | "neq" | "gt" | "gte" | "lt" | "lte" | "contains" | "starts_with" | "ends_with" | "in" | "exists" | "not_exists";
+                        value?: unknown;
+                    }[];
+                })[];
+                code?: string;
+                sources?: ("sdk" | "api" | "import" | "system" | "webhook_source" | "pull_source")[];
+                event_names?: string[];
+            };
+            transform_id?: string;
+        };
+        UpdateDataTransformDto: {
+            name?: string;
+            description?: string;
+            enabled?: boolean;
+            position?: number;
+            rules?: ({
+                /** @constant */
+                op: "map";
+                from: string;
+                to: string;
+            } | {
+                /** @constant */
+                op: "rename";
+                from: string;
+                to: string;
+            } | {
+                /** @constant */
+                op: "remove";
+                path: string;
+            } | {
+                /** @constant */
+                op: "set";
+                path: string;
+                value: unknown;
+            } | {
+                /** @constant */
+                op: "template";
+                path: string;
+                template: string;
+            } | {
+                /** @constant */
+                op: "compute";
+                path: string;
+                /** @enum {string} */
+                fn: "lower" | "upper" | "trim" | "length" | "round" | "abs" | "add" | "multiply" | "now";
+                from?: string;
+                operand?: number;
+            } | {
+                /** @constant */
+                op: "cast";
+                path: string;
+                /** @enum {string} */
+                to: "string" | "number" | "integer" | "boolean" | "date";
+                /** @enum {string} */
+                on_error?: "fail" | "null" | "keep";
+            } | {
+                /** @constant */
+                op: "filter";
+                /** @enum {string} */
+                action: "drop" | "keep";
+                /** @enum {string} */
+                match?: "all" | "any";
+                conditions: {
+                    path: string;
+                    /** @enum {string} */
+                    operator: "eq" | "neq" | "gt" | "gte" | "lt" | "lte" | "contains" | "starts_with" | "ends_with" | "in" | "exists" | "not_exists";
+                    value?: unknown;
+                }[];
+            })[];
+            code?: string;
+            sources?: ("sdk" | "api" | "import" | "system" | "webhook_source" | "pull_source")[];
+            event_names?: string[];
+        };
+        CreateDataSourceDto: {
+            name: string;
+            enabled?: boolean;
+            /** @enum {string} */
+            auth_mode?: "signature" | "token";
+            mapping?: {
+                records_path?: string;
+                event_name?: string;
+                event_name_path?: string;
+                external_id_path?: string;
+                occurred_at_path?: string;
+                value_path?: string;
+                event_id_path?: string;
+                properties_path?: string;
+                tags_path?: string;
+            };
+            config?: {
+                /** Format: uri */
+                url?: string;
+                /** @enum {string} */
+                method?: "GET" | "POST";
+                headers?: {
+                    [key: string]: string;
+                };
+                body?: string;
+                interval_minutes?: number;
+                auth_header?: string;
+                next_cursor_path?: string;
+                cursor_param?: string;
+                resume_cursor?: boolean;
+            };
+            auth_value?: string;
+            /** @enum {string} */
+            kind: "webhook" | "http_pull";
+            /** @enum {string} */
+            target: "event" | "person";
+        };
+        UpdateDataSourceDto: {
+            name?: string;
+            enabled?: boolean;
+            /** @enum {string} */
+            auth_mode?: "signature" | "token";
+            mapping?: {
+                records_path?: string;
+                event_name?: string;
+                event_name_path?: string;
+                external_id_path?: string;
+                occurred_at_path?: string;
+                value_path?: string;
+                event_id_path?: string;
+                properties_path?: string;
+                tags_path?: string;
+            };
+            config?: {
+                /** Format: uri */
+                url?: string;
+                /** @enum {string} */
+                method?: "GET" | "POST";
+                headers?: {
+                    [key: string]: string;
+                };
+                body?: string;
+                interval_minutes?: number;
+                auth_header?: string;
+                next_cursor_path?: string;
+                cursor_param?: string;
+                resume_cursor?: boolean;
+            };
+            auth_value?: string;
+        };
+        ReprocessQuarantineDto: {
+            ids?: string[];
+        };
+        DiscardQuarantineDto: {
+            ids: string[];
         };
         UpdateChannelScoreConfigDto: {
             enabled: boolean;
@@ -17468,6 +17927,264 @@ export interface components {
                 [key: string]: number;
             };
         };
+        DataTransform: {
+            id: string;
+            app_id: string;
+            name: string;
+            description: string;
+            enabled: boolean;
+            /** @enum {string} */
+            target: "event" | "person";
+            /** @enum {string} */
+            kind: "rules" | "javascript";
+            position: number;
+            sources: ("sdk" | "api" | "import" | "system" | "webhook_source" | "pull_source")[];
+            event_names: string[];
+            rules: {
+                [key: string]: unknown;
+            }[];
+            code: string | null;
+            error_count: number;
+            last_error_code: ("mapping_failed" | "invalid_path" | "cast_failed" | "rule_failed" | "invalid_output" | "js_error" | "js_timeout" | "js_memory" | "js_invalid_return" | "sandbox_unavailable" | "write_failed") | null;
+            last_error_at: string | null;
+            created_at: string;
+            updated_at: string;
+        };
+        DataTransformList: {
+            data: {
+                id: string;
+                app_id: string;
+                name: string;
+                description: string;
+                enabled: boolean;
+                /** @enum {string} */
+                target: "event" | "person";
+                /** @enum {string} */
+                kind: "rules" | "javascript";
+                position: number;
+                sources: ("sdk" | "api" | "import" | "system" | "webhook_source" | "pull_source")[];
+                event_names: string[];
+                rules: {
+                    [key: string]: unknown;
+                }[];
+                code: string | null;
+                error_count: number;
+                last_error_code: ("mapping_failed" | "invalid_path" | "cast_failed" | "rule_failed" | "invalid_output" | "js_error" | "js_timeout" | "js_memory" | "js_invalid_return" | "sandbox_unavailable" | "write_failed") | null;
+                last_error_at: string | null;
+                created_at: string;
+                updated_at: string;
+            }[];
+        };
+        DataTransformPreview: {
+            results: {
+                /** @enum {string} */
+                status: "kept" | "dropped" | "failed";
+                record: {
+                    [key: string]: unknown;
+                } | null;
+                transform_id: string | null;
+                error_code: ("mapping_failed" | "invalid_path" | "cast_failed" | "rule_failed" | "invalid_output" | "js_error" | "js_timeout" | "js_memory" | "js_invalid_return" | "sandbox_unavailable" | "write_failed") | null;
+                error_path: string | null;
+                error_message: string | null;
+                logs: string[];
+            }[];
+            duration_ms: number;
+        };
+        DataSource: {
+            id: string;
+            app_id: string;
+            name: string;
+            /** @enum {string} */
+            kind: "webhook" | "http_pull";
+            /** @enum {string} */
+            target: "event" | "person";
+            enabled: boolean;
+            /** @enum {string} */
+            auth_mode: "signature" | "token";
+            mapping: {
+                records_path?: string;
+                event_name?: string;
+                event_name_path?: string;
+                external_id_path?: string;
+                occurred_at_path?: string;
+                value_path?: string;
+                event_id_path?: string;
+                properties_path?: string;
+                tags_path?: string;
+            };
+            config: {
+                /** Format: uri */
+                url?: string;
+                /** @enum {string} */
+                method?: "GET" | "POST";
+                headers?: {
+                    [key: string]: string;
+                };
+                body?: string;
+                interval_minutes?: number;
+                auth_header?: string;
+                next_cursor_path?: string;
+                cursor_param?: string;
+                resume_cursor?: boolean;
+            };
+            has_secret: boolean;
+            webhook_url: string | null;
+            next_run_at: string | null;
+            last_run_at: string | null;
+            last_status: string | null;
+            last_error: string | null;
+            last_stats: {
+                [key: string]: number;
+            };
+            created_at: string;
+            updated_at: string;
+        };
+        DataSourceWithSecret: {
+            id: string;
+            app_id: string;
+            name: string;
+            /** @enum {string} */
+            kind: "webhook" | "http_pull";
+            /** @enum {string} */
+            target: "event" | "person";
+            enabled: boolean;
+            /** @enum {string} */
+            auth_mode: "signature" | "token";
+            mapping: {
+                records_path?: string;
+                event_name?: string;
+                event_name_path?: string;
+                external_id_path?: string;
+                occurred_at_path?: string;
+                value_path?: string;
+                event_id_path?: string;
+                properties_path?: string;
+                tags_path?: string;
+            };
+            config: {
+                /** Format: uri */
+                url?: string;
+                /** @enum {string} */
+                method?: "GET" | "POST";
+                headers?: {
+                    [key: string]: string;
+                };
+                body?: string;
+                interval_minutes?: number;
+                auth_header?: string;
+                next_cursor_path?: string;
+                cursor_param?: string;
+                resume_cursor?: boolean;
+            };
+            has_secret: boolean;
+            webhook_url: string | null;
+            next_run_at: string | null;
+            last_run_at: string | null;
+            last_status: string | null;
+            last_error: string | null;
+            last_stats: {
+                [key: string]: number;
+            };
+            created_at: string;
+            updated_at: string;
+            secret: string | null;
+        };
+        DataSourceList: {
+            data: {
+                id: string;
+                app_id: string;
+                name: string;
+                /** @enum {string} */
+                kind: "webhook" | "http_pull";
+                /** @enum {string} */
+                target: "event" | "person";
+                enabled: boolean;
+                /** @enum {string} */
+                auth_mode: "signature" | "token";
+                mapping: {
+                    records_path?: string;
+                    event_name?: string;
+                    event_name_path?: string;
+                    external_id_path?: string;
+                    occurred_at_path?: string;
+                    value_path?: string;
+                    event_id_path?: string;
+                    properties_path?: string;
+                    tags_path?: string;
+                };
+                config: {
+                    /** Format: uri */
+                    url?: string;
+                    /** @enum {string} */
+                    method?: "GET" | "POST";
+                    headers?: {
+                        [key: string]: string;
+                    };
+                    body?: string;
+                    interval_minutes?: number;
+                    auth_header?: string;
+                    next_cursor_path?: string;
+                    cursor_param?: string;
+                    resume_cursor?: boolean;
+                };
+                has_secret: boolean;
+                webhook_url: string | null;
+                next_run_at: string | null;
+                last_run_at: string | null;
+                last_status: string | null;
+                last_error: string | null;
+                last_stats: {
+                    [key: string]: number;
+                };
+                created_at: string;
+                updated_at: string;
+            }[];
+        };
+        DataSourceRunResult: {
+            /** @enum {string} */
+            status: "succeeded" | "partial" | "failed" | "skipped";
+            stats: {
+                received: number;
+                processed: number;
+                dropped: number;
+                quarantined: number;
+            };
+            error: string | null;
+        };
+        DataQuarantineList: {
+            data: {
+                id: string;
+                /** @enum {string} */
+                target: "event" | "person";
+                source: string;
+                source_id: string | null;
+                transform_id: string | null;
+                payload: {
+                    [key: string]: unknown;
+                };
+                /** @enum {string} */
+                error_code: "mapping_failed" | "invalid_path" | "cast_failed" | "rule_failed" | "invalid_output" | "js_error" | "js_timeout" | "js_memory" | "js_invalid_return" | "sandbox_unavailable" | "write_failed";
+                error_path: string | null;
+                error_message: string | null;
+                /** @enum {string} */
+                status: "pending" | "reprocessed" | "discarded";
+                attempts: number;
+                created_at: string;
+                updated_at: string;
+                resolved_at: string | null;
+            }[];
+            next_cursor: string | null;
+            has_more: boolean;
+            pending_total: number;
+        };
+        DataQuarantineReprocessResult: {
+            reprocessed: number;
+            dropped: number;
+            failed: number;
+        };
+        DataQuarantineDiscardResult: {
+            discarded: number;
+        };
         ChannelScoreConfig: {
             configured: boolean;
             enabled: boolean;
@@ -24880,6 +25597,431 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["AiAgentMetrics"];
+                };
+            };
+        };
+    };
+    PublicDataPipelinesController_listTransforms: {
+        parameters: {
+            query?: {
+                target?: "event" | "person";
+            };
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DataTransformList"];
+                };
+            };
+        };
+    };
+    PublicDataPipelinesController_createTransform: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateDataTransformDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DataTransform"];
+                };
+            };
+        };
+    };
+    PublicDataPipelinesController_preview: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PreviewDataTransformDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DataTransformPreview"];
+                };
+            };
+        };
+    };
+    PublicDataPipelinesController_getTransform: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                transformId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DataTransform"];
+                };
+            };
+        };
+    };
+    PublicDataPipelinesController_removeTransform: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                transformId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            204: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    PublicDataPipelinesController_updateTransform: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                transformId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateDataTransformDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DataTransform"];
+                };
+            };
+        };
+    };
+    PublicDataPipelinesController_listSources: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DataSourceList"];
+                };
+            };
+        };
+    };
+    PublicDataPipelinesController_createSource: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateDataSourceDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DataSourceWithSecret"];
+                };
+            };
+        };
+    };
+    PublicDataPipelinesController_getSource: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                sourceId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DataSource"];
+                };
+            };
+        };
+    };
+    PublicDataPipelinesController_removeSource: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                sourceId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            204: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    PublicDataPipelinesController_updateSource: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                sourceId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateDataSourceDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DataSource"];
+                };
+            };
+        };
+    };
+    PublicDataPipelinesController_rotate: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                sourceId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DataSourceWithSecret"];
+                };
+            };
+        };
+    };
+    PublicDataPipelinesController_run: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                sourceId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DataSourceRunResult"];
+                };
+            };
+        };
+    };
+    PublicDataPipelinesController_quarantine: {
+        parameters: {
+            query?: {
+                status?: "pending" | "reprocessed" | "discarded";
+                target?: "event" | "person";
+                source_id?: string;
+                transform_id?: string;
+                limit?: number;
+                cursor?: string;
+            };
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DataQuarantineList"];
+                };
+            };
+        };
+    };
+    PublicDataPipelinesController_reprocess: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ReprocessQuarantineDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DataQuarantineReprocessResult"];
+                };
+            };
+        };
+    };
+    PublicDataPipelinesController_discard: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["DiscardQuarantineDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DataQuarantineDiscardResult"];
                 };
             };
         };
