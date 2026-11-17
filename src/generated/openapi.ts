@@ -1457,6 +1457,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/apps/{appId}/messenger-links": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Telegram/Viber abonelik bağlama derin bağlantısı (tek kullanımlık belirteç; kullanıcı bota yazınca sohbet kimliği bu kullanıcıya abonelik olarak bağlanır) */
+        post: operations["PublicMessengerLinksController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/apps/{appId}/channel-scores/config": {
         parameters: {
             query?: never;
@@ -6283,7 +6300,7 @@ export interface components {
         CreateAiAgentDto: {
             name: string;
             enabled?: boolean;
-            channels?: ("whatsapp" | "sms" | "rcs" | "chat")[];
+            channels?: ("whatsapp" | "sms" | "rcs" | "telegram" | "viber" | "chat")[];
             instructions?: string;
             faq?: {
                 question: string;
@@ -6315,7 +6332,7 @@ export interface components {
         UpdateAiAgentDto: {
             name?: string;
             enabled?: boolean;
-            channels?: ("whatsapp" | "sms" | "rcs" | "chat")[];
+            channels?: ("whatsapp" | "sms" | "rcs" | "telegram" | "viber" | "chat")[];
             instructions?: string;
             faq?: {
                 question: string;
@@ -6390,6 +6407,13 @@ export interface components {
                 max_steps?: number;
                 monthly_token_cap?: number;
             };
+        };
+        CreateMessengerLinkDto: {
+            /** @enum {string} */
+            channel: "telegram" | "viber";
+            user_id?: string;
+            external_id?: string;
+            ttl_seconds?: number;
         };
         UpdateChannelScoreConfigDto: {
             enabled: boolean;
@@ -6720,7 +6744,7 @@ export interface components {
                         /** @enum {string} */
                         unit: "minutes" | "hours" | "days" | "weeks";
                     };
-                    channels?: ("ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs")[];
+                    channels?: ("ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs" | "telegram" | "viber")[];
                 }[];
                 inApp?: {
                     minIntervalSeconds?: number;
@@ -6881,7 +6905,7 @@ export interface components {
             };
             subscriptions?: {
                 /** @enum {string} */
-                channel: "ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs";
+                channel: "ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs" | "telegram" | "viber";
                 token: string;
                 /** @default {} */
                 device: {
@@ -6937,7 +6961,7 @@ export interface components {
         };
         AddSubscriptionDto: {
             /** @enum {string} */
-            channel: "ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs";
+            channel: "ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs" | "telegram" | "viber";
             token: string;
             /** @default {} */
             device: {
@@ -7022,7 +7046,7 @@ export interface components {
                 included_segments?: string[];
                 excluded_segments?: string[];
                 filters?: unknown;
-                channels?: ("ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs")[];
+                channels?: ("ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs" | "telegram" | "viber")[];
                 test_devices_only?: boolean;
                 email_to?: string[];
                 include_phone_numbers?: string[];
@@ -7202,6 +7226,18 @@ export interface components {
             rcs_fallback_text?: {
                 [key: string]: string;
             };
+            messenger_image_url?: string;
+            messenger_buttons?: ({
+                /** @constant */
+                type: "url";
+                text: string;
+                url: string;
+            } | {
+                /** @constant */
+                type: "reply";
+                text: string;
+                payload?: string;
+            })[];
             add_to_inbox?: boolean;
             inbox_ttl?: number;
             content_card?: {
@@ -7238,7 +7274,7 @@ export interface components {
                 included_segments?: string[];
                 excluded_segments?: string[];
                 filters?: unknown;
-                channels?: ("ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs")[];
+                channels?: ("ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs" | "telegram" | "viber")[];
                 test_devices_only?: boolean;
                 email_to?: string[];
                 include_phone_numbers?: string[];
@@ -7406,13 +7442,13 @@ export interface components {
                 campaign_id?: string;
                 status?: string;
                 /** @enum {string} */
-                channel?: "ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs";
+                channel?: "ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs" | "telegram" | "viber";
                 segment_id?: string;
             };
         };
         CreateTemplateDto: {
             name: string;
-            channel?: ("ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs") | null;
+            channel?: ("ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs" | "telegram" | "viber") | null;
             tags?: string[];
             content: {
                 headings?: {
@@ -7582,6 +7618,18 @@ export interface components {
                 rcs_fallback_text?: {
                     [key: string]: string;
                 };
+                messenger_image_url?: string;
+                messenger_buttons?: ({
+                    /** @constant */
+                    type: "url";
+                    text: string;
+                    url: string;
+                } | {
+                    /** @constant */
+                    type: "reply";
+                    text: string;
+                    payload?: string;
+                })[];
                 ios_carousel?: {
                     url: string;
                     title?: string;
@@ -7596,7 +7644,7 @@ export interface components {
         };
         UpdateTemplateDto: {
             name?: string;
-            channel?: ("ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs") | null;
+            channel?: ("ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs" | "telegram" | "viber") | null;
             tags?: string[];
             content?: {
                 headings?: {
@@ -7766,6 +7814,18 @@ export interface components {
                 rcs_fallback_text?: {
                     [key: string]: string;
                 };
+                messenger_image_url?: string;
+                messenger_buttons?: ({
+                    /** @constant */
+                    type: "url";
+                    text: string;
+                    url: string;
+                } | {
+                    /** @constant */
+                    type: "reply";
+                    text: string;
+                    payload?: string;
+                })[];
                 ios_carousel?: {
                     url: string;
                     title?: string;
@@ -7787,7 +7847,7 @@ export interface components {
              * @default ios_push
              * @enum {string}
              */
-            channel: "ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs";
+            channel: "ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs" | "telegram" | "viber";
             language?: string;
             user?: {
                 external_id?: string;
@@ -7969,6 +8029,18 @@ export interface components {
                 rcs_fallback_text?: {
                     [key: string]: string;
                 };
+                messenger_image_url?: string;
+                messenger_buttons?: ({
+                    /** @constant */
+                    type: "url";
+                    text: string;
+                    url: string;
+                } | {
+                    /** @constant */
+                    type: "reply";
+                    text: string;
+                    payload?: string;
+                })[];
                 ios_carousel?: {
                     url: string;
                     title?: string;
@@ -8066,7 +8138,7 @@ export interface components {
             keyword: string;
             /** @enum {string} */
             scope?: "org" | "app";
-            channels?: ("sms" | "whatsapp" | "rcs")[];
+            channels?: ("sms" | "whatsapp" | "rcs" | "telegram" | "viber")[];
             actions: {
                 add_tags?: {
                     [key: string]: string;
@@ -8088,7 +8160,7 @@ export interface components {
         };
         UpdateKeywordDto: {
             keyword?: string;
-            channels?: ("sms" | "whatsapp" | "rcs")[];
+            channels?: ("sms" | "whatsapp" | "rcs" | "telegram" | "viber")[];
             actions?: {
                 add_tags?: {
                     [key: string]: string;
@@ -8276,7 +8348,7 @@ export interface components {
         };
         CreateSuppressionDto: {
             /** @enum {string} */
-            channel: "email" | "sms" | "whatsapp" | "rcs";
+            channel: "email" | "sms" | "whatsapp" | "rcs" | "telegram" | "viber";
             value: string;
             /** @enum {string} */
             reason?: "manual" | "bounce" | "complaint" | "unsubscribe_link" | "stop";
@@ -8938,7 +9010,7 @@ export interface components {
             description?: {
                 [key: string]: string;
             };
-            channels?: ("ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs")[] | null;
+            channels?: ("ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs" | "telegram" | "viber")[] | null;
             default_opted_in?: boolean;
             position?: number;
         };
@@ -8949,21 +9021,21 @@ export interface components {
             description?: {
                 [key: string]: string;
             };
-            channels?: ("ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs")[] | null;
+            channels?: ("ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs" | "telegram" | "viber")[] | null;
             default_opted_in?: boolean;
             position?: number;
         };
         SetPreferencesDto: {
             preferences: {
                 category: string;
-                channel?: ("ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs") | null;
+                channel?: ("ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs" | "telegram" | "viber") | null;
                 opted_in: boolean;
             }[];
         };
         SdkSetPreferencesDto: {
             preferences: {
                 category: string;
-                channel?: ("ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs") | null;
+                channel?: ("ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs" | "telegram" | "viber") | null;
                 opted_in: boolean;
             }[];
             subscription_id: string;
@@ -10057,8 +10129,8 @@ export interface components {
         };
         ChannelConfig: {
             /** @enum {string} */
-            channel: "ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs";
-            provider: ("apns" | "fcm" | "hms" | "adm" | "wns" | "webpush" | "smtp" | "ses" | "resend" | "twilio" | "netgsm" | "meta_whatsapp" | "google_rbm" | "mock") | null;
+            channel: "ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs" | "telegram" | "viber";
+            provider: ("apns" | "fcm" | "hms" | "adm" | "wns" | "webpush" | "smtp" | "ses" | "resend" | "twilio" | "netgsm" | "meta_whatsapp" | "google_rbm" | "telegram_bot" | "viber_bot" | "mock") | null;
             /** @enum {string} */
             status: "unconfigured" | "active" | "invalid" | "suspended";
             config: {
@@ -10108,6 +10180,11 @@ export interface components {
                 rbm_agent_id?: string;
                 content_sid?: string;
                 sms_fallback?: boolean;
+                telegram_bot_username?: string;
+                viber_uri?: string;
+                viber_sender_name?: string;
+                viber_sender_avatar?: string;
+                webhook_registered_at?: string;
             };
             has_secret: boolean;
             has_hook: boolean;
@@ -10147,8 +10224,8 @@ export interface components {
         ChannelList: {
             data: {
                 /** @enum {string} */
-                channel: "ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs";
-                provider: ("apns" | "fcm" | "hms" | "adm" | "wns" | "webpush" | "smtp" | "ses" | "resend" | "twilio" | "netgsm" | "meta_whatsapp" | "google_rbm" | "mock") | null;
+                channel: "ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs" | "telegram" | "viber";
+                provider: ("apns" | "fcm" | "hms" | "adm" | "wns" | "webpush" | "smtp" | "ses" | "resend" | "twilio" | "netgsm" | "meta_whatsapp" | "google_rbm" | "telegram_bot" | "viber_bot" | "mock") | null;
                 /** @enum {string} */
                 status: "unconfigured" | "active" | "invalid" | "suspended";
                 config: {
@@ -10198,6 +10275,11 @@ export interface components {
                     rbm_agent_id?: string;
                     content_sid?: string;
                     sms_fallback?: boolean;
+                    telegram_bot_username?: string;
+                    viber_uri?: string;
+                    viber_sender_name?: string;
+                    viber_sender_avatar?: string;
+                    webhook_registered_at?: string;
                 };
                 has_secret: boolean;
                 has_hook: boolean;
@@ -10238,8 +10320,8 @@ export interface components {
             } | null;
             channel: {
                 /** @enum {string} */
-                channel: "ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs";
-                provider: ("apns" | "fcm" | "hms" | "adm" | "wns" | "webpush" | "smtp" | "ses" | "resend" | "twilio" | "netgsm" | "meta_whatsapp" | "google_rbm" | "mock") | null;
+                channel: "ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs" | "telegram" | "viber";
+                provider: ("apns" | "fcm" | "hms" | "adm" | "wns" | "webpush" | "smtp" | "ses" | "resend" | "twilio" | "netgsm" | "meta_whatsapp" | "google_rbm" | "telegram_bot" | "viber_bot" | "mock") | null;
                 /** @enum {string} */
                 status: "unconfigured" | "active" | "invalid" | "suspended";
                 config: {
@@ -10289,6 +10371,11 @@ export interface components {
                     rbm_agent_id?: string;
                     content_sid?: string;
                     sms_fallback?: boolean;
+                    telegram_bot_username?: string;
+                    viber_uri?: string;
+                    viber_sender_name?: string;
+                    viber_sender_avatar?: string;
+                    webhook_registered_at?: string;
                 };
                 has_secret: boolean;
                 has_hook: boolean;
@@ -10325,6 +10412,7 @@ export interface components {
             polling: boolean;
             events: string[];
             verify_token?: string | null;
+            secret_token?: string | null;
         };
         Segment: {
             id: string;
@@ -10430,7 +10518,7 @@ export interface components {
             app_id: string;
             user_id: string | null;
             /** @enum {string} */
-            channel: "ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs";
+            channel: "ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs" | "telegram" | "viber";
             token: string;
             /** @enum {string} */
             status: "subscribed" | "unsubscribed" | "invalid" | "pending";
@@ -10493,7 +10581,7 @@ export interface components {
             created_at: string;
             updated_at: string;
             subscription_count: number;
-            channels: ("ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs")[];
+            channels: ("ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs" | "telegram" | "viber")[];
         };
         UserDetail: {
             id: string;
@@ -10517,7 +10605,7 @@ export interface components {
             created_at: string;
             updated_at: string;
             subscription_count: number;
-            channels: ("ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs")[];
+            channels: ("ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs" | "telegram" | "viber")[];
             aliases: {
                 label: string;
                 value: string;
@@ -10527,7 +10615,7 @@ export interface components {
                 app_id: string;
                 user_id: string | null;
                 /** @enum {string} */
-                channel: "ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs";
+                channel: "ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs" | "telegram" | "viber";
                 token: string;
                 /** @enum {string} */
                 status: "subscribed" | "unsubscribed" | "invalid" | "pending";
@@ -10592,7 +10680,7 @@ export interface components {
                 created_at: string;
                 updated_at: string;
                 subscription_count: number;
-                channels: ("ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs")[];
+                channels: ("ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs" | "telegram" | "viber")[];
             }[];
             next_cursor: string | null;
             has_more: boolean;
@@ -10603,7 +10691,7 @@ export interface components {
                 app_id: string;
                 user_id: string | null;
                 /** @enum {string} */
-                channel: "ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs";
+                channel: "ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs" | "telegram" | "viber";
                 token: string;
                 /** @enum {string} */
                 status: "subscribed" | "unsubscribed" | "invalid" | "pending";
@@ -10686,7 +10774,7 @@ export interface components {
                 created_at: string;
                 updated_at: string;
                 subscription_count: number;
-                channels: ("ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs")[];
+                channels: ("ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs" | "telegram" | "viber")[];
                 aliases: {
                     label: string;
                     value: string;
@@ -10696,7 +10784,7 @@ export interface components {
                     app_id: string;
                     user_id: string | null;
                     /** @enum {string} */
-                    channel: "ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs";
+                    channel: "ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs" | "telegram" | "viber";
                     token: string;
                     /** @enum {string} */
                     status: "subscribed" | "unsubscribed" | "invalid" | "pending";
@@ -11094,7 +11182,7 @@ export interface components {
             subscription_id: string;
             user_id: string | null;
             /** @enum {string} */
-            channel: "ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs";
+            channel: "ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs" | "telegram" | "viber";
             provider: string | null;
             /** @enum {string} */
             status: "pending" | "sent" | "delivered" | "failed" | "bounced" | "suppressed" | "expired" | "cancelled";
@@ -11118,7 +11206,7 @@ export interface components {
                 subscription_id: string;
                 user_id: string | null;
                 /** @enum {string} */
-                channel: "ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs";
+                channel: "ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs" | "telegram" | "viber";
                 provider: string | null;
                 /** @enum {string} */
                 status: "pending" | "sent" | "delivered" | "failed" | "bounced" | "suppressed" | "expired" | "cancelled";
@@ -11148,7 +11236,7 @@ export interface components {
                     subscription_id: string;
                     user_id: string | null;
                     /** @enum {string} */
-                    channel: "ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs";
+                    channel: "ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs" | "telegram" | "viber";
                     provider: string | null;
                     /** @enum {string} */
                     status: "pending" | "sent" | "delivered" | "failed" | "bounced" | "suppressed" | "expired" | "cancelled";
@@ -11176,7 +11264,7 @@ export interface components {
                 subscription: {
                     id: string;
                     /** @enum {string} */
-                    channel: "ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs";
+                    channel: "ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs" | "telegram" | "viber";
                     status: string;
                     token_suffix: string;
                     device: {
@@ -11313,8 +11401,8 @@ export interface components {
             }[];
             channels: {
                 /** @enum {string} */
-                channel: "ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs";
-                provider: ("apns" | "fcm" | "hms" | "adm" | "wns" | "webpush" | "smtp" | "ses" | "resend" | "twilio" | "netgsm" | "meta_whatsapp" | "google_rbm" | "mock") | null;
+                channel: "ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs" | "telegram" | "viber";
+                provider: ("apns" | "fcm" | "hms" | "adm" | "wns" | "webpush" | "smtp" | "ses" | "resend" | "twilio" | "netgsm" | "meta_whatsapp" | "google_rbm" | "telegram_bot" | "viber_bot" | "mock") | null;
                 /** @enum {string} */
                 status: "unconfigured" | "active" | "invalid" | "suspended";
                 last_error: string | null;
@@ -11882,7 +11970,7 @@ export interface components {
                         /** @enum {string} */
                         unit: "minutes" | "hours" | "days" | "weeks";
                     };
-                    channels?: ("ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs")[];
+                    channels?: ("ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs" | "telegram" | "viber")[];
                 }[];
                 inApp?: {
                     minIntervalSeconds?: number;
@@ -12066,7 +12154,7 @@ export interface components {
                             /** @enum {string} */
                             unit: "minutes" | "hours" | "days" | "weeks";
                         };
-                        channels?: ("ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs")[];
+                        channels?: ("ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs" | "telegram" | "viber")[];
                     }[];
                     inApp?: {
                         minIntervalSeconds?: number;
@@ -12221,7 +12309,7 @@ export interface components {
             id: string;
             app_id: string;
             name: string;
-            channel: ("ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs") | null;
+            channel: ("ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs" | "telegram" | "viber") | null;
             current_version: number;
             tags: string[];
             content: {
@@ -12251,7 +12339,7 @@ export interface components {
                 id: string;
                 app_id: string;
                 name: string;
-                channel: ("ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs") | null;
+                channel: ("ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs" | "telegram" | "viber") | null;
                 current_version: number;
                 tags: string[];
                 content: {
@@ -12277,7 +12365,7 @@ export interface components {
         };
         RenderPreview: {
             /** @enum {string} */
-            channel: "ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs";
+            channel: "ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs" | "telegram" | "viber";
             language: string;
             title: string | null;
             subtitle: string | null;
@@ -12344,7 +12432,7 @@ export interface components {
                 campaign_id?: string;
                 status?: string;
                 /** @enum {string} */
-                channel?: "ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs";
+                channel?: "ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs" | "telegram" | "viber";
                 segment_id?: string;
             };
             /** @enum {string} */
@@ -12373,7 +12461,7 @@ export interface components {
                     campaign_id?: string;
                     status?: string;
                     /** @enum {string} */
-                    channel?: "ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs";
+                    channel?: "ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs" | "telegram" | "viber";
                     segment_id?: string;
                 };
                 /** @enum {string} */
@@ -12907,7 +12995,7 @@ export interface components {
         Conversation: {
             id: string;
             /** @enum {string} */
-            channel: "sms" | "whatsapp" | "rcs" | "email" | "chat";
+            channel: "sms" | "whatsapp" | "rcs" | "telegram" | "viber" | "email" | "chat";
             /** @enum {string} */
             status: "open" | "pending" | "resolved" | "closed";
             subscription_id: string | null;
@@ -12948,7 +13036,7 @@ export interface components {
             data: {
                 id: string;
                 /** @enum {string} */
-                channel: "sms" | "whatsapp" | "rcs" | "email" | "chat";
+                channel: "sms" | "whatsapp" | "rcs" | "telegram" | "viber" | "email" | "chat";
                 /** @enum {string} */
                 status: "open" | "pending" | "resolved" | "closed";
                 subscription_id: string | null;
@@ -13059,7 +13147,7 @@ export interface components {
             /** @enum {string} */
             scope: "org" | "app";
             app_id: string | null;
-            channels: ("sms" | "whatsapp" | "rcs")[];
+            channels: ("sms" | "whatsapp" | "rcs" | "telegram" | "viber")[];
             actions: {
                 [key: string]: unknown;
             };
@@ -13075,7 +13163,7 @@ export interface components {
                 /** @enum {string} */
                 scope: "org" | "app";
                 app_id: string | null;
-                channels: ("sms" | "whatsapp" | "rcs")[];
+                channels: ("sms" | "whatsapp" | "rcs" | "telegram" | "viber")[];
                 actions: {
                     [key: string]: unknown;
                 };
@@ -13155,7 +13243,7 @@ export interface components {
             other_conversations: {
                 id: string;
                 /** @enum {string} */
-                channel: "sms" | "whatsapp" | "rcs" | "email" | "chat";
+                channel: "sms" | "whatsapp" | "rcs" | "telegram" | "viber" | "email" | "chat";
                 /** @enum {string} */
                 status: "open" | "pending" | "resolved" | "closed";
                 last_message_at: string;
@@ -14511,7 +14599,7 @@ export interface components {
             id: string;
             app_id: string;
             /** @enum {string} */
-            channel: "email" | "sms" | "whatsapp" | "rcs";
+            channel: "email" | "sms" | "whatsapp" | "rcs" | "telegram" | "viber";
             value_masked: string;
             /** @enum {string} */
             reason: "bounce" | "complaint" | "manual" | "unsubscribe_link" | "stop";
@@ -14528,7 +14616,7 @@ export interface components {
                 id: string;
                 app_id: string;
                 /** @enum {string} */
-                channel: "email" | "sms" | "whatsapp" | "rcs";
+                channel: "email" | "sms" | "whatsapp" | "rcs" | "telegram" | "viber";
                 value_masked: string;
                 /** @enum {string} */
                 reason: "bounce" | "complaint" | "manual" | "unsubscribe_link" | "stop";
@@ -15028,7 +15116,7 @@ export interface components {
             } | null;
             channels: {
                 /** @enum {string} */
-                channel: "ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs";
+                channel: "ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs" | "telegram" | "viber";
                 targeted: number;
                 sent: number;
                 failed: number;
@@ -15429,7 +15517,7 @@ export interface components {
             enabled: boolean;
             position: number;
             conditions: {
-                channels?: ("sms" | "whatsapp" | "rcs" | "email" | "chat")[];
+                channels?: ("sms" | "whatsapp" | "rcs" | "telegram" | "viber" | "email" | "chat")[];
                 languages?: string[];
                 tags?: {
                     [key: string]: string;
@@ -15449,7 +15537,7 @@ export interface components {
                 enabled: boolean;
                 position: number;
                 conditions: {
-                    channels?: ("sms" | "whatsapp" | "rcs" | "email" | "chat")[];
+                    channels?: ("sms" | "whatsapp" | "rcs" | "telegram" | "viber" | "email" | "chat")[];
                     languages?: string[];
                     tags?: {
                         [key: string]: string;
@@ -17636,7 +17724,7 @@ export interface components {
             app_id: string;
             name: string;
             enabled: boolean;
-            channels: ("whatsapp" | "sms" | "rcs" | "chat")[];
+            channels: ("whatsapp" | "sms" | "rcs" | "telegram" | "viber" | "chat")[];
             instructions: string;
             faq: {
                 question: string;
@@ -17676,7 +17764,7 @@ export interface components {
             app_id: string;
             name: string;
             enabled: boolean;
-            channels: ("whatsapp" | "sms" | "rcs" | "chat")[];
+            channels: ("whatsapp" | "sms" | "rcs" | "telegram" | "viber" | "chat")[];
             instructions: string;
             faq: {
                 question: string;
@@ -17718,7 +17806,7 @@ export interface components {
                 app_id: string;
                 name: string;
                 enabled: boolean;
-                channels: ("whatsapp" | "sms" | "rcs" | "chat")[];
+                channels: ("whatsapp" | "sms" | "rcs" | "telegram" | "viber" | "chat")[];
                 instructions: string;
                 faq: {
                     question: string;
@@ -18008,6 +18096,15 @@ export interface components {
             }[];
             next_cursor: string | null;
             has_more: boolean;
+        };
+        MessengerLink: {
+            id: string;
+            /** @enum {string} */
+            channel: "telegram" | "viber";
+            user_id: string;
+            url: string;
+            token: string;
+            expires_at: string;
         };
         ChannelScoreConfig: {
             configured: boolean;
@@ -25825,6 +25922,34 @@ export interface operations {
             };
         };
     };
+    PublicMessengerLinksController_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateMessengerLinkDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MessengerLink"];
+                };
+            };
+        };
+    };
     PublicChannelScoresController_config: {
         parameters: {
             query?: never;
@@ -28310,6 +28435,17 @@ export interface operations {
                     sms_fallback?: boolean;
                 } | {
                     /** @constant */
+                    provider: "telegram_bot";
+                    bot_token?: string;
+                } | {
+                    /** @constant */
+                    provider: "viber_bot";
+                    auth_token?: string;
+                    sender_name: string;
+                    /** Format: uri */
+                    sender_avatar?: string;
+                } | {
+                    /** @constant */
                     provider: "mock";
                     app_secret?: string;
                     sms_fallback?: boolean;
@@ -28317,6 +28453,10 @@ export interface operations {
                     from_address?: string;
                     from_name?: string;
                     dkim_selector?: string;
+                    bot_username?: string;
+                    viber_uri?: string;
+                    sender_name?: string;
+                    auth_token?: string;
                 };
             };
         };
@@ -29655,7 +29795,7 @@ export interface operations {
                 limit?: number;
                 cursor?: string;
                 q?: string;
-                channel?: "ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs";
+                channel?: "ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs" | "telegram" | "viber";
             };
             header?: never;
             path: {
@@ -29901,7 +30041,7 @@ export interface operations {
                 q?: string;
                 status?: "draft" | "scheduled" | "running" | "paused" | "completed" | "cancelled" | "failed";
                 type?: "one_time" | "scheduled" | "recurring" | "automated" | "transactional";
-                channel?: "ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs";
+                channel?: "ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs" | "telegram" | "viber";
                 label?: string;
             };
             header?: never;
@@ -29950,7 +30090,7 @@ export interface operations {
                             any?: Record<string, never>[];
                             none?: Record<string, never>[];
                         };
-                        channels?: ("ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs")[];
+                        channels?: ("ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs" | "telegram" | "viber")[];
                         test_devices_only?: boolean;
                     };
                     /** @description messages.content ile aynı şema (headings, contents, url, buttons…) */
@@ -30101,7 +30241,7 @@ export interface operations {
                             any?: Record<string, never>[];
                             none?: Record<string, never>[];
                         };
-                        channels?: ("ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs")[];
+                        channels?: ("ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs" | "telegram" | "viber")[];
                         test_devices_only?: boolean;
                     };
                     /** @description messages.content ile aynı şema (headings, contents, url, buttons…) */
@@ -30580,7 +30720,7 @@ export interface operations {
             query?: {
                 limit?: number;
                 cursor?: string;
-                channel?: "sms" | "whatsapp" | "rcs" | "email" | "chat";
+                channel?: "sms" | "whatsapp" | "rcs" | "telegram" | "viber" | "email" | "chat";
                 status?: "open" | "pending" | "resolved" | "closed";
                 unread?: "true" | "false";
                 q?: string;
@@ -31504,7 +31644,7 @@ export interface operations {
             query?: {
                 from?: string;
                 to?: string;
-                channel?: "sms" | "whatsapp" | "rcs" | "email" | "chat";
+                channel?: "sms" | "whatsapp" | "rcs" | "telegram" | "viber" | "email" | "chat";
             };
             header?: never;
             path: {
@@ -31874,7 +32014,7 @@ export interface operations {
             query?: {
                 limit?: number;
                 cursor?: string;
-                channel?: "email" | "sms" | "whatsapp" | "rcs";
+                channel?: "email" | "sms" | "whatsapp" | "rcs" | "telegram" | "viber";
                 reason?: "bounce" | "complaint" | "manual" | "unsubscribe_link" | "stop";
                 value?: string;
             };
@@ -34122,7 +34262,7 @@ export interface operations {
                             any?: Record<string, never>[];
                             none?: Record<string, never>[];
                         };
-                        channels?: ("ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs")[];
+                        channels?: ("ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs" | "telegram" | "viber")[];
                         test_devices_only?: boolean;
                     };
                     /** @description messages.content ile aynı şema (headings, contents, url, buttons…) */

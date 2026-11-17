@@ -180,7 +180,7 @@ export type SuppressionPage = Schemas['SuppressionPage'];
 export type Ok = Schemas['Ok'];
 export type SuppressionChannel = Suppression['channel'];
 export type SuppressionReason = Suppression['reason'];
-export type Channel = 'ios_push' | 'android_push' | 'hms_push' | 'web_push' | 'email' | 'sms';
+export type Channel = 'ios_push' | 'android_push' | 'hms_push' | 'web_push' | 'email' | 'sms' | 'whatsapp' | 'rcs' | 'telegram' | 'viber';
 
 // --- İstek gövdeleri --------------------------------------------------------------------------
 
@@ -350,6 +350,8 @@ export type AffinityConfig = Schemas['AffinityConfig'];
 export type AffinityOverview = Schemas['AffinityOverview'];
 export type UserAffinity = Schemas['UserAffinity'];
 export type UpdateAffinityConfigInput = JsonBody<'/v1/apps/{appId}/affinity/config', 'put'>;
+export type MessengerLink = Schemas['MessengerLink'];
+export type CreateMessengerLinkInput = JsonBody<'/v1/apps/{appId}/messenger-links', 'post'>;
 export type AiAgent = Schemas['AiAgent'];
 export type AiAgentWithSecret = Schemas['AiAgentWithSecret'];
 export type AiAgentList = Schemas['AiAgentList'];
