@@ -1266,6 +1266,94 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/apps/{appId}/custom-agents": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Özel AI ajanları */
+        get: operations["PublicCustomAgentsController_list"];
+        put?: never;
+        /** Özel AI ajanı oluştur */
+        post: operations["PublicCustomAgentsController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/custom-agents/runs": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Özel AI ajanı çalışma kayıtları */
+        get: operations["PublicCustomAgentsController_runs"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/custom-agents/drafts": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Özel AI ajanı taslakları */
+        get: operations["PublicCustomAgentsController_drafts"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/custom-agents/{agentId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Özel AI ajanı */
+        get: operations["PublicCustomAgentsController_get"];
+        put?: never;
+        post?: never;
+        /** Özel AI ajanını sil */
+        delete: operations["PublicCustomAgentsController_remove"];
+        options?: never;
+        head?: never;
+        /** Özel AI ajanını güncelle */
+        patch: operations["PublicCustomAgentsController_update"];
+        trace?: never;
+    };
+    "/v1/apps/{appId}/custom-agents/{agentId}/run": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Özel AI ajanını şimdi çalıştır */
+        post: operations["PublicCustomAgentsController_run"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/apps/{appId}/channel-scores/config": {
         parameters: {
             query?: never;
@@ -3127,6 +3215,23 @@ export interface paths {
         put?: never;
         /** Hemen gönder; e-posta liste koruması 409 → force=true (admin kapsamı) */
         post: operations["PublicCampaignsController_send"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/campaigns/{campaignId}/preflight": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Yayın öncesi denetim raporu (marka, yasaklı ifade, bağlantı, kişiselleştirme, KVKK/İYS) */
+        post: operations["PublicCampaignsController_preflight"];
         delete?: never;
         options?: never;
         head?: never;
@@ -6135,6 +6240,36 @@ export interface components {
                 max_steps?: number;
             };
             ai_sentiment?: boolean;
+        };
+        CreateCustomAgentDto: {
+            name: string;
+            description?: string;
+            enabled?: boolean;
+            instructions?: string;
+            tools?: ("list_segments" | "campaign_performance" | "delivery_summary" | "create_segment_draft" | "create_campaign_draft")[];
+            schedule?: {
+                cron: string;
+                timezone?: string;
+            } | null;
+            limits?: {
+                max_steps?: number;
+                monthly_token_cap?: number;
+            };
+        };
+        UpdateCustomAgentDto: {
+            name?: string;
+            description?: string;
+            enabled?: boolean;
+            instructions?: string;
+            tools?: ("list_segments" | "campaign_performance" | "delivery_summary" | "create_segment_draft" | "create_campaign_draft")[];
+            schedule?: {
+                cron: string;
+                timezone?: string;
+            } | null;
+            limits?: {
+                max_steps?: number;
+                monthly_token_cap?: number;
+            };
         };
         UpdateChannelScoreConfigDto: {
             enabled: boolean;
@@ -14274,6 +14409,29 @@ export interface components {
             next_cursor: string | null;
             has_more: boolean;
         };
+        CampaignPreflightReport: {
+            campaign_id: string;
+            checked_at: string;
+            links_checked: boolean;
+            summary: {
+                critical: number;
+                warning: number;
+                info: number;
+                blocked: boolean;
+            };
+            findings: {
+                /** @enum {string} */
+                code: "brand_name_casing" | "off_brand_color" | "off_brand_font" | "banned_phrase" | "phishing_term" | "link_invalid" | "link_insecure_http" | "link_unsafe_host" | "link_shortener" | "link_missing_utm" | "link_broken" | "link_unreachable" | "liquid_syntax_error" | "liquid_missing_default" | "liquid_unknown_variable" | "liquid_undefined_property" | "commercial_no_category" | "iys_sms_filter_informational" | "sms_missing_opt_out" | "email_missing_postal_address" | "send_time_outside_hours";
+                /** @enum {string} */
+                category: "brand" | "content" | "links" | "personalization" | "compliance";
+                /** @enum {string} */
+                severity: "critical" | "warning" | "info";
+                field?: string;
+                params?: {
+                    [key: string]: string | number;
+                };
+            }[];
+        };
         CampaignEmailRisk: {
             applies: boolean;
             recipients: number;
@@ -14449,6 +14607,18 @@ export interface components {
             created_at: string;
             updated_at: string;
             estimated_recipients: number | null;
+            preflight: {
+                checked_at: string;
+                summary: {
+                    critical: number;
+                    warning: number;
+                    info: number;
+                    blocked: boolean;
+                };
+                codes: string[];
+                acknowledged_by?: string;
+                acknowledged_at?: string;
+            } | null;
         };
         CampaignPage: {
             data: {
@@ -14561,6 +14731,18 @@ export interface components {
                 created_at: string;
                 updated_at: string;
                 estimated_recipients: number | null;
+                preflight: {
+                    checked_at: string;
+                    summary: {
+                        critical: number;
+                        warning: number;
+                        info: number;
+                        blocked: boolean;
+                    };
+                    codes: string[];
+                    acknowledged_by?: string;
+                    acknowledged_at?: string;
+                } | null;
             }[];
             next_cursor: string | null;
             has_more: boolean;
@@ -14676,6 +14858,18 @@ export interface components {
                 created_at: string;
                 updated_at: string;
                 estimated_recipients: number | null;
+                preflight: {
+                    checked_at: string;
+                    summary: {
+                        critical: number;
+                        warning: number;
+                        info: number;
+                        blocked: boolean;
+                    };
+                    codes: string[];
+                    acknowledged_by?: string;
+                    acknowledged_at?: string;
+                } | null;
             };
             rates: {
                 delivery_rate: number | null;
@@ -17467,6 +17661,144 @@ export interface components {
             handoff_reasons: {
                 [key: string]: number;
             };
+        };
+        CustomAgent: {
+            id: string;
+            app_id: string;
+            name: string;
+            description: string;
+            enabled: boolean;
+            instructions: string;
+            tools: ("list_segments" | "campaign_performance" | "delivery_summary" | "create_segment_draft" | "create_campaign_draft")[];
+            schedule: {
+                cron: string;
+                timezone: string;
+            } | null;
+            limits: {
+                max_steps: number;
+                monthly_token_cap: number;
+            };
+            next_run_at: string | null;
+            last_run_at: string | null;
+            usage: {
+                tokens_this_month: number;
+                period_start: string;
+            };
+            created_at: string;
+            updated_at: string;
+        };
+        CustomAgentList: {
+            data: {
+                id: string;
+                app_id: string;
+                name: string;
+                description: string;
+                enabled: boolean;
+                instructions: string;
+                tools: ("list_segments" | "campaign_performance" | "delivery_summary" | "create_segment_draft" | "create_campaign_draft")[];
+                schedule: {
+                    cron: string;
+                    timezone: string;
+                } | null;
+                limits: {
+                    max_steps: number;
+                    monthly_token_cap: number;
+                };
+                next_run_at: string | null;
+                last_run_at: string | null;
+                usage: {
+                    tokens_this_month: number;
+                    period_start: string;
+                };
+                created_at: string;
+                updated_at: string;
+            }[];
+        };
+        CustomAgentRun: {
+            id: string;
+            agent_id: string;
+            /** @enum {string} */
+            trigger: "schedule" | "manual";
+            /** @enum {string} */
+            status: "pending" | "running" | "succeeded" | "failed" | "skipped";
+            steps: {
+                /** @enum {string} */
+                kind: "tool" | "finish";
+                tool?: string;
+                ok?: boolean;
+                error?: string;
+                duration_ms?: number;
+            }[];
+            summary: string | null;
+            input_tokens: number;
+            output_tokens: number;
+            error: string | null;
+            drafts: number;
+            created_at: string;
+            started_at: string | null;
+            finished_at: string | null;
+        };
+        CustomAgentRunList: {
+            data: {
+                id: string;
+                agent_id: string;
+                /** @enum {string} */
+                trigger: "schedule" | "manual";
+                /** @enum {string} */
+                status: "pending" | "running" | "succeeded" | "failed" | "skipped";
+                steps: {
+                    /** @enum {string} */
+                    kind: "tool" | "finish";
+                    tool?: string;
+                    ok?: boolean;
+                    error?: string;
+                    duration_ms?: number;
+                }[];
+                summary: string | null;
+                input_tokens: number;
+                output_tokens: number;
+                error: string | null;
+                drafts: number;
+                created_at: string;
+                started_at: string | null;
+                finished_at: string | null;
+            }[];
+            next_cursor: string | null;
+            has_more: boolean;
+        };
+        CustomAgentDraft: {
+            id: string;
+            agent_id: string;
+            run_id: string;
+            /** @enum {string} */
+            kind: "segment" | "campaign";
+            /** @enum {string} */
+            status: "pending" | "applied" | "dismissed";
+            payload: {
+                [key: string]: unknown;
+            };
+            result_id: string | null;
+            decided_at: string | null;
+            created_at: string;
+        };
+        CustomAgentDraftList: {
+            data: {
+                id: string;
+                agent_id: string;
+                run_id: string;
+                /** @enum {string} */
+                kind: "segment" | "campaign";
+                /** @enum {string} */
+                status: "pending" | "applied" | "dismissed";
+                payload: {
+                    [key: string]: unknown;
+                };
+                result_id: string | null;
+                decided_at: string | null;
+                created_at: string;
+            }[];
+            next_cursor: string | null;
+            has_more: boolean;
         };
         ChannelScoreConfig: {
             configured: boolean;
@@ -24884,6 +25216,219 @@ export interface operations {
             };
         };
     };
+    PublicCustomAgentsController_list: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CustomAgentList"];
+                };
+            };
+        };
+    };
+    PublicCustomAgentsController_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateCustomAgentDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CustomAgent"];
+                };
+            };
+        };
+    };
+    PublicCustomAgentsController_runs: {
+        parameters: {
+            query?: {
+                agent_id?: string;
+                status?: "pending" | "running" | "succeeded" | "failed" | "skipped";
+                limit?: number;
+                cursor?: string;
+            };
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CustomAgentRunList"];
+                };
+            };
+        };
+    };
+    PublicCustomAgentsController_drafts: {
+        parameters: {
+            query?: {
+                agent_id?: string;
+                run_id?: string;
+                status?: "pending" | "applied" | "dismissed";
+                limit?: number;
+                cursor?: string;
+            };
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CustomAgentDraftList"];
+                };
+            };
+        };
+    };
+    PublicCustomAgentsController_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                agentId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CustomAgent"];
+                };
+            };
+        };
+    };
+    PublicCustomAgentsController_remove: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                agentId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            204: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    PublicCustomAgentsController_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                agentId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateCustomAgentDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CustomAgent"];
+                };
+            };
+        };
+    };
+    PublicCustomAgentsController_run: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                agentId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            202: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CustomAgentRun"];
+                };
+            };
+        };
+    };
     PublicChannelScoresController_config: {
         parameters: {
             query?: never;
@@ -29239,6 +29784,7 @@ export interface operations {
         parameters: {
             query?: {
                 force?: "true" | "false";
+                preflight_ack?: "true" | "false";
             };
             header?: never;
             path: {
@@ -29270,6 +29816,7 @@ export interface operations {
         parameters: {
             query?: {
                 force?: "true" | "false";
+                preflight_ack?: "true" | "false";
             };
             header?: never;
             path: {
@@ -29289,6 +29836,33 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["Campaign"];
+                };
+            };
+        };
+    };
+    PublicCampaignsController_preflight: {
+        parameters: {
+            query?: {
+                check_links?: "true" | "false";
+            };
+            header?: never;
+            path: {
+                campaignId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CampaignPreflightReport"];
                 };
             };
         };
@@ -29420,7 +29994,10 @@ export interface operations {
     };
     PublicCampaignsController_approve: {
         parameters: {
-            query?: never;
+            query?: {
+                force?: "true" | "false";
+                preflight_ack?: "true" | "false";
+            };
             header?: never;
             path: {
                 campaignId: string;
