@@ -1266,6 +1266,109 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/apps/{appId}/sql/schema": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** SQL görünümleri ve sınırlar */
+        get: operations["PublicSqlSegmentsController_schema"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/sql/query": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Salt okunur SQL sorgusu çalıştır */
+        post: operations["PublicSqlSegmentsController_run"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/sql/runs": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** SQL sorgu kaydı */
+        get: operations["PublicSqlSegmentsController_runs"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/sql/segments": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** SQL segmentleri */
+        get: operations["PublicSqlSegmentsController_listSegments"];
+        put?: never;
+        /** Sorgu sonucunu segment olarak kaydet */
+        post: operations["PublicSqlSegmentsController_createSegment"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/sql/segments/{segmentId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /** SQL segmentini güncelle */
+        patch: operations["PublicSqlSegmentsController_updateSegment"];
+        trace?: never;
+    };
+    "/v1/apps/{appId}/sql/segments/{segmentId}/refresh": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** SQL segmentini şimdi yenile */
+        post: operations["PublicSqlSegmentsController_refresh"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/apps/{appId}/channel-scores/config": {
         parameters: {
             query?: never;
@@ -6136,6 +6239,23 @@ export interface components {
             };
             ai_sentiment?: boolean;
         };
+        RunSqlQueryDto: {
+            query: string;
+            row_limit?: number;
+            timeout_ms?: number;
+        };
+        CreateSqlSegmentDto: {
+            name: string;
+            description?: string | null;
+            query: string;
+            refresh_interval_minutes?: number | null;
+        };
+        UpdateSqlSegmentDto: {
+            name?: string;
+            description?: string | null;
+            query?: string;
+            refresh_interval_minutes?: number | null;
+        };
         UpdateChannelScoreConfigDto: {
             enabled: boolean;
             window_days?: number;
@@ -10085,6 +10205,13 @@ export interface components {
             created_by: string | null;
             created_at: string;
             updated_at: string;
+            sql: {
+                query: string;
+                refresh_interval_minutes: number | null;
+                refreshed_at: string | null;
+                member_count: number | null;
+                last_error: string | null;
+            } | null;
         };
         SegmentPage: {
             data: {
@@ -10101,6 +10228,13 @@ export interface components {
                 created_by: string | null;
                 created_at: string;
                 updated_at: string;
+                sql: {
+                    query: string;
+                    refresh_interval_minutes: number | null;
+                    refreshed_at: string | null;
+                    member_count: number | null;
+                    last_error: string | null;
+                } | null;
             }[];
             next_cursor: string | null;
             has_more: boolean;
@@ -17467,6 +17601,81 @@ export interface components {
             handoff_reasons: {
                 [key: string]: number;
             };
+        };
+        SqlSchema: {
+            views: {
+                name: string;
+                columns: {
+                    name: string;
+                    /** @enum {string} */
+                    type: "text" | "integer" | "number" | "boolean" | "timestamp" | "json";
+                }[];
+            }[];
+            limits: {
+                query_max: number;
+                row_limit_default: number;
+                row_limit_max: number;
+                timeout_default_ms: number;
+                timeout_max_ms: number;
+                segment_max_members: number;
+            };
+            refresh_intervals: number[];
+        };
+        SqlQueryResult: {
+            run_id: string;
+            columns: {
+                name: string;
+                type: ("text" | "integer" | "number" | "boolean" | "timestamp" | "json") | "unknown";
+            }[];
+            rows: unknown[][];
+            row_count: number;
+            truncated: boolean;
+            duration_ms: number;
+        };
+        SqlRunList: {
+            data: {
+                id: string;
+                segment_id: string | null;
+                /** @enum {string} */
+                source: "panel" | "api" | "schedule";
+                actor_id: string | null;
+                query: string;
+                query_hash: string;
+                /** @enum {string} */
+                status: "ok" | "rejected" | "timeout" | "failed";
+                reason: ("empty" | "too_long" | "syntax" | "multiple_statements" | "not_select" | "forbidden_relation" | "forbidden_function" | "forbidden_construct" | "forbidden_type") | null;
+                error: string | null;
+                row_count: number;
+                truncated: boolean;
+                duration_ms: number;
+                created_at: string;
+            }[];
+            next_cursor: string | null;
+            has_more: boolean;
+        };
+        SqlSegmentList: {
+            data: {
+                id: string;
+                app_id: string;
+                name: string;
+                description: string | null;
+                definition: {
+                    [key: string]: unknown;
+                };
+                is_dynamic: boolean;
+                estimated_count: number | null;
+                estimated_at: string | null;
+                created_by: string | null;
+                created_at: string;
+                updated_at: string;
+                sql: {
+                    query: string;
+                    refresh_interval_minutes: number | null;
+                    refreshed_at: string | null;
+                    member_count: number | null;
+                    last_error: string | null;
+                } | null;
+            }[];
         };
         ChannelScoreConfig: {
             configured: boolean;
@@ -24880,6 +25089,193 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["AiAgentMetrics"];
+                };
+            };
+        };
+    };
+    PublicSqlSegmentsController_schema: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SqlSchema"];
+                };
+            };
+        };
+    };
+    PublicSqlSegmentsController_run: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["RunSqlQueryDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SqlQueryResult"];
+                };
+            };
+        };
+    };
+    PublicSqlSegmentsController_runs: {
+        parameters: {
+            query?: {
+                segment_id?: string;
+                status?: "ok" | "rejected" | "timeout" | "failed";
+                limit?: number;
+                cursor?: string;
+            };
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SqlRunList"];
+                };
+            };
+        };
+    };
+    PublicSqlSegmentsController_listSegments: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SqlSegmentList"];
+                };
+            };
+        };
+    };
+    PublicSqlSegmentsController_createSegment: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateSqlSegmentDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Segment"];
+                };
+            };
+        };
+    };
+    PublicSqlSegmentsController_updateSegment: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                segmentId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateSqlSegmentDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Segment"];
+                };
+            };
+        };
+    };
+    PublicSqlSegmentsController_refresh: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                segmentId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Segment"];
                 };
             };
         };

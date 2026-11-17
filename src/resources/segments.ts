@@ -3,12 +3,19 @@ import type {
   Ok,
   PreviewSegmentInput,
   QueryParams,
+  RunSqlQueryInput,
   Segment,
   SegmentCampaigns,
   SegmentEstimate,
   SegmentPage,
   SegmentPreview,
+  CreateSqlSegmentInput,
+  SqlQueryResult,
+  SqlRunList,
+  SqlSchema,
+  SqlSegmentList,
   UpdateSegmentInput,
+  UpdateSqlSegmentInput,
 } from '../types.js';
 import { enc, type ResourceContext } from './context.js';
 
@@ -46,5 +53,28 @@ export function createSegments(ctx: ResourceContext) {
         path: `${base(appId)}/${enc(segmentId)}/estimate`,
         query: { force: options.force ? 'true' : 'false' },
       }),
+  };
+}
+
+/**
+ * SQL sorgu ve SQL segment (ADR-0087): izinli görünümler üzerinde salt okunur SELECT (`users:read`), sorgu kaydı ve
+ * sorgu sonucundaki `user_id` kolonundan statik segment (`admin`). Growth+ plan özelliği `sql_segments`.
+ */
+export function createSqlSegments(ctx: ResourceContext) {
+  const base = (appId?: string) => `${ctx.appPath(appId)}/sql`;
+  return {
+    /** İzinli görünümler, kolonlar ve sınırlar. */
+    schema: (appId?: string) => ctx.http.request<SqlSchema>({ method: 'GET', path: `${base(appId)}/schema` }),
+    /** Sorgu çalıştırır; satırlar kolon sırasıyla dizi olarak döner. */
+    query: (body: RunSqlQueryInput, appId?: string) => ctx.http.request<SqlQueryResult>({ method: 'POST', path: `${base(appId)}/query`, body }),
+    /** Sorgu kaydı (`segment_id`, `status`, `limit`, `cursor`). */
+    runs: (params: QueryParams<'/v1/apps/{appId}/sql/runs', 'get'> = {}, appId?: string) =>
+      ctx.http.request<SqlRunList>({ method: 'GET', path: `${base(appId)}/runs`, query: params }),
+    listSegments: (appId?: string) => ctx.http.request<SqlSegmentList>({ method: 'GET', path: `${base(appId)}/segments` }),
+    createSegment: (body: CreateSqlSegmentInput, appId?: string) => ctx.http.request<Segment>({ method: 'POST', path: `${base(appId)}/segments`, body }),
+    updateSegment: (segmentId: string, body: UpdateSqlSegmentInput, appId?: string) =>
+      ctx.http.request<Segment>({ method: 'PATCH', path: `${base(appId)}/segments/${enc(segmentId)}`, body }),
+    refreshSegment: (segmentId: string, appId?: string) =>
+      ctx.http.request<Segment>({ method: 'POST', path: `${base(appId)}/segments/${enc(segmentId)}/refresh` }),
   };
 }
