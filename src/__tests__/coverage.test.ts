@@ -125,6 +125,7 @@ const TABLE: Record<string, (hs: Pushizo) => Promise<unknown>> = {
   'PUT /v1/apps/{appId}/channels/{channel}': (hs) =>
     hs.channels.upsert('ios_push', { provider: 'mock' }),
   'POST /v1/apps/{appId}/channels/{channel}/validate': (hs) => hs.channels.validate('ios_push'),
+  'POST /v1/apps/{appId}/messenger-links': (hs) => hs.channels.createMessengerLink({ channel: 'telegram', external_id: 'musteri-42' }),
   // bildirimler
   'POST /v1/notifications': (hs) =>
     hs.notifications.create({ target: { all: true }, contents: { en: 'x' } }),

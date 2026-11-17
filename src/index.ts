@@ -30,6 +30,8 @@ import type {
   Channel,
   ChannelConfig,
   ChannelValidation,
+  CreateMessengerLinkInput,
+  MessengerLink,
   CreateAppInput,
   CreateNotificationInput,
   CreateNotificationResult,
@@ -471,6 +473,18 @@ export class Pushizo {
         method: 'POST',
         path: `/v1/apps/${enc(this.app(appId))}/channels/${channel}/validate`,
       }),
+    /**
+     * Telegram/Viber abonelik bağlama derin bağlantısı (ADR-0086): kullanıcı bağlantıyı açıp botu başlatınca sohbet
+     * kimliği bu kullanıcıya abonelik olarak bağlanır. Belirteç tek kullanımlıktır ve yalnızca bu yanıtta döner.
+     */
+    createMessengerLink: (input: CreateMessengerLinkInput & { appId?: string }) => {
+      const { appId, ...body } = input;
+      return this.http.request<MessengerLink>({
+        method: 'POST',
+        path: `/v1/apps/${enc(this.app(appId))}/messenger-links`,
+        body,
+      });
+    },
   };
 
   /**
