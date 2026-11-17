@@ -1820,6 +1820,163 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/apps/{appId}/warehouse-segments/options": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Ambar segmenti seçenekleri ve sınırlar */
+        get: operations["PublicWarehouseSegmentsController_options"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/warehouse-segments/connections": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Ambar bağlantıları */
+        get: operations["PublicWarehouseSegmentsController_listConnections"];
+        put?: never;
+        /** Ambar bağlantısı oluştur */
+        post: operations["PublicWarehouseSegmentsController_createConnection"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/warehouse-segments/connections/{connectionId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Ambar bağlantısı detayı */
+        get: operations["PublicWarehouseSegmentsController_getConnection"];
+        put?: never;
+        post?: never;
+        /** Ambar bağlantısını sil */
+        delete: operations["PublicWarehouseSegmentsController_removeConnection"];
+        options?: never;
+        head?: never;
+        /** Ambar bağlantısını güncelle */
+        patch: operations["PublicWarehouseSegmentsController_updateConnection"];
+        trace?: never;
+    };
+    "/v1/apps/{appId}/warehouse-segments/connections/{connectionId}/test": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Ambar bağlantısını dene */
+        post: operations["PublicWarehouseSegmentsController_testConnection"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/warehouse-segments/preview": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Ambar sorgusunu önizle (dry-run veya örnek) */
+        post: operations["PublicWarehouseSegmentsController_preview"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/warehouse-segments/segments": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Ambar segmentleri */
+        get: operations["PublicWarehouseSegmentsController_listSegments"];
+        put?: never;
+        /** Ambar segmenti oluştur */
+        post: operations["PublicWarehouseSegmentsController_createSegment"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/warehouse-segments/segments/{segmentId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /** Ambar segmentini güncelle */
+        patch: operations["PublicWarehouseSegmentsController_updateSegment"];
+        trace?: never;
+    };
+    "/v1/apps/{appId}/warehouse-segments/segments/{segmentId}/refresh": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Ambar segmentini yenileme kuyruğuna al */
+        post: operations["PublicWarehouseSegmentsController_refresh"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/warehouse-segments/runs": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Ambar sorgu kaydı */
+        get: operations["PublicWarehouseSegmentsController_runs"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/apps/{appId}/channel-scores/config": {
         parameters: {
             query?: never;
@@ -7074,6 +7231,73 @@ export interface components {
         DiscardQuarantineDto: {
             ids: string[];
         };
+        CreateWarehouseConnectionDto: {
+            name: string;
+            /** @enum {string} */
+            type: "bigquery" | "snowflake" | "databricks";
+            config: {
+                [key: string]: unknown;
+            };
+            credentials: {
+                [key: string]: unknown;
+            };
+        };
+        UpdateWarehouseConnectionDto: {
+            name?: string;
+            config?: {
+                [key: string]: unknown;
+            };
+            credentials?: {
+                [key: string]: unknown;
+            };
+        };
+        PreviewWarehouseQueryDto: {
+            connection_id: string;
+            query: string;
+            id_column: string;
+            /** @enum {string} */
+            id_type?: "external_id" | "user_id";
+            limits?: {
+                timeout_seconds?: number;
+                max_rows?: number;
+                max_bytes_billed?: number;
+                max_warehouse_size?: ("X-Small" | "Small" | "Medium" | "Large" | "X-Large" | "2X-Large" | "3X-Large" | "4X-Large" | "5X-Large" | "6X-Large") | null;
+            };
+            /** @enum {string} */
+            mode?: "dry_run" | "sample";
+        };
+        CreateWarehouseSegmentDto: {
+            name: string;
+            description?: string | null;
+            connection_id: string;
+            query: string;
+            id_column: string;
+            /** @enum {string} */
+            id_type?: "external_id" | "user_id";
+            refresh_interval_minutes?: number | null;
+            limits?: {
+                timeout_seconds?: number;
+                max_rows?: number;
+                max_bytes_billed?: number;
+                max_warehouse_size?: ("X-Small" | "Small" | "Medium" | "Large" | "X-Large" | "2X-Large" | "3X-Large" | "4X-Large" | "5X-Large" | "6X-Large") | null;
+            };
+        };
+        UpdateWarehouseSegmentDto: {
+            name?: string;
+            description?: string | null;
+            connection_id?: string;
+            query?: string;
+            id_column?: string;
+            /** @enum {string} */
+            id_type?: "external_id" | "user_id";
+            refresh_interval_minutes?: number | null;
+            limits?: {
+                timeout_seconds?: number;
+                max_rows?: number;
+                max_bytes_billed?: number;
+                max_warehouse_size?: ("X-Small" | "Small" | "Medium" | "Large" | "X-Large" | "2X-Large" | "3X-Large" | "4X-Large" | "5X-Large" | "6X-Large") | null;
+            };
+        };
         UpdateChannelScoreConfigDto: {
             enabled: boolean;
             window_days?: number;
@@ -11094,6 +11318,27 @@ export interface components {
                 member_count: number | null;
                 last_error: string | null;
             } | null;
+            warehouse: {
+                connection_id: string | null;
+                query: string;
+                id_column: string;
+                /** @enum {string} */
+                id_type: "external_id" | "user_id";
+                limits: {
+                    timeout_seconds: number;
+                    max_rows: number;
+                    max_bytes_billed: number;
+                    max_warehouse_size: ("X-Small" | "Small" | "Medium" | "Large" | "X-Large" | "2X-Large" | "3X-Large" | "4X-Large" | "5X-Large" | "6X-Large") | null;
+                };
+                refresh_interval_minutes: number | null;
+                /** @enum {string} */
+                refresh_state: "queued" | "failed" | "ok" | "never";
+                refresh_requested_at: string | null;
+                refreshed_at: string | null;
+                member_count: number | null;
+                last_error: string | null;
+                bytes_processed: number | null;
+            } | null;
         };
         SegmentPage: {
             data: {
@@ -11116,6 +11361,27 @@ export interface components {
                     refreshed_at: string | null;
                     member_count: number | null;
                     last_error: string | null;
+                } | null;
+                warehouse: {
+                    connection_id: string | null;
+                    query: string;
+                    id_column: string;
+                    /** @enum {string} */
+                    id_type: "external_id" | "user_id";
+                    limits: {
+                        timeout_seconds: number;
+                        max_rows: number;
+                        max_bytes_billed: number;
+                        max_warehouse_size: ("X-Small" | "Small" | "Medium" | "Large" | "X-Large" | "2X-Large" | "3X-Large" | "4X-Large" | "5X-Large" | "6X-Large") | null;
+                    };
+                    refresh_interval_minutes: number | null;
+                    /** @enum {string} */
+                    refresh_state: "queued" | "failed" | "ok" | "never";
+                    refresh_requested_at: string | null;
+                    refreshed_at: string | null;
+                    member_count: number | null;
+                    last_error: string | null;
+                    bytes_processed: number | null;
                 } | null;
             }[];
             next_cursor: string | null;
@@ -18705,6 +18971,27 @@ export interface components {
                     member_count: number | null;
                     last_error: string | null;
                 } | null;
+                warehouse: {
+                    connection_id: string | null;
+                    query: string;
+                    id_column: string;
+                    /** @enum {string} */
+                    id_type: "external_id" | "user_id";
+                    limits: {
+                        timeout_seconds: number;
+                        max_rows: number;
+                        max_bytes_billed: number;
+                        max_warehouse_size: ("X-Small" | "Small" | "Medium" | "Large" | "X-Large" | "2X-Large" | "3X-Large" | "4X-Large" | "5X-Large" | "6X-Large") | null;
+                    };
+                    refresh_interval_minutes: number | null;
+                    /** @enum {string} */
+                    refresh_state: "queued" | "failed" | "ok" | "never";
+                    refresh_requested_at: string | null;
+                    refreshed_at: string | null;
+                    member_count: number | null;
+                    last_error: string | null;
+                    bytes_processed: number | null;
+                } | null;
             }[];
         };
         CustomAgent: {
@@ -19111,6 +19398,149 @@ export interface components {
         };
         DataQuarantineDiscardResult: {
             discarded: number;
+        };
+        WarehouseSegmentConnection: {
+            id: string;
+            app_id: string;
+            name: string;
+            /** @enum {string} */
+            type: "bigquery" | "snowflake" | "databricks";
+            config: {
+                [key: string]: unknown;
+            };
+            credentials_hint: string;
+            segment_count: number;
+            last_tested_at: string | null;
+            last_test_error: string | null;
+            created_at: string;
+            updated_at: string;
+        };
+        WarehouseSegmentConnectionList: {
+            data: {
+                id: string;
+                app_id: string;
+                name: string;
+                /** @enum {string} */
+                type: "bigquery" | "snowflake" | "databricks";
+                config: {
+                    [key: string]: unknown;
+                };
+                credentials_hint: string;
+                segment_count: number;
+                last_tested_at: string | null;
+                last_test_error: string | null;
+                created_at: string;
+                updated_at: string;
+            }[];
+        };
+        WarehouseSegmentConnectionTest: {
+            ok: boolean;
+            error: {
+                code: string;
+                message: string;
+            } | null;
+        };
+        WarehouseSegmentOptions: {
+            types: ("bigquery" | "snowflake" | "databricks")[];
+            id_types: ("external_id" | "user_id")[];
+            snowflake_warehouse_sizes: ("X-Small" | "Small" | "Medium" | "Large" | "X-Large" | "2X-Large" | "3X-Large" | "4X-Large" | "5X-Large" | "6X-Large")[];
+            refresh_intervals: number[];
+            limits: {
+                query_max: number;
+                timeout_default_seconds: number;
+                timeout_min_seconds: number;
+                timeout_max_seconds: number;
+                max_rows_default: number;
+                max_rows_max: number;
+                max_bytes_billed_default: number;
+                max_bytes_billed_min: number;
+                max_bytes_billed_max: number;
+                preview_sample: number;
+                connections_per_app: number;
+            };
+        };
+        WarehouseSegmentPreview: {
+            run_id: string;
+            /** @enum {string} */
+            mode: "dry_run" | "sample";
+            estimated_bytes: number | null;
+            max_bytes_billed: number | null;
+            within_limit: boolean;
+            sample: string[] | null;
+            sample_truncated: boolean;
+            sample_matched: number | null;
+            duration_ms: number;
+        };
+        WarehouseSegmentRunList: {
+            data: {
+                id: string;
+                segment_id: string | null;
+                connection_id: string | null;
+                /** @enum {string} */
+                warehouse_type: "bigquery" | "snowflake" | "databricks";
+                /** @enum {string} */
+                source: "panel" | "api" | "schedule";
+                actor_id: string | null;
+                query: string;
+                query_hash: string;
+                /** @enum {string} */
+                status: "ok" | "rejected" | "timeout" | "failed";
+                reason: ("empty" | "too_long" | "syntax" | "multiple_statements" | "not_select" | "forbidden_relation" | "forbidden_function" | "forbidden_construct" | "forbidden_type") | null;
+                error: string | null;
+                row_count: number;
+                matched_count: number | null;
+                bytes_processed: number | null;
+                truncated: boolean;
+                duration_ms: number;
+                created_at: string;
+            }[];
+            next_cursor: string | null;
+            has_more: boolean;
+        };
+        WarehouseSegmentList: {
+            data: {
+                id: string;
+                app_id: string;
+                name: string;
+                description: string | null;
+                definition: {
+                    [key: string]: unknown;
+                };
+                is_dynamic: boolean;
+                estimated_count: number | null;
+                estimated_at: string | null;
+                created_by: string | null;
+                created_at: string;
+                updated_at: string;
+                sql: {
+                    query: string;
+                    refresh_interval_minutes: number | null;
+                    refreshed_at: string | null;
+                    member_count: number | null;
+                    last_error: string | null;
+                } | null;
+                warehouse: {
+                    connection_id: string | null;
+                    query: string;
+                    id_column: string;
+                    /** @enum {string} */
+                    id_type: "external_id" | "user_id";
+                    limits: {
+                        timeout_seconds: number;
+                        max_rows: number;
+                        max_bytes_billed: number;
+                        max_warehouse_size: ("X-Small" | "Small" | "Medium" | "Large" | "X-Large" | "2X-Large" | "3X-Large" | "4X-Large" | "5X-Large" | "6X-Large") | null;
+                    };
+                    refresh_interval_minutes: number | null;
+                    /** @enum {string} */
+                    refresh_state: "queued" | "failed" | "ok" | "never";
+                    refresh_requested_at: string | null;
+                    refreshed_at: string | null;
+                    member_count: number | null;
+                    last_error: string | null;
+                    bytes_processed: number | null;
+                } | null;
+            }[];
         };
         ChannelScoreConfig: {
             configured: boolean;
@@ -27707,6 +28137,350 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["DataQuarantineDiscardResult"];
+                };
+            };
+        };
+    };
+    PublicWarehouseSegmentsController_options: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WarehouseSegmentOptions"];
+                };
+            };
+        };
+    };
+    PublicWarehouseSegmentsController_listConnections: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WarehouseSegmentConnectionList"];
+                };
+            };
+        };
+    };
+    PublicWarehouseSegmentsController_createConnection: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateWarehouseConnectionDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WarehouseSegmentConnection"];
+                };
+            };
+        };
+    };
+    PublicWarehouseSegmentsController_getConnection: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                connectionId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WarehouseSegmentConnection"];
+                };
+            };
+        };
+    };
+    PublicWarehouseSegmentsController_removeConnection: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                connectionId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Ok"];
+                };
+            };
+        };
+    };
+    PublicWarehouseSegmentsController_updateConnection: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                connectionId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateWarehouseConnectionDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WarehouseSegmentConnection"];
+                };
+            };
+        };
+    };
+    PublicWarehouseSegmentsController_testConnection: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                connectionId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WarehouseSegmentConnectionTest"];
+                };
+            };
+        };
+    };
+    PublicWarehouseSegmentsController_preview: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PreviewWarehouseQueryDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WarehouseSegmentPreview"];
+                };
+            };
+        };
+    };
+    PublicWarehouseSegmentsController_listSegments: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WarehouseSegmentList"];
+                };
+            };
+        };
+    };
+    PublicWarehouseSegmentsController_createSegment: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateWarehouseSegmentDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Segment"];
+                };
+            };
+        };
+    };
+    PublicWarehouseSegmentsController_updateSegment: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                segmentId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateWarehouseSegmentDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Segment"];
+                };
+            };
+        };
+    };
+    PublicWarehouseSegmentsController_refresh: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                segmentId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            202: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Segment"];
+                };
+            };
+        };
+    };
+    PublicWarehouseSegmentsController_runs: {
+        parameters: {
+            query?: {
+                segment_id?: string;
+                connection_id?: string;
+                status?: "ok" | "rejected" | "timeout" | "failed";
+                limit?: number;
+                cursor?: string;
+            };
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WarehouseSegmentRunList"];
                 };
             };
         };
