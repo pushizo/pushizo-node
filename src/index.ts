@@ -10,6 +10,7 @@ import { createCompanies } from './resources/companies.js';
 import type { ResourceContext } from './resources/context.js';
 import { createAiAgents, createConversations, createSmsKeywords, createWhatsAppTemplates } from './resources/conversations.js';
 import { createDataPipelines } from './resources/data-pipelines.js';
+import { createSiteSearch } from './resources/site-search.js';
 import { createExports, createImports } from './resources/data-transfer.js';
 import { createCatalogs, createContentTables, createDataFeeds, createPromoCodeLists, createRecommendations } from './resources/dynamic-content.js';
 import { createEmailDeliverability } from './resources/email-deliverability.js';
@@ -671,6 +672,8 @@ export class Pushizo {
   readonly aiAgents = createAiAgents(this.resourceContext());
   /** Veri dönüştürme ve kaynak boru hattı: kurallar, sandbox'lı JavaScript, webhook/HTTP pull kaynakları, karantina (ADR-0088). */
   readonly dataPipelines = createDataPipelines(this.resourceContext());
+  /** Site içi AI arama: ayarlar, kaynaklar, belge dizini ve sorgu raporu (ADR-0093). */
+  readonly siteSearch = createSiteSearch(this.resourceContext());
   /** Gelen mesaj anahtar kelimeleri. */
   readonly smsKeywords = createSmsKeywords(this.resourceContext());
   /** WhatsApp Business şablonları. */
