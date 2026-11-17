@@ -5,7 +5,7 @@ import { createAnalytics, createFeatureFlags, createGeofences, createGlobalContr
 import { createApiKeys } from './resources/api-keys.js';
 import { createIdentityKeys, createIdentityToken, type IdentityTokenOptions } from './resources/identity-keys.js';
 import { createLiveActivities } from './resources/live-activities.js';
-import { createCampaigns } from './resources/campaigns.js';
+import { createCampaigns, createCustomAgents } from './resources/campaigns.js';
 import type { ResourceContext } from './resources/context.js';
 import { createAiAgents, createConversations, createSmsKeywords, createWhatsAppTemplates } from './resources/conversations.js';
 import { createExports, createImports } from './resources/data-transfer.js';
@@ -587,6 +587,8 @@ export class Pushizo {
   readonly templates = createTemplates(this.resourceContext());
   /** Kampanyalar: CRUD, yaşam döngüsü, istatistik, teslimat ve mesajlar. */
   readonly campaigns = createCampaigns(this.resourceContext());
+  /** Müşterinin kendi AI ajanı: talimat, izinli araçlar, zamanlanmış çalıştırma ve taslaklar (ADR-0089). */
+  readonly customAgents = createCustomAgents(this.resourceContext());
   /** Journey'ler: taslak graf, yayın/sürümler, yaşam döngüsü, istatistik ve çalıştırmalar. */
   readonly journeys = createJourneys(this.resourceContext());
   /** Uygulama içi mesajlar. */
