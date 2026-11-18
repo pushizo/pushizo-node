@@ -101,7 +101,7 @@ export class HttpClient {
     const headers: Record<string, string> = {
       authorization: `Bearer ${this.options.apiKey}`,
       accept: 'application/json',
-      'user-agent': this.options.userAgent ?? 'pushizo-node/0.1.0',
+      'user-agent': this.options.userAgent ?? 'pushizo-node/0.3.0',
     };
     const multipart = input.body instanceof FormData;
     if (input.body !== undefined && !multipart) headers['content-type'] = 'application/json';

@@ -1,25 +1,30 @@
 import { createHmac, randomUUID } from 'node:crypto';
 import { HttpClient, type HttpOptions } from './http.js';
 import { createAds } from './resources/ads.js';
-import { createAnalytics } from './resources/analytics.js';
+import { createAnalytics, createFeatureFlags, createGeofences, createGlobalControl, createChannelScores, createDecisionAgents, createPredictions, createRfm, createAffinity, createSavedReports, createWallet } from './resources/analytics.js';
 import { createApiKeys } from './resources/api-keys.js';
 import { createIdentityKeys, createIdentityToken, type IdentityTokenOptions } from './resources/identity-keys.js';
 import { createLiveActivities } from './resources/live-activities.js';
-import { createCampaigns } from './resources/campaigns.js';
+import { createCampaigns, createCustomAgents } from './resources/campaigns.js';
+import { createCompanies } from './resources/companies.js';
 import type { ResourceContext } from './resources/context.js';
-import { createConversations, createSmsKeywords, createWhatsAppTemplates } from './resources/conversations.js';
+import { createAiAgents, createConversations, createSmsKeywords, createWhatsAppTemplates } from './resources/conversations.js';
+import { createDataPipelines } from './resources/data-pipelines.js';
+import { createSiteSearch } from './resources/site-search.js';
 import { createExports, createImports } from './resources/data-transfer.js';
-import { createContentTables, createDataFeeds } from './resources/dynamic-content.js';
+import { createCatalogs, createContentTables, createDataFeeds, createPromoCodeLists, createRecommendations } from './resources/dynamic-content.js';
 import { createEmailDeliverability } from './resources/email-deliverability.js';
 import { createInAppMessages } from './resources/in-app-messages.js';
 import { createInbox } from './resources/inbox.js';
-import { createMcpDrafts, createZapier } from './resources/integrations.js';
+import { createIntegrations, createMcpDrafts, createZapier } from './resources/integrations.js';
 import { createJourneys } from './resources/journeys.js';
 import { createPreferences } from './resources/preferences.js';
-import { createSegments } from './resources/segments.js';
+import { createSegments, createSqlSegments, createWarehouseSegments } from './resources/segments.js';
 import { createTemplates } from './resources/templates.js';
+import { createReverseEtl } from './resources/reverse-etl.js';
+import { createVerify } from './resources/verify.js';
 import { createWarehouseExports } from './resources/warehouse-exports.js';
-import { createForms, createLandingPages, createSurveys, createWebCampaigns } from './resources/web-growth.js';
+import { createForms, createLandingPages, createSurveys, createWebCampaigns, createWebPersonalizations } from './resources/web-growth.js';
 import type {
   AddSubscriptionInput,
   App,
@@ -28,6 +33,8 @@ import type {
   Channel,
   ChannelConfig,
   ChannelValidation,
+  CreateMessengerLinkInput,
+  MessengerLink,
   CreateAppInput,
   CreateNotificationInput,
   CreateNotificationResult,
@@ -42,6 +49,8 @@ import type {
   EventDefinitionDetail,
   EventDefinitionList,
   EventsAccepted,
+  JsonBody,
+  JsonResponse,
   ExportJob,
   MemberList,
   Message,
@@ -82,10 +91,12 @@ export type { CreateImportInput, ImportFile } from './resources/data-transfer.js
 export type {
   CreateContentTableInput,
   ReplaceContentTableRowsInput,
+  UploadCatalogItemsInput,
+  UploadPromoCodesInput,
 } from './resources/dynamic-content.js';
 export { createIdentityToken, type IdentityTokenOptions } from './resources/identity-keys.js';
 
-/** `subscriptions.updateByToken` için token türü: Pushizo kanal adı veya OneSignal karşılığı. */
+/** `subscriptions.updateByToken` için token türü: Pushizo kanal adı veya eski sağlayıcı karşılığı. */
 export type SubscriptionTokenType =
   | Channel
   | 'iOSPush'
@@ -207,6 +218,9 @@ export class Pushizo {
         path: '/v1/organization/audit-logs',
         query: params,
       }),
+    /** Public API istek logları (son 7 gün; `app_id`, `status_class`, `method` filtreleri ve cursor). */
+    logs: (params: QueryParams<'/v1/organization/logs', 'get'> & { app_id?: string } = {}) =>
+      this.http.request<JsonResponse<'/v1/organization/logs', 'get'>>({ method: 'GET', path: '/v1/organization/logs', query: params }),
     /** Organizasyon kullanımı ve plan kotaları (org geneli `analytics:read`/`admin` anahtarı). */
     usage: (params: QueryParams<'/v1/organization/usage', 'get'> = {}) =>
       this.http.request<UsageReport>({
@@ -221,6 +235,13 @@ export class Pushizo {
     /** Org geneli admin anahtarı gerektirir. */
     create: (body: CreateAppInput) =>
       this.http.request<App>({ method: 'POST', path: '/v1/apps', body }),
+    /** SDK hata raporları (son 7 gün; `platform`, `level` filtreleri ve cursor; `admin`). */
+    sdkErrors: (params: QueryParams<'/v1/apps/{appId}/sdk-errors', 'get'> = {}, appId?: string) =>
+      this.http.request<JsonResponse<'/v1/apps/{appId}/sdk-errors', 'get'>>({
+        method: 'GET',
+        path: `/v1/apps/${enc(this.app(appId))}/sdk-errors`,
+        query: params,
+      }),
     get: (appId?: string) =>
       this.http.request<App>({ method: 'GET', path: `/v1/apps/${enc(this.app(appId))}` }),
     update: (body: UpdateAppInput, appId?: string) =>
@@ -295,6 +316,13 @@ export class Pushizo {
         method: 'POST',
         path: `/v1/notifications/${enc(messageId)}/export_events`,
         query: { app_id: this.app(appId) },
+      }),
+    /** Mesaj izleme (`admin`): `msg_`/`dlv_`/`sub_` kimliği, external_id veya token'ın son 8 karakteri. */
+    trace: (q: string, appId?: string) =>
+      this.http.request<JsonResponse<'/v1/apps/{appId}/trace', 'get'>>({
+        method: 'GET',
+        path: `/v1/apps/${enc(this.app(appId))}/trace`,
+        query: { q },
       }),
     deliveries: (
       messageId: string,
@@ -372,6 +400,26 @@ export class Pushizo {
         method: 'DELETE',
         path: `/v1/apps/${enc(this.app(appId))}/users/by/${enc(label)}/${enc(value)}/identity/${enc(aliasLabel)}`,
       }),
+    /** Olay ve teslimat zaman çizelgesi (en yeni 40 kayıt). */
+    timeline: (label: string, value: string, appId?: string) =>
+      this.http.request<JsonResponse<'/v1/apps/{appId}/users/by/{label}/{value}/timeline', 'get'>>({
+        method: 'GET',
+        path: `/v1/apps/${enc(this.app(appId))}/users/by/${enc(label)}/${enc(value)}/timeline`,
+      }),
+    /** Kullanıcının son olayları (`limit` 1–200). */
+    events: (label: string, value: string, params: QueryParams<'/v1/apps/{appId}/users/by/{label}/{value}/events', 'get'> = {}, appId?: string) =>
+      this.http.request<JsonResponse<'/v1/apps/{appId}/users/by/{label}/{value}/events', 'get'>>({
+        method: 'GET',
+        path: `/v1/apps/${enc(this.app(appId))}/users/by/${enc(label)}/${enc(value)}/events`,
+        query: params,
+      }),
+    /** Kullanıcının son mesajları (teslimatlar, en yeni önce; `limit` 1–100). */
+    messages: (label: string, value: string, params: QueryParams<'/v1/apps/{appId}/users/by/{label}/{value}/messages', 'get'> = {}, appId?: string) =>
+      this.http.request<JsonResponse<'/v1/apps/{appId}/users/by/{label}/{value}/messages', 'get'>>({
+        method: 'GET',
+        path: `/v1/apps/${enc(this.app(appId))}/users/by/${enc(label)}/${enc(value)}/messages`,
+        query: params,
+      }),
     addSubscription: (label: string, value: string, body: AddSubscriptionInput, appId?: string) =>
       this.http.request<Subscription>({
         method: 'POST',
@@ -381,6 +429,20 @@ export class Pushizo {
   };
 
   readonly subscriptions = {
+    /** Abonelik listesi (kanal/durum/test cihazı filtreleri, cursor); token'ın yalnızca son 8 karakteri döner. */
+    list: (params: QueryParams<'/v1/apps/{appId}/subscriptions', 'get'> = {}, appId?: string) =>
+      this.http.request<JsonResponse<'/v1/apps/{appId}/subscriptions', 'get'>>({
+        method: 'GET',
+        path: `/v1/apps/${enc(this.app(appId))}/subscriptions`,
+        query: params,
+      }),
+    /** Toplu temizlik: `invalid` (varsayılan) veya `unsubscribed` durumundaki abonelikleri kalıcı olarak siler. */
+    cleanup: (body: JsonBody<'/v1/apps/{appId}/subscriptions/cleanup', 'post'> = {}, appId?: string) =>
+      this.http.request<JsonResponse<'/v1/apps/{appId}/subscriptions/cleanup', 'post'>>({
+        method: 'POST',
+        path: `/v1/apps/${enc(this.app(appId))}/subscriptions/cleanup`,
+        body,
+      }),
     get: (subscriptionId: string, appId?: string) =>
       this.http.request<Subscription>({
         method: 'GET',
@@ -403,7 +465,7 @@ export class Pushizo {
         method: 'GET',
         path: `/v1/apps/${enc(this.app(appId))}/subscriptions/${enc(subscriptionId)}/user/identity`,
       }),
-    /** Abonelik kimliği yerine token ile güncelle (OneSignal token türü adları da kabul edilir). */
+    /** Abonelik kimliği yerine token ile güncelle (eski sağlayıcı token türü adları da kabul edilir). */
     updateByToken: (
       tokenType: SubscriptionTokenType,
       token: string,
@@ -441,6 +503,13 @@ export class Pushizo {
         method: 'GET',
         path: `/v1/apps/${enc(this.app(appId))}/events/definitions/${enc(name)}`,
       }),
+    /** Son olaylar (kullanıcı kimliği ve özelliklerle); `name`, `since` ve `limit` ile süzülür. */
+    recent: (params: QueryParams<'/v1/apps/{appId}/events/recent', 'get'> = {}, appId?: string) =>
+      this.http.request<JsonResponse<'/v1/apps/{appId}/events/recent', 'get'>>({
+        method: 'GET',
+        path: `/v1/apps/${enc(this.app(appId))}/events/recent`,
+        query: params,
+      }),
     /** Görünen ad ve dönüşüm işareti (`is_conversion`). */
     updateDefinition: (name: string, body: PatchEventDefinitionInput, appId?: string) =>
       this.http.request<EventDefinition>({
@@ -462,11 +531,35 @@ export class Pushizo {
         path: `/v1/apps/${enc(this.app(appId))}/channels/${channel}`,
         body,
       }),
+    /** Kanal özeti: yalnız sağlayıcı ve durum (`users:read`). */
+    status: (appId?: string) =>
+      this.http.request<JsonResponse<'/v1/apps/{appId}/channels/status', 'get'>>({
+        method: 'GET',
+        path: `/v1/apps/${enc(this.app(appId))}/channels/status`,
+      }),
+    /** E-posta gönderici alan adının SPF/DKIM/DMARC kayıtlarını doğrular. */
+    verifyEmailDns: (appId?: string) =>
+      this.http.request<JsonResponse<'/v1/apps/{appId}/channels/email/verify-dns', 'post'>>({
+        method: 'POST',
+        path: `/v1/apps/${enc(this.app(appId))}/channels/email/verify-dns`,
+      }),
     validate: (channel: Channel, appId?: string) =>
       this.http.request<ChannelValidation>({
         method: 'POST',
         path: `/v1/apps/${enc(this.app(appId))}/channels/${channel}/validate`,
       }),
+    /**
+     * Telegram/Viber abonelik bağlama derin bağlantısı (ADR-0086): kullanıcı bağlantıyı açıp botu başlatınca sohbet
+     * kimliği bu kullanıcıya abonelik olarak bağlanır. Belirteç tek kullanımlıktır ve yalnızca bu yanıtta döner.
+     */
+    createMessengerLink: (input: CreateMessengerLinkInput & { appId?: string }) => {
+      const { appId, ...body } = input;
+      return this.http.request<MessengerLink>({
+        method: 'POST',
+        path: `/v1/apps/${enc(this.app(appId))}/messenger-links`,
+        body,
+      });
+    },
   };
 
   /**
@@ -566,6 +659,25 @@ export class Pushizo {
         method: 'POST',
         path: `/v1/apps/${enc(this.app(appId))}/webhooks/deliveries/${enc(deliveryId)}/replay`,
       }),
+    /** Abone olunabilecek olay türleri. */
+    eventTypes: (appId?: string) =>
+      this.http.request<JsonResponse<'/v1/apps/{appId}/webhooks/event-types', 'get'>>({
+        method: 'GET',
+        path: `/v1/apps/${enc(this.app(appId))}/webhooks/event-types`,
+      }),
+    /** Teslim detayı (gövde dahil). */
+    getDelivery: (deliveryId: string, appId?: string) =>
+      this.http.request<WebhookDeliveryDetail>({
+        method: 'GET',
+        path: `/v1/apps/${enc(this.app(appId))}/webhooks/deliveries/${enc(deliveryId)}`,
+      }),
+    /** Başarısız/ölü teslimleri toplu yeniden gönderir (en fazla 1000; `status`, `from`, `to`). */
+    replayFailed: (webhookId: string, body: JsonBody<'/v1/apps/{appId}/webhooks/{webhookId}/replay', 'post'> = {}, appId?: string) =>
+      this.http.request<JsonResponse<'/v1/apps/{appId}/webhooks/{webhookId}/replay', 'post'>>({
+        method: 'POST',
+        path: `/v1/apps/${enc(this.app(appId))}/webhooks/${enc(webhookId)}/replay`,
+        body,
+      }),
     /** Gövde şablonu ve filtreleri örnek olay verisiyle dener (gönderim yapmaz). */
     preview: (body: WebhookPreviewInput, appId?: string) =>
       this.http.request<WebhookPreviewResult>({
@@ -577,10 +689,18 @@ export class Pushizo {
 
   /** Segmentler: liste, CRUD, önizleme, tahmini sayım ve kullanan kampanyalar. */
   readonly segments = createSegments(this.resourceContext());
+  /** SQL sorgu ve SQL segment: izinli görünümlerde salt okunur SELECT, sorgudan segment (ADR-0087). */
+  readonly sqlSegments = createSqlSegments(this.resourceContext());
+  /** Şirket/hesap nesneleri (B2B): şirketler, kişi ↔ şirket üyeliği ve rol (ADR-0090). */
+  readonly companies = createCompanies(this.resourceContext());
+  /** Zero-copy ambar segmenti: BigQuery/Snowflake/Databricks sorgusundan yalnız kimliklerle segment (ADR-0091). */
+  readonly warehouseSegments = createWarehouseSegments(this.resourceContext());
   /** Şablonlar: CRUD, sürümler, render önizlemesi ve app'ler arası kopyalama. */
   readonly templates = createTemplates(this.resourceContext());
   /** Kampanyalar: CRUD, yaşam döngüsü, istatistik, teslimat ve mesajlar. */
   readonly campaigns = createCampaigns(this.resourceContext());
+  /** Müşterinin kendi AI ajanı: talimat, izinli araçlar, zamanlanmış çalıştırma ve taslaklar (ADR-0089). */
+  readonly customAgents = createCustomAgents(this.resourceContext());
   /** Journey'ler: taslak graf, yayın/sürümler, yaşam döngüsü, istatistik ve çalıştırmalar. */
   readonly journeys = createJourneys(this.resourceContext());
   /** Uygulama içi mesajlar. */
@@ -591,6 +711,26 @@ export class Pushizo {
   readonly inbox = createInbox(this.resourceContext());
   /** Analitik raporları (JSON veya `format: 'csv'`). */
   readonly analytics = createAnalytics(this.resourceContext());
+  /** Genel kontrol grubu: pazarlama mesajlarının toplam etkisini ölçer. */
+  readonly globalControl = createGlobalControl(this.resourceContext());
+  /** Özellik bayrakları ve kademeli yayın. */
+  readonly featureFlags = createFeatureFlags(this.resourceContext());
+  /** Bölgeler: giriş ve çıkış olayları. */
+  readonly geofences = createGeofences(this.resourceContext());
+  /** Kişi başına karar motoru. */
+  readonly decisionAgents = createDecisionAgents(this.resourceContext());
+  /** Öngörü modelleri. */
+  readonly predictions = createPredictions(this.resourceContext());
+  /** Apple ve Google Wallet kartları. */
+  readonly wallet = createWallet(this.resourceContext());
+  /** Kaydedilmiş raporlar. */
+  readonly savedReports = createSavedReports(this.resourceContext());
+  /** Kişi başına en iyi kanal. */
+  readonly channelScores = createChannelScores(this.resourceContext());
+  /** RFM segmentasyonu ve segment geçişleri. */
+  readonly rfm = createRfm(this.resourceContext());
+  /** İlgi etiketleri (ADR-0081). */
+  readonly affinity = createAffinity(this.resourceContext());
   /** Dışa aktarma işleri. */
   readonly exports = createExports(this.resourceContext());
   /** İçe aktarma işleri (multipart CSV). */
@@ -605,10 +745,26 @@ export class Pushizo {
   readonly dataFeeds = createDataFeeds(this.resourceContext());
   /** İçerik tabloları: CSV ile yüklenen, şablonda `lookup` ile okunan tablolar. */
   readonly contentTables = createContentTables(this.resourceContext());
+  /** Promosyon kodu listeleri: şablonda `promo_code` ile teslimat başına tek kod. */
+  readonly promoCodeLists = createPromoCodeLists(this.resourceContext());
+  /** Ürün katalogları: şablonda `catalog_item`, e-postada ürün bloğu. */
+  readonly catalogs = createCatalogs(this.resourceContext());
+  /** Katalog önerileri: şablonda `recommendations`, e-postada öneri bloğu. */
+  readonly recommendations = createRecommendations(this.resourceContext());
   /** Veri ambarı dışa aktarımları (BigQuery, Snowflake, S3 Parquet). */
   readonly warehouseExports = createWarehouseExports(this.resourceContext());
+  /** Depodan içeri aktarım. */
+  readonly reverseEtl = createReverseEtl(this.resourceContext());
+  /** SMS doğrulama kodu. */
+  readonly verify = createVerify(this.resourceContext());
   /** İki yönlü konuşmalar (SMS, WhatsApp, RCS). */
   readonly conversations = createConversations(this.resourceContext());
+  /** Konuşmalı AI ajanı: SSS ve webhook araçlarıyla otomatik yanıt, temsilciye devir (ADR-0085). */
+  readonly aiAgents = createAiAgents(this.resourceContext());
+  /** Veri dönüştürme ve kaynak boru hattı: kurallar, sandbox'lı JavaScript, webhook/HTTP pull kaynakları, karantina (ADR-0088). */
+  readonly dataPipelines = createDataPipelines(this.resourceContext());
+  /** Site içi AI arama: ayarlar, kaynaklar, belge dizini ve sorgu raporu (ADR-0093). */
+  readonly siteSearch = createSiteSearch(this.resourceContext());
   /** Gelen mesaj anahtar kelimeleri. */
   readonly smsKeywords = createSmsKeywords(this.resourceContext());
   /** WhatsApp Business şablonları. */
@@ -617,12 +773,16 @@ export class Pushizo {
   readonly emailDeliverability = createEmailDeliverability(this.resourceContext());
   /** Zapier REST Hook entegrasyonu. */
   readonly zapier = createZapier(this.resourceContext());
+  /** Hazır entegrasyonlar: durum, çalışma geçmişi, bağlantı testi ve cohort senkronu (`admin`). */
+  readonly integrations = createIntegrations(this.resourceContext());
   /** MCP onaylı mod: kampanya ve segment taslakları. */
   readonly mcp = createMcpDrafts(this.resourceContext());
   /** Reklam hesapları, kitleler (ADR-0037), kampanya raporlama, atribüsyon ve bütçe uyarıları (ADR-0038). */
   readonly ads = createAds(this.resourceContext());
   /** Web kampanyaları: pop-up/banner/slide-in, durum geçişi ve günlük rapor (ADR-0039). */
   readonly webCampaigns = createWebCampaigns(this.resourceContext());
+  /** Web sayfası kişiselleştirme (ADR-0083). */
+  readonly webPersonalizations = createWebPersonalizations(this.resourceContext());
   /** Formlar: tanım, gönderimler ve sunucu tarafı gönderim. */
   readonly forms = createForms(this.resourceContext());
   /** Anketler: NPS/CSAT raporu, yanıtlar ve sunucu tarafı yanıt. */

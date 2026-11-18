@@ -298,7 +298,7 @@ describe('Pushizo Node SDK', () => {
   it('webhooks kaynağı doğru yolları çağırır', async () => {
     const { hs, calls } = client(() => json(200, { data: [] }));
     await hs.webhooks.list();
-    await hs.webhooks.create({ url: 'https://x.example.com/h', events: ['user.created'] });
+    await hs.webhooks.create({ url: 'https://x.pushizo.com/h', events: ['user.created'] });
     await hs.webhooks.rotateSecret('whk_1');
     await hs.webhooks.deliveries('whk_1', { status: 'dead', limit: 10 });
     await hs.webhooks.replay('whd_1');
@@ -369,7 +369,7 @@ describe('Faz 10: suppression list ve e-posta/SMS/inbox içerik alanları', () =
     id: 'sup_1',
     app_id: 'app_1',
     channel: 'email',
-    value_masked: 'a***e@example.com',
+    value_masked: 'a***e@pushizo.com',
     reason: 'manual',
     source: 'api',
     detail: {},
@@ -385,18 +385,18 @@ describe('Faz 10: suppression list ve e-posta/SMS/inbox içerik alanları', () =
     const page = await hs.suppressions.list({
       channel: 'email',
       reason: 'bounce',
-      value: 'Ayse@Example.com',
+      value: 'Ayse@Pushizo.com',
       limit: 20,
       cursor: 'c1',
     });
-    expect(page.data[0]!.value_masked).toBe('a***e@example.com');
+    expect(page.data[0]!.value_masked).toBe('a***e@pushizo.com');
     expect(page.has_more).toBe(true);
     const url = new URL(calls[0]!.url);
     expect(url.pathname).toBe('/v1/apps/app_1/suppressions');
     expect(Object.fromEntries(url.searchParams)).toEqual({
       channel: 'email',
       reason: 'bounce',
-      value: 'Ayse@Example.com',
+      value: 'Ayse@Pushizo.com',
       limit: '20',
       cursor: 'c1',
     });
@@ -458,8 +458,8 @@ describe('Faz 10: suppression list ve e-posta/SMS/inbox içerik alanları', () =
       email_mjml: '<mjml><mj-body></mj-body></mjml>',
       email_preheader: 'Kargo takip',
       email_from_name: 'Mağaza',
-      email_from_address: 'no-reply@example.com',
-      email_reply_to_address: 'destek@example.com',
+      email_from_address: 'no-reply@pushizo.com',
+      email_reply_to_address: 'destek@pushizo.com',
       disable_email_click_tracking: true,
       sms_from: 'MAGAZA',
       disable_sms_link_shortening: true,
@@ -470,7 +470,7 @@ describe('Faz 10: suppression list ve e-posta/SMS/inbox içerik alanları', () =
       app_id: 'app_1',
       idempotency_key: 'mail-1',
       email_subject: 'Siparişin yolda',
-      email_from_address: 'no-reply@example.com',
+      email_from_address: 'no-reply@pushizo.com',
       disable_email_click_tracking: true,
       sms_from: 'MAGAZA',
       disable_sms_link_shortening: true,

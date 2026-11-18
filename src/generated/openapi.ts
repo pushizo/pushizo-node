@@ -332,6 +332,66 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/sdk/v1/apps/{appId}/feature-flags/evaluate": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Özellik bayraklarını değerlendir
+         * @description Değerler uygulama kimliğini bilen herkesçe okunabilir. `subscription_id` için sahiplik kuralları PATCH ile aynıdır.
+         */
+        post: operations["SdkController_featureFlags"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/sdk/v1/apps/{appId}/geofences": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Cihazın izleyeceği en yakın bölgeler
+         * @description Arka plan bölge izleme için; bölge adı dönmez.
+         */
+        get: operations["SdkController_geofences"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/sdk/v1/apps/{appId}/subscriptions/{subscriptionId}/geofence-events": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * İşletim sisteminin bildirdiği bölge geçişleri
+         * @description Koordinat içermez. Konum rızası olmayan abonelikte yok sayılır. Sahiplik kuralları PATCH ile aynıdır.
+         */
+        post: operations["SdkController_geofenceEvents"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/sdk/v1/apps/{appId}/events": {
         parameters: {
             query?: never;
@@ -642,6 +702,1656 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/apps/{appId}/promo-code-lists": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Promosyon kodu listeleri */
+        get: operations["PublicDynamicContentController_listPromoLists"];
+        put?: never;
+        /**
+         * Promosyon kodu listesi oluştur
+         * @description Şablonda `{% promo_code '<ad>' %}` teslimat başına tek kullanımlık kod verir. Kod kalmazsa teslimat `PromoCodeUnavailable` hatasıyla düşer.
+         */
+        post: operations["PublicDynamicContentController_createPromoList"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/promo-code-lists/{listId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Promosyon kodu listesi ayrıntısı */
+        get: operations["PublicDynamicContentController_getPromoList"];
+        put?: never;
+        post?: never;
+        /** Promosyon kodu listesini sil */
+        delete: operations["PublicDynamicContentController_deletePromoList"];
+        options?: never;
+        head?: never;
+        /** Promosyon kodu listesini güncelle (açıklama, son kullanma) */
+        patch: operations["PublicDynamicContentController_updatePromoList"];
+        trace?: never;
+    };
+    "/v1/apps/{appId}/promo-code-lists/{listId}/codes": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Listedeki kodlar ve atamaları */
+        get: operations["PublicDynamicContentController_promoCodes"];
+        put?: never;
+        /** CSV ile kod ekle (zaten olanlar atlanır) */
+        post: operations["PublicDynamicContentController_uploadPromoList"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/catalogs": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Ürün katalogları */
+        get: operations["PublicCatalogController_list"];
+        put?: never;
+        /**
+         * Katalog oluştur
+         * @description Şablonda `{% catalog_item '<ad>' id: custom_data.product_id as urun %}{{ urun.title }}`.
+         */
+        post: operations["PublicCatalogController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/catalogs/{catalogId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Katalog ayrıntısı */
+        get: operations["PublicCatalogController_get"];
+        put?: never;
+        post?: never;
+        /** Kataloğu sil */
+        delete: operations["PublicCatalogController_remove"];
+        options?: never;
+        head?: never;
+        /** Kataloğu güncelle */
+        patch: operations["PublicCatalogController_update"];
+        trace?: never;
+    };
+    "/v1/apps/{appId}/catalogs/{catalogId}/items": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Ürünler */
+        get: operations["PublicCatalogController_items"];
+        /**
+         * Ürünleri ekle veya güncelle (en fazla 1000)
+         * @description Listede olmayan ürünlere dokunulmaz. Listedeki ürünün verilmeyen alanları temizlenir.
+         */
+        put: operations["PublicCatalogController_upsert"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/catalogs/{catalogId}/items/upload": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** CSV ile ürün ekle veya güncelle */
+        post: operations["PublicCatalogController_upload"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/catalogs/{catalogId}/items/{itemId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Ürün ayrıntısı */
+        get: operations["PublicCatalogController_item"];
+        put?: never;
+        post?: never;
+        /** Ürünü sil */
+        delete: operations["PublicCatalogController_removeItem"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/catalogs/{catalogId}/recommendations": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Ürün önerileri
+         * @description Stokta olmayan ve kullanıcının satın aldığı ürünler çıkmaz. Sonuç yetmezse yedek kaynakla tamamlanır.
+         */
+        get: operations["PublicRecommendationsController_list"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/catalogs/{catalogId}/recommendations/config": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Öneri modeli */
+        get: operations["PublicRecommendationsController_config"];
+        /**
+         * Öneri modelini ayarla
+         * @description Model açıksa öneriler kayıttan sonra yeniden hesaplanır.
+         */
+        put: operations["PublicRecommendationsController_update"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/catalogs/{catalogId}/recommendations/compute": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Önerileri yeniden hesapla
+         * @description İş kuyruğa alınır; ilerleme `status` alanından izlenir.
+         */
+        post: operations["PublicRecommendationsController_compute"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/feature-flags": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Özellik bayrakları */
+        get: operations["PublicAppFlagsController_list"];
+        put?: never;
+        /**
+         * Bayrak oluştur
+         * @description Değerler uygulama kimliğini bilen herkesçe okunabilir; gizli bilgi yazmayın.
+         */
+        post: operations["PublicAppFlagsController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/feature-flags/evaluate": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Bayrakları bir kullanıcı için değerlendir */
+        post: operations["PublicAppFlagsController_evaluate"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/feature-flags/{flagId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Bayrak ayrıntısı */
+        get: operations["PublicAppFlagsController_get"];
+        put?: never;
+        post?: never;
+        /** Bayrağı sil */
+        delete: operations["PublicAppFlagsController_remove"];
+        options?: never;
+        head?: never;
+        /** Bayrağı güncelle */
+        patch: operations["PublicAppFlagsController_update"];
+        trace?: never;
+    };
+    "/v1/apps/{appId}/geofences": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Bölgeler */
+        get: operations["PublicGeofencesController_list"];
+        put?: never;
+        /**
+         * Bölge oluştur
+         * @description Konum paylaşan abonelik bölgeye girip çıktığında `geofence_enter` ve `geofence_exit` olayları oluşur.
+         */
+        post: operations["PublicGeofencesController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/geofences/{geofenceId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Bölge ayrıntısı */
+        get: operations["PublicGeofencesController_get"];
+        put?: never;
+        post?: never;
+        /** Bölgeyi sil */
+        delete: operations["PublicGeofencesController_remove"];
+        options?: never;
+        head?: never;
+        /** Bölgeyi güncelle */
+        patch: operations["PublicGeofencesController_update"];
+        trace?: never;
+    };
+    "/v1/apps/{appId}/rfm/config": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** RFM modeli */
+        get: operations["PublicRfmController_config"];
+        /**
+         * RFM modelini ayarla
+         * @description Model açıksa skorlar kayıttan sonra yeniden hesaplanır.
+         */
+        put: operations["PublicRfmController_update"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/rfm/compute": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Skorları yeniden hesapla
+         * @description İş kuyruğa alınır; ilerleme `status` alanından izlenir.
+         */
+        post: operations["PublicRfmController_compute"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/rfm/overview": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Segment dağılımı */
+        get: operations["PublicRfmController_overview"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/rfm/transitions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** İki tarih arası segment geçişleri */
+        get: operations["PublicRfmController_transitions"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/rfm/users": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Skoru olan kullanıcılar */
+        get: operations["PublicRfmController_users"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/affinity/config": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** İlgi modeli */
+        get: operations["PublicAffinityController_config"];
+        /**
+         * İlgi modelini ayarla
+         * @description Model açıksa ilgiler kayıttan sonra yeniden hesaplanır.
+         */
+        put: operations["PublicAffinityController_update"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/affinity/compute": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** İlgileri yeniden hesapla */
+        post: operations["PublicAffinityController_compute"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/affinity/overview": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Özellik başına en yaygın ilgiler */
+        get: operations["PublicAffinityController_overview"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/affinity/users/{userId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Kişinin ilgileri ve haftalık sıklık sınırı */
+        get: operations["PublicAffinityController_user"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/companies": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Şirket listesi
+         * @description Ad, harici kimlik veya alan adında arama; en yeni önce.
+         */
+        get: operations["PublicCompaniesController_list"];
+        put?: never;
+        /**
+         * Şirket oluştur/güncelle (external_id ile)
+         * @description Aynı external_id varsa ad, alan adı ve özellikler güncellenir; özellikler merge-patch (null siler).
+         */
+        post: operations["PublicCompaniesController_upsert"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/companies/batch": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Şirketleri toplu oluştur/güncelle
+         * @description İstek başına en çok 1000 şirket; her biri external_id ile upsert edilir.
+         */
+        post: operations["PublicCompaniesController_batch"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/companies/{companyId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Şirket detayı */
+        get: operations["PublicCompaniesController_get"];
+        put?: never;
+        post?: never;
+        /**
+         * Şirketi sil
+         * @description Üyelikler silinir; kişiler kalır.
+         */
+        delete: operations["PublicCompaniesController_remove"];
+        options?: never;
+        head?: never;
+        /** Şirketi güncelle */
+        patch: operations["PublicCompaniesController_update"];
+        trace?: never;
+    };
+    "/v1/apps/{appId}/companies/{companyId}/members": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Şirketin kişileri */
+        get: operations["PublicCompaniesController_members"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/companies/{companyId}/members/batch": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Şirkete toplu kişi ekle
+         * @description Kişi user_id veya kişinin external_id değeriyle verilir; bulunamayanlar yanıtta listelenir.
+         */
+        post: operations["PublicCompaniesController_batchMembers"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/companies/{companyId}/members/{userId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /**
+         * Kişiyi şirkete bağla veya rolünü değiştir
+         * @description Rol verilmezse yeni üyelik member olur, mevcut üyelik rolünü korur.
+         */
+        put: operations["PublicCompaniesController_setMember"];
+        post?: never;
+        /** Kişiyi şirketten çıkar */
+        delete: operations["PublicCompaniesController_removeMember"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/users/{userId}/companies": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Kişinin şirketleri
+         * @description En son bağlanan şirket önce (şablonda company bu şirkettir).
+         */
+        get: operations["PublicCompaniesController_forUser"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/users/by/{label}/{value}/companies": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Kişinin şirketleri (external_id veya alias ile)
+         * @description label: hs_id, external_id veya özel alias etiketi.
+         */
+        get: operations["PublicCompaniesController_forUserAlias"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/ai-agents": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** AI ajanları */
+        get: operations["PublicAiAgentsController_list"];
+        put?: never;
+        /** AI ajanı oluştur */
+        post: operations["PublicAiAgentsController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/ai-agents/runs": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** AI ajanı çalışma kayıtları */
+        get: operations["PublicAiAgentsController_runs"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/ai-agents/{agentId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** AI ajanı */
+        get: operations["PublicAiAgentsController_get"];
+        put?: never;
+        post?: never;
+        /** AI ajanını sil */
+        delete: operations["PublicAiAgentsController_remove"];
+        options?: never;
+        head?: never;
+        /** AI ajanını güncelle */
+        patch: operations["PublicAiAgentsController_update"];
+        trace?: never;
+    };
+    "/v1/apps/{appId}/ai-agents/{agentId}/rotate-secret": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Araç imza anahtarını yenile */
+        post: operations["PublicAiAgentsController_rotate"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/ai-agents/{agentId}/metrics": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** AI ajanı ölçümleri (son 30 gün) */
+        get: operations["PublicAiAgentsController_metrics"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/sql/schema": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** SQL görünümleri ve sınırlar */
+        get: operations["PublicSqlSegmentsController_schema"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/sql/query": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Salt okunur SQL sorgusu çalıştır */
+        post: operations["PublicSqlSegmentsController_run"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/sql/runs": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** SQL sorgu kaydı */
+        get: operations["PublicSqlSegmentsController_runs"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/sql/segments": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** SQL segmentleri */
+        get: operations["PublicSqlSegmentsController_listSegments"];
+        put?: never;
+        /** Sorgu sonucunu segment olarak kaydet */
+        post: operations["PublicSqlSegmentsController_createSegment"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/sql/segments/{segmentId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /** SQL segmentini güncelle */
+        patch: operations["PublicSqlSegmentsController_updateSegment"];
+        trace?: never;
+    };
+    "/v1/apps/{appId}/sql/segments/{segmentId}/refresh": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** SQL segmentini şimdi yenile */
+        post: operations["PublicSqlSegmentsController_refresh"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/custom-agents": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Özel AI ajanları */
+        get: operations["PublicCustomAgentsController_list"];
+        put?: never;
+        /** Özel AI ajanı oluştur */
+        post: operations["PublicCustomAgentsController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/custom-agents/runs": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Özel AI ajanı çalışma kayıtları */
+        get: operations["PublicCustomAgentsController_runs"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/custom-agents/drafts": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Özel AI ajanı taslakları */
+        get: operations["PublicCustomAgentsController_drafts"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/custom-agents/{agentId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Özel AI ajanı */
+        get: operations["PublicCustomAgentsController_get"];
+        put?: never;
+        post?: never;
+        /** Özel AI ajanını sil */
+        delete: operations["PublicCustomAgentsController_remove"];
+        options?: never;
+        head?: never;
+        /** Özel AI ajanını güncelle */
+        patch: operations["PublicCustomAgentsController_update"];
+        trace?: never;
+    };
+    "/v1/apps/{appId}/custom-agents/{agentId}/run": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Özel AI ajanını şimdi çalıştır */
+        post: operations["PublicCustomAgentsController_run"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/messenger-links": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Telegram/Viber abonelik bağlama derin bağlantısı (tek kullanımlık belirteç; kullanıcı bota yazınca sohbet kimliği bu kullanıcıya abonelik olarak bağlanır) */
+        post: operations["PublicMessengerLinksController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/data-pipelines/transforms": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Veri dönüştürmeleri */
+        get: operations["PublicDataPipelinesController_listTransforms"];
+        put?: never;
+        /** Veri dönüştürmesi oluştur */
+        post: operations["PublicDataPipelinesController_createTransform"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/data-pipelines/transforms/preview": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Dönüştürme önizlemesi (örnek kayıtla kuru çalıştırma) */
+        post: operations["PublicDataPipelinesController_preview"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/data-pipelines/transforms/{transformId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Veri dönüştürmesi */
+        get: operations["PublicDataPipelinesController_getTransform"];
+        put?: never;
+        post?: never;
+        /** Veri dönüştürmesini sil */
+        delete: operations["PublicDataPipelinesController_removeTransform"];
+        options?: never;
+        head?: never;
+        /** Veri dönüştürmesini güncelle */
+        patch: operations["PublicDataPipelinesController_updateTransform"];
+        trace?: never;
+    };
+    "/v1/apps/{appId}/data-pipelines/sources": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Veri kaynakları (webhook ve HTTP pull) */
+        get: operations["PublicDataPipelinesController_listSources"];
+        put?: never;
+        /**
+         * Veri kaynağı oluştur
+         * @description Webhook kaynağının imza/erişim anahtarı yalnız bu yanıtta döner.
+         */
+        post: operations["PublicDataPipelinesController_createSource"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/data-pipelines/sources/{sourceId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Veri kaynağı */
+        get: operations["PublicDataPipelinesController_getSource"];
+        put?: never;
+        post?: never;
+        /** Veri kaynağını sil */
+        delete: operations["PublicDataPipelinesController_removeSource"];
+        options?: never;
+        head?: never;
+        /** Veri kaynağını güncelle */
+        patch: operations["PublicDataPipelinesController_updateSource"];
+        trace?: never;
+    };
+    "/v1/apps/{appId}/data-pipelines/sources/{sourceId}/rotate-secret": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Webhook kaynağı anahtarını yenile */
+        post: operations["PublicDataPipelinesController_rotate"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/data-pipelines/sources/{sourceId}/run": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** HTTP pull kaynağını şimdi çalıştır */
+        post: operations["PublicDataPipelinesController_run"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/data-pipelines/quarantine": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Karantinadaki kayıtlar */
+        get: operations["PublicDataPipelinesController_quarantine"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/data-pipelines/quarantine/reprocess": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Karantinadaki kayıtları yeniden işle
+         * @description Kimlik verilmezse bekleyen en eski 500 kayıt işlenir.
+         */
+        post: operations["PublicDataPipelinesController_reprocess"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/data-pipelines/quarantine/discard": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Karantinadaki kayıtları yeniden işlemeden kapat */
+        post: operations["PublicDataPipelinesController_discard"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/warehouse-segments/options": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Ambar segmenti seçenekleri ve sınırlar */
+        get: operations["PublicWarehouseSegmentsController_options"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/warehouse-segments/connections": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Ambar bağlantıları */
+        get: operations["PublicWarehouseSegmentsController_listConnections"];
+        put?: never;
+        /** Ambar bağlantısı oluştur */
+        post: operations["PublicWarehouseSegmentsController_createConnection"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/warehouse-segments/connections/{connectionId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Ambar bağlantısı detayı */
+        get: operations["PublicWarehouseSegmentsController_getConnection"];
+        put?: never;
+        post?: never;
+        /** Ambar bağlantısını sil */
+        delete: operations["PublicWarehouseSegmentsController_removeConnection"];
+        options?: never;
+        head?: never;
+        /** Ambar bağlantısını güncelle */
+        patch: operations["PublicWarehouseSegmentsController_updateConnection"];
+        trace?: never;
+    };
+    "/v1/apps/{appId}/warehouse-segments/connections/{connectionId}/test": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Ambar bağlantısını dene */
+        post: operations["PublicWarehouseSegmentsController_testConnection"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/warehouse-segments/preview": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Ambar sorgusunu önizle (dry-run veya örnek) */
+        post: operations["PublicWarehouseSegmentsController_preview"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/warehouse-segments/segments": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Ambar segmentleri */
+        get: operations["PublicWarehouseSegmentsController_listSegments"];
+        put?: never;
+        /** Ambar segmenti oluştur */
+        post: operations["PublicWarehouseSegmentsController_createSegment"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/warehouse-segments/segments/{segmentId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /** Ambar segmentini güncelle */
+        patch: operations["PublicWarehouseSegmentsController_updateSegment"];
+        trace?: never;
+    };
+    "/v1/apps/{appId}/warehouse-segments/segments/{segmentId}/refresh": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Ambar segmentini yenileme kuyruğuna al */
+        post: operations["PublicWarehouseSegmentsController_refresh"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/warehouse-segments/runs": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Ambar sorgu kaydı */
+        get: operations["PublicWarehouseSegmentsController_runs"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/channel-scores/config": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Kanal skoru ayarı */
+        get: operations["PublicChannelScoresController_config"];
+        /**
+         * Kanal skorunu ayarla
+         * @description Açıkken skorlar kayıttan sonra yeniden hesaplanır; kapatınca silinir.
+         */
+        put: operations["PublicChannelScoresController_update"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/channel-scores/compute": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Kanal skorlarını yeniden hesapla
+         * @description İş kuyruğa alınır; ilerleme `status` alanından izlenir.
+         */
+        post: operations["PublicChannelScoresController_compute"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/channel-scores/overview": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** En iyi kanal dağılımı */
+        get: operations["PublicChannelScoresController_overview"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/channel-scores/users": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** En iyi kanalı belli kullanıcılar */
+        get: operations["PublicChannelScoresController_users"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/channel-scores/users/{userId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Kullanıcının kanal skorları */
+        get: operations["PublicChannelScoresController_user"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/wallet/config": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Wallet yapılandırması
+         * @description Kimlik bilgisi geri okunamaz, yalnızca durum döner.
+         */
+        get: operations["PublicWalletController_config"];
+        /** Wallet kimlik bilgilerini ayarla */
+        put: operations["PublicWalletController_updateConfig"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/wallet/templates": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Wallet şablonları */
+        get: operations["PublicWalletController_templates"];
+        put?: never;
+        /** Wallet şablonu oluştur */
+        post: operations["PublicWalletController_createTemplate"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/wallet/templates/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Wallet şablonu */
+        get: operations["PublicWalletController_template"];
+        put?: never;
+        post?: never;
+        /**
+         * Wallet şablonunu sil
+         * @description Verilmiş kartı olan şablon silinemez, arşivlenir.
+         */
+        delete: operations["PublicWalletController_removeTemplate"];
+        options?: never;
+        head?: never;
+        /**
+         * Wallet şablonunu güncelle
+         * @description Tasarım değişirse verilmiş kartlar da güncellenir.
+         */
+        patch: operations["PublicWalletController_updateTemplate"];
+        trace?: never;
+    };
+    "/v1/apps/{appId}/wallet/passes": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Verilmiş kartlar */
+        get: operations["PublicWalletController_passes"];
+        put?: never;
+        /**
+         * Kart ver
+         * @description Kullanıcılı kart şablon başına tektir; tekrar istek aynı kartı döndürür.
+         */
+        post: operations["PublicWalletController_issue"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/wallet/passes/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Kart */
+        get: operations["PublicWalletController_pass"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /**
+         * Kartı güncelle
+         * @description Cihazdaki kart arka planda yenilenir.
+         */
+        patch: operations["PublicWalletController_updatePass"];
+        trace?: never;
+    };
+    "/v1/apps/{appId}/wallet/passes/{id}/void": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Kartı iptal et
+         * @description Geri alınmaz; cihazdaki kart geçersiz görünür.
+         */
+        post: operations["PublicWalletController_voidPass"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/predictions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Öngörü modelleri */
+        get: operations["PublicPredictionsController_list"];
+        put?: never;
+        /**
+         * Öngörü modeli oluştur
+         * @description Eğitim kuyruğa alınır; sonuç `outcome` alanından izlenir.
+         */
+        post: operations["PublicPredictionsController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/predictions/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Öngörü modeli */
+        get: operations["PublicPredictionsController_get"];
+        put?: never;
+        post?: never;
+        /** Öngörü modelini sil */
+        delete: operations["PublicPredictionsController_remove"];
+        options?: never;
+        head?: never;
+        /**
+         * Öngörü modelini güncelle
+         * @description Olay veya ufuk değişirse yeniden eğitilir; kapatınca skorlar silinir.
+         */
+        patch: operations["PublicPredictionsController_update"];
+        trace?: never;
+    };
+    "/v1/apps/{appId}/predictions/{id}/compute": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Modeli yeniden eğit */
+        post: operations["PublicPredictionsController_compute"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/predictions/{id}/users": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Skoru olan kullanıcılar */
+        get: operations["PublicPredictionsController_users"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/decision-agents": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Karar ajanları */
+        get: operations["PublicDecisionsController_list"];
+        put?: never;
+        /** Karar ajanı oluştur */
+        post: operations["PublicDecisionsController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/decision-agents/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Karar ajanı */
+        get: operations["PublicDecisionsController_get"];
+        put?: never;
+        post?: never;
+        /** Karar ajanını sil */
+        delete: operations["PublicDecisionsController_remove"];
+        options?: never;
+        head?: never;
+        /**
+         * Karar ajanını güncelle
+         * @description Seçenekler değiştirilemez: geçmiş öğrenme onlara bağlıdır. Yeni seçenekler için yeni ajan oluşturun.
+         */
+        patch: operations["PublicDecisionsController_update"];
+        trace?: never;
+    };
+    "/v1/apps/{appId}/decision-agents/{id}/report": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Kazanç raporu
+         * @description Öğrenen politika ve kontrol grubu karşılaştırması.
+         */
+        get: operations["PublicDecisionsController_report"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/decision-agents/{id}/decide": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Kullanıcı için karar al
+         * @description Karar kaydedilir, ödül olayı geldikçe ajan öğrenir.
+         */
+        post: operations["PublicDecisionsController_decide"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/sdk/v1/apps/{appId}/errors": {
         parameters: {
             query?: never;
@@ -653,6 +2363,40 @@ export interface paths {
         put?: never;
         /** SDK hata raporları (en fazla 20; 7 gün saklanır) */
         post: operations["SdkErrorsIngestController_ingest"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/sdk-errors": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** SDK hata raporları (son 7 gün, cursor) */
+        get: operations["PublicSdkErrorsController_list"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/webhooks/event-types": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Abone olunabilecek olay türleri */
+        get: operations["PublicWebhooksController_eventTypes"];
+        put?: never;
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -756,6 +2500,40 @@ export interface paths {
         };
         /** Teslim geçmişi (cursor; durum/olay türü filtresi) */
         get: operations["PublicWebhooksController_deliveries"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/webhooks/{webhookId}/replay": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Başarısız/ölü teslimleri toplu yeniden gönder (en fazla 1000) */
+        post: operations["PublicWebhooksController_bulkReplay"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/webhooks/deliveries/{deliveryId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Teslim detayı (gövde dahil) */
+        get: operations["PublicWebhooksController_delivery"];
         put?: never;
         post?: never;
         delete?: never;
@@ -903,6 +2681,111 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/apps/{appId}/reverse-etl": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Depodan içeri aktarımlar */
+        get: operations["PublicReverseEtlController_list"];
+        put?: never;
+        /** İçeri aktarım oluştur */
+        post: operations["PublicReverseEtlController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/reverse-etl/test-connection": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Kaydetmeden bağlantı testi */
+        post: operations["PublicReverseEtlController_test"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/reverse-etl/{syncId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** İçeri aktarım detayı */
+        get: operations["PublicReverseEtlController_get"];
+        put?: never;
+        post?: never;
+        /** İçeri aktarımı sil */
+        delete: operations["PublicReverseEtlController_remove"];
+        options?: never;
+        head?: never;
+        /** İçeri aktarımı güncelle */
+        patch: operations["PublicReverseEtlController_update"];
+        trace?: never;
+    };
+    "/v1/apps/{appId}/reverse-etl/{syncId}/test": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Kayıtlı içeri aktarımın bağlantı testi */
+        post: operations["PublicReverseEtlController_testSaved"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/reverse-etl/{syncId}/run": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Şimdi içeri aktar */
+        post: operations["PublicReverseEtlController_run"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/reverse-etl/{syncId}/runs": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** İçeri aktarım geçmişi */
+        get: operations["PublicReverseEtlController_runs"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/organization": {
         parameters: {
             query?: never;
@@ -946,6 +2829,23 @@ export interface paths {
         };
         /** Audit log (org geneli admin anahtarı; action/actor/app/tarih filtreleri, cursor) */
         get: operations["PublicApiController_auditLogs"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/organization/logs": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Public API istek logları (org geneli admin anahtarı; son 7 gün, cursor) */
+        get: operations["PublicApiController_requestLogs"];
         put?: never;
         post?: never;
         delete?: never;
@@ -1079,6 +2979,57 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/apps/{appId}/users/by/{label}/{value}/timeline": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Kullanıcının olay ve teslimat zaman çizelgesi (en yeni 40 kayıt) */
+        get: operations["PublicUsersController_timeline"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/users/by/{label}/{value}/events": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Kullanıcının son olayları */
+        get: operations["PublicUsersController_userEvents"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/users/by/{label}/{value}/messages": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Kullanıcının son mesajları (teslimatlar, en yeni önce) */
+        get: operations["PublicUsersController_userMessages"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/apps/{appId}/users/by/{label}/{value}/identity/{aliasLabel}": {
         parameters: {
             query?: never;
@@ -1107,6 +3058,40 @@ export interface paths {
         put?: never;
         /** Kullanıcıya abonelik ekle */
         post: operations["PublicUsersController_addSubscription"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/subscriptions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Abonelik listesi (kanal/durum/test cihazı filtreleri; token yalnızca son 8 karakter) */
+        get: operations["PublicUsersController_listSubscriptions"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/subscriptions/cleanup": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Toplu temizlik: geçersiz (veya abonelikten çıkmış) kayıtları sil */
+        post: operations["PublicUsersController_cleanupSubscriptions"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1162,7 +3147,7 @@ export interface paths {
         delete?: never;
         options?: never;
         head?: never;
-        /** Token ile abonelik güncelle (token_type: ios_push, android_push, hms_push, web_push, email, sms veya OneSignal adları iOSPush, AndroidPush, HuaweiPush, ChromePush, FirefoxPush, SafariPush, Email, SMS) */
+        /** Token ile abonelik güncelle (token_type: ios_push, android_push, hms_push, web_push, email, sms veya eski sağlayıcı adları iOSPush, AndroidPush, HuaweiPush, ChromePush, FirefoxPush, SafariPush, Email, SMS) */
         patch: operations["PublicUsersController_patchSubscriptionByToken"];
         trace?: never;
     };
@@ -1211,6 +3196,40 @@ export interface paths {
         get: operations["PublicChannelsController_list"];
         put?: never;
         post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/channels/status": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Kanal özeti (yalnız sağlayıcı ve durum; yapılandırma ayrıntısı dönmez) */
+        get: operations["PublicChannelsController_status"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/channels/email/verify-dns": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Gönderici alan adı SPF/DKIM/DMARC doğrulaması */
+        post: operations["PublicChannelsController_verifyDns"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1321,6 +3340,40 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/apps/{appId}/trace": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Mesaj izleme: msg_/dlv_/sub_ ID, external_id veya token son 8 karakteri */
+        get: operations["PublicMessageTraceController_trace"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/analytics/sessions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Son 14 gün oturum hacmi ve tekil kullanıcı (günlük toplamlar) */
+        get: operations["PublicAnalyticsController_sessions"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/apps/{appId}/analytics/overview": {
         parameters: {
             query?: never;
@@ -1372,6 +3425,46 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/apps/{appId}/analytics/uninstalls": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Uygulama kaldırma raporu
+         * @description Mobil push sağlayıcısının "cihaz kayıtlı değil" yanıtından sayılır.
+         */
+        get: operations["PublicAnalyticsController_uninstallReport"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/analytics/android-delivery": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Android teslimat sağlığı raporu
+         * @description Üretici ve ROM bazında gönderildi, teslim alındı, açıldı sayıları ile gönderimden cihaza ulaşmaya kadar geçen süre. Teslim alındı cihazdaki SDK alındısından, kısıt özeti SDK teşhisinden hesaplanır.
+         */
+        get: operations["PublicAnalyticsController_androidDeliveryReport"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/apps/{appId}/analytics/events": {
         parameters: {
             query?: never;
@@ -1400,6 +3493,46 @@ export interface paths {
         get: operations["PublicAnalyticsController_conversionsReport"];
         put?: never;
         post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/analytics/reports/run": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Rapor çalıştır
+         * @description Kaynak, metrik, boyut ve filtre seçilerek rapor üretir; alanlar izinli listeyle sınırlıdır.
+         */
+        post: operations["PublicAnalyticsController_runReport"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/analytics/paths": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Yol analizi
+         * @description Başlangıç olayından sonra veya önce kullanıcıların izlediği yollar.
+         */
+        post: operations["PublicAnalyticsController_paths"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1474,6 +3607,98 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/apps/{appId}/global-control": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Genel kontrol grubu ayarı */
+        get: operations["PublicGlobalControlController_get"];
+        /**
+         * Genel kontrol grubunu ayarla
+         * @description Gruptaki kullanıcılar kampanya, otomasyon ve uygulama içi mesajları almaz. API ve işlemsel gönderimler etkilenmez.
+         */
+        put: operations["PublicGlobalControlController_update"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/global-control/reset": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Grubu yeniden kur (üyelik değişir, ölçüm baştan başlar) */
+        post: operations["PublicGlobalControlController_reset"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/global-control/report": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Kontrol ve mesaj alan grubun dönüşüm karşılaştırması */
+        get: operations["PublicGlobalControlController_report"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/analytics/reports": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Kaydedilmiş raporlar */
+        get: operations["PublicSavedReportsController_list"];
+        put?: never;
+        /** Raporu kaydet */
+        post: operations["PublicSavedReportsController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/analytics/reports/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Kaydedilmiş rapor */
+        get: operations["PublicSavedReportsController_get"];
+        put?: never;
+        post?: never;
+        /** Raporu sil */
+        delete: operations["PublicSavedReportsController_remove"];
+        options?: never;
+        head?: never;
+        /** Raporu güncelle */
+        patch: operations["PublicSavedReportsController_update"];
+        trace?: never;
+    };
     "/v1/apps/{appId}/events/definitions": {
         parameters: {
             query?: never;
@@ -1507,6 +3732,23 @@ export interface paths {
         head?: never;
         /** Görünen ad / dönüşüm işareti */
         patch: operations["PublicEventsController_patch"];
+        trace?: never;
+    };
+    "/v1/apps/{appId}/events/recent": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Son olaylar (kullanıcı kimliği ve özelliklerle; ad ve zaman filtresi) */
+        get: operations["PublicEventsController_recent"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
         trace?: never;
     };
     "/v1/apps/{appId}/exports": {
@@ -1684,6 +3926,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/apps/{appId}/segments/{segmentId}/refresh": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Statik segment üyeliklerini yeniden hesapla */
+        post: operations["PublicSegmentsController_refresh"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/apps/{appId}/segments/{segmentId}/estimate": {
         parameters: {
             query?: never;
@@ -1789,6 +4048,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/apps/{appId}/templates/{templateId}/versions/{version}/revert": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Eski sürümü geçerli yap */
+        post: operations["PublicTemplatesController_revert"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/apps/{appId}/templates/{templateId}/render": {
         parameters: {
             query?: never;
@@ -1852,7 +4128,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** Zamanla */
+        /** Zamanla; e-posta liste koruması 409 → force=true (admin kapsamı) */
         post: operations["PublicCampaignsController_schedule"];
         delete?: never;
         options?: never;
@@ -1869,8 +4145,42 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** Hemen gönder */
+        /** Hemen gönder; e-posta liste koruması 409 → force=true (admin kapsamı) */
         post: operations["PublicCampaignsController_send"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/campaigns/{campaignId}/preflight": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Yayın öncesi denetim raporu (marka, yasaklı ifade, bağlantı, kişiselleştirme, KVKK/İYS) */
+        post: operations["PublicCampaignsController_preflight"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/campaigns/{campaignId}/email-risk": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** E-posta liste riski (tahmini geçersiz oranı, 7/30 gün bounce oranı) */
+        get: operations["PublicCampaignsController_emailRisk"];
+        put?: never;
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -2097,6 +4407,23 @@ export interface paths {
         head?: never;
         /** Konuşma durumu: open / pending / resolved (closed = resolved) */
         patch: operations["PublicConversationsController_setStatus"];
+        trace?: never;
+    };
+    "/v1/apps/{appId}/conversations/{conversationId}/contact": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Kişi profili: özellikler, etiketler, abonelikler (maskeli), son olaylar, diğer konuşmalar */
+        get: operations["PublicConversationsController_contact"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
         trace?: never;
     };
     "/v1/apps/{appId}/conversations/{conversationId}/messages": {
@@ -2472,11 +4799,66 @@ export interface paths {
         /** Takımlar */
         get: operations["PublicInboxController_teams"];
         put?: never;
-        post?: never;
+        /** Takım oluştur (üyeler yanıt rolüne sahip org üyeleri) */
+        post: operations["PublicInboxController_createTeam"];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/inbox/teams/{teamId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /** Takımı sil (konuşmaların takım ataması kalkar) */
+        delete: operations["PublicInboxController_deleteTeam"];
+        options?: never;
+        head?: never;
+        /** Takımı güncelle */
+        patch: operations["PublicInboxController_updateTeam"];
+        trace?: never;
+    };
+    "/v1/apps/{appId}/inbox/assignment-rules": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Atama kuralları (sırayla değerlendirilir) */
+        get: operations["PublicInboxController_rules"];
+        put?: never;
+        /** Atama kuralı oluştur (kanal/dil/etiket koşulu; round-robin, en az yük veya yalnızca takım) */
+        post: operations["PublicInboxController_createRule"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/inbox/assignment-rules/{ruleId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /** Atama kuralını sil */
+        delete: operations["PublicInboxController_deleteRule"];
+        options?: never;
+        head?: never;
+        /** Atama kuralını güncelle (sıra dahil) */
+        patch: operations["PublicInboxController_updateRule"];
         trace?: never;
     };
     "/v1/apps/{appId}/inbox/agents": {
@@ -2494,6 +4876,23 @@ export interface paths {
         options?: never;
         head?: never;
         patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/inbox/agents/{accountId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /** Temsilci yönlendirme profili: eşzamanlı konuşma sınırı ve diller */
+        patch: operations["PublicInboxController_updateAgent"];
         trace?: never;
     };
     "/v1/apps/{appId}/inbox/settings": {
@@ -2620,6 +5019,176 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/apps/{appId}/email-deliverability/hygiene": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Liste temizliği durumu: e-posta aboneliklerinin denetim dağılımı ve son doğrulama çalıştırması */
+        get: operations["PublicDeliverabilityController_hygiene"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/email-deliverability/hygiene-runs": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Listeyi doğrula: tüm e-posta aboneliklerini toplu, hız sınırlı doğrula (etkin çalıştırma varsa o döner) */
+        post: operations["PublicDeliverabilityController_startHygiene"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/email-deliverability/hygiene-runs/{runId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Liste doğrulama çalıştırması (ilerleme ve özet) */
+        get: operations["PublicDeliverabilityController_hygieneRun"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/email-deliverability/hygiene-runs/{runId}/suppress": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Doğrulamada geçersiz bulunan adresleri bastır (abonelik invalid + suppression list) */
+        post: operations["PublicDeliverabilityController_suppressHygiene"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/email-deliverability/insights": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Posta sağlayıcısı bazında (Gmail, Outlook, Yahoo, diğer) teslim, açılma, tıklama, bounce ve şikâyet sayıları */
+        get: operations["PublicDeliverabilityController_insights"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/email-deliverability/bounces": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** E-posta bounce eğilimi (%2 hedef), tür/neden dağılımı ve en çok bounce alan alıcı alan adları */
+        get: operations["PublicDeliverabilityController_bounces"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/email-deliverability/postmaster": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Google Postmaster itibar kayıtları */
+        get: operations["PublicDeliverabilityController_postmaster"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/email-deliverability/postmaster/sync": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Google Postmaster dünkü itibarını oku */
+        post: operations["PublicDeliverabilityController_syncPostmaster"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/verify/sms": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** SMS doğrulama kodu gönder */
+        post: operations["PublicVerifyController_start"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/verify/sms/check": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** SMS doğrulama kodunu kontrol et */
+        post: operations["PublicVerifyController_check"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/apps/{appId}/suppressions": {
         parameters: {
             query?: never;
@@ -2664,6 +5233,26 @@ export interface paths {
         };
         /** Cihaz için gösterilebilecek in-app mesajlar (tetikleri SDK değerlendirir) */
         get: operations["SdkEngagementController_inAppList"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/sdk/v1/apps/{appId}/placements/{key}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Gömülü yerleşim içeriği
+         * @description Önceliğe göre sıralı; gösterim içerik çizilince `in-app/{id}/events` ile bildirilir.
+         */
+        get: operations["SdkEngagementController_placement"];
         put?: never;
         post?: never;
         delete?: never;
@@ -2734,6 +5323,40 @@ export interface paths {
         put?: never;
         /** Okundu işaretle */
         post: operations["SdkEngagementController_inboxRead"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/sdk/v1/apps/{appId}/users/{userId}/cards": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** İçerik kartı akışı (sabitlenmiş, öncelik, yeni sırasıyla; abonelik kullanıcıya ait olmalı) */
+        get: operations["SdkEngagementController_cardsList"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/sdk/v1/apps/{appId}/users/{userId}/cards/{itemId}/{event}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Kart olayı: impression (gösterim), click (tıklama) veya dismiss (kapatma) */
+        post: operations["SdkEngagementController_cardEvent"];
         delete?: never;
         options?: never;
         head?: never;
@@ -3073,6 +5696,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/apps/{appId}/journeys/{journeyId}/versions/{version}/restore": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Eski sürümü yeni taslak olarak geri yükle (yayındaki sürüm değişmez) */
+        post: operations["PublicJourneysController_restoreVersion"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/apps/{appId}/journeys/{journeyId}/publish": {
         parameters: {
             query?: never;
@@ -3252,7 +5892,8 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get?: never;
+        /** Zapier REST Hook abonelikleri */
+        get: operations["PublicIntegrationsController_hooks"];
         put?: never;
         /** REST Hook aboneliği (Zap açıldı) */
         post: operations["PublicZapierController_subscribe"];
@@ -3288,6 +5929,108 @@ export interface paths {
         };
         /** Tetik örnekleri (performList): son kayıtlar, abonelik gövdesiyle aynı biçim */
         get: operations["PublicZapierController_samples"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/integrations": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Bağlı entegrasyonlar ve katalog */
+        get: operations["PublicIntegrationsController_list"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/integrations/{type}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Entegrasyon ayrıntısı (kimlik bilgisi maskeli) */
+        get: operations["PublicIntegrationsController_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/integrations/{type}/runs": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Son çalışmalar (senkron, olay gönderimi, gelen istekler, test) */
+        get: operations["PublicIntegrationsController_runs"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/integrations/{type}/test": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Bağlantı testi */
+        post: operations["PublicIntegrationsController_test"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/integrations/{type}/sync": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Cohort senkronunu şimdi çalıştır (worker en geç 1 dk içinde) */
+        post: operations["PublicIntegrationsController_sync"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/ads/platforms": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Reklam platformları (etkin/mock, tanımlayıcılar, lookalike desteği) */
+        get: operations["PublicAdsController_platforms"];
         put?: never;
         post?: never;
         delete?: never;
@@ -3411,7 +6154,8 @@ export interface paths {
         /** Kampanya / reklam seti / reklam listesi ve metrikler */
         get: operations["PublicAdsReportingController_list"];
         put?: never;
-        post?: never;
+        /** Reklam kampanyası oluştur: kampanya + reklam seti (Pushizo kitlesi) + kreatif/reklam */
+        post: operations["PublicAdsReportingController_create"];
         delete?: never;
         options?: never;
         head?: never;
@@ -3434,6 +6178,110 @@ export interface paths {
         head?: never;
         /** Durum ve günlük bütçe değişikliği */
         patch: operations["PublicAdsReportingController_update"];
+        trace?: never;
+    };
+    "/v1/apps/{appId}/ads/campaigns/{entityId}/preview": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Kreatif önizlemesi (platform önizleme bağlantısı + kreatif özeti) */
+        get: operations["PublicAdsReportingController_preview"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/ads/accounts/{accountId}/pages": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Meta: hesabın tanıtabildiği Facebook sayfaları */
+        get: operations["PublicAdsReportingController_pages"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/ads/creatives": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Yüklenen kreatif görselleri */
+        get: operations["PublicAdsReportingController_creatives"];
+        put?: never;
+        /** Kreatif görsel yükle (multipart `file`: PNG/JPEG, en çok 5 MB) */
+        post: operations["PublicAdsReportingController_upload"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/ads/settings": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Raporlama para birimi (org) ve atribüsyon varsayılanları (app) */
+        get: operations["PublicAdsReportingController_settings"];
+        /** Raporlama para birimi ve atribüsyon varsayılanlarını güncelle */
+        put: operations["PublicAdsReportingController_updateSettings"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/ads/conversions-api/configs/{configId}/test": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Platform test aracına sentetik test olayı gönder */
+        post: operations["PublicAdsReportingController_testCapi"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/ads/conversions-api/deliveries/{deliveryId}/retry": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Başarısız teslimi yeniden dene */
+        post: operations["PublicAdsReportingController_retryCapi"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
         trace?: never;
     };
     "/v1/apps/{appId}/ads/accounts/{accountId}/refresh": {
@@ -3645,6 +6493,142 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/apps/{appId}/mcp/template-drafts": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Şablon oluştur (MCP onaylı mod; şablon tek başına gönderim yapmaz) */
+        post: operations["McpDraftsController_createTemplateDraft"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/mcp/journey-drafts": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Journey taslağı oluştur (MCP onaylı mod; yayımlanmaz) */
+        post: operations["McpDraftsController_createJourneyDraft"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/mcp/in-app-drafts": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** In-app mesaj taslağı oluştur (MCP onaylı mod; etkinleştirilmez) */
+        post: operations["McpDraftsController_createInAppDraft"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/mcp/web-campaign-drafts": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Web kampanyası taslağı oluştur (MCP onaylı mod; yayımlanmaz) */
+        post: operations["McpDraftsController_createWebCampaignDraft"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/mcp/web-personalization-drafts": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Web kişiselleştirme taslağı oluştur (MCP onaylı mod; yayımlanmaz) */
+        post: operations["McpDraftsController_createWebPersonalizationDraft"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/mcp/survey-drafts": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Anket taslağı oluştur (MCP onaylı mod; etkinleştirilmez) */
+        post: operations["McpDraftsController_createSurveyDraft"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/mcp/landing-page-drafts": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Landing sayfası taslağı oluştur (MCP onaylı mod; yayımlanmaz) */
+        post: operations["McpDraftsController_createLandingPageDraft"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/mcp/test-sends": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Test gönderimi (yalnızca app’in test cihazlarına; MCP onaylı mod) */
+        post: operations["McpDraftsController_testSend"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/sdk/v1/apps/{appId}/web-campaigns": {
         parameters: {
             query?: never;
@@ -3713,6 +6697,40 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/sdk/v1/apps/{appId}/web-personalizations": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Yayındaki kişiselleştirme deneyimleri (koşul/varyant SDK'da değerlendirilir). ETag ve 60 sn önbellek. */
+        get: operations["SdkWebPersonalizationsController_list"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/sdk/v1/apps/{appId}/web-personalizations/{personalizationId}/events": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Kişiselleştirme maruz kalma / dönüşüm olayı */
+        post: operations["SdkWebPersonalizationsController_event"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/apps/{appId}/web-campaigns": {
         parameters: {
             query?: never;
@@ -3742,7 +6760,8 @@ export interface paths {
         get: operations["PublicWebCampaignsController_get"];
         put?: never;
         post?: never;
-        delete?: never;
+        /** Web kampanyasını sil (olaylarıyla birlikte) */
+        delete: operations["PublicWebCampaignsController_remove"];
         options?: never;
         head?: never;
         /** Web kampanyasını düzenle */
@@ -3783,6 +6802,111 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/apps/{appId}/web-campaigns/{campaignId}/winner": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** A/B kazananını seç (SDK yalnızca kazanan görünümü sunar) */
+        post: operations["PublicWebCampaignsController_winner"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/web-personalizations": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Web kişiselleştirme deneyimleri */
+        get: operations["PublicWebPersonalizationsController_list"];
+        put?: never;
+        /** Kişiselleştirme deneyimi oluştur (taslak) */
+        post: operations["PublicWebPersonalizationsController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/web-personalizations/{personalizationId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Kişiselleştirme deneyimi detayı ve istatistikleri */
+        get: operations["PublicWebPersonalizationsController_get"];
+        put?: never;
+        post?: never;
+        /** Kişiselleştirme deneyimini sil (olaylarıyla birlikte) */
+        delete: operations["PublicWebPersonalizationsController_remove"];
+        options?: never;
+        head?: never;
+        /** Kişiselleştirme deneyimini düzenle */
+        patch: operations["PublicWebPersonalizationsController_update"];
+        trace?: never;
+    };
+    "/v1/apps/{appId}/web-personalizations/{personalizationId}/report": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Günlük seri */
+        get: operations["PublicWebPersonalizationsController_report"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/web-personalizations/{personalizationId}/status": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Yayınla / duraklat / arşivle */
+        post: operations["PublicWebPersonalizationsController_status"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/web-personalizations/{personalizationId}/winner": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** A/B kazananını seç (SDK yalnız kazananın değişikliklerini uygular) */
+        post: operations["PublicWebPersonalizationsController_winner"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/apps/{appId}/forms": {
         parameters: {
             query?: never;
@@ -3812,10 +6936,12 @@ export interface paths {
         get: operations["PublicFormsController_get"];
         put?: never;
         post?: never;
-        delete?: never;
+        /** Formu sil (gönderimleriyle birlikte) */
+        delete: operations["PublicFormsController_remove"];
         options?: never;
         head?: never;
-        patch?: never;
+        /** Formu düzenle */
+        patch: operations["PublicFormsController_update"];
         trace?: never;
     };
     "/v1/apps/{appId}/forms/{formId}/submissions": {
@@ -3865,10 +6991,12 @@ export interface paths {
         get: operations["PublicSurveysController_get"];
         put?: never;
         post?: never;
-        delete?: never;
+        /** Anketi sil (yanıtları ve bağlı in-app mesajıyla birlikte) */
+        delete: operations["PublicSurveysController_remove"];
         options?: never;
         head?: never;
-        patch?: never;
+        /** Anketi düzenle (bağlı in-app mesajı yenilenir) */
+        patch: operations["PublicSurveysController_update"];
         trace?: never;
     };
     "/v1/apps/{appId}/surveys/{surveyId}/status": {
@@ -3882,6 +7010,23 @@ export interface paths {
         put?: never;
         /** Etkinleştir / kapat */
         post: operations["PublicSurveysController_status"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/surveys/{surveyId}/distribute/in-app": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** In-app dağıtımı: anketi HTML in-app mesajına dönüştür (oluştur/güncelle, isteğe bağlı yayınla) */
+        post: operations["PublicSurveysController_distribute"];
         delete?: never;
         options?: never;
         head?: never;
@@ -3933,7 +7078,8 @@ export interface paths {
         /** Landing sayfaları */
         get: operations["PublicLandingPagesController_list"];
         put?: never;
-        post?: never;
+        /** Landing sayfası oluştur (taslak) */
+        post: operations["PublicLandingPagesController_create"];
         delete?: never;
         options?: never;
         head?: never;
@@ -3951,10 +7097,12 @@ export interface paths {
         get: operations["PublicLandingPagesController_get"];
         put?: never;
         post?: never;
-        delete?: never;
+        /** Landing sayfasını sil */
+        delete: operations["PublicLandingPagesController_remove"];
         options?: never;
         head?: never;
-        patch?: never;
+        /** Taslağı düzenle (yayındaki sürüm değişmez) */
+        patch: operations["PublicLandingPagesController_update"];
         trace?: never;
     };
     "/v1/apps/{appId}/landing-pages/{pageId}/publish": {
@@ -3985,6 +7133,230 @@ export interface paths {
         put?: never;
         /** Yayından kaldır */
         post: operations["PublicLandingPagesController_unpublish"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/landing-pages/{pageId}/archive": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Arşivle (yayından kalkar, kotadan düşer) */
+        post: operations["PublicLandingPagesController_archive"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/landing-pages/{pageId}/versions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Yayın sürümleri */
+        get: operations["PublicLandingPagesController_versions"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/landing-pages/{pageId}/versions/{version}/restore": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Sürümü taslağa geri yükle */
+        post: operations["PublicLandingPagesController_restore"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/sdk/v1/apps/{appId}/search": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Site içi arama: sonuçlar ve (mode=answer ise) sitenin kendi içeriğinden kaynak gösteren AI yanıtı. AI yanıtı verilemezse yalnız sonuçlar döner. */
+        post: operations["SdkSiteSearchController_search"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/sdk/v1/apps/{appId}/search/events": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Arama olayı: tıklanan sonuç */
+        post: operations["SdkSiteSearchController_event"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/site-search": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Site araması ayarları, dizin durumu ve AI kullanımı */
+        get: operations["PublicSiteSearchController_overview"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/site-search/settings": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /** Site araması ayarlarını güncelle */
+        patch: operations["PublicSiteSearchController_updateSettings"];
+        trace?: never;
+    };
+    "/v1/apps/{appId}/site-search/sources": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Arama kaynakları */
+        get: operations["PublicSiteSearchController_sources"];
+        put?: never;
+        /** Arama kaynağı ekle */
+        post: operations["PublicSiteSearchController_createSource"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/site-search/sources/{sourceId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /** Arama kaynağını ve sayfalarını sil */
+        delete: operations["PublicSiteSearchController_removeSource"];
+        options?: never;
+        head?: never;
+        /** Arama kaynağını düzenle */
+        patch: operations["PublicSiteSearchController_updateSource"];
+        trace?: never;
+    };
+    "/v1/apps/{appId}/site-search/sources/{sourceId}/crawl": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Kaynağı şimdi yeniden tara */
+        post: operations["PublicSiteSearchController_crawl"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/site-search/documents": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Dizindeki belgeler */
+        get: operations["PublicSiteSearchController_documents"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/site-search/documents/{documentKey}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** Belgeyi dizine yükle veya değiştir (anahtar app içinde tekildir) */
+        put: operations["PublicSiteSearchController_putDocument"];
+        post?: never;
+        /** Belgeyi dizinden sil (belge kimliği veya anahtarı) */
+        delete: operations["PublicSiteSearchController_removeDocument"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/apps/{appId}/site-search/report": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Arama raporu */
+        get: operations["PublicSiteSearchController_report"];
+        put?: never;
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -4022,7 +7394,7 @@ export interface components {
         };
         SdkRegisterDto: {
             /** @enum {string} */
-            channel: "ios_push" | "android_push" | "hms_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs";
+            channel: "ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs";
             token: string;
             /** @default {} */
             device: {
@@ -4038,6 +7410,23 @@ export interface components {
                 push_capable?: boolean;
                 /** @enum {string} */
                 push_environment?: "sandbox" | "production";
+                /** @enum {string} */
+                form_factor?: "phone" | "watch";
+                /** @enum {string} */
+                push_kind?: "alert" | "voip" | "app_clip";
+                manufacturer?: string;
+                brand?: string;
+                rom?: string;
+                rom_version?: string;
+                delivery?: {
+                    battery_optimization_exempt?: boolean;
+                    background_restricted?: boolean;
+                    channel_blocked?: boolean;
+                    power_save_mode?: boolean;
+                    data_saver?: boolean;
+                    /** @enum {string} */
+                    standby_bucket?: "exempted" | "active" | "working_set" | "frequent" | "rare" | "restricted";
+                };
             };
             test_device?: boolean;
             user?: {
@@ -4071,6 +7460,23 @@ export interface components {
                 push_capable?: boolean;
                 /** @enum {string} */
                 push_environment?: "sandbox" | "production";
+                /** @enum {string} */
+                form_factor?: "phone" | "watch";
+                /** @enum {string} */
+                push_kind?: "alert" | "voip" | "app_clip";
+                manufacturer?: string;
+                brand?: string;
+                rom?: string;
+                rom_version?: string;
+                delivery?: {
+                    battery_optimization_exempt?: boolean;
+                    background_restricted?: boolean;
+                    channel_blocked?: boolean;
+                    power_save_mode?: boolean;
+                    data_saver?: boolean;
+                    /** @enum {string} */
+                    standby_bucket?: "exempted" | "active" | "working_set" | "frequent" | "rare" | "restricted";
+                };
             };
             opted_in?: boolean;
             location?: {
@@ -4123,6 +7529,23 @@ export interface components {
             app_version?: string | null;
             sdk_version?: string;
         };
+        SdkFlagsEvaluateDto: {
+            token_hash?: string;
+            identity_hash?: string;
+            subscription_id?: string;
+            subject?: string;
+        };
+        SdkGeofenceEventsDto: {
+            token_hash?: string;
+            identity_hash?: string;
+            events: {
+                geofence_id: string;
+                /** @enum {string} */
+                transition: "enter" | "exit";
+                /** Format: date-time */
+                occurred_at?: string;
+            }[];
+        };
         SdkEventsDto: {
             events: {
                 name: string;
@@ -4139,6 +7562,11 @@ export interface components {
                 token_hash?: string;
                 identity_hash?: string;
             }[];
+        };
+        ReceivedDto: {
+            /** Format: date-time */
+            received_at?: string;
+            deprioritized?: boolean;
         };
         OpenedDto: {
             button_id?: string;
@@ -4342,6 +7770,781 @@ export interface components {
         UpdateContentTableDto: {
             description?: string | null;
         };
+        CreatePromoCodeListDto: {
+            name: string;
+            description?: string;
+            expires_at?: string | null;
+        };
+        UpdatePromoCodeListDto: {
+            description?: string | null;
+            expires_at?: string | null;
+        };
+        CreateCatalogDto: {
+            name: string;
+            description?: string;
+            currency?: string;
+        };
+        UpdateCatalogDto: {
+            description?: string | null;
+            currency?: string;
+        };
+        UpsertCatalogItemsDto: {
+            items: {
+                id: string;
+                title: string;
+                description?: string | null;
+                image_url?: string | null;
+                url?: string | null;
+                price?: number | null;
+                sale_price?: number | null;
+                currency?: string;
+                category?: string | null;
+                brand?: string | null;
+                in_stock?: boolean;
+                attributes?: {
+                    [key: string]: string;
+                };
+            }[];
+        };
+        UpdateRecommendationConfigDto: {
+            enabled: boolean;
+            view_events?: string[];
+            purchase_events?: string[];
+            item_property?: string;
+            window_days?: number;
+        };
+        CreateAppFlagDto: {
+            key: string;
+            name: string;
+            description?: string | null;
+            enabled?: boolean;
+            /** @enum {string} */
+            value_type?: "boolean" | "string" | "number" | "json";
+            on_value?: boolean | number | string | unknown[] | {
+                [key: string]: unknown;
+            };
+            off_value?: boolean | number | string | unknown[] | {
+                [key: string]: unknown;
+            };
+            rollout_percent?: number;
+            segment_id?: string | null;
+            rollout_schedule?: {
+                /** Format: date-time */
+                at: string;
+                percent: number;
+            }[];
+        };
+        EvaluateAppFlagsDto: {
+            external_id?: string;
+            user_id?: string;
+            subject?: string;
+        };
+        UpdateAppFlagDto: {
+            name?: string;
+            description?: string | null;
+            enabled?: boolean;
+            /** @enum {string} */
+            value_type?: "boolean" | "string" | "number" | "json";
+            on_value?: boolean | number | string | unknown[] | {
+                [key: string]: unknown;
+            };
+            off_value?: boolean | number | string | unknown[] | {
+                [key: string]: unknown;
+            };
+            rollout_percent?: number;
+            segment_id?: string | null;
+            rollout_schedule?: {
+                /** Format: date-time */
+                at: string;
+                percent: number;
+            }[];
+        };
+        CreateGeofenceDto: {
+            name: string;
+            lat: number;
+            lng: number;
+            radius_m: number;
+            cooldown_minutes?: number;
+            enabled?: boolean;
+        };
+        UpdateGeofenceDto: {
+            name?: string;
+            lat?: number;
+            lng?: number;
+            radius_m?: number;
+            cooldown_minutes?: number;
+            enabled?: boolean;
+        };
+        UpdateRfmConfigDto: {
+            enabled: boolean;
+            event_names: string[];
+            value_property?: string | null;
+            use_monetary?: boolean;
+            window_days?: number;
+        };
+        UpdateAffinityConfigDto: {
+            enabled: boolean;
+            attributes: string[];
+            events: {
+                [key: string]: number;
+            };
+            window_days?: number;
+            half_life_days?: number;
+        };
+        UpsertCompanyDto: {
+            external_id: string;
+            name?: string | null;
+            domain?: string | null;
+            properties?: {
+                [key: string]: unknown;
+            };
+        };
+        BatchUpsertCompaniesDto: {
+            companies: {
+                external_id: string;
+                name?: string | null;
+                domain?: string | null;
+                properties?: {
+                    [key: string]: unknown;
+                };
+            }[];
+        };
+        UpdateCompanyDto: {
+            external_id?: string;
+            name?: string | null;
+            domain?: string | null;
+            properties?: {
+                [key: string]: unknown;
+            };
+        };
+        BatchMembersDto: {
+            members: {
+                user_id?: string;
+                external_id?: string;
+                role?: string;
+            }[];
+        };
+        SetMemberDto: {
+            role?: string;
+        };
+        CreateAiAgentDto: {
+            name: string;
+            enabled?: boolean;
+            channels?: ("whatsapp" | "sms" | "rcs" | "telegram" | "viber" | "chat")[];
+            instructions?: string;
+            faq?: {
+                question: string;
+                answer: string;
+            }[];
+            tools?: {
+                name: string;
+                description: string;
+                /** Format: uri */
+                url: string;
+                params?: {
+                    name: string;
+                    description?: string;
+                    required?: boolean;
+                }[];
+            }[];
+            handoff?: {
+                keywords?: string[];
+                max_bot_replies?: number;
+                on_negative_sentiment?: boolean;
+                message?: string;
+            };
+            limits?: {
+                monthly_token_cap?: number;
+                max_steps?: number;
+            };
+            ai_sentiment?: boolean;
+        };
+        UpdateAiAgentDto: {
+            name?: string;
+            enabled?: boolean;
+            channels?: ("whatsapp" | "sms" | "rcs" | "telegram" | "viber" | "chat")[];
+            instructions?: string;
+            faq?: {
+                question: string;
+                answer: string;
+            }[];
+            tools?: {
+                name: string;
+                description: string;
+                /** Format: uri */
+                url: string;
+                params?: {
+                    name: string;
+                    description?: string;
+                    required?: boolean;
+                }[];
+            }[];
+            handoff?: {
+                keywords?: string[];
+                max_bot_replies?: number;
+                on_negative_sentiment?: boolean;
+                message?: string;
+            };
+            limits?: {
+                monthly_token_cap?: number;
+                max_steps?: number;
+            };
+            ai_sentiment?: boolean;
+        };
+        RunSqlQueryDto: {
+            query: string;
+            row_limit?: number;
+            timeout_ms?: number;
+        };
+        CreateSqlSegmentDto: {
+            name: string;
+            description?: string | null;
+            query: string;
+            refresh_interval_minutes?: number | null;
+        };
+        UpdateSqlSegmentDto: {
+            name?: string;
+            description?: string | null;
+            query?: string;
+            refresh_interval_minutes?: number | null;
+        };
+        CreateCustomAgentDto: {
+            name: string;
+            description?: string;
+            enabled?: boolean;
+            instructions?: string;
+            tools?: ("list_segments" | "campaign_performance" | "delivery_summary" | "create_segment_draft" | "create_campaign_draft")[];
+            schedule?: {
+                cron: string;
+                timezone?: string;
+            } | null;
+            limits?: {
+                max_steps?: number;
+                monthly_token_cap?: number;
+            };
+        };
+        UpdateCustomAgentDto: {
+            name?: string;
+            description?: string;
+            enabled?: boolean;
+            instructions?: string;
+            tools?: ("list_segments" | "campaign_performance" | "delivery_summary" | "create_segment_draft" | "create_campaign_draft")[];
+            schedule?: {
+                cron: string;
+                timezone?: string;
+            } | null;
+            limits?: {
+                max_steps?: number;
+                monthly_token_cap?: number;
+            };
+        };
+        CreateMessengerLinkDto: {
+            /** @enum {string} */
+            channel: "telegram" | "viber";
+            user_id?: string;
+            external_id?: string;
+            ttl_seconds?: number;
+        };
+        CreateDataTransformDto: {
+            name: string;
+            description?: string;
+            enabled?: boolean;
+            /** @enum {string} */
+            target: "event" | "person";
+            /** @enum {string} */
+            kind: "rules" | "javascript";
+            position?: number;
+            rules?: ({
+                /** @constant */
+                op: "map";
+                from: string;
+                to: string;
+            } | {
+                /** @constant */
+                op: "rename";
+                from: string;
+                to: string;
+            } | {
+                /** @constant */
+                op: "remove";
+                path: string;
+            } | {
+                /** @constant */
+                op: "set";
+                path: string;
+                value: unknown;
+            } | {
+                /** @constant */
+                op: "template";
+                path: string;
+                template: string;
+            } | {
+                /** @constant */
+                op: "compute";
+                path: string;
+                /** @enum {string} */
+                fn: "lower" | "upper" | "trim" | "length" | "round" | "abs" | "add" | "multiply" | "now";
+                from?: string;
+                operand?: number;
+            } | {
+                /** @constant */
+                op: "cast";
+                path: string;
+                /** @enum {string} */
+                to: "string" | "number" | "integer" | "boolean" | "date";
+                /** @enum {string} */
+                on_error?: "fail" | "null" | "keep";
+            } | {
+                /** @constant */
+                op: "filter";
+                /** @enum {string} */
+                action: "drop" | "keep";
+                /** @enum {string} */
+                match?: "all" | "any";
+                conditions: {
+                    path: string;
+                    /** @enum {string} */
+                    operator: "eq" | "neq" | "gt" | "gte" | "lt" | "lte" | "contains" | "starts_with" | "ends_with" | "in" | "exists" | "not_exists";
+                    value?: unknown;
+                }[];
+            })[];
+            code?: string;
+            sources?: ("sdk" | "api" | "import" | "system" | "webhook_source" | "pull_source")[];
+            event_names?: string[];
+        };
+        PreviewDataTransformDto: {
+            /** @enum {string} */
+            target: "event" | "person";
+            /** @enum {string} */
+            source?: "sdk" | "api" | "import" | "system" | "webhook_source" | "pull_source";
+            records: {
+                [key: string]: unknown;
+            }[];
+            transform?: {
+                /** @enum {string} */
+                kind: "rules" | "javascript";
+                rules?: ({
+                    /** @constant */
+                    op: "map";
+                    from: string;
+                    to: string;
+                } | {
+                    /** @constant */
+                    op: "rename";
+                    from: string;
+                    to: string;
+                } | {
+                    /** @constant */
+                    op: "remove";
+                    path: string;
+                } | {
+                    /** @constant */
+                    op: "set";
+                    path: string;
+                    value: unknown;
+                } | {
+                    /** @constant */
+                    op: "template";
+                    path: string;
+                    template: string;
+                } | {
+                    /** @constant */
+                    op: "compute";
+                    path: string;
+                    /** @enum {string} */
+                    fn: "lower" | "upper" | "trim" | "length" | "round" | "abs" | "add" | "multiply" | "now";
+                    from?: string;
+                    operand?: number;
+                } | {
+                    /** @constant */
+                    op: "cast";
+                    path: string;
+                    /** @enum {string} */
+                    to: "string" | "number" | "integer" | "boolean" | "date";
+                    /** @enum {string} */
+                    on_error?: "fail" | "null" | "keep";
+                } | {
+                    /** @constant */
+                    op: "filter";
+                    /** @enum {string} */
+                    action: "drop" | "keep";
+                    /** @enum {string} */
+                    match?: "all" | "any";
+                    conditions: {
+                        path: string;
+                        /** @enum {string} */
+                        operator: "eq" | "neq" | "gt" | "gte" | "lt" | "lte" | "contains" | "starts_with" | "ends_with" | "in" | "exists" | "not_exists";
+                        value?: unknown;
+                    }[];
+                })[];
+                code?: string;
+                sources?: ("sdk" | "api" | "import" | "system" | "webhook_source" | "pull_source")[];
+                event_names?: string[];
+            };
+            transform_id?: string;
+        };
+        UpdateDataTransformDto: {
+            name?: string;
+            description?: string;
+            enabled?: boolean;
+            position?: number;
+            rules?: ({
+                /** @constant */
+                op: "map";
+                from: string;
+                to: string;
+            } | {
+                /** @constant */
+                op: "rename";
+                from: string;
+                to: string;
+            } | {
+                /** @constant */
+                op: "remove";
+                path: string;
+            } | {
+                /** @constant */
+                op: "set";
+                path: string;
+                value: unknown;
+            } | {
+                /** @constant */
+                op: "template";
+                path: string;
+                template: string;
+            } | {
+                /** @constant */
+                op: "compute";
+                path: string;
+                /** @enum {string} */
+                fn: "lower" | "upper" | "trim" | "length" | "round" | "abs" | "add" | "multiply" | "now";
+                from?: string;
+                operand?: number;
+            } | {
+                /** @constant */
+                op: "cast";
+                path: string;
+                /** @enum {string} */
+                to: "string" | "number" | "integer" | "boolean" | "date";
+                /** @enum {string} */
+                on_error?: "fail" | "null" | "keep";
+            } | {
+                /** @constant */
+                op: "filter";
+                /** @enum {string} */
+                action: "drop" | "keep";
+                /** @enum {string} */
+                match?: "all" | "any";
+                conditions: {
+                    path: string;
+                    /** @enum {string} */
+                    operator: "eq" | "neq" | "gt" | "gte" | "lt" | "lte" | "contains" | "starts_with" | "ends_with" | "in" | "exists" | "not_exists";
+                    value?: unknown;
+                }[];
+            })[];
+            code?: string;
+            sources?: ("sdk" | "api" | "import" | "system" | "webhook_source" | "pull_source")[];
+            event_names?: string[];
+        };
+        CreateDataSourceDto: {
+            name: string;
+            enabled?: boolean;
+            /** @enum {string} */
+            auth_mode?: "signature" | "token";
+            mapping?: {
+                records_path?: string;
+                event_name?: string;
+                event_name_path?: string;
+                external_id_path?: string;
+                occurred_at_path?: string;
+                value_path?: string;
+                event_id_path?: string;
+                properties_path?: string;
+                tags_path?: string;
+            };
+            config?: {
+                /** Format: uri */
+                url?: string;
+                /** @enum {string} */
+                method?: "GET" | "POST";
+                headers?: {
+                    [key: string]: string;
+                };
+                body?: string;
+                interval_minutes?: number;
+                auth_header?: string;
+                next_cursor_path?: string;
+                cursor_param?: string;
+                resume_cursor?: boolean;
+            };
+            auth_value?: string;
+            /** @enum {string} */
+            kind: "webhook" | "http_pull";
+            /** @enum {string} */
+            target: "event" | "person";
+        };
+        UpdateDataSourceDto: {
+            name?: string;
+            enabled?: boolean;
+            /** @enum {string} */
+            auth_mode?: "signature" | "token";
+            mapping?: {
+                records_path?: string;
+                event_name?: string;
+                event_name_path?: string;
+                external_id_path?: string;
+                occurred_at_path?: string;
+                value_path?: string;
+                event_id_path?: string;
+                properties_path?: string;
+                tags_path?: string;
+            };
+            config?: {
+                /** Format: uri */
+                url?: string;
+                /** @enum {string} */
+                method?: "GET" | "POST";
+                headers?: {
+                    [key: string]: string;
+                };
+                body?: string;
+                interval_minutes?: number;
+                auth_header?: string;
+                next_cursor_path?: string;
+                cursor_param?: string;
+                resume_cursor?: boolean;
+            };
+            auth_value?: string;
+        };
+        ReprocessQuarantineDto: {
+            ids?: string[];
+        };
+        DiscardQuarantineDto: {
+            ids: string[];
+        };
+        CreateWarehouseConnectionDto: {
+            name: string;
+            /** @enum {string} */
+            type: "bigquery" | "snowflake" | "databricks";
+            config: {
+                [key: string]: unknown;
+            };
+            credentials: {
+                [key: string]: unknown;
+            };
+        };
+        UpdateWarehouseConnectionDto: {
+            name?: string;
+            config?: {
+                [key: string]: unknown;
+            };
+            credentials?: {
+                [key: string]: unknown;
+            };
+        };
+        PreviewWarehouseQueryDto: {
+            connection_id: string;
+            query: string;
+            id_column: string;
+            /** @enum {string} */
+            id_type?: "external_id" | "user_id";
+            limits?: {
+                timeout_seconds?: number;
+                max_rows?: number;
+                max_bytes_billed?: number;
+                max_warehouse_size?: ("X-Small" | "Small" | "Medium" | "Large" | "X-Large" | "2X-Large" | "3X-Large" | "4X-Large" | "5X-Large" | "6X-Large") | null;
+            };
+            /** @enum {string} */
+            mode?: "dry_run" | "sample";
+        };
+        CreateWarehouseSegmentDto: {
+            name: string;
+            description?: string | null;
+            connection_id: string;
+            query: string;
+            id_column: string;
+            /** @enum {string} */
+            id_type?: "external_id" | "user_id";
+            refresh_interval_minutes?: number | null;
+            limits?: {
+                timeout_seconds?: number;
+                max_rows?: number;
+                max_bytes_billed?: number;
+                max_warehouse_size?: ("X-Small" | "Small" | "Medium" | "Large" | "X-Large" | "2X-Large" | "3X-Large" | "4X-Large" | "5X-Large" | "6X-Large") | null;
+            };
+        };
+        UpdateWarehouseSegmentDto: {
+            name?: string;
+            description?: string | null;
+            connection_id?: string;
+            query?: string;
+            id_column?: string;
+            /** @enum {string} */
+            id_type?: "external_id" | "user_id";
+            refresh_interval_minutes?: number | null;
+            limits?: {
+                timeout_seconds?: number;
+                max_rows?: number;
+                max_bytes_billed?: number;
+                max_warehouse_size?: ("X-Small" | "Small" | "Medium" | "Large" | "X-Large" | "2X-Large" | "3X-Large" | "4X-Large" | "5X-Large" | "6X-Large") | null;
+            };
+        };
+        UpdateChannelScoreConfigDto: {
+            enabled: boolean;
+            window_days?: number;
+            min_sends?: number;
+            count_email_opens?: boolean;
+        };
+        UpdateWalletConfigDto: {
+            apple?: {
+                pass_type_id: string;
+                team_id: string;
+                certificate_pem: string;
+                private_key_pem: string;
+                key_passphrase?: string;
+                wwdr_pem: string;
+            } | null;
+            google?: {
+                issuer_id: string;
+                service_account_json: string;
+            } | null;
+        };
+        CreateWalletTemplateDto: {
+            slug: string;
+            name: string;
+            /** @enum {string} */
+            kind: "coupon" | "loyalty" | "event" | "generic";
+            design: {
+                title: string;
+                description: string;
+                organization: string;
+                /** @default #ffffff */
+                background_color: string;
+                /** @default #111111 */
+                foreground_color: string;
+                /** @default #555555 */
+                label_color: string;
+                /**
+                 * @default qr
+                 * @enum {string}
+                 */
+                barcode: "qr" | "pdf417" | "aztec" | "code128";
+                /** @default [] */
+                fields: {
+                    key: string;
+                    /** @default  */
+                    label: string;
+                    /** @default  */
+                    value: string;
+                    /**
+                     * @default secondary
+                     * @enum {string}
+                     */
+                    section: "header" | "primary" | "secondary" | "auxiliary" | "back";
+                }[];
+                expires_at?: string | null;
+                relevant_at?: string | null;
+            };
+            images?: {
+                [key: string]: string;
+            };
+        };
+        UpdateWalletTemplateDto: {
+            name?: string;
+            /** @enum {string} */
+            status?: "active" | "archived";
+            design?: {
+                title: string;
+                description: string;
+                organization: string;
+                /** @default #ffffff */
+                background_color: string;
+                /** @default #111111 */
+                foreground_color: string;
+                /** @default #555555 */
+                label_color: string;
+                /**
+                 * @default qr
+                 * @enum {string}
+                 */
+                barcode: "qr" | "pdf417" | "aztec" | "code128";
+                /** @default [] */
+                fields: {
+                    key: string;
+                    /** @default  */
+                    label: string;
+                    /** @default  */
+                    value: string;
+                    /**
+                     * @default secondary
+                     * @enum {string}
+                     */
+                    section: "header" | "primary" | "secondary" | "auxiliary" | "back";
+                }[];
+                expires_at?: string | null;
+                relevant_at?: string | null;
+            };
+            images?: {
+                [key: string]: string;
+            };
+        };
+        IssueWalletPassDto: {
+            template_id: string;
+            external_id?: string;
+            barcode_value?: string;
+            values?: {
+                [key: string]: string;
+            };
+        };
+        UpdateWalletPassDto: {
+            barcode_value?: string;
+            values?: {
+                [key: string]: string;
+            };
+        };
+        CreatePredictionDto: {
+            slug: string;
+            name: string;
+            /** @enum {string} */
+            kind: "churn" | "event";
+            /** @default [] */
+            event_names: string[];
+            /** @default 30 */
+            horizon_days: number;
+        };
+        UpdatePredictionDto: {
+            name?: string;
+            enabled?: boolean;
+            event_names?: string[];
+            horizon_days?: number;
+        };
+        CreateDecisionAgentDto: {
+            slug: string;
+            name: string;
+            arms: {
+                id: string;
+                label: string;
+            }[];
+            reward_events: string[];
+            /** @default 72 */
+            reward_window_hours: number;
+            /** @default 10 */
+            holdout_percent: number;
+            context_prediction?: string | null;
+            /** @default false */
+            use_best_channel: boolean;
+        };
+        UpdateDecisionAgentDto: {
+            name?: string;
+            /** @enum {string} */
+            status?: "active" | "paused";
+            reward_events?: string[];
+            reward_window_hours?: number;
+            holdout_percent?: number;
+        };
+        DecideDto: {
+            external_id: string;
+        };
         SdkErrorsDto: {
             errors: {
                 /**
@@ -4444,11 +8647,31 @@ export interface components {
                 }[];
             } | null;
         };
+        BulkReplayDto: {
+            /** @enum {string} */
+            status?: "failed" | "dead" | "failed_or_dead";
+            /** Format: date-time */
+            from?: string;
+            /** Format: date-time */
+            to?: string;
+        };
         UpdateWarehouseExportDto: {
             name?: string;
             tables?: ("deliveries" | "delivery_events" | "events" | "conversions" | "users" | "subscriptions")[];
             /** @enum {string} */
-            schedule?: "hourly" | "daily";
+            schedule?: "every_15_minutes" | "hourly" | "daily";
+            enabled?: boolean;
+            config?: {
+                [key: string]: unknown;
+            };
+            credentials?: {
+                [key: string]: unknown;
+            };
+        };
+        UpdateReverseEtlDto: {
+            name?: string;
+            /** @enum {string} */
+            schedule?: "every_5_minutes" | "hourly" | "daily";
             enabled?: boolean;
             config?: {
                 [key: string]: unknown;
@@ -4503,7 +8726,7 @@ export interface components {
                         /** @enum {string} */
                         unit: "minutes" | "hours" | "days" | "weeks";
                     };
-                    channels?: ("ios_push" | "android_push" | "hms_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs")[];
+                    channels?: ("ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs" | "telegram" | "viber")[];
                 }[];
                 inApp?: {
                     minIntervalSeconds?: number;
@@ -4538,8 +8761,25 @@ export interface components {
                         };
                     };
                 };
+                brandKit?: {
+                    website_url?: string;
+                    name?: string;
+                    primary_color?: string;
+                    accent_color?: string;
+                    font?: string;
+                    logo_url?: string;
+                    tone?: string;
+                };
                 defaultTtlSeconds?: number;
                 identityVerificationRequired?: boolean;
+                /** @enum {string} */
+                ipCapture?: "off" | "full" | "masked";
+                ipRetentionDays?: number;
+                adaptiveFrequency?: {
+                    enabled: boolean;
+                    min: number;
+                    max: number;
+                };
                 allowedOrigins?: string[];
                 campaignApprovalRequired?: boolean;
                 webPush?: {
@@ -4612,9 +8852,9 @@ export interface components {
                     simulation?: boolean;
                     completed_at?: string | null;
                     version?: number;
-                    platforms?: ("ios" | "android" | "huawei" | "web")[];
+                    platforms?: ("ios" | "android" | "huawei" | "web" | "amazon" | "windows" | "email" | "sms")[];
                     /** @enum {string} */
-                    framework?: "native" | "flutter" | "react-native" | "unity" | "capacitor" | "cordova" | "maui";
+                    framework?: "native" | "flutter" | "react-native" | "expo" | "kmp" | "unity" | "capacitor" | "cordova" | "maui";
                     /** @enum {string} */
                     web_integration?: "code" | "wordpress";
                 };
@@ -4647,7 +8887,7 @@ export interface components {
             };
             subscriptions?: {
                 /** @enum {string} */
-                channel: "ios_push" | "android_push" | "hms_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs";
+                channel: "ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs" | "telegram" | "viber";
                 token: string;
                 /** @default {} */
                 device: {
@@ -4663,6 +8903,23 @@ export interface components {
                     push_capable?: boolean;
                     /** @enum {string} */
                     push_environment?: "sandbox" | "production";
+                    /** @enum {string} */
+                    form_factor?: "phone" | "watch";
+                    /** @enum {string} */
+                    push_kind?: "alert" | "voip" | "app_clip";
+                    manufacturer?: string;
+                    brand?: string;
+                    rom?: string;
+                    rom_version?: string;
+                    delivery?: {
+                        battery_optimization_exempt?: boolean;
+                        background_restricted?: boolean;
+                        channel_blocked?: boolean;
+                        power_save_mode?: boolean;
+                        data_saver?: boolean;
+                        /** @enum {string} */
+                        standby_bucket?: "exempted" | "active" | "working_set" | "frequent" | "rare" | "restricted";
+                    };
                 };
                 /** @enum {string} */
                 status?: "subscribed" | "unsubscribed";
@@ -4699,7 +8956,7 @@ export interface components {
         };
         AddSubscriptionDto: {
             /** @enum {string} */
-            channel: "ios_push" | "android_push" | "hms_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs";
+            channel: "ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs" | "telegram" | "viber";
             token: string;
             /** @default {} */
             device: {
@@ -4715,6 +8972,23 @@ export interface components {
                 push_capable?: boolean;
                 /** @enum {string} */
                 push_environment?: "sandbox" | "production";
+                /** @enum {string} */
+                form_factor?: "phone" | "watch";
+                /** @enum {string} */
+                push_kind?: "alert" | "voip" | "app_clip";
+                manufacturer?: string;
+                brand?: string;
+                rom?: string;
+                rom_version?: string;
+                delivery?: {
+                    battery_optimization_exempt?: boolean;
+                    background_restricted?: boolean;
+                    channel_blocked?: boolean;
+                    power_save_mode?: boolean;
+                    data_saver?: boolean;
+                    /** @enum {string} */
+                    standby_bucket?: "exempted" | "active" | "working_set" | "frequent" | "rare" | "restricted";
+                };
             };
             /** @enum {string} */
             status?: "subscribed" | "unsubscribed";
@@ -4723,6 +8997,10 @@ export interface components {
                 /** Format: date-time */
                 at?: string;
             };
+        };
+        PublicCleanupSubscriptionsDto: {
+            /** @enum {string} */
+            status?: "invalid" | "unsubscribed";
         };
         PatchSubscriptionDto: {
             token?: string;
@@ -4739,6 +9017,23 @@ export interface components {
                 push_capable?: boolean;
                 /** @enum {string} */
                 push_environment?: "sandbox" | "production";
+                /** @enum {string} */
+                form_factor?: "phone" | "watch";
+                /** @enum {string} */
+                push_kind?: "alert" | "voip" | "app_clip";
+                manufacturer?: string;
+                brand?: string;
+                rom?: string;
+                rom_version?: string;
+                delivery?: {
+                    battery_optimization_exempt?: boolean;
+                    background_restricted?: boolean;
+                    channel_blocked?: boolean;
+                    power_save_mode?: boolean;
+                    data_saver?: boolean;
+                    /** @enum {string} */
+                    standby_bucket?: "exempted" | "active" | "working_set" | "frequent" | "rare" | "restricted";
+                };
             };
             /** @enum {string} */
             status?: "subscribed" | "unsubscribed";
@@ -4776,7 +9071,7 @@ export interface components {
                 included_segments?: string[];
                 excluded_segments?: string[];
                 filters?: unknown;
-                channels?: ("ios_push" | "android_push" | "hms_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs")[];
+                channels?: ("ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs" | "telegram" | "viber")[];
                 test_devices_only?: boolean;
                 email_to?: string[];
                 include_phone_numbers?: string[];
@@ -4822,6 +9117,16 @@ export interface components {
             large_icon?: string;
             android_accent_color?: string;
             android_visibility?: 1 | 0 | -1;
+            ios_carousel?: {
+                url: string;
+                title?: string;
+            }[];
+            android_live_update?: {
+                progress: number;
+                ongoing?: boolean;
+            };
+            voip?: boolean;
+            app_clip?: boolean;
             chrome_web_icon?: string;
             chrome_web_image?: string;
             chrome_web_badge?: string;
@@ -4946,8 +9251,29 @@ export interface components {
             rcs_fallback_text?: {
                 [key: string]: string;
             };
+            messenger_image_url?: string;
+            messenger_buttons?: ({
+                /** @constant */
+                type: "url";
+                text: string;
+                url: string;
+            } | {
+                /** @constant */
+                type: "reply";
+                text: string;
+                payload?: string;
+            })[];
             add_to_inbox?: boolean;
             inbox_ttl?: number;
+            content_card?: {
+                /** @enum {string} */
+                type: "classic" | "captioned_image" | "image_only";
+                pinned?: boolean;
+                priority?: number;
+                button_text?: {
+                    [key: string]: string;
+                };
+            };
             frequency_cap_exempt?: boolean;
             quiet_hours_exempt?: boolean;
             one_per_user?: boolean;
@@ -4956,6 +9282,10 @@ export interface components {
             name?: string;
             labels?: string[];
             category?: string;
+            /** @enum {string} */
+            fallback_channel?: "sms" | "email";
+            /** @enum {string} */
+            form_factor?: "phone" | "watch";
         };
         EstimateAudienceDto: {
             app_id?: string;
@@ -4969,12 +9299,68 @@ export interface components {
                 included_segments?: string[];
                 excluded_segments?: string[];
                 filters?: unknown;
-                channels?: ("ios_push" | "android_push" | "hms_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs")[];
+                channels?: ("ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs" | "telegram" | "viber")[];
                 test_devices_only?: boolean;
                 email_to?: string[];
                 include_phone_numbers?: string[];
             };
             include_unsubscribed?: boolean;
+        };
+        ReportRunBodyDto: {
+            /** @enum {string} */
+            source: "deliveries" | "events" | "conversions";
+            metrics: ("sent" | "delivered" | "failed" | "opened" | "clicked" | "delivery_rate" | "open_rate" | "click_rate" | "failure_rate" | "count" | "unique_users" | "value_sum" | "value_avg" | "conversions" | "revenue")[];
+            /** @default [] */
+            dimensions: ("day" | "week" | "month" | "channel" | "provider" | "campaign" | "status" | "name" | "source" | "event_name" | "kind")[];
+            /** @default {} */
+            filters: {
+                [key: string]: string[];
+            };
+            sort?: {
+                by: string;
+                /**
+                 * @default desc
+                 * @enum {string}
+                 */
+                direction: "asc" | "desc";
+            };
+            /** @default 100 */
+            limit: number;
+            days?: number;
+            /** Format: date-time */
+            from?: string;
+            /** Format: date-time */
+            to?: string;
+            /**
+             * @default json
+             * @enum {string}
+             */
+            format: "json" | "csv";
+        };
+        PathBodyDto: {
+            event: string;
+            /**
+             * @default after
+             * @enum {string}
+             */
+            direction: "after" | "before";
+            /** @default 3 */
+            depth: number;
+            /** @default 5 */
+            top: number;
+            /** @default 24 */
+            window_hours: number;
+            /** @default [] */
+            exclude: string[];
+            /** Format: date-time */
+            from?: string;
+            /** Format: date-time */
+            to?: string;
+            /**
+             * @default json
+             * @enum {string}
+             */
+            format: "json" | "csv";
         };
         FunnelBodyDto: {
             steps: {
@@ -4998,6 +9384,68 @@ export interface components {
              */
             format: "json" | "csv";
         };
+        UpdateGlobalControlDto: {
+            enabled: boolean;
+            percent: number;
+        };
+        CreateSavedReportDto: {
+            name: string;
+            definition: {
+                /** @enum {string} */
+                source: "deliveries" | "events" | "conversions";
+                metrics: ("sent" | "delivered" | "failed" | "opened" | "clicked" | "delivery_rate" | "open_rate" | "click_rate" | "failure_rate" | "count" | "unique_users" | "value_sum" | "value_avg" | "conversions" | "revenue")[];
+                /** @default [] */
+                dimensions: ("day" | "week" | "month" | "channel" | "provider" | "campaign" | "status" | "name" | "source" | "event_name" | "kind")[];
+                /** @default {} */
+                filters: {
+                    [key: string]: string[];
+                };
+                sort?: {
+                    by: string;
+                    /**
+                     * @default desc
+                     * @enum {string}
+                     */
+                    direction: "asc" | "desc";
+                };
+                /** @default 100 */
+                limit: number;
+                days?: number;
+                /** Format: date-time */
+                from?: string;
+                /** Format: date-time */
+                to?: string;
+            };
+        };
+        UpdateSavedReportDto: {
+            name?: string;
+            definition?: {
+                /** @enum {string} */
+                source: "deliveries" | "events" | "conversions";
+                metrics: ("sent" | "delivered" | "failed" | "opened" | "clicked" | "delivery_rate" | "open_rate" | "click_rate" | "failure_rate" | "count" | "unique_users" | "value_sum" | "value_avg" | "conversions" | "revenue")[];
+                /** @default [] */
+                dimensions: ("day" | "week" | "month" | "channel" | "provider" | "campaign" | "status" | "name" | "source" | "event_name" | "kind")[];
+                /** @default {} */
+                filters: {
+                    [key: string]: string[];
+                };
+                sort?: {
+                    by: string;
+                    /**
+                     * @default desc
+                     * @enum {string}
+                     */
+                    direction: "asc" | "desc";
+                };
+                /** @default 100 */
+                limit: number;
+                days?: number;
+                /** Format: date-time */
+                from?: string;
+                /** Format: date-time */
+                to?: string;
+            };
+        };
         PatchEventDefinitionDto: {
             display_name?: string | null;
             is_conversion?: boolean;
@@ -5019,13 +9467,13 @@ export interface components {
                 campaign_id?: string;
                 status?: string;
                 /** @enum {string} */
-                channel?: "ios_push" | "android_push" | "hms_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs";
+                channel?: "ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs" | "telegram" | "viber";
                 segment_id?: string;
             };
         };
         CreateTemplateDto: {
             name: string;
-            channel?: ("ios_push" | "android_push" | "hms_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs") | null;
+            channel?: ("ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs" | "telegram" | "viber") | null;
             tags?: string[];
             content: {
                 headings?: {
@@ -5085,6 +9533,15 @@ export interface components {
                 disable_sms_link_shortening?: boolean;
                 add_to_inbox?: boolean;
                 inbox_ttl?: number;
+                content_card?: {
+                    /** @enum {string} */
+                    type: "classic" | "captioned_image" | "image_only";
+                    pinned?: boolean;
+                    priority?: number;
+                    button_text?: {
+                        [key: string]: string;
+                    };
+                };
                 thread_id?: string;
                 ios_relevance_score?: number;
                 target_content_identifier?: string;
@@ -5186,11 +9643,33 @@ export interface components {
                 rcs_fallback_text?: {
                     [key: string]: string;
                 };
+                messenger_image_url?: string;
+                messenger_buttons?: ({
+                    /** @constant */
+                    type: "url";
+                    text: string;
+                    url: string;
+                } | {
+                    /** @constant */
+                    type: "reply";
+                    text: string;
+                    payload?: string;
+                })[];
+                ios_carousel?: {
+                    url: string;
+                    title?: string;
+                }[];
+                android_live_update?: {
+                    progress: number;
+                    ongoing?: boolean;
+                };
+                voip?: boolean;
+                app_clip?: boolean;
             };
         };
         UpdateTemplateDto: {
             name?: string;
-            channel?: ("ios_push" | "android_push" | "hms_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs") | null;
+            channel?: ("ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs" | "telegram" | "viber") | null;
             tags?: string[];
             content?: {
                 headings?: {
@@ -5250,6 +9729,15 @@ export interface components {
                 disable_sms_link_shortening?: boolean;
                 add_to_inbox?: boolean;
                 inbox_ttl?: number;
+                content_card?: {
+                    /** @enum {string} */
+                    type: "classic" | "captioned_image" | "image_only";
+                    pinned?: boolean;
+                    priority?: number;
+                    button_text?: {
+                        [key: string]: string;
+                    };
+                };
                 thread_id?: string;
                 ios_relevance_score?: number;
                 target_content_identifier?: string;
@@ -5351,6 +9839,28 @@ export interface components {
                 rcs_fallback_text?: {
                     [key: string]: string;
                 };
+                messenger_image_url?: string;
+                messenger_buttons?: ({
+                    /** @constant */
+                    type: "url";
+                    text: string;
+                    url: string;
+                } | {
+                    /** @constant */
+                    type: "reply";
+                    text: string;
+                    payload?: string;
+                })[];
+                ios_carousel?: {
+                    url: string;
+                    title?: string;
+                }[];
+                android_live_update?: {
+                    progress: number;
+                    ongoing?: boolean;
+                };
+                voip?: boolean;
+                app_clip?: boolean;
             };
         };
         CopyTemplateDto: {
@@ -5362,7 +9872,7 @@ export interface components {
              * @default ios_push
              * @enum {string}
              */
-            channel: "ios_push" | "android_push" | "hms_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs";
+            channel: "ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs" | "telegram" | "viber";
             language?: string;
             user?: {
                 external_id?: string;
@@ -5434,6 +9944,15 @@ export interface components {
                 disable_sms_link_shortening?: boolean;
                 add_to_inbox?: boolean;
                 inbox_ttl?: number;
+                content_card?: {
+                    /** @enum {string} */
+                    type: "classic" | "captioned_image" | "image_only";
+                    pinned?: boolean;
+                    priority?: number;
+                    button_text?: {
+                        [key: string]: string;
+                    };
+                };
                 thread_id?: string;
                 ios_relevance_score?: number;
                 target_content_identifier?: string;
@@ -5535,6 +10054,28 @@ export interface components {
                 rcs_fallback_text?: {
                     [key: string]: string;
                 };
+                messenger_image_url?: string;
+                messenger_buttons?: ({
+                    /** @constant */
+                    type: "url";
+                    text: string;
+                    url: string;
+                } | {
+                    /** @constant */
+                    type: "reply";
+                    text: string;
+                    payload?: string;
+                })[];
+                ios_carousel?: {
+                    url: string;
+                    title?: string;
+                }[];
+                android_live_update?: {
+                    progress: number;
+                    ongoing?: boolean;
+                };
+                voip?: boolean;
+                app_clip?: boolean;
             };
             version?: number;
         };
@@ -5622,7 +10163,7 @@ export interface components {
             keyword: string;
             /** @enum {string} */
             scope?: "org" | "app";
-            channels?: ("sms" | "whatsapp" | "rcs")[];
+            channels?: ("sms" | "whatsapp" | "rcs" | "telegram" | "viber")[];
             actions: {
                 add_tags?: {
                     [key: string]: string;
@@ -5644,7 +10185,7 @@ export interface components {
         };
         UpdateKeywordDto: {
             keyword?: string;
-            channels?: ("sms" | "whatsapp" | "rcs")[];
+            channels?: ("sms" | "whatsapp" | "rcs" | "telegram" | "viber")[];
             actions?: {
                 add_tags?: {
                     [key: string]: string;
@@ -5721,6 +10262,52 @@ export interface components {
             body?: string;
             language?: string | null;
         };
+        TeamInputDto: {
+            name: string;
+            description?: string | null;
+            member_ids?: string[];
+        };
+        TeamUpdateDto: {
+            name?: string;
+            description?: string | null;
+            member_ids?: string[];
+        };
+        AssignmentRuleInputDto: {
+            name: string;
+            enabled?: boolean;
+            position?: number;
+            conditions?: {
+                channels?: ("sms" | "whatsapp" | "rcs" | "telegram" | "viber" | "email" | "chat")[];
+                languages?: string[];
+                tags?: {
+                    [key: string]: string;
+                };
+            };
+            /** @enum {string} */
+            strategy?: "round_robin" | "least_busy" | "team_only";
+            team_id?: string | null;
+            agent_ids?: string[];
+        };
+        AssignmentRuleUpdateDto: {
+            name?: string;
+            enabled?: boolean;
+            position?: number;
+            conditions?: {
+                channels?: ("sms" | "whatsapp" | "rcs" | "telegram" | "viber" | "email" | "chat")[];
+                languages?: string[];
+                tags?: {
+                    [key: string]: string;
+                };
+            };
+            /** @enum {string} */
+            strategy?: "round_robin" | "least_busy" | "team_only";
+            team_id?: string | null;
+            agent_ids?: string[];
+        };
+        AgentUpdateDto: {
+            max_concurrent?: number | null;
+            languages?: string[];
+        };
         InboxSettingsUpdateDto: {
             widget?: {
                 enabled?: boolean;
@@ -5777,6 +10364,15 @@ export interface components {
                 provider: ("zerobounce" | "neverbounce" | "mock") | null;
                 api_key?: string;
             };
+            volume_spike?: {
+                multiplier: number | null;
+                floor: number | null;
+            };
+            max_invalid_ratio?: number | null;
+            postmaster?: {
+                domain: string | null;
+                access_token?: string;
+            };
         };
         VerifyAddressDto: {
             address: string;
@@ -5813,9 +10409,18 @@ export interface components {
                 other: number;
             } | null;
         };
+        StartHygieneDto: Record<string, never>;
+        StartVerifyDto: {
+            phone: string;
+            locale?: string;
+        };
+        CheckVerifyDto: {
+            id: string;
+            code: string;
+        };
         CreateSuppressionDto: {
             /** @enum {string} */
-            channel: "email" | "sms" | "whatsapp" | "rcs";
+            channel: "email" | "sms" | "whatsapp" | "rcs" | "telegram" | "viber";
             value: string;
             /** @enum {string} */
             reason?: "manual" | "bounce" | "complaint" | "unsubscribe_link" | "stop";
@@ -6136,6 +10741,7 @@ export interface components {
             audience?: {
                 included_segments?: string[];
                 excluded_segments?: string[];
+                global_control_exempt?: boolean;
             };
             frequency?: {
                 max_impressions?: number;
@@ -6143,6 +10749,7 @@ export interface components {
                 stop_after_interaction?: boolean;
             };
             journey_only?: boolean;
+            placement?: string | null;
             priority?: number;
             start_at?: string | null;
             end_at?: string | null;
@@ -6447,6 +11054,7 @@ export interface components {
             audience?: {
                 included_segments?: string[];
                 excluded_segments?: string[];
+                global_control_exempt?: boolean;
             };
             frequency?: {
                 max_impressions?: number;
@@ -6454,6 +11062,7 @@ export interface components {
                 stop_after_interaction?: boolean;
             };
             journey_only?: boolean;
+            placement?: string | null;
             priority?: number;
             start_at?: string | null;
             end_at?: string | null;
@@ -6473,7 +11082,7 @@ export interface components {
             description?: {
                 [key: string]: string;
             };
-            channels?: ("ios_push" | "android_push" | "hms_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs")[] | null;
+            channels?: ("ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs" | "telegram" | "viber")[] | null;
             default_opted_in?: boolean;
             position?: number;
         };
@@ -6484,21 +11093,21 @@ export interface components {
             description?: {
                 [key: string]: string;
             };
-            channels?: ("ios_push" | "android_push" | "hms_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs")[] | null;
+            channels?: ("ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs" | "telegram" | "viber")[] | null;
             default_opted_in?: boolean;
             position?: number;
         };
         SetPreferencesDto: {
             preferences: {
                 category: string;
-                channel?: ("ios_push" | "android_push" | "hms_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs") | null;
+                channel?: ("ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs" | "telegram" | "viber") | null;
                 opted_in: boolean;
             }[];
         };
         SdkSetPreferencesDto: {
             preferences: {
                 category: string;
-                channel?: ("ios_push" | "android_push" | "hms_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs") | null;
+                channel?: ("ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs" | "telegram" | "viber") | null;
                 opted_in: boolean;
             }[];
             subscription_id: string;
@@ -6562,6 +11171,46 @@ export interface components {
             country: string;
             ratio: number;
         };
+        CreateAdCampaignDto: {
+            ad_account_id: string;
+            audience_id: string;
+            name: string;
+            /** @enum {string} */
+            objective: "traffic" | "conversions" | "leads" | "awareness";
+            /** @enum {string} */
+            optimization_goal?: "clicks" | "landing_page_views" | "conversions" | "reach" | "impressions";
+            daily_budget: string | number;
+            /** Format: date-time */
+            start_at?: string;
+            /** Format: date-time */
+            end_at?: string;
+            countries: string[];
+            /** @enum {string} */
+            status?: "active" | "paused";
+            pixel_id?: string;
+            creative?: {
+                headline: string;
+                long_headline?: string;
+                primary_text: string;
+                description?: string;
+                /** Format: uri */
+                link_url: string;
+                /** @enum {string} */
+                call_to_action: "LEARN_MORE" | "SHOP_NOW" | "SIGN_UP" | "SUBSCRIBE" | "DOWNLOAD" | "CONTACT_US" | "BOOK_NOW" | "GET_OFFER";
+                image_id?: string;
+                square_image_id?: string;
+                page_id?: string;
+                business_name?: string;
+            };
+        };
+        AdReportingSettingsInputDto: {
+            reporting_currency?: string;
+            /** @enum {string} */
+            attribution_model?: "last_click" | "first_click" | "linear" | "time_decay";
+            window_days?: number;
+            half_life_days?: number;
+            conversion_events?: string[];
+        };
         UpdateAdCampaignDto: {
             /** @enum {string} */
             status?: "active" | "paused";
@@ -6608,38 +11257,6 @@ export interface components {
                 landing_url?: string;
                 referrer?: string;
             }[];
-        };
-        SdkWebCampaignEventDto: {
-            /** @enum {string} */
-            type: "impression" | "click" | "close" | "conversion";
-            visitor_id: string;
-            variant_id?: string;
-            button_id?: string;
-            subscription_id?: string;
-            token_hash?: string;
-        };
-        SdkFormSubmitDto: {
-            values: {
-                [key: string]: string | boolean | number | string[];
-            };
-            visitor_id?: string;
-            subscription_id?: string;
-            token_hash?: string;
-            identity_hash?: string;
-            web_campaign_id?: string;
-            page_url?: string;
-            language?: string;
-            website?: string;
-            elapsed_ms?: number;
-        };
-        SdkSurveyResponseDto: {
-            answers: {
-                [key: string]: string | boolean | number | string[];
-            };
-            visitor_id?: string;
-            subscription_id?: string;
-            token_hash?: string;
-            web_campaign_id?: string;
         };
         CreateWebCampaignDto: {
             name: string;
@@ -6830,6 +11447,420 @@ export interface components {
             priority?: number;
             start_at?: string | null;
             end_at?: string | null;
+        };
+        CreateWebPersonalizationDto: {
+            name: string;
+            changes?: ({
+                /** @constant */
+                action: "text";
+                selector: string;
+                text: {
+                    [key: string]: string;
+                };
+            } | {
+                /** @constant */
+                action: "image";
+                selector: string;
+                url: string;
+                alt?: {
+                    [key: string]: string;
+                };
+            } | {
+                /** @constant */
+                action: "link";
+                selector: string;
+                url: string;
+                text?: {
+                    [key: string]: string;
+                };
+                new_tab?: boolean;
+            } | {
+                /** @constant */
+                action: "hide";
+                selector: string;
+            } | {
+                /** @constant */
+                action: "show";
+                selector: string;
+            })[];
+            variants?: {
+                id: string;
+                name: string;
+                weight_percent: number;
+                changes: ({
+                    /** @constant */
+                    action: "text";
+                    selector: string;
+                    text: {
+                        [key: string]: string;
+                    };
+                } | {
+                    /** @constant */
+                    action: "image";
+                    selector: string;
+                    url: string;
+                    alt?: {
+                        [key: string]: string;
+                    };
+                } | {
+                    /** @constant */
+                    action: "link";
+                    selector: string;
+                    url: string;
+                    text?: {
+                        [key: string]: string;
+                    };
+                    new_tab?: boolean;
+                } | {
+                    /** @constant */
+                    action: "hide";
+                    selector: string;
+                } | {
+                    /** @constant */
+                    action: "show";
+                    selector: string;
+                })[];
+            }[];
+            conditions?: {
+                url_rules?: {
+                    /** @enum {string} */
+                    op: "equals" | "contains" | "starts_with" | "not_contains" | "matches";
+                    value: string;
+                }[];
+                utm_rules?: {
+                    /** @enum {string} */
+                    param: "utm_source" | "utm_medium" | "utm_campaign" | "utm_term" | "utm_content";
+                    /** @enum {string} */
+                    op: "equals" | "contains" | "exists";
+                    value?: string;
+                }[];
+                visits?: {
+                    /** @enum {string} */
+                    op: "gte" | "lte" | "eq";
+                    value: number;
+                };
+            };
+            targeting?: {
+                included_segments?: string[];
+                excluded_segments?: string[];
+                /** @enum {string} */
+                visitor?: "all" | "new" | "returning";
+                devices?: ("desktop" | "mobile" | "tablet")[];
+            };
+            goal?: ({
+                /** @constant */
+                type: "event";
+                event: string;
+            } | {
+                /** @constant */
+                type: "page";
+                url: {
+                    /** @enum {string} */
+                    op: "equals" | "contains" | "starts_with" | "not_contains" | "matches";
+                    value: string;
+                };
+            } | {
+                /** @constant */
+                type: "click";
+                selector: string;
+            }) | null;
+            priority?: number;
+            start_at?: string | null;
+            end_at?: string | null;
+        };
+        CreateSurveyDto: {
+            name: string;
+            questions: {
+                id: string;
+                /** @enum {string} */
+                type: "nps" | "csat" | "single_choice" | "multiple_choice" | "text";
+                text: {
+                    [key: string]: string;
+                };
+                required?: boolean;
+                options?: {
+                    value: string;
+                    label: {
+                        [key: string]: string;
+                    };
+                }[];
+                low_label?: {
+                    [key: string]: string;
+                };
+                high_label?: {
+                    [key: string]: string;
+                };
+                placeholder?: {
+                    [key: string]: string;
+                };
+            }[];
+            settings?: {
+                thank_you?: {
+                    [key: string]: string;
+                };
+                submit_label?: {
+                    [key: string]: string;
+                };
+                write_properties?: boolean;
+                allow_multiple?: boolean;
+                default_language?: string;
+            };
+        };
+        CreateLandingPageDto: {
+            name: string;
+            slug: string;
+            document: {
+                /** @constant */
+                version: 1;
+                settings: {
+                    width?: number;
+                    background_color?: string;
+                    content_background_color?: string;
+                    text_color?: string;
+                    link_color?: string;
+                    /** @enum {string} */
+                    font_family?: "system" | "arial" | "georgia" | "verdana" | "trebuchet" | "courier";
+                    dark_mode?: {
+                        background_color?: string;
+                        content_background_color?: string;
+                        text_color?: string;
+                        link_color?: string;
+                    };
+                };
+                sections: {
+                    id: string;
+                    /** @constant */
+                    type: "section";
+                    background_color?: string;
+                    background_image?: string;
+                    padding?: {
+                        top: number;
+                        right: number;
+                        bottom: number;
+                        left: number;
+                    };
+                    stack_on_mobile?: boolean;
+                    columns: {
+                        id: string;
+                        width_percent?: number;
+                        background_color?: string;
+                        /** @enum {string} */
+                        vertical_align?: "top" | "middle" | "bottom";
+                        padding?: {
+                            top: number;
+                            right: number;
+                            bottom: number;
+                            left: number;
+                        };
+                        blocks: ({
+                            id: string;
+                            /** @constant */
+                            type: "text";
+                            html: string;
+                            /** @enum {string} */
+                            align?: "left" | "center" | "right";
+                            font_size?: number;
+                            line_height?: number;
+                            color?: string;
+                            padding?: {
+                                top: number;
+                                right: number;
+                                bottom: number;
+                                left: number;
+                            };
+                        } | {
+                            id: string;
+                            /** @constant */
+                            type: "image";
+                            src: string;
+                            alt: string;
+                            decorative?: boolean;
+                            href?: string;
+                            width?: number;
+                            /** @enum {string} */
+                            align?: "left" | "center" | "right";
+                            padding?: {
+                                top: number;
+                                right: number;
+                                bottom: number;
+                                left: number;
+                            };
+                        } | {
+                            id: string;
+                            /** @constant */
+                            type: "button";
+                            text: string;
+                            href: string;
+                            background_color?: string;
+                            text_color?: string;
+                            /** @enum {string} */
+                            align?: "left" | "center" | "right";
+                            border_radius?: number;
+                            font_size?: number;
+                            full_width?: boolean;
+                            padding?: {
+                                top: number;
+                                right: number;
+                                bottom: number;
+                                left: number;
+                            };
+                        } | {
+                            id: string;
+                            /** @constant */
+                            type: "divider";
+                            color?: string;
+                            thickness?: number;
+                            width_percent?: number;
+                            padding?: {
+                                top: number;
+                                right: number;
+                                bottom: number;
+                                left: number;
+                            };
+                        } | {
+                            id: string;
+                            /** @constant */
+                            type: "spacer";
+                            height: number;
+                        } | {
+                            id: string;
+                            /** @constant */
+                            type: "social";
+                            /** @enum {string} */
+                            align?: "left" | "center" | "right";
+                            icon_size?: number;
+                            items: {
+                                /** @enum {string} */
+                                network: "facebook" | "x" | "instagram" | "linkedin" | "youtube" | "pinterest" | "github" | "web";
+                                href: string;
+                                label?: string;
+                            }[];
+                        } | {
+                            id: string;
+                            /** @constant */
+                            type: "html";
+                            html: string;
+                        } | {
+                            id: string;
+                            /** @constant */
+                            type: "product";
+                            catalog: string;
+                            /** @enum {string} */
+                            source: "fixed" | "expression";
+                            item: string;
+                            show_description?: boolean;
+                            show_price?: boolean;
+                            button_text?: string;
+                            /** @enum {string} */
+                            align?: "left" | "center" | "right";
+                            padding?: {
+                                top: number;
+                                right: number;
+                                bottom: number;
+                                left: number;
+                            };
+                        } | {
+                            id: string;
+                            /** @constant */
+                            type: "recommendations";
+                            catalog: string;
+                            /** @enum {string} */
+                            strategy: "personalized" | "popular" | "trending" | "similar" | "category" | "recently_viewed" | "new_arrivals";
+                            limit: number;
+                            /** @enum {string} */
+                            source?: "fixed" | "expression";
+                            value?: string;
+                            heading?: string;
+                            show_description?: boolean;
+                            show_price?: boolean;
+                            button_text?: string;
+                            /** @enum {string} */
+                            align?: "left" | "center" | "right";
+                            padding?: {
+                                top: number;
+                                right: number;
+                                bottom: number;
+                                left: number;
+                            };
+                        })[];
+                    }[];
+                }[];
+            };
+            seo?: {
+                title?: string;
+                description?: string;
+                og_image?: string;
+                canonical_url?: string;
+                noindex?: boolean;
+            };
+            settings?: {
+                language?: string;
+                form_id?: string | null;
+                form_section_id?: string | null;
+                cookie_consent?: {
+                    enabled: boolean;
+                    text?: string;
+                    accept_label?: string;
+                    reject_label?: string;
+                    policy_url?: string;
+                };
+                web_sdk?: boolean;
+                favicon_url?: string;
+            };
+            custom_domain_id?: string | null;
+        };
+        TestPushDto: {
+            subscription_ids?: string[];
+            headings?: {
+                [key: string]: string;
+            };
+            contents: {
+                [key: string]: string;
+            };
+            url?: string;
+            data?: {
+                [key: string]: string;
+            };
+        };
+        SdkWebCampaignEventDto: {
+            /** @enum {string} */
+            type: "impression" | "click" | "close" | "conversion";
+            visitor_id: string;
+            variant_id?: string;
+            button_id?: string;
+            subscription_id?: string;
+            token_hash?: string;
+        };
+        SdkFormSubmitDto: {
+            values: {
+                [key: string]: string | boolean | number | string[];
+            };
+            visitor_id?: string;
+            subscription_id?: string;
+            token_hash?: string;
+            identity_hash?: string;
+            web_campaign_id?: string;
+            page_url?: string;
+            language?: string;
+            website?: string;
+            elapsed_ms?: number;
+        };
+        SdkSurveyResponseDto: {
+            answers: {
+                [key: string]: string | boolean | number | string[];
+            };
+            visitor_id?: string;
+            subscription_id?: string;
+            token_hash?: string;
+            web_campaign_id?: string;
+        };
+        SdkWebPersonalizationEventDto: {
+            /** @enum {string} */
+            type: "impression" | "conversion";
+            visitor_id: string;
+            variant_id?: string;
+            subscription_id?: string;
+            token_hash?: string;
         };
         UpdateWebCampaignDto: {
             name?: string;
@@ -7025,6 +12056,136 @@ export interface components {
             /** @enum {string} */
             status: "draft" | "active" | "paused" | "archived";
         };
+        WebCampaignWinnerDto: {
+            variant_id: string;
+        };
+        UpdateWebPersonalizationDto: {
+            name?: string;
+            changes?: ({
+                /** @constant */
+                action: "text";
+                selector: string;
+                text: {
+                    [key: string]: string;
+                };
+            } | {
+                /** @constant */
+                action: "image";
+                selector: string;
+                url: string;
+                alt?: {
+                    [key: string]: string;
+                };
+            } | {
+                /** @constant */
+                action: "link";
+                selector: string;
+                url: string;
+                text?: {
+                    [key: string]: string;
+                };
+                new_tab?: boolean;
+            } | {
+                /** @constant */
+                action: "hide";
+                selector: string;
+            } | {
+                /** @constant */
+                action: "show";
+                selector: string;
+            })[];
+            variants?: {
+                id: string;
+                name: string;
+                weight_percent: number;
+                changes: ({
+                    /** @constant */
+                    action: "text";
+                    selector: string;
+                    text: {
+                        [key: string]: string;
+                    };
+                } | {
+                    /** @constant */
+                    action: "image";
+                    selector: string;
+                    url: string;
+                    alt?: {
+                        [key: string]: string;
+                    };
+                } | {
+                    /** @constant */
+                    action: "link";
+                    selector: string;
+                    url: string;
+                    text?: {
+                        [key: string]: string;
+                    };
+                    new_tab?: boolean;
+                } | {
+                    /** @constant */
+                    action: "hide";
+                    selector: string;
+                } | {
+                    /** @constant */
+                    action: "show";
+                    selector: string;
+                })[];
+            }[];
+            conditions?: {
+                url_rules?: {
+                    /** @enum {string} */
+                    op: "equals" | "contains" | "starts_with" | "not_contains" | "matches";
+                    value: string;
+                }[];
+                utm_rules?: {
+                    /** @enum {string} */
+                    param: "utm_source" | "utm_medium" | "utm_campaign" | "utm_term" | "utm_content";
+                    /** @enum {string} */
+                    op: "equals" | "contains" | "exists";
+                    value?: string;
+                }[];
+                visits?: {
+                    /** @enum {string} */
+                    op: "gte" | "lte" | "eq";
+                    value: number;
+                };
+            };
+            targeting?: {
+                included_segments?: string[];
+                excluded_segments?: string[];
+                /** @enum {string} */
+                visitor?: "all" | "new" | "returning";
+                devices?: ("desktop" | "mobile" | "tablet")[];
+            };
+            goal?: ({
+                /** @constant */
+                type: "event";
+                event: string;
+            } | {
+                /** @constant */
+                type: "page";
+                url: {
+                    /** @enum {string} */
+                    op: "equals" | "contains" | "starts_with" | "not_contains" | "matches";
+                    value: string;
+                };
+            } | {
+                /** @constant */
+                type: "click";
+                selector: string;
+            }) | null;
+            priority?: number;
+            start_at?: string | null;
+            end_at?: string | null;
+        };
+        WebPersonalizationStatusDto: {
+            /** @enum {string} */
+            status: "draft" | "active" | "paused" | "archived";
+        };
+        WebPersonalizationWinnerDto: {
+            variant_id: string;
+        };
         CreateFormDto: {
             name: string;
             fields: {
@@ -7087,9 +12248,111 @@ export interface components {
             page_url?: string;
             language?: string;
         };
-        CreateSurveyDto: {
-            name: string;
-            questions: {
+        UpdateFormDto: {
+            name?: string;
+            fields?: {
+                id: string;
+                /** @enum {string} */
+                type: "email" | "phone" | "first_name" | "last_name" | "full_name" | "text" | "textarea" | "select" | "radio" | "checkbox" | "consent";
+                label: {
+                    [key: string]: string;
+                };
+                placeholder?: {
+                    [key: string]: string;
+                };
+                required?: boolean;
+                options?: {
+                    value: string;
+                    label: {
+                        [key: string]: string;
+                    };
+                }[];
+                maps_to?: string;
+                max_length?: number;
+                policy_url?: string;
+            }[];
+            settings?: {
+                submit_label?: {
+                    [key: string]: string;
+                };
+                success_message?: {
+                    [key: string]: string;
+                };
+                redirect_url?: string;
+                tags?: {
+                    [key: string]: string;
+                };
+                subscribe?: {
+                    email?: boolean;
+                    sms?: boolean;
+                };
+                double_opt_in?: {
+                    enabled: boolean;
+                    subject?: {
+                        [key: string]: string;
+                    };
+                    body?: {
+                        [key: string]: string;
+                    };
+                };
+                event_name?: string;
+                captcha?: boolean;
+                default_language?: string;
+            };
+            /** @enum {string} */
+            status?: "active" | "archived";
+        };
+        SurveyStatusDto: {
+            /** @enum {string} */
+            status: "draft" | "active" | "closed";
+        };
+        SurveyInAppDto: {
+            triggers?: ({
+                /** @constant */
+                kind: "session_start";
+            } | {
+                /** @constant */
+                kind: "session_duration";
+                seconds: number;
+            } | {
+                /** @constant */
+                kind: "event";
+                name: string;
+            } | {
+                /** @constant */
+                kind: "screen";
+                name: string;
+            } | {
+                /** @constant */
+                kind: "trigger";
+                key: string;
+                /** @enum {string} */
+                op: "eq" | "neq" | "exists" | "gt" | "lt";
+                value?: string | number;
+            })[];
+            audience?: {
+                included_segments?: string[];
+                excluded_segments?: string[];
+                global_control_exempt?: boolean;
+            };
+            frequency?: {
+                max_impressions?: number;
+                min_interval_seconds?: number;
+                stop_after_interaction?: boolean;
+            };
+            /** @enum {string} */
+            layout?: "modal" | "banner_bottom" | "fullscreen";
+            publish?: boolean;
+        };
+        PublicSurveyResponseDto: {
+            answers: {
+                [key: string]: string | boolean | number | string[];
+            };
+            external_id?: string;
+        };
+        UpdateSurveyDto: {
+            name?: string;
+            questions?: {
                 id: string;
                 /** @enum {string} */
                 type: "nps" | "csat" | "single_choice" | "multiple_choice" | "text";
@@ -7125,15 +12388,257 @@ export interface components {
                 default_language?: string;
             };
         };
-        SurveyStatusDto: {
-            /** @enum {string} */
-            status: "draft" | "active" | "closed";
-        };
-        PublicSurveyResponseDto: {
-            answers: {
-                [key: string]: string | boolean | number | string[];
+        UpdateLandingPageDto: {
+            name?: string;
+            slug?: string;
+            document?: {
+                /** @constant */
+                version: 1;
+                settings: {
+                    width?: number;
+                    background_color?: string;
+                    content_background_color?: string;
+                    text_color?: string;
+                    link_color?: string;
+                    /** @enum {string} */
+                    font_family?: "system" | "arial" | "georgia" | "verdana" | "trebuchet" | "courier";
+                    dark_mode?: {
+                        background_color?: string;
+                        content_background_color?: string;
+                        text_color?: string;
+                        link_color?: string;
+                    };
+                };
+                sections: {
+                    id: string;
+                    /** @constant */
+                    type: "section";
+                    background_color?: string;
+                    background_image?: string;
+                    padding?: {
+                        top: number;
+                        right: number;
+                        bottom: number;
+                        left: number;
+                    };
+                    stack_on_mobile?: boolean;
+                    columns: {
+                        id: string;
+                        width_percent?: number;
+                        background_color?: string;
+                        /** @enum {string} */
+                        vertical_align?: "top" | "middle" | "bottom";
+                        padding?: {
+                            top: number;
+                            right: number;
+                            bottom: number;
+                            left: number;
+                        };
+                        blocks: ({
+                            id: string;
+                            /** @constant */
+                            type: "text";
+                            html: string;
+                            /** @enum {string} */
+                            align?: "left" | "center" | "right";
+                            font_size?: number;
+                            line_height?: number;
+                            color?: string;
+                            padding?: {
+                                top: number;
+                                right: number;
+                                bottom: number;
+                                left: number;
+                            };
+                        } | {
+                            id: string;
+                            /** @constant */
+                            type: "image";
+                            src: string;
+                            alt: string;
+                            decorative?: boolean;
+                            href?: string;
+                            width?: number;
+                            /** @enum {string} */
+                            align?: "left" | "center" | "right";
+                            padding?: {
+                                top: number;
+                                right: number;
+                                bottom: number;
+                                left: number;
+                            };
+                        } | {
+                            id: string;
+                            /** @constant */
+                            type: "button";
+                            text: string;
+                            href: string;
+                            background_color?: string;
+                            text_color?: string;
+                            /** @enum {string} */
+                            align?: "left" | "center" | "right";
+                            border_radius?: number;
+                            font_size?: number;
+                            full_width?: boolean;
+                            padding?: {
+                                top: number;
+                                right: number;
+                                bottom: number;
+                                left: number;
+                            };
+                        } | {
+                            id: string;
+                            /** @constant */
+                            type: "divider";
+                            color?: string;
+                            thickness?: number;
+                            width_percent?: number;
+                            padding?: {
+                                top: number;
+                                right: number;
+                                bottom: number;
+                                left: number;
+                            };
+                        } | {
+                            id: string;
+                            /** @constant */
+                            type: "spacer";
+                            height: number;
+                        } | {
+                            id: string;
+                            /** @constant */
+                            type: "social";
+                            /** @enum {string} */
+                            align?: "left" | "center" | "right";
+                            icon_size?: number;
+                            items: {
+                                /** @enum {string} */
+                                network: "facebook" | "x" | "instagram" | "linkedin" | "youtube" | "pinterest" | "github" | "web";
+                                href: string;
+                                label?: string;
+                            }[];
+                        } | {
+                            id: string;
+                            /** @constant */
+                            type: "html";
+                            html: string;
+                        } | {
+                            id: string;
+                            /** @constant */
+                            type: "product";
+                            catalog: string;
+                            /** @enum {string} */
+                            source: "fixed" | "expression";
+                            item: string;
+                            show_description?: boolean;
+                            show_price?: boolean;
+                            button_text?: string;
+                            /** @enum {string} */
+                            align?: "left" | "center" | "right";
+                            padding?: {
+                                top: number;
+                                right: number;
+                                bottom: number;
+                                left: number;
+                            };
+                        } | {
+                            id: string;
+                            /** @constant */
+                            type: "recommendations";
+                            catalog: string;
+                            /** @enum {string} */
+                            strategy: "personalized" | "popular" | "trending" | "similar" | "category" | "recently_viewed" | "new_arrivals";
+                            limit: number;
+                            /** @enum {string} */
+                            source?: "fixed" | "expression";
+                            value?: string;
+                            heading?: string;
+                            show_description?: boolean;
+                            show_price?: boolean;
+                            button_text?: string;
+                            /** @enum {string} */
+                            align?: "left" | "center" | "right";
+                            padding?: {
+                                top: number;
+                                right: number;
+                                bottom: number;
+                                left: number;
+                            };
+                        })[];
+                    }[];
+                }[];
             };
-            external_id?: string;
+            seo?: {
+                title?: string;
+                description?: string;
+                og_image?: string;
+                canonical_url?: string;
+                noindex?: boolean;
+            };
+            settings?: {
+                language?: string;
+                form_id?: string | null;
+                form_section_id?: string | null;
+                cookie_consent?: {
+                    enabled: boolean;
+                    text?: string;
+                    accept_label?: string;
+                    reject_label?: string;
+                    policy_url?: string;
+                };
+                web_sdk?: boolean;
+                favicon_url?: string;
+            };
+            custom_domain_id?: string | null;
+        };
+        SiteSearchRequestDto: {
+            query: string;
+            /** @enum {string} */
+            mode?: "search" | "answer";
+            language?: string;
+            limit?: number;
+        };
+        SiteSearchEventDto: {
+            query_id: string;
+            /** @enum {string} */
+            type: "click";
+            url: string;
+            position?: number;
+        };
+        UpdateSiteSearchSettingsDto: {
+            enabled?: boolean;
+            ai_answers?: boolean;
+            allowed_origins?: string[];
+            language?: string;
+            monthly_token_cap?: number;
+            query_retention_days?: number;
+        };
+        CreateSiteSearchSourceDto: {
+            name: string;
+            /** @enum {string} */
+            kind: "sitemap" | "urls";
+            url?: string;
+            urls?: string[];
+            max_pages?: number;
+            refresh_hours?: number | null;
+            enabled?: boolean;
+        };
+        UpdateSiteSearchSourceDto: {
+            name?: string;
+            /** @enum {string} */
+            kind?: "sitemap" | "urls";
+            url?: string;
+            urls?: string[];
+            max_pages?: number;
+            refresh_hours?: number | null;
+            enabled?: boolean;
+        };
+        PutSiteSearchDocumentDto: {
+            url: string;
+            title?: string;
+            content?: string;
+            html?: string;
+            language?: string;
         };
         Account: {
             id: string;
@@ -7146,6 +12651,14 @@ export interface components {
             is_platform_admin: boolean;
             has_password: boolean;
             marketing_opt_in: boolean;
+            preferences: {
+                /** @enum {string} */
+                date_format: "auto" | "dmy" | "mdy" | "iso";
+                /** @enum {string} */
+                time_format: "auto" | "24h" | "12h";
+                /** @enum {string} */
+                table_density: "comfortable" | "compact";
+            };
             created_at: string;
         };
         Me: {
@@ -7160,6 +12673,14 @@ export interface components {
                 is_platform_admin: boolean;
                 has_password: boolean;
                 marketing_opt_in: boolean;
+                preferences: {
+                    /** @enum {string} */
+                    date_format: "auto" | "dmy" | "mdy" | "iso";
+                    /** @enum {string} */
+                    time_format: "auto" | "24h" | "12h";
+                    /** @enum {string} */
+                    table_density: "comfortable" | "compact";
+                };
                 created_at: string;
             };
             memberships: {
@@ -7188,6 +12709,14 @@ export interface components {
                 is_platform_admin: boolean;
                 has_password: boolean;
                 marketing_opt_in: boolean;
+                preferences: {
+                    /** @enum {string} */
+                    date_format: "auto" | "dmy" | "mdy" | "iso";
+                    /** @enum {string} */
+                    time_format: "auto" | "24h" | "12h";
+                    /** @enum {string} */
+                    table_density: "comfortable" | "compact";
+                };
                 created_at: string;
             };
         };
@@ -7231,6 +12760,14 @@ export interface components {
                 mfa_enabled: boolean;
                 is_platform_admin: boolean;
                 last_login_at: string | null;
+                preferences: {
+                    /** @enum {string} */
+                    date_format: "auto" | "dmy" | "mdy" | "iso";
+                    /** @enum {string} */
+                    time_format: "auto" | "24h" | "12h";
+                    /** @enum {string} */
+                    table_density: "comfortable" | "compact";
+                };
                 created_at: string;
                 updated_at: string;
             };
@@ -7295,8 +12832,8 @@ export interface components {
         };
         ChannelConfig: {
             /** @enum {string} */
-            channel: "ios_push" | "android_push" | "hms_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs";
-            provider: ("apns" | "fcm" | "hms" | "webpush" | "smtp" | "ses" | "resend" | "twilio" | "netgsm" | "meta_whatsapp" | "google_rbm" | "mock") | null;
+            channel: "ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs" | "telegram" | "viber";
+            provider: ("apns" | "fcm" | "hms" | "adm" | "wns" | "webpush" | "smtp" | "ses" | "resend" | "twilio" | "netgsm" | "meta_whatsapp" | "google_rbm" | "telegram_bot" | "viber_bot" | "mock") | null;
             /** @enum {string} */
             status: "unconfigured" | "active" | "invalid" | "suspended";
             config: {
@@ -7333,6 +12870,7 @@ export interface components {
                 account_sid?: string;
                 from_number?: string;
                 messaging_service_sid?: string;
+                verify_service_sid?: string;
                 usercode?: string;
                 msgheader?: string;
                 /** @enum {string} */
@@ -7345,6 +12883,11 @@ export interface components {
                 rbm_agent_id?: string;
                 content_sid?: string;
                 sms_fallback?: boolean;
+                telegram_bot_username?: string;
+                viber_uri?: string;
+                viber_sender_name?: string;
+                viber_sender_avatar?: string;
+                webhook_registered_at?: string;
             };
             has_secret: boolean;
             has_hook: boolean;
@@ -7384,8 +12927,8 @@ export interface components {
         ChannelList: {
             data: {
                 /** @enum {string} */
-                channel: "ios_push" | "android_push" | "hms_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs";
-                provider: ("apns" | "fcm" | "hms" | "webpush" | "smtp" | "ses" | "resend" | "twilio" | "netgsm" | "meta_whatsapp" | "google_rbm" | "mock") | null;
+                channel: "ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs" | "telegram" | "viber";
+                provider: ("apns" | "fcm" | "hms" | "adm" | "wns" | "webpush" | "smtp" | "ses" | "resend" | "twilio" | "netgsm" | "meta_whatsapp" | "google_rbm" | "telegram_bot" | "viber_bot" | "mock") | null;
                 /** @enum {string} */
                 status: "unconfigured" | "active" | "invalid" | "suspended";
                 config: {
@@ -7422,6 +12965,7 @@ export interface components {
                     account_sid?: string;
                     from_number?: string;
                     messaging_service_sid?: string;
+                    verify_service_sid?: string;
                     usercode?: string;
                     msgheader?: string;
                     /** @enum {string} */
@@ -7434,6 +12978,11 @@ export interface components {
                     rbm_agent_id?: string;
                     content_sid?: string;
                     sms_fallback?: boolean;
+                    telegram_bot_username?: string;
+                    viber_uri?: string;
+                    viber_sender_name?: string;
+                    viber_sender_avatar?: string;
+                    webhook_registered_at?: string;
                 };
                 has_secret: boolean;
                 has_hook: boolean;
@@ -7474,8 +13023,8 @@ export interface components {
             } | null;
             channel: {
                 /** @enum {string} */
-                channel: "ios_push" | "android_push" | "hms_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs";
-                provider: ("apns" | "fcm" | "hms" | "webpush" | "smtp" | "ses" | "resend" | "twilio" | "netgsm" | "meta_whatsapp" | "google_rbm" | "mock") | null;
+                channel: "ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs" | "telegram" | "viber";
+                provider: ("apns" | "fcm" | "hms" | "adm" | "wns" | "webpush" | "smtp" | "ses" | "resend" | "twilio" | "netgsm" | "meta_whatsapp" | "google_rbm" | "telegram_bot" | "viber_bot" | "mock") | null;
                 /** @enum {string} */
                 status: "unconfigured" | "active" | "invalid" | "suspended";
                 config: {
@@ -7512,6 +13061,7 @@ export interface components {
                     account_sid?: string;
                     from_number?: string;
                     messaging_service_sid?: string;
+                    verify_service_sid?: string;
                     usercode?: string;
                     msgheader?: string;
                     /** @enum {string} */
@@ -7524,6 +13074,11 @@ export interface components {
                     rbm_agent_id?: string;
                     content_sid?: string;
                     sms_fallback?: boolean;
+                    telegram_bot_username?: string;
+                    viber_uri?: string;
+                    viber_sender_name?: string;
+                    viber_sender_avatar?: string;
+                    webhook_registered_at?: string;
                 };
                 has_secret: boolean;
                 has_hook: boolean;
@@ -7560,6 +13115,7 @@ export interface components {
             polling: boolean;
             events: string[];
             verify_token?: string | null;
+            secret_token?: string | null;
         };
         Segment: {
             id: string;
@@ -7575,6 +13131,34 @@ export interface components {
             created_by: string | null;
             created_at: string;
             updated_at: string;
+            sql: {
+                query: string;
+                refresh_interval_minutes: number | null;
+                refreshed_at: string | null;
+                member_count: number | null;
+                last_error: string | null;
+            } | null;
+            warehouse: {
+                connection_id: string | null;
+                query: string;
+                id_column: string;
+                /** @enum {string} */
+                id_type: "external_id" | "user_id";
+                limits: {
+                    timeout_seconds: number;
+                    max_rows: number;
+                    max_bytes_billed: number;
+                    max_warehouse_size: ("X-Small" | "Small" | "Medium" | "Large" | "X-Large" | "2X-Large" | "3X-Large" | "4X-Large" | "5X-Large" | "6X-Large") | null;
+                };
+                refresh_interval_minutes: number | null;
+                /** @enum {string} */
+                refresh_state: "queued" | "failed" | "ok" | "never";
+                refresh_requested_at: string | null;
+                refreshed_at: string | null;
+                member_count: number | null;
+                last_error: string | null;
+                bytes_processed: number | null;
+            } | null;
         };
         SegmentPage: {
             data: {
@@ -7591,6 +13175,34 @@ export interface components {
                 created_by: string | null;
                 created_at: string;
                 updated_at: string;
+                sql: {
+                    query: string;
+                    refresh_interval_minutes: number | null;
+                    refreshed_at: string | null;
+                    member_count: number | null;
+                    last_error: string | null;
+                } | null;
+                warehouse: {
+                    connection_id: string | null;
+                    query: string;
+                    id_column: string;
+                    /** @enum {string} */
+                    id_type: "external_id" | "user_id";
+                    limits: {
+                        timeout_seconds: number;
+                        max_rows: number;
+                        max_bytes_billed: number;
+                        max_warehouse_size: ("X-Small" | "Small" | "Medium" | "Large" | "X-Large" | "2X-Large" | "3X-Large" | "4X-Large" | "5X-Large" | "6X-Large") | null;
+                    };
+                    refresh_interval_minutes: number | null;
+                    /** @enum {string} */
+                    refresh_state: "queued" | "failed" | "ok" | "never";
+                    refresh_requested_at: string | null;
+                    refreshed_at: string | null;
+                    member_count: number | null;
+                    last_error: string | null;
+                    bytes_processed: number | null;
+                } | null;
             }[];
             next_cursor: string | null;
             has_more: boolean;
@@ -7627,6 +13239,22 @@ export interface components {
                 last_active_at: string;
             }[];
         };
+        SdkFeatureFlags: {
+            flags: {
+                [key: string]: {
+                    enabled: boolean;
+                    value: unknown;
+                };
+            };
+        };
+        SdkGeofenceList: {
+            data: {
+                id: string;
+                lat: number;
+                lng: number;
+                radius_m: number;
+            }[];
+        };
         CleanupResult: {
             deleted: number;
         };
@@ -7635,7 +13263,7 @@ export interface components {
             app_id: string;
             user_id: string | null;
             /** @enum {string} */
-            channel: "ios_push" | "android_push" | "hms_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs";
+            channel: "ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs" | "telegram" | "viber";
             token: string;
             /** @enum {string} */
             status: "subscribed" | "unsubscribed" | "invalid" | "pending";
@@ -7653,6 +13281,23 @@ export interface components {
                 push_capable?: boolean;
                 /** @enum {string} */
                 push_environment?: "sandbox" | "production";
+                /** @enum {string} */
+                form_factor?: "phone" | "watch";
+                /** @enum {string} */
+                push_kind?: "alert" | "voip" | "app_clip";
+                manufacturer?: string;
+                brand?: string;
+                rom?: string;
+                rom_version?: string;
+                delivery?: {
+                    battery_optimization_exempt?: boolean;
+                    background_restricted?: boolean;
+                    channel_blocked?: boolean;
+                    power_save_mode?: boolean;
+                    data_saver?: boolean;
+                    /** @enum {string} */
+                    standby_bucket?: "exempted" | "active" | "working_set" | "frequent" | "rare" | "restricted";
+                };
             };
             test_device: boolean;
             test_device_name: string | null;
@@ -7687,10 +13332,14 @@ export interface components {
             session_count: number;
             usage_seconds: number;
             merged_into: string | null;
+            last_ip: string | null;
+            last_ip_at: string | null;
+            last_sentiment: ("positive" | "negative" | "neutral") | null;
+            last_sentiment_at: string | null;
             created_at: string;
             updated_at: string;
             subscription_count: number;
-            channels: ("ios_push" | "android_push" | "hms_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs")[];
+            channels: ("ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs" | "telegram" | "viber")[];
         };
         UserDetail: {
             id: string;
@@ -7707,10 +13356,14 @@ export interface components {
             session_count: number;
             usage_seconds: number;
             merged_into: string | null;
+            last_ip: string | null;
+            last_ip_at: string | null;
+            last_sentiment: ("positive" | "negative" | "neutral") | null;
+            last_sentiment_at: string | null;
             created_at: string;
             updated_at: string;
             subscription_count: number;
-            channels: ("ios_push" | "android_push" | "hms_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs")[];
+            channels: ("ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs" | "telegram" | "viber")[];
             aliases: {
                 label: string;
                 value: string;
@@ -7720,7 +13373,7 @@ export interface components {
                 app_id: string;
                 user_id: string | null;
                 /** @enum {string} */
-                channel: "ios_push" | "android_push" | "hms_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs";
+                channel: "ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs" | "telegram" | "viber";
                 token: string;
                 /** @enum {string} */
                 status: "subscribed" | "unsubscribed" | "invalid" | "pending";
@@ -7738,6 +13391,23 @@ export interface components {
                     push_capable?: boolean;
                     /** @enum {string} */
                     push_environment?: "sandbox" | "production";
+                    /** @enum {string} */
+                    form_factor?: "phone" | "watch";
+                    /** @enum {string} */
+                    push_kind?: "alert" | "voip" | "app_clip";
+                    manufacturer?: string;
+                    brand?: string;
+                    rom?: string;
+                    rom_version?: string;
+                    delivery?: {
+                        battery_optimization_exempt?: boolean;
+                        background_restricted?: boolean;
+                        channel_blocked?: boolean;
+                        power_save_mode?: boolean;
+                        data_saver?: boolean;
+                        /** @enum {string} */
+                        standby_bucket?: "exempted" | "active" | "working_set" | "frequent" | "rare" | "restricted";
+                    };
                 };
                 test_device: boolean;
                 test_device_name: string | null;
@@ -7774,10 +13444,14 @@ export interface components {
                 session_count: number;
                 usage_seconds: number;
                 merged_into: string | null;
+                last_ip: string | null;
+                last_ip_at: string | null;
+                last_sentiment: ("positive" | "negative" | "neutral") | null;
+                last_sentiment_at: string | null;
                 created_at: string;
                 updated_at: string;
                 subscription_count: number;
-                channels: ("ios_push" | "android_push" | "hms_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs")[];
+                channels: ("ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs" | "telegram" | "viber")[];
             }[];
             next_cursor: string | null;
             has_more: boolean;
@@ -7788,7 +13462,7 @@ export interface components {
                 app_id: string;
                 user_id: string | null;
                 /** @enum {string} */
-                channel: "ios_push" | "android_push" | "hms_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs";
+                channel: "ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs" | "telegram" | "viber";
                 token: string;
                 /** @enum {string} */
                 status: "subscribed" | "unsubscribed" | "invalid" | "pending";
@@ -7806,6 +13480,23 @@ export interface components {
                     push_capable?: boolean;
                     /** @enum {string} */
                     push_environment?: "sandbox" | "production";
+                    /** @enum {string} */
+                    form_factor?: "phone" | "watch";
+                    /** @enum {string} */
+                    push_kind?: "alert" | "voip" | "app_clip";
+                    manufacturer?: string;
+                    brand?: string;
+                    rom?: string;
+                    rom_version?: string;
+                    delivery?: {
+                        battery_optimization_exempt?: boolean;
+                        background_restricted?: boolean;
+                        channel_blocked?: boolean;
+                        power_save_mode?: boolean;
+                        data_saver?: boolean;
+                        /** @enum {string} */
+                        standby_bucket?: "exempted" | "active" | "working_set" | "frequent" | "rare" | "restricted";
+                    };
                 };
                 test_device: boolean;
                 test_device_name: string | null;
@@ -7843,6 +13534,15 @@ export interface components {
                 occurred_at: string;
             }[];
         };
+        UserTimeline: {
+            data: {
+                /** @enum {string} */
+                kind: "event" | "delivery";
+                at: string;
+                title: string;
+                detail: string;
+            }[];
+        };
         UserExport: {
             exported_at: string;
             user: {
@@ -7860,10 +13560,14 @@ export interface components {
                 session_count: number;
                 usage_seconds: number;
                 merged_into: string | null;
+                last_ip: string | null;
+                last_ip_at: string | null;
+                last_sentiment: ("positive" | "negative" | "neutral") | null;
+                last_sentiment_at: string | null;
                 created_at: string;
                 updated_at: string;
                 subscription_count: number;
-                channels: ("ios_push" | "android_push" | "hms_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs")[];
+                channels: ("ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs" | "telegram" | "viber")[];
                 aliases: {
                     label: string;
                     value: string;
@@ -7873,7 +13577,7 @@ export interface components {
                     app_id: string;
                     user_id: string | null;
                     /** @enum {string} */
-                    channel: "ios_push" | "android_push" | "hms_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs";
+                    channel: "ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs" | "telegram" | "viber";
                     token: string;
                     /** @enum {string} */
                     status: "subscribed" | "unsubscribed" | "invalid" | "pending";
@@ -7891,6 +13595,23 @@ export interface components {
                         push_capable?: boolean;
                         /** @enum {string} */
                         push_environment?: "sandbox" | "production";
+                        /** @enum {string} */
+                        form_factor?: "phone" | "watch";
+                        /** @enum {string} */
+                        push_kind?: "alert" | "voip" | "app_clip";
+                        manufacturer?: string;
+                        brand?: string;
+                        rom?: string;
+                        rom_version?: string;
+                        delivery?: {
+                            battery_optimization_exempt?: boolean;
+                            background_restricted?: boolean;
+                            channel_blocked?: boolean;
+                            power_save_mode?: boolean;
+                            data_saver?: boolean;
+                            /** @enum {string} */
+                            standby_bucket?: "exempted" | "active" | "working_set" | "frequent" | "rare" | "restricted";
+                        };
                     };
                     test_device: boolean;
                     test_device_name: string | null;
@@ -7924,6 +13645,76 @@ export interface components {
                 source: "sdk" | "api" | "system" | "import";
                 occurred_at: string;
             }[];
+            derived: {
+                wallet_passes: {
+                    id: string;
+                    template_id: string;
+                    status: string;
+                    barcode_value: string;
+                    values: {
+                        [key: string]: string;
+                    };
+                    created_at: string;
+                    updated_at: string;
+                }[];
+                rfm: {
+                    segment: string;
+                    segment_since: string;
+                    r: number;
+                    f: number;
+                    m: number | null;
+                    frequency: number;
+                    monetary: number;
+                    last_event_at: string;
+                    computed_at: string;
+                } | null;
+                predictions: {
+                    model: string;
+                    score: number;
+                    computed_at: string;
+                }[];
+                channel_scores: {
+                    channel: string;
+                    sends: number;
+                    engaged: number;
+                    score: number;
+                    is_best: boolean;
+                    computed_at: string;
+                }[];
+                decisions: {
+                    agent: string;
+                    arm_id: string;
+                    context: string;
+                    assigned_at: string;
+                    rewarded_at: string | null;
+                }[];
+                recommendations: {
+                    catalog_id: string;
+                    personalized: string[];
+                    recent: string[];
+                    purchased: string[];
+                    computed_at: string;
+                }[];
+                affinities: {
+                    attribute: string;
+                    value: string;
+                    score: number;
+                    rank: number;
+                    computed_at: string;
+                }[];
+                frequency_cap: {
+                    weekly_cap: number;
+                    engagement: number;
+                    computed_at: string;
+                } | null;
+                companies: {
+                    company_id: string;
+                    external_id: string;
+                    name: string | null;
+                    role: string;
+                    joined_at: string;
+                }[];
+            };
         };
         UserIdentity: {
             identity: {
@@ -8204,7 +13995,7 @@ export interface components {
             subscription_id: string;
             user_id: string | null;
             /** @enum {string} */
-            channel: "ios_push" | "android_push" | "hms_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs";
+            channel: "ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs" | "telegram" | "viber";
             provider: string | null;
             /** @enum {string} */
             status: "pending" | "sent" | "delivered" | "failed" | "bounced" | "suppressed" | "expired" | "cancelled";
@@ -8228,7 +14019,7 @@ export interface components {
                 subscription_id: string;
                 user_id: string | null;
                 /** @enum {string} */
-                channel: "ios_push" | "android_push" | "hms_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs";
+                channel: "ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs" | "telegram" | "viber";
                 provider: string | null;
                 /** @enum {string} */
                 status: "pending" | "sent" | "delivered" | "failed" | "bounced" | "suppressed" | "expired" | "cancelled";
@@ -8258,7 +14049,7 @@ export interface components {
                     subscription_id: string;
                     user_id: string | null;
                     /** @enum {string} */
-                    channel: "ios_push" | "android_push" | "hms_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs";
+                    channel: "ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs" | "telegram" | "viber";
                     provider: string | null;
                     /** @enum {string} */
                     status: "pending" | "sent" | "delivered" | "failed" | "bounced" | "suppressed" | "expired" | "cancelled";
@@ -8286,7 +14077,7 @@ export interface components {
                 subscription: {
                     id: string;
                     /** @enum {string} */
-                    channel: "ios_push" | "android_push" | "hms_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs";
+                    channel: "ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs" | "telegram" | "viber";
                     status: string;
                     token_suffix: string;
                     device: {
@@ -8423,8 +14214,8 @@ export interface components {
             }[];
             channels: {
                 /** @enum {string} */
-                channel: "ios_push" | "android_push" | "hms_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs";
-                provider: ("apns" | "fcm" | "hms" | "webpush" | "smtp" | "ses" | "resend" | "twilio" | "netgsm" | "meta_whatsapp" | "google_rbm" | "mock") | null;
+                channel: "ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs" | "telegram" | "viber";
+                provider: ("apns" | "fcm" | "hms" | "adm" | "wns" | "webpush" | "smtp" | "ses" | "resend" | "twilio" | "netgsm" | "meta_whatsapp" | "google_rbm" | "telegram_bot" | "viber_bot" | "mock") | null;
                 /** @enum {string} */
                 status: "unconfigured" | "active" | "invalid" | "suspended";
                 last_error: string | null;
@@ -8500,6 +14291,110 @@ export interface components {
                 unsubscribed: number;
             }[];
         };
+        UninstallReport: {
+            from: string;
+            to: string;
+            totals: {
+                uninstalls: number;
+                active: number;
+                rate: number | null;
+            };
+            previous: {
+                uninstalls: number;
+                active: number;
+                rate: number | null;
+            } | null;
+            rows: {
+                date: string;
+                uninstalls: number;
+            }[];
+            by_channel: {
+                channel: string;
+                uninstalls: number;
+                active: number;
+            }[];
+            last_messages: {
+                campaign_id: string | null;
+                name: string | null;
+                source: string;
+                uninstalls: number;
+            }[];
+        };
+        AndroidDeliveryReport: {
+            from: string;
+            to: string;
+            devices: {
+                total: number;
+                reporting: number;
+                reporting_rate: number | null;
+                restricted: number;
+                restricted_rate: number | null;
+                background_restricted: number;
+                battery_optimized: number;
+                low_standby_bucket: number;
+                power_save: number;
+                data_saver: number;
+                channel_blocked: number;
+                notifications_blocked: number;
+                aggressive_vendor: number;
+                aggressive_vendor_rate: number | null;
+            };
+            totals: {
+                sent: number;
+                delivered: number;
+                opened: number;
+                delivery_rate: number | null;
+                open_rate: number | null;
+                median_delay_seconds: number | null;
+                p90_delay_seconds: number | null;
+            };
+            previous: {
+                sent: number;
+                delivered: number;
+                opened: number;
+                delivery_rate: number | null;
+                open_rate: number | null;
+                median_delay_seconds: number | null;
+                p90_delay_seconds: number | null;
+            } | null;
+            deprioritized: number;
+            aggressive: {
+                sent: number;
+                delivered: number;
+                delivery_rate: number | null;
+            };
+            others: {
+                sent: number;
+                delivered: number;
+                delivery_rate: number | null;
+            };
+            vendors: {
+                vendor: string;
+                aggressive: boolean;
+                devices: number;
+                reporting: number;
+                restricted: number;
+                battery_optimized: number;
+                sent: number;
+                delivered: number;
+                opened: number;
+                delivery_rate: number | null;
+                open_rate: number | null;
+                median_delay_seconds: number | null;
+                p90_delay_seconds: number | null;
+                deprioritized: number;
+            }[];
+            roms: {
+                rom: string;
+                devices: number;
+                restricted: number;
+                sent: number;
+                delivered: number;
+                delivery_rate: number | null;
+                median_delay_seconds: number | null;
+            }[];
+            recommendations: ("upgrade_sdk" | "vendor_guidance" | "background_restricted" | "battery_exemption" | "deprioritized" | "notifications_blocked")[];
+        };
         EventsReport: {
             from: string;
             to: string;
@@ -8570,6 +14465,55 @@ export interface components {
                 overall_rate: number | null;
             } | null;
         };
+        ReportResult: {
+            from: string;
+            to: string;
+            columns: {
+                key: string;
+                /** @enum {string} */
+                kind: "dimension" | "metric";
+                /** @enum {string} */
+                format: "text" | "date" | "number" | "percent";
+            }[];
+            rows: {
+                [key: string]: string | number | null;
+            }[];
+            totals: {
+                [key: string]: number | null;
+            } | null;
+            truncated: boolean;
+        };
+        PathReport: {
+            from: string;
+            to: string;
+            event: string;
+            /** @enum {string} */
+            direction: "after" | "before";
+            window_hours: number;
+            total_users: number;
+            truncated: boolean;
+            levels: {
+                step: number;
+                nodes: {
+                    id: string;
+                    name: string | null;
+                    /** @enum {string} */
+                    kind: "event" | "other" | "end";
+                    users: number;
+                    share: number;
+                }[];
+            }[];
+            links: {
+                source: string;
+                target: string;
+                users: number;
+            }[];
+            top_paths: {
+                path: string[];
+                users: number;
+                share: number;
+            }[];
+        };
         ProvidersReport: {
             from: string;
             to: string;
@@ -8629,6 +14573,109 @@ export interface components {
                 retention: (number | null)[];
             }[];
             average: (number | null)[];
+        };
+        SessionVolume: {
+            days: {
+                day: string;
+                sessions: number;
+                users: number;
+            }[];
+        };
+        GlobalControl: {
+            enabled: boolean;
+            percent: number;
+            started_at: string | null;
+        };
+        GlobalControlReport: {
+            enabled: boolean;
+            percent: number;
+            started_at: string | null;
+            from: string;
+            to: string;
+            events: string[];
+            control: {
+                users: number;
+                converted: number;
+                conversion_rate: number;
+            };
+            treatment: {
+                users: number;
+                converted: number;
+                conversion_rate: number;
+            };
+            lift_percent: number | null;
+            incremental_conversions: number;
+            p_value: number | null;
+            significant: boolean;
+            withheld_messages: number;
+        };
+        SavedReport: {
+            id: string;
+            name: string;
+            definition: {
+                /** @enum {string} */
+                source: "deliveries" | "events" | "conversions";
+                metrics: ("sent" | "delivered" | "failed" | "opened" | "clicked" | "delivery_rate" | "open_rate" | "click_rate" | "failure_rate" | "count" | "unique_users" | "value_sum" | "value_avg" | "conversions" | "revenue")[];
+                /** @default [] */
+                dimensions: ("day" | "week" | "month" | "channel" | "provider" | "campaign" | "status" | "name" | "source" | "event_name" | "kind")[];
+                /** @default {} */
+                filters: {
+                    [key: string]: string[];
+                };
+                sort?: {
+                    by: string;
+                    /**
+                     * @default desc
+                     * @enum {string}
+                     */
+                    direction: "asc" | "desc";
+                };
+                /** @default 100 */
+                limit: number;
+                days?: number;
+                /** Format: date-time */
+                from?: string;
+                /** Format: date-time */
+                to?: string;
+            };
+            created_by: string | null;
+            created_at: string;
+            updated_at: string;
+        };
+        SavedReportList: {
+            data: {
+                id: string;
+                name: string;
+                definition: {
+                    /** @enum {string} */
+                    source: "deliveries" | "events" | "conversions";
+                    metrics: ("sent" | "delivered" | "failed" | "opened" | "clicked" | "delivery_rate" | "open_rate" | "click_rate" | "failure_rate" | "count" | "unique_users" | "value_sum" | "value_avg" | "conversions" | "revenue")[];
+                    /** @default [] */
+                    dimensions: ("day" | "week" | "month" | "channel" | "provider" | "campaign" | "status" | "name" | "source" | "event_name" | "kind")[];
+                    /** @default {} */
+                    filters: {
+                        [key: string]: string[];
+                    };
+                    sort?: {
+                        by: string;
+                        /**
+                         * @default desc
+                         * @enum {string}
+                         */
+                        direction: "asc" | "desc";
+                    };
+                    /** @default 100 */
+                    limit: number;
+                    days?: number;
+                    /** Format: date-time */
+                    from?: string;
+                    /** Format: date-time */
+                    to?: string;
+                };
+                created_by: string | null;
+                created_at: string;
+                updated_at: string;
+            }[];
         };
         IdentityKey: {
             id: string;
@@ -8711,6 +14758,11 @@ export interface components {
             /** @enum {string} */
             role: "owner" | "admin" | "developer" | "marketer" | "analyst" | "billing" | "viewer" | "composer" | "agent";
             app_scopes: string[];
+            app_roles: {
+                app_id: string;
+                /** @enum {string} */
+                role: "owner" | "admin" | "developer" | "marketer" | "analyst" | "billing" | "viewer" | "composer" | "agent";
+            }[];
             accepted_at: string | null;
             created_at: string;
             last_login_at: string | null;
@@ -8724,6 +14776,11 @@ export interface components {
                 /** @enum {string} */
                 role: "owner" | "admin" | "developer" | "marketer" | "analyst" | "billing" | "viewer" | "composer" | "agent";
                 app_scopes: string[];
+                app_roles: {
+                    app_id: string;
+                    /** @enum {string} */
+                    role: "owner" | "admin" | "developer" | "marketer" | "analyst" | "billing" | "viewer" | "composer" | "agent";
+                }[];
                 accepted_at: string | null;
                 created_at: string;
                 last_login_at: string | null;
@@ -8763,6 +14820,18 @@ export interface components {
             /** @enum {string} */
             role: "owner" | "admin" | "developer" | "marketer" | "analyst" | "billing" | "viewer" | "composer" | "agent";
         };
+        BrandKitExtract: {
+            website_url?: string;
+            name?: string;
+            primary_color?: string;
+            accent_color?: string;
+            font?: string;
+            logo_url?: string;
+            tone?: string;
+        };
+        ShopifyWebhookStatus: {
+            configured: boolean;
+        };
         App: {
             id: string;
             org_id: string;
@@ -8796,7 +14865,7 @@ export interface components {
                         /** @enum {string} */
                         unit: "minutes" | "hours" | "days" | "weeks";
                     };
-                    channels?: ("ios_push" | "android_push" | "hms_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs")[];
+                    channels?: ("ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs" | "telegram" | "viber")[];
                 }[];
                 inApp?: {
                     minIntervalSeconds?: number;
@@ -8831,8 +14900,25 @@ export interface components {
                         };
                     };
                 };
+                brandKit?: {
+                    website_url?: string;
+                    name?: string;
+                    primary_color?: string;
+                    accent_color?: string;
+                    font?: string;
+                    logo_url?: string;
+                    tone?: string;
+                };
                 defaultTtlSeconds?: number;
                 identityVerificationRequired?: boolean;
+                /** @enum {string} */
+                ipCapture?: "off" | "full" | "masked";
+                ipRetentionDays?: number;
+                adaptiveFrequency?: {
+                    enabled: boolean;
+                    min: number;
+                    max: number;
+                };
                 allowedOrigins?: string[];
                 campaignApprovalRequired?: boolean;
                 webPush?: {
@@ -8905,9 +14991,9 @@ export interface components {
                     simulation?: boolean;
                     completed_at?: string | null;
                     version?: number;
-                    platforms?: ("ios" | "android" | "huawei" | "web")[];
+                    platforms?: ("ios" | "android" | "huawei" | "web" | "amazon" | "windows" | "email" | "sms")[];
                     /** @enum {string} */
-                    framework?: "native" | "flutter" | "react-native" | "unity" | "capacitor" | "cordova" | "maui";
+                    framework?: "native" | "flutter" | "react-native" | "expo" | "kmp" | "unity" | "capacitor" | "cordova" | "maui";
                     /** @enum {string} */
                     web_integration?: "code" | "wordpress";
                 };
@@ -8963,7 +15049,7 @@ export interface components {
                             /** @enum {string} */
                             unit: "minutes" | "hours" | "days" | "weeks";
                         };
-                        channels?: ("ios_push" | "android_push" | "hms_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs")[];
+                        channels?: ("ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs" | "telegram" | "viber")[];
                     }[];
                     inApp?: {
                         minIntervalSeconds?: number;
@@ -8998,8 +15084,25 @@ export interface components {
                             };
                         };
                     };
+                    brandKit?: {
+                        website_url?: string;
+                        name?: string;
+                        primary_color?: string;
+                        accent_color?: string;
+                        font?: string;
+                        logo_url?: string;
+                        tone?: string;
+                    };
                     defaultTtlSeconds?: number;
                     identityVerificationRequired?: boolean;
+                    /** @enum {string} */
+                    ipCapture?: "off" | "full" | "masked";
+                    ipRetentionDays?: number;
+                    adaptiveFrequency?: {
+                        enabled: boolean;
+                        min: number;
+                        max: number;
+                    };
                     allowedOrigins?: string[];
                     campaignApprovalRequired?: boolean;
                     webPush?: {
@@ -9072,9 +15175,9 @@ export interface components {
                         simulation?: boolean;
                         completed_at?: string | null;
                         version?: number;
-                        platforms?: ("ios" | "android" | "huawei" | "web")[];
+                        platforms?: ("ios" | "android" | "huawei" | "web" | "amazon" | "windows" | "email" | "sms")[];
                         /** @enum {string} */
-                        framework?: "native" | "flutter" | "react-native" | "unity" | "capacitor" | "cordova" | "maui";
+                        framework?: "native" | "flutter" | "react-native" | "expo" | "kmp" | "unity" | "capacitor" | "cordova" | "maui";
                         /** @enum {string} */
                         web_integration?: "code" | "wordpress";
                     };
@@ -9101,7 +15204,7 @@ export interface components {
             id: string;
             app_id: string;
             name: string;
-            channel: ("ios_push" | "android_push" | "hms_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs") | null;
+            channel: ("ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs" | "telegram" | "viber") | null;
             current_version: number;
             tags: string[];
             content: {
@@ -9131,7 +15234,7 @@ export interface components {
                 id: string;
                 app_id: string;
                 name: string;
-                channel: ("ios_push" | "android_push" | "hms_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs") | null;
+                channel: ("ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs" | "telegram" | "viber") | null;
                 current_version: number;
                 tags: string[];
                 content: {
@@ -9157,7 +15260,7 @@ export interface components {
         };
         RenderPreview: {
             /** @enum {string} */
-            channel: "ios_push" | "android_push" | "hms_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs";
+            channel: "ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs" | "telegram" | "viber";
             language: string;
             title: string | null;
             subtitle: string | null;
@@ -9224,7 +15327,7 @@ export interface components {
                 campaign_id?: string;
                 status?: string;
                 /** @enum {string} */
-                channel?: "ios_push" | "android_push" | "hms_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs";
+                channel?: "ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs" | "telegram" | "viber";
                 segment_id?: string;
             };
             /** @enum {string} */
@@ -9253,7 +15356,7 @@ export interface components {
                     campaign_id?: string;
                     status?: string;
                     /** @enum {string} */
-                    channel?: "ios_push" | "android_push" | "hms_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs";
+                    channel?: "ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs" | "telegram" | "viber";
                     segment_id?: string;
                 };
                 /** @enum {string} */
@@ -9273,7 +15376,7 @@ export interface components {
             id: string;
             app_id: string;
             /** @enum {string} */
-            type: "onesignal_players" | "csv_users";
+            type: "legacy_players" | "csv_users";
             file_name: string | null;
             /** @enum {string} */
             status: "pending" | "running" | "completed" | "failed";
@@ -9284,6 +15387,10 @@ export interface components {
                 created_subscriptions?: number;
                 skipped?: number;
                 errors?: number;
+                rejected_emails?: number;
+                rejected_email_reasons?: {
+                    [key: string]: number;
+                };
             };
             error: string | null;
             error_report_url: string | null;
@@ -9296,7 +15403,7 @@ export interface components {
                 id: string;
                 app_id: string;
                 /** @enum {string} */
-                type: "onesignal_players" | "csv_users";
+                type: "legacy_players" | "csv_users";
                 file_name: string | null;
                 /** @enum {string} */
                 status: "pending" | "running" | "completed" | "failed";
@@ -9307,6 +15414,10 @@ export interface components {
                     created_subscriptions?: number;
                     skipped?: number;
                     errors?: number;
+                    rejected_emails?: number;
+                    rejected_email_reasons?: {
+                        [key: string]: number;
+                    };
                 };
                 error: string | null;
                 error_report_url: string | null;
@@ -9590,7 +15701,7 @@ export interface components {
         };
         BillingStatus: {
             org_id: string;
-            /** @description stripe | iyzico | mock | none (ödeme sağlayıcısı yapılandırılmamış; checkout/portal 503 döner) */
+            /** @description stripe | iyzico | creem | mock | none (ödeme sağlayıcısı yapılandırılmamış; checkout/portal 503 döner) */
             provider: string;
             plan: {
                 code: string;
@@ -9699,6 +15810,30 @@ export interface components {
                 issued_at: string | null;
             }[];
         };
+        OverageChargeList: {
+            data: {
+                id: string;
+                period_start: string;
+                period_end: string;
+                provider: string;
+                plan_code: string;
+                currency: string;
+                amount: number;
+                /** @enum {string} */
+                status: "pending" | "invoiced" | "awaiting_payment" | "paid" | "failed" | "waived";
+                lines: {
+                    metric: string;
+                    included: number;
+                    used: number;
+                    billable: number;
+                    amount: number;
+                    description: string;
+                }[];
+                charged_at: string | null;
+                paid_at: string | null;
+                created_at: string;
+            }[];
+        };
         CheckoutResult: {
             url: string;
             session_id: string;
@@ -9755,7 +15890,7 @@ export interface components {
         Conversation: {
             id: string;
             /** @enum {string} */
-            channel: "sms" | "whatsapp" | "rcs" | "email" | "chat";
+            channel: "sms" | "whatsapp" | "rcs" | "telegram" | "viber" | "email" | "chat";
             /** @enum {string} */
             status: "open" | "pending" | "resolved" | "closed";
             subscription_id: string | null;
@@ -9796,7 +15931,7 @@ export interface components {
             data: {
                 id: string;
                 /** @enum {string} */
-                channel: "sms" | "whatsapp" | "rcs" | "email" | "chat";
+                channel: "sms" | "whatsapp" | "rcs" | "telegram" | "viber" | "email" | "chat";
                 /** @enum {string} */
                 status: "open" | "pending" | "resolved" | "closed";
                 subscription_id: string | null;
@@ -9907,7 +16042,7 @@ export interface components {
             /** @enum {string} */
             scope: "org" | "app";
             app_id: string | null;
-            channels: ("sms" | "whatsapp" | "rcs")[];
+            channels: ("sms" | "whatsapp" | "rcs" | "telegram" | "viber")[];
             actions: {
                 [key: string]: unknown;
             };
@@ -9923,7 +16058,7 @@ export interface components {
                 /** @enum {string} */
                 scope: "org" | "app";
                 app_id: string | null;
-                channels: ("sms" | "whatsapp" | "rcs")[];
+                channels: ("sms" | "whatsapp" | "rcs" | "telegram" | "viber")[];
                 actions: {
                     [key: string]: unknown;
                 };
@@ -10003,7 +16138,7 @@ export interface components {
             other_conversations: {
                 id: string;
                 /** @enum {string} */
-                channel: "sms" | "whatsapp" | "rcs" | "email" | "chat";
+                channel: "sms" | "whatsapp" | "rcs" | "telegram" | "viber" | "email" | "chat";
                 /** @enum {string} */
                 status: "open" | "pending" | "resolved" | "closed";
                 last_message_at: string;
@@ -10423,6 +16558,7 @@ export interface components {
             audience: {
                 included_segments?: string[];
                 excluded_segments?: string[];
+                global_control_exempt?: boolean;
             };
             frequency: {
                 max_impressions?: number;
@@ -10430,6 +16566,7 @@ export interface components {
                 stop_after_interaction?: boolean;
             };
             journey_only: boolean;
+            placement: string | null;
             start_at: string | null;
             end_at: string | null;
             stats: {
@@ -10762,6 +16899,7 @@ export interface components {
                 audience: {
                     included_segments?: string[];
                     excluded_segments?: string[];
+                    global_control_exempt?: boolean;
                 };
                 frequency: {
                     max_impressions?: number;
@@ -10769,6 +16907,7 @@ export interface components {
                     stop_after_interaction?: boolean;
                 };
                 journey_only: boolean;
+                placement: string | null;
                 start_at: string | null;
                 end_at: string | null;
                 stats: {
@@ -11001,6 +17140,49 @@ export interface components {
             archived_at: string | null;
             expires_at: string | null;
             created_at: string;
+        };
+        ContentCard: {
+            id: string;
+            message_id: string | null;
+            /** @enum {string} */
+            type: "classic" | "captioned_image" | "image_only";
+            title: string | null;
+            body: string | null;
+            url: string | null;
+            image_url: string | null;
+            button_text: string | null;
+            data: {
+                [key: string]: string;
+            };
+            pinned: boolean;
+            priority: number;
+            viewed: boolean;
+            clicked: boolean;
+            expires_at: string | null;
+            created_at: string;
+        };
+        ContentCardList: {
+            data: {
+                id: string;
+                message_id: string | null;
+                /** @enum {string} */
+                type: "classic" | "captioned_image" | "image_only";
+                title: string | null;
+                body: string | null;
+                url: string | null;
+                image_url: string | null;
+                button_text: string | null;
+                data: {
+                    [key: string]: string;
+                };
+                pinned: boolean;
+                priority: number;
+                viewed: boolean;
+                clicked: boolean;
+                expires_at: string | null;
+                created_at: string;
+            }[];
+            unviewed_count: number;
         };
         InboxReadAllResult: {
             updated: number;
@@ -11312,7 +17494,7 @@ export interface components {
             id: string;
             app_id: string;
             /** @enum {string} */
-            channel: "email" | "sms" | "whatsapp" | "rcs";
+            channel: "email" | "sms" | "whatsapp" | "rcs" | "telegram" | "viber";
             value_masked: string;
             /** @enum {string} */
             reason: "bounce" | "complaint" | "manual" | "unsubscribe_link" | "stop";
@@ -11329,7 +17511,7 @@ export interface components {
                 id: string;
                 app_id: string;
                 /** @enum {string} */
-                channel: "email" | "sms" | "whatsapp" | "rcs";
+                channel: "email" | "sms" | "whatsapp" | "rcs" | "telegram" | "viber";
                 value_masked: string;
                 /** @enum {string} */
                 reason: "bounce" | "complaint" | "manual" | "unsubscribe_link" | "stop";
@@ -11343,6 +17525,43 @@ export interface components {
             }[];
             next_cursor: string | null;
             has_more: boolean;
+        };
+        CampaignPreflightReport: {
+            campaign_id: string;
+            checked_at: string;
+            links_checked: boolean;
+            summary: {
+                critical: number;
+                warning: number;
+                info: number;
+                blocked: boolean;
+            };
+            findings: {
+                /** @enum {string} */
+                code: "brand_name_casing" | "off_brand_color" | "off_brand_font" | "banned_phrase" | "phishing_term" | "link_invalid" | "link_insecure_http" | "link_unsafe_host" | "link_shortener" | "link_missing_utm" | "link_broken" | "link_unreachable" | "liquid_syntax_error" | "liquid_missing_default" | "liquid_unknown_variable" | "liquid_undefined_property" | "commercial_no_category" | "iys_sms_filter_informational" | "sms_missing_opt_out" | "email_missing_postal_address" | "send_time_outside_hours";
+                /** @enum {string} */
+                category: "brand" | "content" | "links" | "personalization" | "compliance";
+                /** @enum {string} */
+                severity: "critical" | "warning" | "info";
+                field?: string;
+                params?: {
+                    [key: string]: string | number;
+                };
+            }[];
+        };
+        CampaignEmailRisk: {
+            applies: boolean;
+            recipients: number;
+            flagged_invalid: number;
+            sendable: number;
+            valid: number;
+            unknown: number;
+            unchecked: number;
+            estimated_invalid_ratio: number;
+            max_invalid_ratio: number;
+            blocked: boolean;
+            bounce_rate_7d: number | null;
+            bounce_rate_30d: number | null;
         };
         CampaignVariantStats: {
             ab_test: {
@@ -11381,6 +17600,12 @@ export interface components {
                 open_rate: number;
                 click_rate: number;
                 conversion_rate: number;
+                goals: {
+                    event: string;
+                    primary: boolean;
+                    converted: number;
+                    conversion_rate: number;
+                }[];
             }[];
             leader: string | null;
             significance: {
@@ -11395,6 +17620,10 @@ export interface components {
             name: string;
             labels: string[];
             category: string | null;
+            goals: {
+                primary?: string;
+                secondary?: string[];
+            };
             ab_test: {
                 enabled?: boolean;
                 test_percentage?: number;
@@ -11447,6 +17676,9 @@ export interface components {
                 priority?: 5 | 10;
                 collapse_id?: string;
                 frequency_cap_exempt?: boolean;
+                /** @enum {string} */
+                frequency_priority?: "low" | "normal" | "high";
+                global_control_exempt?: boolean;
                 quiet_hours_exempt?: boolean;
                 one_per_user?: boolean;
             };
@@ -11492,6 +17724,18 @@ export interface components {
             created_at: string;
             updated_at: string;
             estimated_recipients: number | null;
+            preflight: {
+                checked_at: string;
+                summary: {
+                    critical: number;
+                    warning: number;
+                    info: number;
+                    blocked: boolean;
+                };
+                codes: string[];
+                acknowledged_by?: string;
+                acknowledged_at?: string;
+            } | null;
         };
         CampaignPage: {
             data: {
@@ -11500,6 +17744,10 @@ export interface components {
                 name: string;
                 labels: string[];
                 category: string | null;
+                goals: {
+                    primary?: string;
+                    secondary?: string[];
+                };
                 ab_test: {
                     enabled?: boolean;
                     test_percentage?: number;
@@ -11552,6 +17800,9 @@ export interface components {
                     priority?: 5 | 10;
                     collapse_id?: string;
                     frequency_cap_exempt?: boolean;
+                    /** @enum {string} */
+                    frequency_priority?: "low" | "normal" | "high";
+                    global_control_exempt?: boolean;
                     quiet_hours_exempt?: boolean;
                     one_per_user?: boolean;
                 };
@@ -11597,6 +17848,18 @@ export interface components {
                 created_at: string;
                 updated_at: string;
                 estimated_recipients: number | null;
+                preflight: {
+                    checked_at: string;
+                    summary: {
+                        critical: number;
+                        warning: number;
+                        info: number;
+                        blocked: boolean;
+                    };
+                    codes: string[];
+                    acknowledged_by?: string;
+                    acknowledged_at?: string;
+                } | null;
             }[];
             next_cursor: string | null;
             has_more: boolean;
@@ -11608,6 +17871,10 @@ export interface components {
                 name: string;
                 labels: string[];
                 category: string | null;
+                goals: {
+                    primary?: string;
+                    secondary?: string[];
+                };
                 ab_test: {
                     enabled?: boolean;
                     test_percentage?: number;
@@ -11660,6 +17927,9 @@ export interface components {
                     priority?: 5 | 10;
                     collapse_id?: string;
                     frequency_cap_exempt?: boolean;
+                    /** @enum {string} */
+                    frequency_priority?: "low" | "normal" | "high";
+                    global_control_exempt?: boolean;
                     quiet_hours_exempt?: boolean;
                     one_per_user?: boolean;
                 };
@@ -11705,6 +17975,18 @@ export interface components {
                 created_at: string;
                 updated_at: string;
                 estimated_recipients: number | null;
+                preflight: {
+                    checked_at: string;
+                    summary: {
+                        critical: number;
+                        warning: number;
+                        info: number;
+                        blocked: boolean;
+                    };
+                    codes: string[];
+                    acknowledged_by?: string;
+                    acknowledged_at?: string;
+                } | null;
             };
             rates: {
                 delivery_rate: number | null;
@@ -11713,9 +17995,23 @@ export interface components {
                 failure_rate: number | null;
                 conversion_rate: number | null;
             };
+            goals: {
+                event: string;
+                primary: boolean;
+                converted: number;
+                conversion_rate: number | null;
+            }[];
+            cards: {
+                created: number;
+                viewed: number;
+                clicked: number;
+                dismissed: number;
+                view_rate: number | null;
+                click_rate: number | null;
+            } | null;
             channels: {
                 /** @enum {string} */
-                channel: "ios_push" | "android_push" | "hms_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs";
+                channel: "ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs" | "telegram" | "viber";
                 targeted: number;
                 sent: number;
                 failed: number;
@@ -11982,6 +18278,64 @@ export interface components {
                 updated_at: string;
             }[];
         };
+        AiPanelResult: {
+            answer: string;
+            segment: {
+                name: string;
+                description: string;
+                /** @enum {string} */
+                kind: "clicked_7d" | "not_opened_7d" | "inactive_30d" | "event_7d";
+                event_name?: string;
+            } | null;
+            campaign: {
+                name: string;
+                title: string;
+                body: string;
+            } | null;
+            journey: {
+                name: string;
+                description: string;
+                trigger_event?: string | null;
+                steps: {
+                    type: string;
+                    hours?: number;
+                    title?: string;
+                    body?: string;
+                    event_name?: string;
+                }[];
+            } | null;
+            journey_edit: {
+                journey_id: string;
+                base_hash: string;
+                summary: string;
+                edits: {
+                    op: string;
+                    node_id: string;
+                    handle?: string;
+                    step?: {
+                        type: string;
+                        hours?: number;
+                        title?: string;
+                        body?: string;
+                        event_name?: string;
+                    };
+                    title?: string;
+                    body?: string;
+                    hours?: number;
+                }[];
+                targets: {
+                    [key: string]: string;
+                };
+            } | null;
+            meta: {
+                model: string;
+            };
+        };
+        AiPanelApplyResult: {
+            segment_id: string | null;
+            campaign_id: string | null;
+            journey_id: string | null;
+        };
         InboxSettings: {
             widget: {
                 enabled?: boolean;
@@ -12058,7 +18412,7 @@ export interface components {
             enabled: boolean;
             position: number;
             conditions: {
-                channels?: ("sms" | "whatsapp" | "rcs" | "email" | "chat")[];
+                channels?: ("sms" | "whatsapp" | "rcs" | "telegram" | "viber" | "email" | "chat")[];
                 languages?: string[];
                 tags?: {
                     [key: string]: string;
@@ -12078,7 +18432,7 @@ export interface components {
                 enabled: boolean;
                 position: number;
                 conditions: {
-                    channels?: ("sms" | "whatsapp" | "rcs" | "email" | "chat")[];
+                    channels?: ("sms" | "whatsapp" | "rcs" | "telegram" | "viber" | "email" | "chat")[];
                     languages?: string[];
                     tags?: {
                         [key: string]: string;
@@ -12410,6 +18764,23 @@ export interface components {
                 provider: ("zerobounce" | "neverbounce" | "mock") | null;
                 has_key: boolean;
             };
+            volume_spike: {
+                multiplier: number | null;
+                floor: number | null;
+            };
+            postmaster: {
+                domain: string | null;
+                has_token: boolean;
+            };
+            max_invalid_ratio: number;
+        };
+        PostmasterStats: {
+            domain: string | null;
+            data: {
+                day: string;
+                domain_reputation: string | null;
+                spam_rate: string | null;
+            }[];
         };
         EmailAddressCheck: {
             ok: boolean;
@@ -12417,6 +18788,177 @@ export interface components {
             detail: string | null;
             checks: string[];
             unknown: string[];
+        };
+        EmailHygieneRun: {
+            id: string;
+            app_id: string;
+            /** @enum {string} */
+            status: "queued" | "running" | "completed" | "failed";
+            total: number;
+            processed: number;
+            valid: number;
+            invalid: number;
+            unknown: number;
+            reasons: {
+                [key: string]: number;
+            };
+            error: string | null;
+            suppressed_count: number | null;
+            suppressed_at: string | null;
+            started_at: string | null;
+            completed_at: string | null;
+            created_at: string;
+            updated_at: string;
+        };
+        EmailHygieneStart: {
+            run: {
+                id: string;
+                app_id: string;
+                /** @enum {string} */
+                status: "queued" | "running" | "completed" | "failed";
+                total: number;
+                processed: number;
+                valid: number;
+                invalid: number;
+                unknown: number;
+                reasons: {
+                    [key: string]: number;
+                };
+                error: string | null;
+                suppressed_count: number | null;
+                suppressed_at: string | null;
+                started_at: string | null;
+                completed_at: string | null;
+                created_at: string;
+                updated_at: string;
+            };
+            created: boolean;
+        };
+        EmailHygieneSuppress: {
+            suppressed: number;
+            run: {
+                id: string;
+                app_id: string;
+                /** @enum {string} */
+                status: "queued" | "running" | "completed" | "failed";
+                total: number;
+                processed: number;
+                valid: number;
+                invalid: number;
+                unknown: number;
+                reasons: {
+                    [key: string]: number;
+                };
+                error: string | null;
+                suppressed_count: number | null;
+                suppressed_at: string | null;
+                started_at: string | null;
+                completed_at: string | null;
+                created_at: string;
+                updated_at: string;
+            };
+        };
+        EmailHygieneStatus: {
+            status: {
+                total: number;
+                valid: number;
+                invalid: number;
+                unknown: number;
+                pending: number;
+                unchecked: number;
+                invalid_by_reason: {
+                    [key: string]: number;
+                };
+                unsendable: number;
+            };
+            latest_run: {
+                id: string;
+                app_id: string;
+                /** @enum {string} */
+                status: "queued" | "running" | "completed" | "failed";
+                total: number;
+                processed: number;
+                valid: number;
+                invalid: number;
+                unknown: number;
+                reasons: {
+                    [key: string]: number;
+                };
+                error: string | null;
+                suppressed_count: number | null;
+                suppressed_at: string | null;
+                started_at: string | null;
+                completed_at: string | null;
+                created_at: string;
+                updated_at: string;
+            } | null;
+        };
+        EmailProviderInsights: {
+            days: number;
+            providers: {
+                /** @enum {string} */
+                provider: "gmail" | "outlook" | "yahoo" | "other";
+                sent: number;
+                delivered: number;
+                opened: number;
+                clicked: number;
+                bounced: number;
+                complained: number;
+            }[];
+            trend: {
+                day: string;
+                /** @enum {string} */
+                provider: "gmail" | "outlook" | "yahoo" | "other";
+                sent: number;
+                delivered: number;
+                bounced: number;
+            }[];
+        };
+        EmailBounceStats: {
+            days: number;
+            target_rate: number;
+            suspend_rate: number;
+            rate_7d: {
+                sent: number;
+                bounced: number;
+                rate: number | null;
+            };
+            rate_30d: {
+                sent: number;
+                bounced: number;
+                rate: number | null;
+            };
+            trend: {
+                day: string;
+                sent: number;
+                bounced: number;
+                soft_bounced: number;
+                rate: number | null;
+            }[];
+            by_type: {
+                hard: number;
+                soft: number;
+                complaint: number;
+                blocked_before_send: number;
+            };
+            by_reason: {
+                code: string;
+                count: number;
+            }[];
+            top_domains: {
+                domain: string;
+                sent: number;
+                bounced: number;
+                rate: number | null;
+            }[];
+        };
+        SmsVerification: {
+            id: string;
+            expires_at: string;
+        };
+        SmsVerificationCheck: {
+            /** @constant */
+            verified: true;
         };
         LiveActivityType: {
             id: string;
@@ -12655,6 +19197,48 @@ export interface components {
                             /** @constant */
                             type: "html";
                             html: string;
+                        } | {
+                            id: string;
+                            /** @constant */
+                            type: "product";
+                            catalog: string;
+                            /** @enum {string} */
+                            source: "fixed" | "expression";
+                            item: string;
+                            show_description?: boolean;
+                            show_price?: boolean;
+                            button_text?: string;
+                            /** @enum {string} */
+                            align?: "left" | "center" | "right";
+                            padding?: {
+                                top: number;
+                                right: number;
+                                bottom: number;
+                                left: number;
+                            };
+                        } | {
+                            id: string;
+                            /** @constant */
+                            type: "recommendations";
+                            catalog: string;
+                            /** @enum {string} */
+                            strategy: "personalized" | "popular" | "trending" | "similar" | "category" | "recently_viewed" | "new_arrivals";
+                            limit: number;
+                            /** @enum {string} */
+                            source?: "fixed" | "expression";
+                            value?: string;
+                            heading?: string;
+                            show_description?: boolean;
+                            show_price?: boolean;
+                            button_text?: string;
+                            /** @enum {string} */
+                            align?: "left" | "center" | "right";
+                            padding?: {
+                                top: number;
+                                right: number;
+                                bottom: number;
+                                left: number;
+                            };
                         })[];
                     }[];
                 }[];
@@ -12832,6 +19416,48 @@ export interface components {
                             /** @constant */
                             type: "html";
                             html: string;
+                        } | {
+                            id: string;
+                            /** @constant */
+                            type: "product";
+                            catalog: string;
+                            /** @enum {string} */
+                            source: "fixed" | "expression";
+                            item: string;
+                            show_description?: boolean;
+                            show_price?: boolean;
+                            button_text?: string;
+                            /** @enum {string} */
+                            align?: "left" | "center" | "right";
+                            padding?: {
+                                top: number;
+                                right: number;
+                                bottom: number;
+                                left: number;
+                            };
+                        } | {
+                            id: string;
+                            /** @constant */
+                            type: "recommendations";
+                            catalog: string;
+                            /** @enum {string} */
+                            strategy: "personalized" | "popular" | "trending" | "similar" | "category" | "recently_viewed" | "new_arrivals";
+                            limit: number;
+                            /** @enum {string} */
+                            source?: "fixed" | "expression";
+                            value?: string;
+                            heading?: string;
+                            show_description?: boolean;
+                            show_price?: boolean;
+                            button_text?: string;
+                            /** @enum {string} */
+                            align?: "left" | "center" | "right";
+                            padding?: {
+                                top: number;
+                                right: number;
+                                bottom: number;
+                                left: number;
+                            };
                         })[];
                     }[];
                 };
@@ -12926,6 +19552,48 @@ export interface components {
                     /** @constant */
                     type: "html";
                     html: string;
+                } | {
+                    id: string;
+                    /** @constant */
+                    type: "product";
+                    catalog: string;
+                    /** @enum {string} */
+                    source: "fixed" | "expression";
+                    item: string;
+                    show_description?: boolean;
+                    show_price?: boolean;
+                    button_text?: string;
+                    /** @enum {string} */
+                    align?: "left" | "center" | "right";
+                    padding?: {
+                        top: number;
+                        right: number;
+                        bottom: number;
+                        left: number;
+                    };
+                } | {
+                    id: string;
+                    /** @constant */
+                    type: "recommendations";
+                    catalog: string;
+                    /** @enum {string} */
+                    strategy: "personalized" | "popular" | "trending" | "similar" | "category" | "recently_viewed" | "new_arrivals";
+                    limit: number;
+                    /** @enum {string} */
+                    source?: "fixed" | "expression";
+                    value?: string;
+                    heading?: string;
+                    show_description?: boolean;
+                    show_price?: boolean;
+                    button_text?: string;
+                    /** @enum {string} */
+                    align?: "left" | "center" | "right";
+                    padding?: {
+                        top: number;
+                        right: number;
+                        bottom: number;
+                        left: number;
+                    };
                 };
             };
             created_by: string | null;
@@ -13054,6 +19722,48 @@ export interface components {
                                 /** @constant */
                                 type: "html";
                                 html: string;
+                            } | {
+                                id: string;
+                                /** @constant */
+                                type: "product";
+                                catalog: string;
+                                /** @enum {string} */
+                                source: "fixed" | "expression";
+                                item: string;
+                                show_description?: boolean;
+                                show_price?: boolean;
+                                button_text?: string;
+                                /** @enum {string} */
+                                align?: "left" | "center" | "right";
+                                padding?: {
+                                    top: number;
+                                    right: number;
+                                    bottom: number;
+                                    left: number;
+                                };
+                            } | {
+                                id: string;
+                                /** @constant */
+                                type: "recommendations";
+                                catalog: string;
+                                /** @enum {string} */
+                                strategy: "personalized" | "popular" | "trending" | "similar" | "category" | "recently_viewed" | "new_arrivals";
+                                limit: number;
+                                /** @enum {string} */
+                                source?: "fixed" | "expression";
+                                value?: string;
+                                heading?: string;
+                                show_description?: boolean;
+                                show_price?: boolean;
+                                button_text?: string;
+                                /** @enum {string} */
+                                align?: "left" | "center" | "right";
+                                padding?: {
+                                    top: number;
+                                    right: number;
+                                    bottom: number;
+                                    left: number;
+                                };
                             })[];
                         }[];
                     };
@@ -13148,6 +19858,48 @@ export interface components {
                         /** @constant */
                         type: "html";
                         html: string;
+                    } | {
+                        id: string;
+                        /** @constant */
+                        type: "product";
+                        catalog: string;
+                        /** @enum {string} */
+                        source: "fixed" | "expression";
+                        item: string;
+                        show_description?: boolean;
+                        show_price?: boolean;
+                        button_text?: string;
+                        /** @enum {string} */
+                        align?: "left" | "center" | "right";
+                        padding?: {
+                            top: number;
+                            right: number;
+                            bottom: number;
+                            left: number;
+                        };
+                    } | {
+                        id: string;
+                        /** @constant */
+                        type: "recommendations";
+                        catalog: string;
+                        /** @enum {string} */
+                        strategy: "personalized" | "popular" | "trending" | "similar" | "category" | "recently_viewed" | "new_arrivals";
+                        limit: number;
+                        /** @enum {string} */
+                        source?: "fixed" | "expression";
+                        value?: string;
+                        heading?: string;
+                        show_description?: boolean;
+                        show_price?: boolean;
+                        button_text?: string;
+                        /** @enum {string} */
+                        align?: "left" | "center" | "right";
+                        padding?: {
+                            top: number;
+                            right: number;
+                            bottom: number;
+                            left: number;
+                        };
                     };
                 };
                 created_by: string | null;
@@ -13508,6 +20260,1675 @@ export interface components {
             data: {
                 [key: string]: string;
             }[];
+        };
+        PromoCodeList: {
+            id: string;
+            app_id: string;
+            name: string;
+            description: string | null;
+            expires_at: string | null;
+            total_count: number;
+            assigned_count: number;
+            available_count: number;
+            liquid: string;
+            created_at: string;
+            updated_at: string;
+        };
+        PromoCodeListList: {
+            data: {
+                id: string;
+                app_id: string;
+                name: string;
+                description: string | null;
+                expires_at: string | null;
+                total_count: number;
+                assigned_count: number;
+                available_count: number;
+                liquid: string;
+                created_at: string;
+                updated_at: string;
+            }[];
+        };
+        PromoCodeUploadResult: {
+            list: {
+                id: string;
+                app_id: string;
+                name: string;
+                description: string | null;
+                expires_at: string | null;
+                total_count: number;
+                assigned_count: number;
+                available_count: number;
+                liquid: string;
+                created_at: string;
+                updated_at: string;
+            };
+            added: number;
+            skipped: number;
+        };
+        PromoCodesPage: {
+            total: number;
+            data: {
+                code: string;
+                delivery_id: string | null;
+                message_id: string | null;
+                assigned_at: string | null;
+            }[];
+        };
+        Catalog: {
+            id: string;
+            app_id: string;
+            name: string;
+            description: string | null;
+            currency: string;
+            item_count: number;
+            liquid: string;
+            created_at: string;
+            updated_at: string;
+        };
+        CatalogList: {
+            data: {
+                id: string;
+                app_id: string;
+                name: string;
+                description: string | null;
+                currency: string;
+                item_count: number;
+                liquid: string;
+                created_at: string;
+                updated_at: string;
+            }[];
+        };
+        CatalogItem: {
+            id: string;
+            title: string;
+            description: string | null;
+            image_url: string | null;
+            url: string | null;
+            price: number | null;
+            sale_price: number | null;
+            currency: string;
+            category: string | null;
+            brand: string | null;
+            in_stock: boolean;
+            attributes: {
+                [key: string]: string;
+            };
+            updated_at: string;
+        };
+        CatalogItemsPage: {
+            total: number;
+            data: {
+                id: string;
+                title: string;
+                description: string | null;
+                image_url: string | null;
+                url: string | null;
+                price: number | null;
+                sale_price: number | null;
+                currency: string;
+                category: string | null;
+                brand: string | null;
+                in_stock: boolean;
+                attributes: {
+                    [key: string]: string;
+                };
+                updated_at: string;
+            }[];
+        };
+        CatalogUpsertResult: {
+            catalog: {
+                id: string;
+                app_id: string;
+                name: string;
+                description: string | null;
+                currency: string;
+                item_count: number;
+                liquid: string;
+                created_at: string;
+                updated_at: string;
+            };
+            upserted: number;
+        };
+        RecommendationConfig: {
+            configured: boolean;
+            enabled: boolean;
+            view_events: string[];
+            purchase_events: string[];
+            item_property: string;
+            window_days: number;
+            /** @enum {string} */
+            status: "idle" | "queued" | "running" | "failed";
+            last_error: string | null;
+            last_computed_at: string | null;
+            scored_items: number;
+            scored_users: number;
+        };
+        Recommendations: {
+            /** @enum {string} */
+            strategy: "personalized" | "popular" | "trending" | "similar" | "category" | "recently_viewed" | "new_arrivals";
+            source: ("personalized" | "popular" | "trending" | "similar" | "category" | "recently_viewed" | "new_arrivals") | null;
+            data: {
+                id: string;
+                title: string;
+                description: string | null;
+                image_url: string | null;
+                url: string | null;
+                price: number | null;
+                sale_price: number | null;
+                currency: string;
+                category: string | null;
+                brand: string | null;
+                in_stock: boolean;
+                attributes: {
+                    [key: string]: string;
+                };
+                updated_at: string;
+            }[];
+        };
+        AppFlag: {
+            id: string;
+            app_id: string;
+            key: string;
+            name: string;
+            description: string | null;
+            enabled: boolean;
+            /** @enum {string} */
+            value_type: "boolean" | "string" | "number" | "json";
+            on_value: boolean | number | string | unknown[] | {
+                [key: string]: unknown;
+            };
+            off_value: boolean | number | string | unknown[] | {
+                [key: string]: unknown;
+            };
+            rollout_percent: number;
+            segment_id: string | null;
+            rollout_schedule: {
+                at: string;
+                percent: number;
+            }[];
+            created_at: string;
+            updated_at: string;
+        };
+        AppFlagList: {
+            data: {
+                id: string;
+                app_id: string;
+                key: string;
+                name: string;
+                description: string | null;
+                enabled: boolean;
+                /** @enum {string} */
+                value_type: "boolean" | "string" | "number" | "json";
+                on_value: boolean | number | string | unknown[] | {
+                    [key: string]: unknown;
+                };
+                off_value: boolean | number | string | unknown[] | {
+                    [key: string]: unknown;
+                };
+                rollout_percent: number;
+                segment_id: string | null;
+                rollout_schedule: {
+                    at: string;
+                    percent: number;
+                }[];
+                created_at: string;
+                updated_at: string;
+            }[];
+        };
+        AppFlagEvaluation: {
+            flags: {
+                [key: string]: {
+                    enabled: boolean;
+                    value: boolean | number | string | unknown[] | {
+                        [key: string]: unknown;
+                    };
+                    /** @enum {string} */
+                    reason: "on" | "disabled" | "segment" | "rollout";
+                };
+            };
+        };
+        Geofence: {
+            id: string;
+            app_id: string;
+            name: string;
+            lat: number;
+            lng: number;
+            radius_m: number;
+            cooldown_minutes: number;
+            enabled: boolean;
+            enter_count: number;
+            exit_count: number;
+            inside_count: number;
+            created_at: string;
+            updated_at: string;
+        };
+        GeofenceList: {
+            data: {
+                id: string;
+                app_id: string;
+                name: string;
+                lat: number;
+                lng: number;
+                radius_m: number;
+                cooldown_minutes: number;
+                enabled: boolean;
+                enter_count: number;
+                exit_count: number;
+                inside_count: number;
+                created_at: string;
+                updated_at: string;
+            }[];
+        };
+        RfmConfig: {
+            configured: boolean;
+            enabled: boolean;
+            event_names: string[];
+            value_property: string | null;
+            use_monetary: boolean;
+            window_days: number;
+            /** @enum {string} */
+            status: "idle" | "queued" | "running" | "failed";
+            last_error: string | null;
+            first_computed_at: string | null;
+            last_computed_at: string | null;
+            scored_users: number;
+        };
+        RfmOverview: {
+            total: number;
+            low_population: boolean;
+            last_computed_at: string | null;
+            segments: {
+                /** @enum {string} */
+                segment: "champions" | "loyal" | "potential" | "new" | "promising" | "need_attention" | "about_to_sleep" | "at_risk" | "cant_lose" | "hibernating" | "lost";
+                users: number;
+                share: number;
+                avg_recency_days: number | null;
+                avg_frequency: number | null;
+                avg_monetary: number | null;
+            }[];
+        };
+        RfmTransitions: {
+            from: string;
+            to: string;
+            first_computed_at: string | null;
+            transitions: {
+                from: ("champions" | "loyal" | "potential" | "new" | "promising" | "need_attention" | "about_to_sleep" | "at_risk" | "cant_lose" | "hibernating" | "lost") | null;
+                to: ("champions" | "loyal" | "potential" | "new" | "promising" | "need_attention" | "about_to_sleep" | "at_risk" | "cant_lose" | "hibernating" | "lost") | null;
+                users: number;
+            }[];
+        };
+        RfmUsersPage: {
+            data: {
+                user_id: string;
+                external_id: string | null;
+                /** @enum {string} */
+                segment: "champions" | "loyal" | "potential" | "new" | "promising" | "need_attention" | "about_to_sleep" | "at_risk" | "cant_lose" | "hibernating" | "lost";
+                r: number;
+                f: number;
+                m: number | null;
+                recency_days: number;
+                frequency: number;
+                monetary: number;
+                last_event_at: string;
+                segment_since: string;
+            }[];
+            next_cursor: string | null;
+        };
+        AffinityConfig: {
+            configured: boolean;
+            enabled: boolean;
+            attributes: string[];
+            events: {
+                [key: string]: number;
+            };
+            window_days: number;
+            half_life_days: number;
+            /** @enum {string} */
+            status: "idle" | "queued" | "running" | "failed";
+            last_error: string | null;
+            last_computed_at: string | null;
+            scored_users: number;
+        };
+        AffinityOverview: {
+            last_computed_at: string | null;
+            scored_users: number;
+            attributes: {
+                attribute: string;
+                values: {
+                    value: string;
+                    users: number;
+                    top_users: number;
+                }[];
+            }[];
+        };
+        UserAffinity: {
+            user_id: string;
+            affinities: {
+                attribute: string;
+                value: string;
+                score: number;
+                rank: number;
+            }[];
+            weekly_cap: number | null;
+            engagement: number | null;
+            computed_at: string | null;
+        };
+        Company: {
+            id: string;
+            external_id: string;
+            name: string | null;
+            domain: string | null;
+            properties: {
+                [key: string]: unknown;
+            };
+            member_count: number;
+            created_at: string;
+            updated_at: string;
+        };
+        CompanyList: {
+            data: {
+                id: string;
+                external_id: string;
+                name: string | null;
+                domain: string | null;
+                properties: {
+                    [key: string]: unknown;
+                };
+                member_count: number;
+                created_at: string;
+                updated_at: string;
+            }[];
+            next_cursor: string | null;
+            has_more: boolean;
+        };
+        CompanyBatchResult: {
+            created: number;
+            updated: number;
+            data: {
+                id: string;
+                external_id: string;
+                created: boolean;
+            }[];
+        };
+        CompanyMember: {
+            company_id: string;
+            user_id: string;
+            external_id: string | null;
+            role: string;
+            created_at: string;
+            updated_at: string;
+        };
+        CompanyMemberList: {
+            data: {
+                company_id: string;
+                user_id: string;
+                external_id: string | null;
+                role: string;
+                created_at: string;
+                updated_at: string;
+            }[];
+            next_cursor: string | null;
+            has_more: boolean;
+        };
+        CompanyMemberBatchResult: {
+            added: number;
+            updated: number;
+            not_found: {
+                index: number;
+                user_id: string | null;
+                external_id: string | null;
+            }[];
+        };
+        UserCompanyList: {
+            data: {
+                company: {
+                    id: string;
+                    external_id: string;
+                    name: string | null;
+                    domain: string | null;
+                    properties: {
+                        [key: string]: unknown;
+                    };
+                };
+                role: string;
+                created_at: string;
+                updated_at: string;
+            }[];
+        };
+        AiAgent: {
+            id: string;
+            app_id: string;
+            name: string;
+            enabled: boolean;
+            channels: ("whatsapp" | "sms" | "rcs" | "telegram" | "viber" | "chat")[];
+            instructions: string;
+            faq: {
+                question: string;
+                answer: string;
+            }[];
+            tools: {
+                name: string;
+                description: string;
+                url: string;
+                params: {
+                    name: string;
+                    description: string;
+                    required: boolean;
+                }[];
+            }[];
+            handoff: {
+                keywords: string[];
+                max_bot_replies: number;
+                on_negative_sentiment: boolean;
+                message: string;
+            };
+            limits: {
+                monthly_token_cap: number;
+                max_steps: number;
+            };
+            ai_sentiment: boolean;
+            has_tool_secret: boolean;
+            usage: {
+                tokens_this_month: number;
+                period_start: string;
+            };
+            created_at: string;
+            updated_at: string;
+        };
+        AiAgentWithSecret: {
+            id: string;
+            app_id: string;
+            name: string;
+            enabled: boolean;
+            channels: ("whatsapp" | "sms" | "rcs" | "telegram" | "viber" | "chat")[];
+            instructions: string;
+            faq: {
+                question: string;
+                answer: string;
+            }[];
+            tools: {
+                name: string;
+                description: string;
+                url: string;
+                params: {
+                    name: string;
+                    description: string;
+                    required: boolean;
+                }[];
+            }[];
+            handoff: {
+                keywords: string[];
+                max_bot_replies: number;
+                on_negative_sentiment: boolean;
+                message: string;
+            };
+            limits: {
+                monthly_token_cap: number;
+                max_steps: number;
+            };
+            ai_sentiment: boolean;
+            has_tool_secret: boolean;
+            usage: {
+                tokens_this_month: number;
+                period_start: string;
+            };
+            created_at: string;
+            updated_at: string;
+            tool_secret: string | null;
+        };
+        AiAgentList: {
+            data: {
+                id: string;
+                app_id: string;
+                name: string;
+                enabled: boolean;
+                channels: ("whatsapp" | "sms" | "rcs" | "telegram" | "viber" | "chat")[];
+                instructions: string;
+                faq: {
+                    question: string;
+                    answer: string;
+                }[];
+                tools: {
+                    name: string;
+                    description: string;
+                    url: string;
+                    params: {
+                        name: string;
+                        description: string;
+                        required: boolean;
+                    }[];
+                }[];
+                handoff: {
+                    keywords: string[];
+                    max_bot_replies: number;
+                    on_negative_sentiment: boolean;
+                    message: string;
+                };
+                limits: {
+                    monthly_token_cap: number;
+                    max_steps: number;
+                };
+                ai_sentiment: boolean;
+                has_tool_secret: boolean;
+                usage: {
+                    tokens_this_month: number;
+                    period_start: string;
+                };
+                created_at: string;
+                updated_at: string;
+            }[];
+        };
+        AiAgentRunList: {
+            data: {
+                id: string;
+                agent_id: string;
+                conversation_id: string;
+                /** @enum {string} */
+                status: "pending" | "replied" | "handed_off" | "skipped_cap" | "failed";
+                steps: {
+                    /** @enum {string} */
+                    kind: "reply" | "tool" | "handoff";
+                    tool?: string;
+                    status?: number | null;
+                    ok?: boolean;
+                    duration_ms?: number;
+                }[];
+                input_tokens: number;
+                output_tokens: number;
+                handoff_reason: string | null;
+                error: string | null;
+                created_at: string;
+                finished_at: string | null;
+            }[];
+            next_cursor: string | null;
+            has_more: boolean;
+        };
+        AiAgentMetrics: {
+            period_days: number;
+            runs: number;
+            replied: number;
+            handed_off: number;
+            skipped_cap: number;
+            failed: number;
+            conversations: number;
+            resolution_rate: number;
+            avg_steps: number;
+            tool_calls: number;
+            tool_error_rate: number;
+            tokens: number;
+            handoff_reasons: {
+                [key: string]: number;
+            };
+        };
+        SqlSchema: {
+            views: {
+                name: string;
+                columns: {
+                    name: string;
+                    /** @enum {string} */
+                    type: "text" | "integer" | "number" | "boolean" | "timestamp" | "json";
+                }[];
+            }[];
+            limits: {
+                query_max: number;
+                row_limit_default: number;
+                row_limit_max: number;
+                timeout_default_ms: number;
+                timeout_max_ms: number;
+                segment_max_members: number;
+            };
+            refresh_intervals: number[];
+        };
+        SqlQueryResult: {
+            run_id: string;
+            columns: {
+                name: string;
+                type: ("text" | "integer" | "number" | "boolean" | "timestamp" | "json") | "unknown";
+            }[];
+            rows: unknown[][];
+            row_count: number;
+            truncated: boolean;
+            duration_ms: number;
+        };
+        SqlRunList: {
+            data: {
+                id: string;
+                segment_id: string | null;
+                /** @enum {string} */
+                source: "panel" | "api" | "schedule";
+                actor_id: string | null;
+                query: string;
+                query_hash: string;
+                /** @enum {string} */
+                status: "ok" | "rejected" | "timeout" | "failed";
+                reason: ("empty" | "too_long" | "syntax" | "multiple_statements" | "not_select" | "forbidden_relation" | "forbidden_function" | "forbidden_construct" | "forbidden_type") | null;
+                error: string | null;
+                row_count: number;
+                truncated: boolean;
+                duration_ms: number;
+                created_at: string;
+            }[];
+            next_cursor: string | null;
+            has_more: boolean;
+        };
+        SqlSegmentList: {
+            data: {
+                id: string;
+                app_id: string;
+                name: string;
+                description: string | null;
+                definition: {
+                    [key: string]: unknown;
+                };
+                is_dynamic: boolean;
+                estimated_count: number | null;
+                estimated_at: string | null;
+                created_by: string | null;
+                created_at: string;
+                updated_at: string;
+                sql: {
+                    query: string;
+                    refresh_interval_minutes: number | null;
+                    refreshed_at: string | null;
+                    member_count: number | null;
+                    last_error: string | null;
+                } | null;
+                warehouse: {
+                    connection_id: string | null;
+                    query: string;
+                    id_column: string;
+                    /** @enum {string} */
+                    id_type: "external_id" | "user_id";
+                    limits: {
+                        timeout_seconds: number;
+                        max_rows: number;
+                        max_bytes_billed: number;
+                        max_warehouse_size: ("X-Small" | "Small" | "Medium" | "Large" | "X-Large" | "2X-Large" | "3X-Large" | "4X-Large" | "5X-Large" | "6X-Large") | null;
+                    };
+                    refresh_interval_minutes: number | null;
+                    /** @enum {string} */
+                    refresh_state: "queued" | "failed" | "ok" | "never";
+                    refresh_requested_at: string | null;
+                    refreshed_at: string | null;
+                    member_count: number | null;
+                    last_error: string | null;
+                    bytes_processed: number | null;
+                } | null;
+            }[];
+        };
+        CustomAgent: {
+            id: string;
+            app_id: string;
+            name: string;
+            description: string;
+            enabled: boolean;
+            instructions: string;
+            tools: ("list_segments" | "campaign_performance" | "delivery_summary" | "create_segment_draft" | "create_campaign_draft")[];
+            schedule: {
+                cron: string;
+                timezone: string;
+            } | null;
+            limits: {
+                max_steps: number;
+                monthly_token_cap: number;
+            };
+            next_run_at: string | null;
+            last_run_at: string | null;
+            usage: {
+                tokens_this_month: number;
+                period_start: string;
+            };
+            created_at: string;
+            updated_at: string;
+        };
+        CustomAgentList: {
+            data: {
+                id: string;
+                app_id: string;
+                name: string;
+                description: string;
+                enabled: boolean;
+                instructions: string;
+                tools: ("list_segments" | "campaign_performance" | "delivery_summary" | "create_segment_draft" | "create_campaign_draft")[];
+                schedule: {
+                    cron: string;
+                    timezone: string;
+                } | null;
+                limits: {
+                    max_steps: number;
+                    monthly_token_cap: number;
+                };
+                next_run_at: string | null;
+                last_run_at: string | null;
+                usage: {
+                    tokens_this_month: number;
+                    period_start: string;
+                };
+                created_at: string;
+                updated_at: string;
+            }[];
+        };
+        CustomAgentRun: {
+            id: string;
+            agent_id: string;
+            /** @enum {string} */
+            trigger: "schedule" | "manual";
+            /** @enum {string} */
+            status: "pending" | "running" | "succeeded" | "failed" | "skipped";
+            steps: {
+                /** @enum {string} */
+                kind: "tool" | "finish";
+                tool?: string;
+                ok?: boolean;
+                error?: string;
+                duration_ms?: number;
+            }[];
+            summary: string | null;
+            input_tokens: number;
+            output_tokens: number;
+            error: string | null;
+            drafts: number;
+            created_at: string;
+            started_at: string | null;
+            finished_at: string | null;
+        };
+        CustomAgentRunList: {
+            data: {
+                id: string;
+                agent_id: string;
+                /** @enum {string} */
+                trigger: "schedule" | "manual";
+                /** @enum {string} */
+                status: "pending" | "running" | "succeeded" | "failed" | "skipped";
+                steps: {
+                    /** @enum {string} */
+                    kind: "tool" | "finish";
+                    tool?: string;
+                    ok?: boolean;
+                    error?: string;
+                    duration_ms?: number;
+                }[];
+                summary: string | null;
+                input_tokens: number;
+                output_tokens: number;
+                error: string | null;
+                drafts: number;
+                created_at: string;
+                started_at: string | null;
+                finished_at: string | null;
+            }[];
+            next_cursor: string | null;
+            has_more: boolean;
+        };
+        CustomAgentDraft: {
+            id: string;
+            agent_id: string;
+            run_id: string;
+            /** @enum {string} */
+            kind: "segment" | "campaign";
+            /** @enum {string} */
+            status: "pending" | "applied" | "dismissed";
+            payload: {
+                [key: string]: unknown;
+            };
+            result_id: string | null;
+            decided_at: string | null;
+            created_at: string;
+        };
+        CustomAgentDraftList: {
+            data: {
+                id: string;
+                agent_id: string;
+                run_id: string;
+                /** @enum {string} */
+                kind: "segment" | "campaign";
+                /** @enum {string} */
+                status: "pending" | "applied" | "dismissed";
+                payload: {
+                    [key: string]: unknown;
+                };
+                result_id: string | null;
+                decided_at: string | null;
+                created_at: string;
+            }[];
+            next_cursor: string | null;
+            has_more: boolean;
+        };
+        MessengerLink: {
+            id: string;
+            /** @enum {string} */
+            channel: "telegram" | "viber";
+            user_id: string;
+            url: string;
+            token: string;
+            expires_at: string;
+        };
+        DataTransform: {
+            id: string;
+            app_id: string;
+            name: string;
+            description: string;
+            enabled: boolean;
+            /** @enum {string} */
+            target: "event" | "person";
+            /** @enum {string} */
+            kind: "rules" | "javascript";
+            position: number;
+            sources: ("sdk" | "api" | "import" | "system" | "webhook_source" | "pull_source")[];
+            event_names: string[];
+            rules: {
+                [key: string]: unknown;
+            }[];
+            code: string | null;
+            error_count: number;
+            last_error_code: ("mapping_failed" | "invalid_path" | "cast_failed" | "rule_failed" | "invalid_output" | "js_error" | "js_timeout" | "js_memory" | "js_invalid_return" | "sandbox_unavailable" | "write_failed") | null;
+            last_error_at: string | null;
+            created_at: string;
+            updated_at: string;
+        };
+        DataTransformList: {
+            data: {
+                id: string;
+                app_id: string;
+                name: string;
+                description: string;
+                enabled: boolean;
+                /** @enum {string} */
+                target: "event" | "person";
+                /** @enum {string} */
+                kind: "rules" | "javascript";
+                position: number;
+                sources: ("sdk" | "api" | "import" | "system" | "webhook_source" | "pull_source")[];
+                event_names: string[];
+                rules: {
+                    [key: string]: unknown;
+                }[];
+                code: string | null;
+                error_count: number;
+                last_error_code: ("mapping_failed" | "invalid_path" | "cast_failed" | "rule_failed" | "invalid_output" | "js_error" | "js_timeout" | "js_memory" | "js_invalid_return" | "sandbox_unavailable" | "write_failed") | null;
+                last_error_at: string | null;
+                created_at: string;
+                updated_at: string;
+            }[];
+        };
+        DataTransformPreview: {
+            results: {
+                /** @enum {string} */
+                status: "kept" | "dropped" | "failed";
+                record: {
+                    [key: string]: unknown;
+                } | null;
+                transform_id: string | null;
+                error_code: ("mapping_failed" | "invalid_path" | "cast_failed" | "rule_failed" | "invalid_output" | "js_error" | "js_timeout" | "js_memory" | "js_invalid_return" | "sandbox_unavailable" | "write_failed") | null;
+                error_path: string | null;
+                error_message: string | null;
+                logs: string[];
+            }[];
+            duration_ms: number;
+        };
+        DataSource: {
+            id: string;
+            app_id: string;
+            name: string;
+            /** @enum {string} */
+            kind: "webhook" | "http_pull";
+            /** @enum {string} */
+            target: "event" | "person";
+            enabled: boolean;
+            /** @enum {string} */
+            auth_mode: "signature" | "token";
+            mapping: {
+                records_path?: string;
+                event_name?: string;
+                event_name_path?: string;
+                external_id_path?: string;
+                occurred_at_path?: string;
+                value_path?: string;
+                event_id_path?: string;
+                properties_path?: string;
+                tags_path?: string;
+            };
+            config: {
+                /** Format: uri */
+                url?: string;
+                /** @enum {string} */
+                method?: "GET" | "POST";
+                headers?: {
+                    [key: string]: string;
+                };
+                body?: string;
+                interval_minutes?: number;
+                auth_header?: string;
+                next_cursor_path?: string;
+                cursor_param?: string;
+                resume_cursor?: boolean;
+            };
+            has_secret: boolean;
+            webhook_url: string | null;
+            next_run_at: string | null;
+            last_run_at: string | null;
+            last_status: string | null;
+            last_error: string | null;
+            last_stats: {
+                [key: string]: number;
+            };
+            created_at: string;
+            updated_at: string;
+        };
+        DataSourceWithSecret: {
+            id: string;
+            app_id: string;
+            name: string;
+            /** @enum {string} */
+            kind: "webhook" | "http_pull";
+            /** @enum {string} */
+            target: "event" | "person";
+            enabled: boolean;
+            /** @enum {string} */
+            auth_mode: "signature" | "token";
+            mapping: {
+                records_path?: string;
+                event_name?: string;
+                event_name_path?: string;
+                external_id_path?: string;
+                occurred_at_path?: string;
+                value_path?: string;
+                event_id_path?: string;
+                properties_path?: string;
+                tags_path?: string;
+            };
+            config: {
+                /** Format: uri */
+                url?: string;
+                /** @enum {string} */
+                method?: "GET" | "POST";
+                headers?: {
+                    [key: string]: string;
+                };
+                body?: string;
+                interval_minutes?: number;
+                auth_header?: string;
+                next_cursor_path?: string;
+                cursor_param?: string;
+                resume_cursor?: boolean;
+            };
+            has_secret: boolean;
+            webhook_url: string | null;
+            next_run_at: string | null;
+            last_run_at: string | null;
+            last_status: string | null;
+            last_error: string | null;
+            last_stats: {
+                [key: string]: number;
+            };
+            created_at: string;
+            updated_at: string;
+            secret: string | null;
+        };
+        DataSourceList: {
+            data: {
+                id: string;
+                app_id: string;
+                name: string;
+                /** @enum {string} */
+                kind: "webhook" | "http_pull";
+                /** @enum {string} */
+                target: "event" | "person";
+                enabled: boolean;
+                /** @enum {string} */
+                auth_mode: "signature" | "token";
+                mapping: {
+                    records_path?: string;
+                    event_name?: string;
+                    event_name_path?: string;
+                    external_id_path?: string;
+                    occurred_at_path?: string;
+                    value_path?: string;
+                    event_id_path?: string;
+                    properties_path?: string;
+                    tags_path?: string;
+                };
+                config: {
+                    /** Format: uri */
+                    url?: string;
+                    /** @enum {string} */
+                    method?: "GET" | "POST";
+                    headers?: {
+                        [key: string]: string;
+                    };
+                    body?: string;
+                    interval_minutes?: number;
+                    auth_header?: string;
+                    next_cursor_path?: string;
+                    cursor_param?: string;
+                    resume_cursor?: boolean;
+                };
+                has_secret: boolean;
+                webhook_url: string | null;
+                next_run_at: string | null;
+                last_run_at: string | null;
+                last_status: string | null;
+                last_error: string | null;
+                last_stats: {
+                    [key: string]: number;
+                };
+                created_at: string;
+                updated_at: string;
+            }[];
+        };
+        DataSourceRunResult: {
+            /** @enum {string} */
+            status: "succeeded" | "partial" | "failed" | "skipped";
+            stats: {
+                received: number;
+                processed: number;
+                dropped: number;
+                quarantined: number;
+            };
+            error: string | null;
+        };
+        DataQuarantineList: {
+            data: {
+                id: string;
+                /** @enum {string} */
+                target: "event" | "person";
+                source: string;
+                source_id: string | null;
+                transform_id: string | null;
+                payload: {
+                    [key: string]: unknown;
+                };
+                /** @enum {string} */
+                error_code: "mapping_failed" | "invalid_path" | "cast_failed" | "rule_failed" | "invalid_output" | "js_error" | "js_timeout" | "js_memory" | "js_invalid_return" | "sandbox_unavailable" | "write_failed";
+                error_path: string | null;
+                error_message: string | null;
+                /** @enum {string} */
+                status: "pending" | "reprocessed" | "discarded";
+                attempts: number;
+                created_at: string;
+                updated_at: string;
+                resolved_at: string | null;
+            }[];
+            next_cursor: string | null;
+            has_more: boolean;
+            pending_total: number;
+        };
+        DataQuarantineReprocessResult: {
+            reprocessed: number;
+            dropped: number;
+            failed: number;
+        };
+        DataQuarantineDiscardResult: {
+            discarded: number;
+        };
+        WarehouseSegmentConnection: {
+            id: string;
+            app_id: string;
+            name: string;
+            /** @enum {string} */
+            type: "bigquery" | "snowflake" | "databricks";
+            config: {
+                [key: string]: unknown;
+            };
+            credentials_hint: string;
+            segment_count: number;
+            last_tested_at: string | null;
+            last_test_error: string | null;
+            created_at: string;
+            updated_at: string;
+        };
+        WarehouseSegmentConnectionList: {
+            data: {
+                id: string;
+                app_id: string;
+                name: string;
+                /** @enum {string} */
+                type: "bigquery" | "snowflake" | "databricks";
+                config: {
+                    [key: string]: unknown;
+                };
+                credentials_hint: string;
+                segment_count: number;
+                last_tested_at: string | null;
+                last_test_error: string | null;
+                created_at: string;
+                updated_at: string;
+            }[];
+        };
+        WarehouseSegmentConnectionTest: {
+            ok: boolean;
+            error: {
+                code: string;
+                message: string;
+            } | null;
+        };
+        WarehouseSegmentOptions: {
+            types: ("bigquery" | "snowflake" | "databricks")[];
+            id_types: ("external_id" | "user_id")[];
+            snowflake_warehouse_sizes: ("X-Small" | "Small" | "Medium" | "Large" | "X-Large" | "2X-Large" | "3X-Large" | "4X-Large" | "5X-Large" | "6X-Large")[];
+            refresh_intervals: number[];
+            limits: {
+                query_max: number;
+                timeout_default_seconds: number;
+                timeout_min_seconds: number;
+                timeout_max_seconds: number;
+                max_rows_default: number;
+                max_rows_max: number;
+                max_bytes_billed_default: number;
+                max_bytes_billed_min: number;
+                max_bytes_billed_max: number;
+                preview_sample: number;
+                connections_per_app: number;
+            };
+        };
+        WarehouseSegmentPreview: {
+            run_id: string;
+            /** @enum {string} */
+            mode: "dry_run" | "sample";
+            estimated_bytes: number | null;
+            max_bytes_billed: number | null;
+            within_limit: boolean;
+            sample: string[] | null;
+            sample_truncated: boolean;
+            sample_matched: number | null;
+            duration_ms: number;
+        };
+        WarehouseSegmentRunList: {
+            data: {
+                id: string;
+                segment_id: string | null;
+                connection_id: string | null;
+                /** @enum {string} */
+                warehouse_type: "bigquery" | "snowflake" | "databricks";
+                /** @enum {string} */
+                source: "panel" | "api" | "schedule";
+                actor_id: string | null;
+                query: string;
+                query_hash: string;
+                /** @enum {string} */
+                status: "ok" | "rejected" | "timeout" | "failed";
+                reason: ("empty" | "too_long" | "syntax" | "multiple_statements" | "not_select" | "forbidden_relation" | "forbidden_function" | "forbidden_construct" | "forbidden_type") | null;
+                error: string | null;
+                row_count: number;
+                matched_count: number | null;
+                bytes_processed: number | null;
+                truncated: boolean;
+                duration_ms: number;
+                created_at: string;
+            }[];
+            next_cursor: string | null;
+            has_more: boolean;
+        };
+        WarehouseSegmentList: {
+            data: {
+                id: string;
+                app_id: string;
+                name: string;
+                description: string | null;
+                definition: {
+                    [key: string]: unknown;
+                };
+                is_dynamic: boolean;
+                estimated_count: number | null;
+                estimated_at: string | null;
+                created_by: string | null;
+                created_at: string;
+                updated_at: string;
+                sql: {
+                    query: string;
+                    refresh_interval_minutes: number | null;
+                    refreshed_at: string | null;
+                    member_count: number | null;
+                    last_error: string | null;
+                } | null;
+                warehouse: {
+                    connection_id: string | null;
+                    query: string;
+                    id_column: string;
+                    /** @enum {string} */
+                    id_type: "external_id" | "user_id";
+                    limits: {
+                        timeout_seconds: number;
+                        max_rows: number;
+                        max_bytes_billed: number;
+                        max_warehouse_size: ("X-Small" | "Small" | "Medium" | "Large" | "X-Large" | "2X-Large" | "3X-Large" | "4X-Large" | "5X-Large" | "6X-Large") | null;
+                    };
+                    refresh_interval_minutes: number | null;
+                    /** @enum {string} */
+                    refresh_state: "queued" | "failed" | "ok" | "never";
+                    refresh_requested_at: string | null;
+                    refreshed_at: string | null;
+                    member_count: number | null;
+                    last_error: string | null;
+                    bytes_processed: number | null;
+                } | null;
+            }[];
+        };
+        ChannelScoreConfig: {
+            configured: boolean;
+            enabled: boolean;
+            window_days: number;
+            min_sends: number;
+            count_email_opens: boolean;
+            /** @enum {string} */
+            status: "idle" | "queued" | "running" | "failed";
+            last_error: string | null;
+            last_computed_at: string | null;
+            scored_users: number;
+        };
+        ChannelScoreOverview: {
+            total: number;
+            low_population: boolean;
+            last_computed_at: string | null;
+            channels: {
+                /** @enum {string} */
+                channel: "push" | "email" | "whatsapp" | "rcs" | "sms";
+                best_users: number;
+                share: number;
+                sends: number;
+                engaged: number;
+                engagement_rate: number | null;
+            }[];
+        };
+        ChannelScoreUser: {
+            user_id: string;
+            external_id: string | null;
+            best_channel: ("push" | "email" | "whatsapp" | "rcs" | "sms") | null;
+            scores: {
+                /** @enum {string} */
+                channel: "push" | "email" | "whatsapp" | "rcs" | "sms";
+                sends: number;
+                engaged: number;
+                score: number;
+            }[];
+        };
+        ChannelScoreUsersPage: {
+            data: {
+                user_id: string;
+                external_id: string | null;
+                best_channel: ("push" | "email" | "whatsapp" | "rcs" | "sms") | null;
+                scores: {
+                    /** @enum {string} */
+                    channel: "push" | "email" | "whatsapp" | "rcs" | "sms";
+                    sends: number;
+                    engaged: number;
+                    score: number;
+                }[];
+            }[];
+            next_cursor: string | null;
+        };
+        WalletConfig: {
+            apple: {
+                configured: boolean;
+                pass_type_id: string | null;
+                team_id: string | null;
+                certificate_expires_at: string | null;
+            };
+            google: {
+                configured: boolean;
+                issuer_id: string | null;
+            };
+        };
+        WalletTemplate: {
+            id: string;
+            slug: string;
+            name: string;
+            /** @enum {string} */
+            kind: "coupon" | "loyalty" | "event" | "generic";
+            /** @enum {string} */
+            status: "active" | "archived";
+            design: {
+                title: string;
+                description: string;
+                organization: string;
+                /** @default #ffffff */
+                background_color: string;
+                /** @default #111111 */
+                foreground_color: string;
+                /** @default #555555 */
+                label_color: string;
+                /**
+                 * @default qr
+                 * @enum {string}
+                 */
+                barcode: "qr" | "pdf417" | "aztec" | "code128";
+                /** @default [] */
+                fields: {
+                    key: string;
+                    /** @default  */
+                    label: string;
+                    /** @default  */
+                    value: string;
+                    /**
+                     * @default secondary
+                     * @enum {string}
+                     */
+                    section: "header" | "primary" | "secondary" | "auxiliary" | "back";
+                }[];
+                expires_at?: string | null;
+                relevant_at?: string | null;
+            };
+            images: string[];
+            passes: number;
+            created_at: string;
+            updated_at: string;
+        };
+        WalletTemplateList: {
+            data: {
+                id: string;
+                slug: string;
+                name: string;
+                /** @enum {string} */
+                kind: "coupon" | "loyalty" | "event" | "generic";
+                /** @enum {string} */
+                status: "active" | "archived";
+                design: {
+                    title: string;
+                    description: string;
+                    organization: string;
+                    /** @default #ffffff */
+                    background_color: string;
+                    /** @default #111111 */
+                    foreground_color: string;
+                    /** @default #555555 */
+                    label_color: string;
+                    /**
+                     * @default qr
+                     * @enum {string}
+                     */
+                    barcode: "qr" | "pdf417" | "aztec" | "code128";
+                    /** @default [] */
+                    fields: {
+                        key: string;
+                        /** @default  */
+                        label: string;
+                        /** @default  */
+                        value: string;
+                        /**
+                         * @default secondary
+                         * @enum {string}
+                         */
+                        section: "header" | "primary" | "secondary" | "auxiliary" | "back";
+                    }[];
+                    expires_at?: string | null;
+                    relevant_at?: string | null;
+                };
+                images: string[];
+                passes: number;
+                created_at: string;
+                updated_at: string;
+            }[];
+        };
+        WalletPass: {
+            id: string;
+            template_id: string;
+            user_id: string | null;
+            external_id: string | null;
+            barcode_value: string;
+            values: {
+                [key: string]: string;
+            };
+            /** @enum {string} */
+            status: "active" | "voided";
+            url: string;
+            apple_url: string;
+            google_url: string;
+            apple_devices: number;
+            version: number;
+            created_at: string;
+            updated_at: string;
+        };
+        WalletPassPage: {
+            data: {
+                id: string;
+                template_id: string;
+                user_id: string | null;
+                external_id: string | null;
+                barcode_value: string;
+                values: {
+                    [key: string]: string;
+                };
+                /** @enum {string} */
+                status: "active" | "voided";
+                url: string;
+                apple_url: string;
+                google_url: string;
+                apple_devices: number;
+                version: number;
+                created_at: string;
+                updated_at: string;
+            }[];
+            next_cursor: string | null;
+        };
+        PredictionModel: {
+            id: string;
+            slug: string;
+            name: string;
+            /** @enum {string} */
+            kind: "churn" | "event";
+            event_names: string[];
+            horizon_days: number;
+            enabled: boolean;
+            /** @enum {string} */
+            status: "idle" | "queued" | "running" | "failed";
+            outcome: ("ready" | "insufficient_data" | "low_quality") | null;
+            last_computed_at: string | null;
+            scored_users: number;
+            metrics: {
+                auc: number | null;
+                base_rate: number | null;
+                train_users: number;
+                holdout_users: number;
+                positives: number;
+                negatives: number;
+                calibration: {
+                    /** @enum {string} */
+                    bucket: "low" | "medium" | "high";
+                    users: number;
+                    predicted: number | null;
+                    actual: number | null;
+                }[];
+                importance: {
+                    /** @enum {string} */
+                    feature: "recency_days" | "events_7" | "events_30" | "active_days_30" | "target_30" | "days_since_target" | "tenure_days" | "sent_30" | "engaged_30";
+                    weight: number;
+                }[];
+            } | null;
+            distribution: {
+                /** @enum {string} */
+                bucket: "low" | "medium" | "high";
+                users: number;
+            }[];
+        };
+        PredictionModelList: {
+            data: {
+                id: string;
+                slug: string;
+                name: string;
+                /** @enum {string} */
+                kind: "churn" | "event";
+                event_names: string[];
+                horizon_days: number;
+                enabled: boolean;
+                /** @enum {string} */
+                status: "idle" | "queued" | "running" | "failed";
+                outcome: ("ready" | "insufficient_data" | "low_quality") | null;
+                last_computed_at: string | null;
+                scored_users: number;
+                metrics: {
+                    auc: number | null;
+                    base_rate: number | null;
+                    train_users: number;
+                    holdout_users: number;
+                    positives: number;
+                    negatives: number;
+                    calibration: {
+                        /** @enum {string} */
+                        bucket: "low" | "medium" | "high";
+                        users: number;
+                        predicted: number | null;
+                        actual: number | null;
+                    }[];
+                    importance: {
+                        /** @enum {string} */
+                        feature: "recency_days" | "events_7" | "events_30" | "active_days_30" | "target_30" | "days_since_target" | "tenure_days" | "sent_30" | "engaged_30";
+                        weight: number;
+                    }[];
+                } | null;
+                distribution: {
+                    /** @enum {string} */
+                    bucket: "low" | "medium" | "high";
+                    users: number;
+                }[];
+            }[];
+        };
+        PredictionUsersPage: {
+            data: {
+                user_id: string;
+                external_id: string | null;
+                score: number;
+                /** @enum {string} */
+                bucket: "low" | "medium" | "high";
+            }[];
+            next_cursor: string | null;
+        };
+        DecisionAgent: {
+            id: string;
+            slug: string;
+            name: string;
+            arms: {
+                id: string;
+                label: string;
+            }[];
+            reward_events: string[];
+            reward_window_hours: number;
+            holdout_percent: number;
+            context_prediction: string | null;
+            use_best_channel: boolean;
+            /** @enum {string} */
+            status: "active" | "paused";
+            created_at: string;
+            updated_at: string;
+        };
+        DecisionAgentList: {
+            data: {
+                id: string;
+                slug: string;
+                name: string;
+                arms: {
+                    id: string;
+                    label: string;
+                }[];
+                reward_events: string[];
+                reward_window_hours: number;
+                holdout_percent: number;
+                context_prediction: string | null;
+                use_best_channel: boolean;
+                /** @enum {string} */
+                status: "active" | "paused";
+                created_at: string;
+                updated_at: string;
+            }[];
+        };
+        DecisionResult: {
+            arm_id: string;
+            label: string;
+            /** @enum {string} */
+            policy: "thompson" | "holdout";
+            context: string;
+        };
+        DecisionReport: {
+            agent_id: string;
+            days: number;
+            learned: {
+                assignments: number;
+                settled: number;
+                rewards: number;
+                rate: number | null;
+            };
+            holdout: {
+                assignments: number;
+                settled: number;
+                rewards: number;
+                rate: number | null;
+            };
+            lift: number | null;
+            p_value: number | null;
+            significant: boolean;
+            arms: {
+                id: string;
+                label: string;
+                share: number;
+                assignments: number;
+                settled: number;
+                rewards: number;
+                rate: number | null;
+            }[];
+            contexts: {
+                context: string;
+                arm_id: string;
+                settled: number;
+                rate: number | null;
+            }[];
+        };
+        CampaignAgentConfig: {
+            configured: boolean;
+            enabled: boolean;
+            /** @enum {string} */
+            goal: "retention" | "revenue" | "reactivation" | "engagement";
+            min_audience: number;
+            /** @enum {string} */
+            status: "idle" | "queued" | "running" | "failed";
+            last_run_at: string | null;
+        };
+        CampaignProposal: {
+            id: string;
+            /** @enum {string} */
+            kind: "churn_risk" | "likely_to_act" | "rfm_at_risk" | "inactive_30d" | "recent_clickers";
+            /** @enum {string} */
+            status: "pending" | "approved" | "dismissed" | "expired";
+            audience_size: number;
+            model_name: string | null;
+            draft: {
+                name: string;
+                title: string;
+                body: string;
+                language: string;
+            } | null;
+            segment_id: string | null;
+            campaign_id: string | null;
+            expires_at: string;
+            created_at: string;
+            decided_at: string | null;
+        };
+        CampaignProposalList: {
+            data: {
+                id: string;
+                /** @enum {string} */
+                kind: "churn_risk" | "likely_to_act" | "rfm_at_risk" | "inactive_30d" | "recent_clickers";
+                /** @enum {string} */
+                status: "pending" | "approved" | "dismissed" | "expired";
+                audience_size: number;
+                model_name: string | null;
+                draft: {
+                    name: string;
+                    title: string;
+                    body: string;
+                    language: string;
+                } | null;
+                segment_id: string | null;
+                campaign_id: string | null;
+                expires_at: string;
+                created_at: string;
+                decided_at: string | null;
+            }[];
+        };
+        CampaignProposalDraft: {
+            name: string;
+            title: string;
+            body: string;
+            language: string;
         };
         SsoConnection: {
             id: string;
@@ -13963,7 +22384,7 @@ export interface components {
             name: string;
             tables: ("deliveries" | "delivery_events" | "events" | "conversions" | "users" | "subscriptions")[];
             /** @enum {string} */
-            schedule: "hourly" | "daily";
+            schedule: "every_15_minutes" | "hourly" | "daily";
             enabled?: boolean;
             /** @constant */
             destination: "bigquery";
@@ -13981,7 +22402,7 @@ export interface components {
             name: string;
             tables: ("deliveries" | "delivery_events" | "events" | "conversions" | "users" | "subscriptions")[];
             /** @enum {string} */
-            schedule: "hourly" | "daily";
+            schedule: "every_15_minutes" | "hourly" | "daily";
             enabled?: boolean;
             /** @constant */
             destination: "snowflake";
@@ -14002,7 +22423,7 @@ export interface components {
             name: string;
             tables: ("deliveries" | "delivery_events" | "events" | "conversions" | "users" | "subscriptions")[];
             /** @enum {string} */
-            schedule: "hourly" | "daily";
+            schedule: "every_15_minutes" | "hourly" | "daily";
             enabled?: boolean;
             /** @constant */
             destination: "s3_parquet";
@@ -14013,6 +22434,46 @@ export interface components {
                 /** Format: uri */
                 endpoint?: string;
                 force_path_style?: boolean;
+            };
+            credentials: {
+                access_key_id: string;
+                secret_access_key: string;
+            };
+        } | {
+            name: string;
+            tables: ("deliveries" | "delivery_events" | "events" | "conversions" | "users" | "subscriptions")[];
+            /** @enum {string} */
+            schedule: "every_15_minutes" | "hourly" | "daily";
+            enabled?: boolean;
+            /** @constant */
+            destination: "databricks";
+            config: {
+                host: string;
+                warehouse_id: string;
+                catalog: string;
+                schema: string;
+                table_prefix?: string;
+            };
+            credentials: {
+                /** @description Databricks kişisel erişim belirteci. */
+                access_token: string;
+            };
+        } | {
+            name: string;
+            tables: ("deliveries" | "delivery_events" | "events" | "conversions" | "users" | "subscriptions")[];
+            /** @enum {string} */
+            schedule: "every_15_minutes" | "hourly" | "daily";
+            enabled?: boolean;
+            /** @constant */
+            destination: "redshift";
+            config: {
+                region: string;
+                database: string;
+                schema: string;
+                db_user: string;
+                cluster_identifier?: string;
+                workgroup_name?: string;
+                table_prefix?: string;
             };
             credentials: {
                 access_key_id: string;
@@ -14063,20 +22524,50 @@ export interface components {
                 access_key_id: string;
                 secret_access_key: string;
             };
+        } | {
+            /** @constant */
+            destination: "databricks";
+            config: {
+                host: string;
+                warehouse_id: string;
+                catalog: string;
+                schema: string;
+                table_prefix?: string;
+            };
+            credentials: {
+                /** @description Databricks kişisel erişim belirteci. */
+                access_token: string;
+            };
+        } | {
+            /** @constant */
+            destination: "redshift";
+            config: {
+                region: string;
+                database: string;
+                schema: string;
+                db_user: string;
+                cluster_identifier?: string;
+                workgroup_name?: string;
+                table_prefix?: string;
+            };
+            credentials: {
+                access_key_id: string;
+                secret_access_key: string;
+            };
         };
         WarehouseExport: {
             id: string;
             app_id: string;
             name: string;
             /** @enum {string} */
-            destination: "bigquery" | "snowflake" | "s3_parquet";
+            destination: "bigquery" | "snowflake" | "s3_parquet" | "redshift" | "databricks";
             config: {
                 [key: string]: unknown;
             };
             credentials_hint: string;
             tables: ("deliveries" | "delivery_events" | "events" | "conversions" | "users" | "subscriptions")[];
             /** @enum {string} */
-            schedule: "hourly" | "daily";
+            schedule: "every_15_minutes" | "hourly" | "daily";
             enabled: boolean;
             /** @enum {string} */
             status: "active" | "paused" | "failing";
@@ -14103,14 +22594,14 @@ export interface components {
                 app_id: string;
                 name: string;
                 /** @enum {string} */
-                destination: "bigquery" | "snowflake" | "s3_parquet";
+                destination: "bigquery" | "snowflake" | "s3_parquet" | "redshift" | "databricks";
                 config: {
                     [key: string]: unknown;
                 };
                 credentials_hint: string;
                 tables: ("deliveries" | "delivery_events" | "events" | "conversions" | "users" | "subscriptions")[];
                 /** @enum {string} */
-                schedule: "hourly" | "daily";
+                schedule: "every_15_minutes" | "hourly" | "daily";
                 enabled: boolean;
                 /** @enum {string} */
                 status: "active" | "paused" | "failing";
@@ -14219,11 +22710,737 @@ export interface components {
                 }[];
             }[];
         };
+        ReverseEtlCreate: {
+            name: string;
+            /** @enum {string} */
+            target: "event" | "user";
+            /** @enum {string} */
+            schedule: "every_5_minutes" | "hourly" | "daily";
+            enabled?: boolean;
+            /** @constant */
+            source: "snowflake";
+            config: {
+                account: string;
+                user: string;
+                database: string;
+                schema: string;
+                warehouse: string;
+                role?: string;
+                query: string;
+                mapping: {
+                    external_id_column: string;
+                    event_name?: string;
+                    event_name_column?: string;
+                    occurred_at_column?: string;
+                    cursor_column?: string;
+                };
+            };
+            credentials: {
+                private_key: string;
+            };
+        } | {
+            name: string;
+            /** @enum {string} */
+            target: "event" | "user";
+            /** @enum {string} */
+            schedule: "every_5_minutes" | "hourly" | "daily";
+            enabled?: boolean;
+            /** @constant */
+            source: "bigquery";
+            config: {
+                project_id: string;
+                query: string;
+                mapping: {
+                    external_id_column: string;
+                    event_name?: string;
+                    event_name_column?: string;
+                    occurred_at_column?: string;
+                    cursor_column?: string;
+                };
+            };
+            credentials: {
+                service_account_json: string;
+            };
+        } | {
+            name: string;
+            /** @enum {string} */
+            target: "event" | "user";
+            /** @enum {string} */
+            schedule: "every_5_minutes" | "hourly" | "daily";
+            enabled?: boolean;
+            /** @constant */
+            source: "postgres";
+            config: {
+                host: string;
+                port?: number;
+                user: string;
+                database: string;
+                ca_certificate?: string;
+                query: string;
+                mapping: {
+                    external_id_column: string;
+                    event_name?: string;
+                    event_name_column?: string;
+                    occurred_at_column?: string;
+                    cursor_column?: string;
+                };
+                /** @enum {string} */
+                preset?: "alloydb" | "cloud_sql" | "greenplum" | "materialize" | "motherduck";
+            };
+            credentials: {
+                password: string;
+            };
+        } | {
+            name: string;
+            /** @enum {string} */
+            target: "event" | "user";
+            /** @enum {string} */
+            schedule: "every_5_minutes" | "hourly" | "daily";
+            enabled?: boolean;
+            /** @constant */
+            source: "mysql";
+            config: {
+                host: string;
+                port?: number;
+                user: string;
+                database: string;
+                ca_certificate?: string;
+                query: string;
+                mapping: {
+                    external_id_column: string;
+                    event_name?: string;
+                    event_name_column?: string;
+                    occurred_at_column?: string;
+                    cursor_column?: string;
+                };
+                /** @enum {string} */
+                preset?: "singlestore";
+            };
+            credentials: {
+                password: string;
+            };
+        } | {
+            name: string;
+            /** @enum {string} */
+            target: "event" | "user";
+            /** @enum {string} */
+            schedule: "every_5_minutes" | "hourly" | "daily";
+            enabled?: boolean;
+            /** @constant */
+            source: "s3";
+            config: {
+                bucket: string;
+                region: string;
+                key: string;
+                /** @enum {string} */
+                format: "csv" | "ndjson";
+                /** Format: uri */
+                endpoint?: string;
+                mapping: {
+                    external_id_column: string;
+                    event_name?: string;
+                    event_name_column?: string;
+                    occurred_at_column?: string;
+                    cursor_column?: string;
+                };
+            };
+            credentials: {
+                access_key_id: string;
+                secret_access_key: string;
+            };
+        } | {
+            name: string;
+            /** @enum {string} */
+            target: "event" | "user";
+            /** @enum {string} */
+            schedule: "every_5_minutes" | "hourly" | "daily";
+            enabled?: boolean;
+            /** @constant */
+            source: "google_sheets";
+            config: {
+                spreadsheet_id: string;
+                range: string;
+                mapping: {
+                    external_id_column: string;
+                    event_name?: string;
+                    event_name_column?: string;
+                    occurred_at_column?: string;
+                    cursor_column?: string;
+                };
+            };
+            credentials: {
+                service_account_json: string;
+            };
+        } | {
+            name: string;
+            /** @enum {string} */
+            target: "event" | "user";
+            /** @enum {string} */
+            schedule: "every_5_minutes" | "hourly" | "daily";
+            enabled?: boolean;
+            /** @constant */
+            source: "clickhouse";
+            config: {
+                host: string;
+                port?: number;
+                tls?: boolean;
+                database: string;
+                user: string;
+                query: string;
+                mapping: {
+                    external_id_column: string;
+                    event_name?: string;
+                    event_name_column?: string;
+                    occurred_at_column?: string;
+                    cursor_column?: string;
+                };
+            };
+            credentials: {
+                password: string;
+            };
+        } | {
+            name: string;
+            /** @enum {string} */
+            target: "event" | "user";
+            /** @enum {string} */
+            schedule: "every_5_minutes" | "hourly" | "daily";
+            enabled?: boolean;
+            /** @constant */
+            source: "sqlserver";
+            config: {
+                host: string;
+                port?: number;
+                user: string;
+                database: string;
+                ca_certificate?: string;
+                query: string;
+                mapping: {
+                    external_id_column: string;
+                    event_name?: string;
+                    event_name_column?: string;
+                    occurred_at_column?: string;
+                    cursor_column?: string;
+                };
+                /** @enum {string} */
+                preset?: "synapse";
+            };
+            credentials: {
+                password: string;
+            };
+        } | {
+            name: string;
+            /** @enum {string} */
+            target: "event" | "user";
+            /** @enum {string} */
+            schedule: "every_5_minutes" | "hourly" | "daily";
+            enabled?: boolean;
+            /** @constant */
+            source: "trino";
+            config: {
+                host: string;
+                port?: number;
+                tls?: boolean;
+                catalog: string;
+                schema?: string;
+                user: string;
+                /** @enum {string} */
+                preset?: "starburst_enterprise" | "starburst_galaxy";
+                query: string;
+                mapping: {
+                    external_id_column: string;
+                    event_name?: string;
+                    event_name_column?: string;
+                    occurred_at_column?: string;
+                    cursor_column?: string;
+                };
+            };
+            credentials: {
+                password: string;
+            };
+        } | {
+            name: string;
+            /** @enum {string} */
+            target: "event" | "user";
+            /** @enum {string} */
+            schedule: "every_5_minutes" | "hourly" | "daily";
+            enabled?: boolean;
+            /** @constant */
+            source: "athena";
+            config: {
+                region: string;
+                database: string;
+                workgroup?: string;
+                output_location?: string;
+                query: string;
+                mapping: {
+                    external_id_column: string;
+                    event_name?: string;
+                    event_name_column?: string;
+                    occurred_at_column?: string;
+                    cursor_column?: string;
+                };
+            };
+            credentials: {
+                access_key_id: string;
+                secret_access_key: string;
+            };
+        } | {
+            name: string;
+            /** @enum {string} */
+            target: "event" | "user";
+            /** @enum {string} */
+            schedule: "every_5_minutes" | "hourly" | "daily";
+            enabled?: boolean;
+            /** @constant */
+            source: "elasticsearch";
+            config: {
+                /** Format: uri */
+                endpoint: string;
+                index: string;
+                query?: {
+                    [key: string]: unknown;
+                };
+                mapping: {
+                    external_id_column: string;
+                    event_name?: string;
+                    event_name_column?: string;
+                    occurred_at_column?: string;
+                    cursor_column?: string;
+                };
+            };
+            credentials: {
+                api_key?: string;
+                username?: string;
+                password?: string;
+            };
+        } | {
+            name: string;
+            /** @enum {string} */
+            target: "event" | "user";
+            /** @enum {string} */
+            schedule: "every_5_minutes" | "hourly" | "daily";
+            enabled?: boolean;
+            /** @constant */
+            source: "kafka";
+            config: {
+                brokers: string[];
+                topic: string;
+                ssl?: boolean;
+                /** @enum {string} */
+                mechanism?: "plain" | "scram-sha-256" | "scram-sha-512";
+                /** @enum {string} */
+                start?: "earliest" | "latest";
+                /** @enum {string} */
+                preset?: "confluent";
+                mapping: {
+                    external_id_column: string;
+                    event_name?: string;
+                    event_name_column?: string;
+                    occurred_at_column?: string;
+                    cursor_column?: string;
+                };
+            };
+            credentials: {
+                username?: string;
+                password?: string;
+            };
+        } | {
+            name: string;
+            /** @enum {string} */
+            target: "event" | "user";
+            /** @enum {string} */
+            schedule: "every_5_minutes" | "hourly" | "daily";
+            enabled?: boolean;
+            /** @constant */
+            source: "pubsub";
+            config: {
+                project_id: string;
+                subscription: string;
+                mapping: {
+                    external_id_column: string;
+                    event_name?: string;
+                    event_name_column?: string;
+                    occurred_at_column?: string;
+                    cursor_column?: string;
+                };
+            };
+            credentials: {
+                service_account_json: string;
+            };
+        };
+        ReverseEtlConnectionTest: {
+            /** @constant */
+            source: "snowflake";
+            config: {
+                account: string;
+                user: string;
+                database: string;
+                schema: string;
+                warehouse: string;
+                role?: string;
+                query: string;
+                mapping: {
+                    external_id_column: string;
+                    event_name?: string;
+                    event_name_column?: string;
+                    occurred_at_column?: string;
+                    cursor_column?: string;
+                };
+            };
+            credentials: {
+                private_key: string;
+            };
+        } | {
+            /** @constant */
+            source: "bigquery";
+            config: {
+                project_id: string;
+                query: string;
+                mapping: {
+                    external_id_column: string;
+                    event_name?: string;
+                    event_name_column?: string;
+                    occurred_at_column?: string;
+                    cursor_column?: string;
+                };
+            };
+            credentials: {
+                service_account_json: string;
+            };
+        } | {
+            /** @constant */
+            source: "postgres";
+            config: {
+                host: string;
+                port?: number;
+                user: string;
+                database: string;
+                ca_certificate?: string;
+                query: string;
+                mapping: {
+                    external_id_column: string;
+                    event_name?: string;
+                    event_name_column?: string;
+                    occurred_at_column?: string;
+                    cursor_column?: string;
+                };
+                /** @enum {string} */
+                preset?: "alloydb" | "cloud_sql" | "greenplum" | "materialize" | "motherduck";
+            };
+            credentials: {
+                password: string;
+            };
+        } | {
+            /** @constant */
+            source: "mysql";
+            config: {
+                host: string;
+                port?: number;
+                user: string;
+                database: string;
+                ca_certificate?: string;
+                query: string;
+                mapping: {
+                    external_id_column: string;
+                    event_name?: string;
+                    event_name_column?: string;
+                    occurred_at_column?: string;
+                    cursor_column?: string;
+                };
+                /** @enum {string} */
+                preset?: "singlestore";
+            };
+            credentials: {
+                password: string;
+            };
+        } | {
+            /** @constant */
+            source: "s3";
+            config: {
+                bucket: string;
+                region: string;
+                key: string;
+                /** @enum {string} */
+                format: "csv" | "ndjson";
+                /** Format: uri */
+                endpoint?: string;
+                mapping: {
+                    external_id_column: string;
+                    event_name?: string;
+                    event_name_column?: string;
+                    occurred_at_column?: string;
+                    cursor_column?: string;
+                };
+            };
+            credentials: {
+                access_key_id: string;
+                secret_access_key: string;
+            };
+        } | {
+            /** @constant */
+            source: "google_sheets";
+            config: {
+                spreadsheet_id: string;
+                range: string;
+                mapping: {
+                    external_id_column: string;
+                    event_name?: string;
+                    event_name_column?: string;
+                    occurred_at_column?: string;
+                    cursor_column?: string;
+                };
+            };
+            credentials: {
+                service_account_json: string;
+            };
+        } | {
+            /** @constant */
+            source: "clickhouse";
+            config: {
+                host: string;
+                port?: number;
+                tls?: boolean;
+                database: string;
+                user: string;
+                query: string;
+                mapping: {
+                    external_id_column: string;
+                    event_name?: string;
+                    event_name_column?: string;
+                    occurred_at_column?: string;
+                    cursor_column?: string;
+                };
+            };
+            credentials: {
+                password: string;
+            };
+        } | {
+            /** @constant */
+            source: "sqlserver";
+            config: {
+                host: string;
+                port?: number;
+                user: string;
+                database: string;
+                ca_certificate?: string;
+                query: string;
+                mapping: {
+                    external_id_column: string;
+                    event_name?: string;
+                    event_name_column?: string;
+                    occurred_at_column?: string;
+                    cursor_column?: string;
+                };
+                /** @enum {string} */
+                preset?: "synapse";
+            };
+            credentials: {
+                password: string;
+            };
+        } | {
+            /** @constant */
+            source: "trino";
+            config: {
+                host: string;
+                port?: number;
+                tls?: boolean;
+                catalog: string;
+                schema?: string;
+                user: string;
+                /** @enum {string} */
+                preset?: "starburst_enterprise" | "starburst_galaxy";
+                query: string;
+                mapping: {
+                    external_id_column: string;
+                    event_name?: string;
+                    event_name_column?: string;
+                    occurred_at_column?: string;
+                    cursor_column?: string;
+                };
+            };
+            credentials: {
+                password: string;
+            };
+        } | {
+            /** @constant */
+            source: "athena";
+            config: {
+                region: string;
+                database: string;
+                workgroup?: string;
+                output_location?: string;
+                query: string;
+                mapping: {
+                    external_id_column: string;
+                    event_name?: string;
+                    event_name_column?: string;
+                    occurred_at_column?: string;
+                    cursor_column?: string;
+                };
+            };
+            credentials: {
+                access_key_id: string;
+                secret_access_key: string;
+            };
+        } | {
+            /** @constant */
+            source: "elasticsearch";
+            config: {
+                /** Format: uri */
+                endpoint: string;
+                index: string;
+                query?: {
+                    [key: string]: unknown;
+                };
+                mapping: {
+                    external_id_column: string;
+                    event_name?: string;
+                    event_name_column?: string;
+                    occurred_at_column?: string;
+                    cursor_column?: string;
+                };
+            };
+            credentials: {
+                api_key?: string;
+                username?: string;
+                password?: string;
+            };
+        } | {
+            /** @constant */
+            source: "kafka";
+            config: {
+                brokers: string[];
+                topic: string;
+                ssl?: boolean;
+                /** @enum {string} */
+                mechanism?: "plain" | "scram-sha-256" | "scram-sha-512";
+                /** @enum {string} */
+                start?: "earliest" | "latest";
+                /** @enum {string} */
+                preset?: "confluent";
+                mapping: {
+                    external_id_column: string;
+                    event_name?: string;
+                    event_name_column?: string;
+                    occurred_at_column?: string;
+                    cursor_column?: string;
+                };
+            };
+            credentials: {
+                username?: string;
+                password?: string;
+            };
+        } | {
+            /** @constant */
+            source: "pubsub";
+            config: {
+                project_id: string;
+                subscription: string;
+                mapping: {
+                    external_id_column: string;
+                    event_name?: string;
+                    event_name_column?: string;
+                    occurred_at_column?: string;
+                    cursor_column?: string;
+                };
+            };
+            credentials: {
+                service_account_json: string;
+            };
+        };
+        ReverseEtlSync: {
+            id: string;
+            app_id: string;
+            name: string;
+            /** @enum {string} */
+            source: "snowflake" | "bigquery" | "postgres" | "mysql" | "s3" | "google_sheets" | "clickhouse" | "sqlserver" | "trino" | "athena" | "elasticsearch" | "kafka" | "pubsub";
+            /** @enum {string} */
+            target: "event" | "user";
+            config: {
+                [key: string]: unknown;
+            };
+            credentials_hint: string;
+            /** @enum {string} */
+            schedule: "every_5_minutes" | "hourly" | "daily";
+            enabled: boolean;
+            /** @enum {string} */
+            status: "active" | "paused" | "failing";
+            cursor: string | null;
+            consecutive_failures: number;
+            last_error: string | null;
+            last_run_at: string | null;
+            last_success_at: string | null;
+            next_run_at: string | null;
+            created_at: string;
+            updated_at: string;
+        };
+        ReverseEtlSyncList: {
+            data: {
+                id: string;
+                app_id: string;
+                name: string;
+                /** @enum {string} */
+                source: "snowflake" | "bigquery" | "postgres" | "mysql" | "s3" | "google_sheets" | "clickhouse" | "sqlserver" | "trino" | "athena" | "elasticsearch" | "kafka" | "pubsub";
+                /** @enum {string} */
+                target: "event" | "user";
+                config: {
+                    [key: string]: unknown;
+                };
+                credentials_hint: string;
+                /** @enum {string} */
+                schedule: "every_5_minutes" | "hourly" | "daily";
+                enabled: boolean;
+                /** @enum {string} */
+                status: "active" | "paused" | "failing";
+                cursor: string | null;
+                consecutive_failures: number;
+                last_error: string | null;
+                last_run_at: string | null;
+                last_success_at: string | null;
+                next_run_at: string | null;
+                created_at: string;
+                updated_at: string;
+            }[];
+        };
+        ReverseEtlRun: {
+            id: string;
+            sync_id: string;
+            /** @enum {string} */
+            trigger: "schedule" | "manual";
+            /** @enum {string} */
+            status: "queued" | "running" | "succeeded" | "failed";
+            row_count: number;
+            attempt: number;
+            error: string | null;
+            started_at: string | null;
+            finished_at: string | null;
+            duration_ms: number | null;
+            created_at: string;
+        };
+        ReverseEtlRunPage: {
+            data: {
+                id: string;
+                sync_id: string;
+                /** @enum {string} */
+                trigger: "schedule" | "manual";
+                /** @enum {string} */
+                status: "queued" | "running" | "succeeded" | "failed";
+                row_count: number;
+                attempt: number;
+                error: string | null;
+                started_at: string | null;
+                finished_at: string | null;
+                duration_ms: number | null;
+                created_at: string;
+            }[];
+            next_cursor: string | null;
+            has_more: boolean;
+        };
         Integration: {
             id: string;
             app_id: string;
             /** @enum {string} */
-            type: "segment" | "amplitude" | "mixpanel" | "zapier" | "slack";
+            type: "segment" | "amplitude" | "mixpanel" | "ga4" | "posthog" | "rudderstack" | "hubspot" | "appsflyer" | "adjust" | "revenuecat" | "zapier" | "slack" | "activecampaign" | "adobe_audience_manager" | "salesforce";
             name: string;
             /** @enum {string} */
             status: "active" | "paused" | "error";
@@ -14256,7 +23473,7 @@ export interface components {
                 id: string;
                 app_id: string;
                 /** @enum {string} */
-                type: "segment" | "amplitude" | "mixpanel" | "zapier" | "slack";
+                type: "segment" | "amplitude" | "mixpanel" | "ga4" | "posthog" | "rudderstack" | "hubspot" | "appsflyer" | "adjust" | "revenuecat" | "zapier" | "slack" | "activecampaign" | "adobe_audience_manager" | "salesforce";
                 name: string;
                 /** @enum {string} */
                 status: "active" | "paused" | "error";
@@ -14286,7 +23503,7 @@ export interface components {
             }[];
             catalog: {
                 /** @enum {string} */
-                type: "segment" | "amplitude" | "mixpanel" | "zapier" | "slack";
+                type: "segment" | "amplitude" | "mixpanel" | "ga4" | "posthog" | "rudderstack" | "hubspot" | "appsflyer" | "adjust" | "revenuecat" | "zapier" | "slack" | "activecampaign" | "adobe_audience_manager" | "salesforce";
                 events: string[];
                 cohorts: boolean;
                 inbound: boolean;
@@ -15022,200 +24239,6 @@ export interface components {
         };
         SdkAttributionAccepted: {
             accepted: number;
-        };
-        OAuthConsentContext: {
-            client: {
-                client_id: string;
-                client_name: string;
-                client_uri: string | null;
-                redirect_host: string;
-            };
-            requested_scopes: string[];
-            available_scopes: string[];
-            deny_url: string;
-            organizations: {
-                id: string;
-                name: string;
-                slug: string;
-                role: string;
-                org_wide_allowed: boolean;
-                grantable_scopes: string[];
-                apps: {
-                    id: string;
-                    name: string;
-                }[];
-            }[];
-        };
-        OAuthApproveResult: {
-            redirect_to: string;
-        };
-        CellList: {
-            enabled: boolean;
-            current_cell_id: string | null;
-            control_plane: boolean;
-            control_plane_dashboard_url: string | null;
-            cells: {
-                id: string;
-                name: string;
-                api_url: string;
-                dashboard_url: string;
-            }[];
-        };
-        CellOrgList: {
-            data: {
-                id: string;
-                name: string;
-                slug: string;
-                /** @enum {string} */
-                role: "owner" | "admin" | "developer" | "marketer" | "analyst" | "billing" | "viewer" | "composer" | "agent";
-                region: string | null;
-                dashboard_url: string | null;
-                local: boolean;
-            }[];
-            unavailable_cells: string[];
-        };
-        CellHandoff: {
-            url: string;
-            expires_at: string;
-        };
-        CellHandoffResult: {
-            account: {
-                id: string;
-                email: string;
-                name: string;
-                locale: string;
-                timezone: string;
-                email_verified: boolean;
-                mfa_enabled: boolean;
-                is_platform_admin: boolean;
-                has_password: boolean;
-                marketing_opt_in: boolean;
-                created_at: string;
-            };
-            next: string | null;
-        };
-        CustomDomain: {
-            id: string;
-            /** @enum {string} */
-            kind: "dashboard" | "tracking" | "preference_center" | "status_page" | "landing";
-            hostname: string;
-            /** @enum {string} */
-            status: "pending" | "verified" | "active" | "failed";
-            verification: {
-                txt_name: string;
-                txt_value: string;
-                cname_target: string | null;
-            };
-            last_error: string | null;
-            last_checked_at: string | null;
-            verified_at: string | null;
-            activated_at: string | null;
-            created_at: string;
-        };
-        CustomDomainList: {
-            data: {
-                id: string;
-                /** @enum {string} */
-                kind: "dashboard" | "tracking" | "preference_center" | "status_page" | "landing";
-                hostname: string;
-                /** @enum {string} */
-                status: "pending" | "verified" | "active" | "failed";
-                verification: {
-                    txt_name: string;
-                    txt_value: string;
-                    cname_target: string | null;
-                };
-                last_error: string | null;
-                last_checked_at: string | null;
-                verified_at: string | null;
-                activated_at: string | null;
-                created_at: string;
-            }[];
-        };
-        ResellerChildOrg: {
-            id: string;
-            name: string;
-            slug: string;
-            plan_code: string;
-            /** @enum {string} */
-            status: "active" | "suspended" | "deleted";
-            suspended_reason: string | null;
-            members: number;
-            /** @enum {string} */
-            access: "owner" | "member" | "support" | "none";
-            region: string | null;
-            created_at: string;
-        };
-        ResellerChildOrgList: {
-            data: {
-                id: string;
-                name: string;
-                slug: string;
-                plan_code: string;
-                /** @enum {string} */
-                status: "active" | "suspended" | "deleted";
-                suspended_reason: string | null;
-                members: number;
-                /** @enum {string} */
-                access: "owner" | "member" | "support" | "none";
-                region: string | null;
-                created_at: string;
-            }[];
-        };
-        ResellerStatement: {
-            month: string;
-            currency: string;
-            items: {
-                org_id: string;
-                name: string;
-                slug: string;
-                plan_code: string;
-                status: string;
-                amount: number;
-                messages_sent: number;
-                events_ingested: number;
-                api_requests: number;
-                active_subscriptions: number;
-                mau: number;
-            }[];
-            totals: {
-                amount: number;
-                messages_sent: number;
-                events_ingested: number;
-                child_orgs: number;
-            };
-        };
-        Branding: {
-            product_name: string | null;
-            logo_url: string | null;
-            primary_color: string | null;
-            secondary_color: string | null;
-            support_email: string | null;
-            hide_powered_by: boolean;
-            effective: {
-                product_name: string;
-                logo_url: string | null;
-                primary_color: string | null;
-                secondary_color: string | null;
-                support_email: string | null;
-                powered_by: boolean;
-                inherited: boolean;
-            };
-            features: {
-                white_label: boolean;
-                hide_powered_by: boolean;
-            };
-        };
-        BrandResolution: {
-            /** @enum {string} */
-            kind: "dashboard" | "tracking" | "preference_center" | "status_page";
-            org_slug: string;
-            product_name: string;
-            logo_url: string | null;
-            primary_color: string | null;
-            secondary_color: string | null;
-            support_email: string | null;
-            powered_by: boolean;
         };
         WebCampaign: {
             id: string;
@@ -16451,6 +25474,48 @@ export interface components {
                             /** @constant */
                             type: "html";
                             html: string;
+                        } | {
+                            id: string;
+                            /** @constant */
+                            type: "product";
+                            catalog: string;
+                            /** @enum {string} */
+                            source: "fixed" | "expression";
+                            item: string;
+                            show_description?: boolean;
+                            show_price?: boolean;
+                            button_text?: string;
+                            /** @enum {string} */
+                            align?: "left" | "center" | "right";
+                            padding?: {
+                                top: number;
+                                right: number;
+                                bottom: number;
+                                left: number;
+                            };
+                        } | {
+                            id: string;
+                            /** @constant */
+                            type: "recommendations";
+                            catalog: string;
+                            /** @enum {string} */
+                            strategy: "personalized" | "popular" | "trending" | "similar" | "category" | "recently_viewed" | "new_arrivals";
+                            limit: number;
+                            /** @enum {string} */
+                            source?: "fixed" | "expression";
+                            value?: string;
+                            heading?: string;
+                            show_description?: boolean;
+                            show_price?: boolean;
+                            button_text?: string;
+                            /** @enum {string} */
+                            align?: "left" | "center" | "right";
+                            padding?: {
+                                top: number;
+                                right: number;
+                                bottom: number;
+                                left: number;
+                            };
                         })[];
                     }[];
                 }[];
@@ -16509,6 +25574,830 @@ export interface components {
                 version: number;
                 published_at: string;
                 published_by: string | null;
+            }[];
+        };
+        WebPersonalization: {
+            id: string;
+            app_id: string;
+            name: string;
+            /** @enum {string} */
+            status: "draft" | "active" | "paused" | "archived";
+            priority: number;
+            changes: ({
+                /** @constant */
+                action: "text";
+                selector: string;
+                text: {
+                    [key: string]: string;
+                };
+            } | {
+                /** @constant */
+                action: "image";
+                selector: string;
+                url: string;
+                alt?: {
+                    [key: string]: string;
+                };
+            } | {
+                /** @constant */
+                action: "link";
+                selector: string;
+                url: string;
+                text?: {
+                    [key: string]: string;
+                };
+                new_tab?: boolean;
+            } | {
+                /** @constant */
+                action: "hide";
+                selector: string;
+            } | {
+                /** @constant */
+                action: "show";
+                selector: string;
+            })[];
+            variants: {
+                id: string;
+                name: string;
+                weight_percent: number;
+                changes: ({
+                    /** @constant */
+                    action: "text";
+                    selector: string;
+                    text: {
+                        [key: string]: string;
+                    };
+                } | {
+                    /** @constant */
+                    action: "image";
+                    selector: string;
+                    url: string;
+                    alt?: {
+                        [key: string]: string;
+                    };
+                } | {
+                    /** @constant */
+                    action: "link";
+                    selector: string;
+                    url: string;
+                    text?: {
+                        [key: string]: string;
+                    };
+                    new_tab?: boolean;
+                } | {
+                    /** @constant */
+                    action: "hide";
+                    selector: string;
+                } | {
+                    /** @constant */
+                    action: "show";
+                    selector: string;
+                })[];
+            }[];
+            ab_test: {
+                winner_variant_id: string | null;
+                decided_at: string | null;
+                decided_by: string | null;
+            };
+            conditions: {
+                url_rules?: {
+                    /** @enum {string} */
+                    op: "equals" | "contains" | "starts_with" | "not_contains" | "matches";
+                    value: string;
+                }[];
+                utm_rules?: {
+                    /** @enum {string} */
+                    param: "utm_source" | "utm_medium" | "utm_campaign" | "utm_term" | "utm_content";
+                    /** @enum {string} */
+                    op: "equals" | "contains" | "exists";
+                    value?: string;
+                }[];
+                visits?: {
+                    /** @enum {string} */
+                    op: "gte" | "lte" | "eq";
+                    value: number;
+                };
+            };
+            targeting: {
+                included_segments?: string[];
+                excluded_segments?: string[];
+                /** @enum {string} */
+                visitor?: "all" | "new" | "returning";
+                devices?: ("desktop" | "mobile" | "tablet")[];
+            };
+            goal: ({
+                /** @constant */
+                type: "event";
+                event: string;
+            } | {
+                /** @constant */
+                type: "page";
+                url: {
+                    /** @enum {string} */
+                    op: "equals" | "contains" | "starts_with" | "not_contains" | "matches";
+                    value: string;
+                };
+            } | {
+                /** @constant */
+                type: "click";
+                selector: string;
+            }) | null;
+            start_at: string | null;
+            end_at: string | null;
+            stats: {
+                visitors: number;
+                conversions: number;
+                conversion_rate: number;
+            };
+            variant_stats: {
+                visitors: number;
+                conversions: number;
+                conversion_rate: number;
+                variant_id: string;
+            }[];
+            variant_significance: {
+                leader: string | null;
+                p_value: number;
+                significant: boolean;
+            } | null;
+            created_at: string;
+            updated_at: string;
+        };
+        WebPersonalizationPage: {
+            data: {
+                id: string;
+                app_id: string;
+                name: string;
+                /** @enum {string} */
+                status: "draft" | "active" | "paused" | "archived";
+                priority: number;
+                changes: ({
+                    /** @constant */
+                    action: "text";
+                    selector: string;
+                    text: {
+                        [key: string]: string;
+                    };
+                } | {
+                    /** @constant */
+                    action: "image";
+                    selector: string;
+                    url: string;
+                    alt?: {
+                        [key: string]: string;
+                    };
+                } | {
+                    /** @constant */
+                    action: "link";
+                    selector: string;
+                    url: string;
+                    text?: {
+                        [key: string]: string;
+                    };
+                    new_tab?: boolean;
+                } | {
+                    /** @constant */
+                    action: "hide";
+                    selector: string;
+                } | {
+                    /** @constant */
+                    action: "show";
+                    selector: string;
+                })[];
+                variants: {
+                    id: string;
+                    name: string;
+                    weight_percent: number;
+                    changes: ({
+                        /** @constant */
+                        action: "text";
+                        selector: string;
+                        text: {
+                            [key: string]: string;
+                        };
+                    } | {
+                        /** @constant */
+                        action: "image";
+                        selector: string;
+                        url: string;
+                        alt?: {
+                            [key: string]: string;
+                        };
+                    } | {
+                        /** @constant */
+                        action: "link";
+                        selector: string;
+                        url: string;
+                        text?: {
+                            [key: string]: string;
+                        };
+                        new_tab?: boolean;
+                    } | {
+                        /** @constant */
+                        action: "hide";
+                        selector: string;
+                    } | {
+                        /** @constant */
+                        action: "show";
+                        selector: string;
+                    })[];
+                }[];
+                ab_test: {
+                    winner_variant_id: string | null;
+                    decided_at: string | null;
+                    decided_by: string | null;
+                };
+                conditions: {
+                    url_rules?: {
+                        /** @enum {string} */
+                        op: "equals" | "contains" | "starts_with" | "not_contains" | "matches";
+                        value: string;
+                    }[];
+                    utm_rules?: {
+                        /** @enum {string} */
+                        param: "utm_source" | "utm_medium" | "utm_campaign" | "utm_term" | "utm_content";
+                        /** @enum {string} */
+                        op: "equals" | "contains" | "exists";
+                        value?: string;
+                    }[];
+                    visits?: {
+                        /** @enum {string} */
+                        op: "gte" | "lte" | "eq";
+                        value: number;
+                    };
+                };
+                targeting: {
+                    included_segments?: string[];
+                    excluded_segments?: string[];
+                    /** @enum {string} */
+                    visitor?: "all" | "new" | "returning";
+                    devices?: ("desktop" | "mobile" | "tablet")[];
+                };
+                goal: ({
+                    /** @constant */
+                    type: "event";
+                    event: string;
+                } | {
+                    /** @constant */
+                    type: "page";
+                    url: {
+                        /** @enum {string} */
+                        op: "equals" | "contains" | "starts_with" | "not_contains" | "matches";
+                        value: string;
+                    };
+                } | {
+                    /** @constant */
+                    type: "click";
+                    selector: string;
+                }) | null;
+                start_at: string | null;
+                end_at: string | null;
+                stats: {
+                    visitors: number;
+                    conversions: number;
+                    conversion_rate: number;
+                };
+                variant_stats: {
+                    visitors: number;
+                    conversions: number;
+                    conversion_rate: number;
+                    variant_id: string;
+                }[];
+                variant_significance: {
+                    leader: string | null;
+                    p_value: number;
+                    significant: boolean;
+                } | null;
+                created_at: string;
+                updated_at: string;
+            }[];
+            next_cursor: string | null;
+            has_more: boolean;
+        };
+        WebPersonalizationReport: {
+            personalization_id: string;
+            days: number;
+            daily: {
+                date: string;
+                visitors: number;
+                conversions: number;
+            }[];
+            totals: {
+                visitors: number;
+                conversions: number;
+                conversion_rate: number;
+            };
+        };
+        SdkWebPersonalizationList: {
+            data: {
+                id: string;
+                priority: number;
+                conditions: {
+                    url_rules?: {
+                        /** @enum {string} */
+                        op: "equals" | "contains" | "starts_with" | "not_contains" | "matches";
+                        value: string;
+                    }[];
+                    utm_rules?: {
+                        /** @enum {string} */
+                        param: "utm_source" | "utm_medium" | "utm_campaign" | "utm_term" | "utm_content";
+                        /** @enum {string} */
+                        op: "equals" | "contains" | "exists";
+                        value?: string;
+                    }[];
+                    visits?: {
+                        /** @enum {string} */
+                        op: "gte" | "lte" | "eq";
+                        value: number;
+                    };
+                };
+                targeting: {
+                    /** @enum {string} */
+                    visitor: "all" | "new" | "returning";
+                    devices: ("desktop" | "mobile" | "tablet")[];
+                };
+                changes: {
+                    selector: string;
+                    /** @enum {string} */
+                    action: "text" | "image" | "link" | "hide" | "show";
+                    text: string | null;
+                    url: string | null;
+                    alt: string | null;
+                    new_tab: boolean;
+                }[];
+                variants: {
+                    id: string;
+                    weight_percent: number;
+                    changes: {
+                        selector: string;
+                        /** @enum {string} */
+                        action: "text" | "image" | "link" | "hide" | "show";
+                        text: string | null;
+                        url: string | null;
+                        alt: string | null;
+                        new_tab: boolean;
+                    }[];
+                }[];
+                winner_variant_id: string | null;
+                goal: ({
+                    /** @constant */
+                    type: "event";
+                    event: string;
+                } | {
+                    /** @constant */
+                    type: "page";
+                    url: {
+                        /** @enum {string} */
+                        op: "equals" | "contains" | "starts_with" | "not_contains" | "matches";
+                        value: string;
+                    };
+                } | {
+                    /** @constant */
+                    type: "click";
+                    selector: string;
+                }) | null;
+                end_at: string | null;
+            }[];
+            editor_origins: string[];
+            language: string;
+        };
+        OAuthConsentContext: {
+            client: {
+                client_id: string;
+                client_name: string;
+                client_uri: string | null;
+                redirect_host: string;
+            };
+            requested_scopes: string[];
+            available_scopes: string[];
+            deny_url: string;
+            organizations: {
+                id: string;
+                name: string;
+                slug: string;
+                role: string;
+                org_wide_allowed: boolean;
+                grantable_scopes: string[];
+                apps: {
+                    id: string;
+                    name: string;
+                }[];
+            }[];
+        };
+        OAuthApproveResult: {
+            redirect_to: string;
+        };
+        CellList: {
+            enabled: boolean;
+            current_cell_id: string | null;
+            control_plane: boolean;
+            control_plane_dashboard_url: string | null;
+            cells: {
+                id: string;
+                name: string;
+                api_url: string;
+                dashboard_url: string;
+            }[];
+        };
+        CellOrgList: {
+            data: {
+                id: string;
+                name: string;
+                slug: string;
+                /** @enum {string} */
+                role: "owner" | "admin" | "developer" | "marketer" | "analyst" | "billing" | "viewer" | "composer" | "agent";
+                region: string | null;
+                dashboard_url: string | null;
+                local: boolean;
+            }[];
+            unavailable_cells: string[];
+        };
+        CellHandoff: {
+            url: string;
+            expires_at: string;
+        };
+        CellHandoffResult: {
+            account: {
+                id: string;
+                email: string;
+                name: string;
+                locale: string;
+                timezone: string;
+                email_verified: boolean;
+                mfa_enabled: boolean;
+                is_platform_admin: boolean;
+                has_password: boolean;
+                marketing_opt_in: boolean;
+                preferences: {
+                    /** @enum {string} */
+                    date_format: "auto" | "dmy" | "mdy" | "iso";
+                    /** @enum {string} */
+                    time_format: "auto" | "24h" | "12h";
+                    /** @enum {string} */
+                    table_density: "comfortable" | "compact";
+                };
+                created_at: string;
+            };
+            next: string | null;
+        };
+        CustomDomain: {
+            id: string;
+            /** @enum {string} */
+            kind: "dashboard" | "tracking" | "preference_center" | "status_page" | "landing";
+            hostname: string;
+            /** @enum {string} */
+            status: "pending" | "verified" | "active" | "failed";
+            verification: {
+                txt_name: string;
+                txt_value: string;
+                cname_target: string | null;
+            };
+            last_error: string | null;
+            last_checked_at: string | null;
+            verified_at: string | null;
+            activated_at: string | null;
+            created_at: string;
+        };
+        CustomDomainList: {
+            data: {
+                id: string;
+                /** @enum {string} */
+                kind: "dashboard" | "tracking" | "preference_center" | "status_page" | "landing";
+                hostname: string;
+                /** @enum {string} */
+                status: "pending" | "verified" | "active" | "failed";
+                verification: {
+                    txt_name: string;
+                    txt_value: string;
+                    cname_target: string | null;
+                };
+                last_error: string | null;
+                last_checked_at: string | null;
+                verified_at: string | null;
+                activated_at: string | null;
+                created_at: string;
+            }[];
+        };
+        ResellerChildOrg: {
+            id: string;
+            name: string;
+            slug: string;
+            plan_code: string;
+            /** @enum {string} */
+            status: "active" | "suspended" | "deleted";
+            suspended_reason: string | null;
+            members: number;
+            /** @enum {string} */
+            access: "owner" | "member" | "support" | "none";
+            region: string | null;
+            created_at: string;
+        };
+        ResellerChildOrgList: {
+            data: {
+                id: string;
+                name: string;
+                slug: string;
+                plan_code: string;
+                /** @enum {string} */
+                status: "active" | "suspended" | "deleted";
+                suspended_reason: string | null;
+                members: number;
+                /** @enum {string} */
+                access: "owner" | "member" | "support" | "none";
+                region: string | null;
+                created_at: string;
+            }[];
+        };
+        ResellerStatement: {
+            month: string;
+            currency: string;
+            items: {
+                org_id: string;
+                name: string;
+                slug: string;
+                plan_code: string;
+                status: string;
+                amount: number;
+                messages_sent: number;
+                events_ingested: number;
+                api_requests: number;
+                active_subscriptions: number;
+                mau: number;
+            }[];
+            totals: {
+                amount: number;
+                messages_sent: number;
+                events_ingested: number;
+                child_orgs: number;
+            };
+        };
+        Branding: {
+            product_name: string | null;
+            logo_url: string | null;
+            primary_color: string | null;
+            secondary_color: string | null;
+            support_email: string | null;
+            hide_powered_by: boolean;
+            effective: {
+                product_name: string;
+                logo_url: string | null;
+                primary_color: string | null;
+                secondary_color: string | null;
+                support_email: string | null;
+                powered_by: boolean;
+                inherited: boolean;
+            };
+            features: {
+                white_label: boolean;
+                hide_powered_by: boolean;
+            };
+        };
+        BrandResolution: {
+            /** @enum {string} */
+            kind: "dashboard" | "tracking" | "preference_center" | "status_page";
+            org_slug: string;
+            product_name: string;
+            logo_url: string | null;
+            primary_color: string | null;
+            secondary_color: string | null;
+            support_email: string | null;
+            powered_by: boolean;
+        };
+        SiteSearchOverview: {
+            settings: {
+                enabled: boolean;
+                ai_answers: boolean;
+                allowed_origins: string[];
+                language: string;
+                text_search_config: string;
+                monthly_token_cap: number;
+                query_retention_days: number;
+                updated_at: string | null;
+            };
+            index: {
+                documents: number;
+                chunks: number;
+                sources: number;
+                last_indexed_at: string | null;
+            };
+            usage: {
+                tokens_this_month: number;
+                monthly_token_cap: number;
+                period_start: string;
+            };
+            ai: {
+                available: boolean;
+                reason: ("disabled" | "unavailable" | "cap_reached") | null;
+            };
+        };
+        SiteSearchSource: {
+            id: string;
+            name: string;
+            /** @enum {string} */
+            kind: "sitemap" | "urls";
+            url: string | null;
+            urls: string[];
+            max_pages: number;
+            refresh_hours: number | null;
+            enabled: boolean;
+            /** @enum {string} */
+            status: "idle" | "queued" | "crawling" | "ok" | "partial" | "failed";
+            documents: number;
+            crawl_requested_at: string | null;
+            last_crawled_at: string | null;
+            next_crawl_at: string | null;
+            last_error: string | null;
+            stats: {
+                pages_found: number;
+                pages_indexed: number;
+                pages_unchanged: number;
+                pages_skipped: number;
+                pages_failed: number;
+                pages_removed: number;
+                duration_ms: number;
+            };
+            created_at: string;
+            updated_at: string;
+        };
+        SiteSearchSourceList: {
+            data: {
+                id: string;
+                name: string;
+                /** @enum {string} */
+                kind: "sitemap" | "urls";
+                url: string | null;
+                urls: string[];
+                max_pages: number;
+                refresh_hours: number | null;
+                enabled: boolean;
+                /** @enum {string} */
+                status: "idle" | "queued" | "crawling" | "ok" | "partial" | "failed";
+                documents: number;
+                crawl_requested_at: string | null;
+                last_crawled_at: string | null;
+                next_crawl_at: string | null;
+                last_error: string | null;
+                stats: {
+                    pages_found: number;
+                    pages_indexed: number;
+                    pages_unchanged: number;
+                    pages_skipped: number;
+                    pages_failed: number;
+                    pages_removed: number;
+                    duration_ms: number;
+                };
+                created_at: string;
+                updated_at: string;
+            }[];
+        };
+        SiteSearchCrawlRequest: {
+            queued: boolean;
+            source: {
+                id: string;
+                name: string;
+                /** @enum {string} */
+                kind: "sitemap" | "urls";
+                url: string | null;
+                urls: string[];
+                max_pages: number;
+                refresh_hours: number | null;
+                enabled: boolean;
+                /** @enum {string} */
+                status: "idle" | "queued" | "crawling" | "ok" | "partial" | "failed";
+                documents: number;
+                crawl_requested_at: string | null;
+                last_crawled_at: string | null;
+                next_crawl_at: string | null;
+                last_error: string | null;
+                stats: {
+                    pages_found: number;
+                    pages_indexed: number;
+                    pages_unchanged: number;
+                    pages_skipped: number;
+                    pages_failed: number;
+                    pages_removed: number;
+                    duration_ms: number;
+                };
+                created_at: string;
+                updated_at: string;
+            };
+        };
+        SiteSearchDocument: {
+            id: string;
+            key: string;
+            source_id: string | null;
+            url: string;
+            title: string;
+            language: string | null;
+            chunks: number;
+            chars: number;
+            indexed_at: string;
+            created_at: string;
+        };
+        SiteSearchDocumentPage: {
+            data: {
+                id: string;
+                key: string;
+                source_id: string | null;
+                url: string;
+                title: string;
+                language: string | null;
+                chunks: number;
+                chars: number;
+                indexed_at: string;
+                created_at: string;
+            }[];
+            next_cursor: string | null;
+            has_more: boolean;
+        };
+        SiteSearchDocumentResult: {
+            /** @enum {string} */
+            outcome: "created" | "updated" | "unchanged";
+            document: {
+                id: string;
+                key: string;
+                source_id: string | null;
+                url: string;
+                title: string;
+                language: string | null;
+                chunks: number;
+                chars: number;
+                indexed_at: string;
+                created_at: string;
+            };
+        };
+        SiteSearchResponse: {
+            query_id: string;
+            /** @enum {string} */
+            mode: "search" | "answer";
+            results: {
+                id: string;
+                url: string;
+                title: string;
+                heading: string;
+                snippet: string;
+                snippet_html: string;
+            }[];
+            answer: {
+                text: string;
+                sources: {
+                    id: string;
+                    url: string;
+                    title: string;
+                }[];
+            } | null;
+            answer_status: ("answered" | "not_found") | null;
+            answers_available: boolean;
+        };
+        SiteSearchPreview: {
+            query_id: string;
+            /** @enum {string} */
+            mode: "search" | "answer";
+            results: {
+                id: string;
+                url: string;
+                title: string;
+                heading: string;
+                snippet: string;
+                snippet_html: string;
+            }[];
+            answer: {
+                text: string;
+                sources: {
+                    id: string;
+                    url: string;
+                    title: string;
+                }[];
+            } | null;
+            answer_status: ("answered" | "not_found") | null;
+            answers_available: boolean;
+            fallback_reason: ("disabled" | "unavailable" | "cap_reached" | "rate_limited" | "blocked" | "no_results") | null;
+        };
+        SiteSearchReport: {
+            period_days: number;
+            searches: number;
+            zero_results: number;
+            click_through_rate: number;
+            answers_requested: number;
+            answered: number;
+            not_found: number;
+            answer_fallbacks: number;
+            tokens: number;
+            top_queries: {
+                query: string;
+                searches: number;
+                clicks: number;
+                avg_results: number;
+            }[];
+            zero_result_queries: {
+                query: string;
+                searches: number;
+            }[];
+            daily: {
+                date: string;
+                searches: number;
+                zero_results: number;
+                answered: number;
             }[];
         };
     };
@@ -17097,6 +26986,91 @@ export interface operations {
             };
         };
     };
+    SdkController_featureFlags: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SdkFlagsEvaluateDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SdkFeatureFlags"];
+                };
+            };
+        };
+    };
+    SdkController_geofences: {
+        parameters: {
+            query: {
+                lat: number;
+                lng: number;
+                limit?: number;
+            };
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SdkGeofenceList"];
+                };
+            };
+        };
+    };
+    SdkController_geofenceEvents: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+                subscriptionId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SdkGeofenceEventsDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EventsAccepted"];
+                };
+            };
+        };
+    };
     SdkController_events: {
         parameters: {
             query?: never;
@@ -17135,7 +27109,11 @@ export interface operations {
             };
             cookie?: never;
         };
-        requestBody?: never;
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["ReceivedDto"];
+            };
+        };
         responses: {
             200: {
                 headers: {
@@ -17821,6 +27799,3731 @@ export interface operations {
             };
         };
     };
+    PublicDynamicContentController_listPromoLists: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PromoCodeListList"];
+                };
+            };
+        };
+    };
+    PublicDynamicContentController_createPromoList: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreatePromoCodeListDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PromoCodeList"];
+                };
+            };
+        };
+    };
+    PublicDynamicContentController_getPromoList: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                listId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PromoCodeList"];
+                };
+            };
+        };
+    };
+    PublicDynamicContentController_deletePromoList: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                listId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Ok"];
+                };
+            };
+        };
+    };
+    PublicDynamicContentController_updatePromoList: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                listId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdatePromoCodeListDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PromoCodeList"];
+                };
+            };
+        };
+    };
+    PublicDynamicContentController_promoCodes: {
+        parameters: {
+            query?: {
+                limit?: number;
+                offset?: number;
+                q?: string;
+                status?: "available" | "assigned";
+            };
+            header?: never;
+            path: {
+                listId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PromoCodesPage"];
+                };
+            };
+        };
+    };
+    PublicDynamicContentController_uploadPromoList: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                listId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "multipart/form-data": {
+                    /**
+                     * Format: binary
+                     * @description UTF-8 CSV; kodlar ilk sütunda, başlık isteğe bağlı. En fazla 1.000.000 kod, 20 MB.
+                     */
+                    file: string;
+                };
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PromoCodeUploadResult"];
+                };
+            };
+        };
+    };
+    PublicCatalogController_list: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CatalogList"];
+                };
+            };
+        };
+    };
+    PublicCatalogController_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateCatalogDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Catalog"];
+                };
+            };
+        };
+    };
+    PublicCatalogController_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                catalogId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Catalog"];
+                };
+            };
+        };
+    };
+    PublicCatalogController_remove: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                catalogId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Ok"];
+                };
+            };
+        };
+    };
+    PublicCatalogController_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                catalogId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateCatalogDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Catalog"];
+                };
+            };
+        };
+    };
+    PublicCatalogController_items: {
+        parameters: {
+            query?: {
+                limit?: number;
+                offset?: number;
+                q?: string;
+                category?: string;
+            };
+            header?: never;
+            path: {
+                catalogId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CatalogItemsPage"];
+                };
+            };
+        };
+    };
+    PublicCatalogController_upsert: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                catalogId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpsertCatalogItemsDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CatalogUpsertResult"];
+                };
+            };
+        };
+    };
+    PublicCatalogController_upload: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                catalogId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "multipart/form-data": {
+                    /**
+                     * Format: binary
+                     * @description UTF-8 CSV. Zorunlu sütunlar: id, title. Bilinen: description, image_url, url, price, sale_price, currency, category, brand, in_stock. Diğerleri özellik olur. En fazla 100.000 satır, 20 MB.
+                     */
+                    file: string;
+                };
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CatalogUpsertResult"];
+                };
+            };
+        };
+    };
+    PublicCatalogController_item: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                catalogId: string;
+                itemId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CatalogItem"];
+                };
+            };
+        };
+    };
+    PublicCatalogController_removeItem: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                catalogId: string;
+                itemId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Ok"];
+                };
+            };
+        };
+    };
+    PublicRecommendationsController_list: {
+        parameters: {
+            query: {
+                strategy: "personalized" | "popular" | "trending" | "similar" | "category" | "recently_viewed" | "new_arrivals";
+                limit?: number;
+                user_id?: string;
+                external_id?: string;
+                item_id?: string;
+                category?: string;
+            };
+            header?: never;
+            path: {
+                catalogId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Recommendations"];
+                };
+            };
+        };
+    };
+    PublicRecommendationsController_config: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                catalogId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RecommendationConfig"];
+                };
+            };
+        };
+    };
+    PublicRecommendationsController_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                catalogId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateRecommendationConfigDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RecommendationConfig"];
+                };
+            };
+        };
+    };
+    PublicRecommendationsController_compute: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                catalogId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            202: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RecommendationConfig"];
+                };
+            };
+        };
+    };
+    PublicAppFlagsController_list: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AppFlagList"];
+                };
+            };
+        };
+    };
+    PublicAppFlagsController_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateAppFlagDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AppFlag"];
+                };
+            };
+        };
+    };
+    PublicAppFlagsController_evaluate: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["EvaluateAppFlagsDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AppFlagEvaluation"];
+                };
+            };
+        };
+    };
+    PublicAppFlagsController_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                flagId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AppFlag"];
+                };
+            };
+        };
+    };
+    PublicAppFlagsController_remove: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                flagId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Ok"];
+                };
+            };
+        };
+    };
+    PublicAppFlagsController_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                flagId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateAppFlagDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AppFlag"];
+                };
+            };
+        };
+    };
+    PublicGeofencesController_list: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GeofenceList"];
+                };
+            };
+        };
+    };
+    PublicGeofencesController_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateGeofenceDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Geofence"];
+                };
+            };
+        };
+    };
+    PublicGeofencesController_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                geofenceId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Geofence"];
+                };
+            };
+        };
+    };
+    PublicGeofencesController_remove: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                geofenceId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Ok"];
+                };
+            };
+        };
+    };
+    PublicGeofencesController_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                geofenceId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateGeofenceDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Geofence"];
+                };
+            };
+        };
+    };
+    PublicRfmController_config: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RfmConfig"];
+                };
+            };
+        };
+    };
+    PublicRfmController_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateRfmConfigDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RfmConfig"];
+                };
+            };
+        };
+    };
+    PublicRfmController_compute: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            202: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RfmConfig"];
+                };
+            };
+        };
+    };
+    PublicRfmController_overview: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RfmOverview"];
+                };
+            };
+        };
+    };
+    PublicRfmController_transitions: {
+        parameters: {
+            query?: {
+                from?: string;
+                to?: string;
+            };
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RfmTransitions"];
+                };
+            };
+        };
+    };
+    PublicRfmController_users: {
+        parameters: {
+            query?: {
+                segment?: "champions" | "loyal" | "potential" | "new" | "promising" | "need_attention" | "about_to_sleep" | "at_risk" | "cant_lose" | "hibernating" | "lost";
+                limit?: number;
+                cursor?: string;
+            };
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RfmUsersPage"];
+                };
+            };
+        };
+    };
+    PublicAffinityController_config: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AffinityConfig"];
+                };
+            };
+        };
+    };
+    PublicAffinityController_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateAffinityConfigDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AffinityConfig"];
+                };
+            };
+        };
+    };
+    PublicAffinityController_compute: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            202: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AffinityConfig"];
+                };
+            };
+        };
+    };
+    PublicAffinityController_overview: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AffinityOverview"];
+                };
+            };
+        };
+    };
+    PublicAffinityController_user: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                userId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["UserAffinity"];
+                };
+            };
+        };
+    };
+    PublicCompaniesController_list: {
+        parameters: {
+            query?: {
+                limit?: number;
+                cursor?: string;
+                q?: string;
+                external_id?: string;
+                domain?: string;
+            };
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CompanyList"];
+                };
+            };
+        };
+    };
+    PublicCompaniesController_upsert: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpsertCompanyDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Company"];
+                };
+            };
+        };
+    };
+    PublicCompaniesController_batch: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["BatchUpsertCompaniesDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CompanyBatchResult"];
+                };
+            };
+        };
+    };
+    PublicCompaniesController_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                companyId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Company"];
+                };
+            };
+        };
+    };
+    PublicCompaniesController_remove: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                companyId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Ok"];
+                };
+            };
+        };
+    };
+    PublicCompaniesController_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                companyId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateCompanyDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Company"];
+                };
+            };
+        };
+    };
+    PublicCompaniesController_members: {
+        parameters: {
+            query?: {
+                limit?: number;
+                cursor?: string;
+                role?: string;
+            };
+            header?: never;
+            path: {
+                companyId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CompanyMemberList"];
+                };
+            };
+        };
+    };
+    PublicCompaniesController_batchMembers: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                companyId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["BatchMembersDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CompanyMemberBatchResult"];
+                };
+            };
+        };
+    };
+    PublicCompaniesController_setMember: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                companyId: string;
+                userId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SetMemberDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CompanyMember"];
+                };
+            };
+        };
+    };
+    PublicCompaniesController_removeMember: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                companyId: string;
+                userId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Ok"];
+                };
+            };
+        };
+    };
+    PublicCompaniesController_forUser: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                userId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["UserCompanyList"];
+                };
+            };
+        };
+    };
+    PublicCompaniesController_forUserAlias: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                label: string;
+                value: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["UserCompanyList"];
+                };
+            };
+        };
+    };
+    PublicAiAgentsController_list: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AiAgentList"];
+                };
+            };
+        };
+    };
+    PublicAiAgentsController_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateAiAgentDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AiAgentWithSecret"];
+                };
+            };
+        };
+    };
+    PublicAiAgentsController_runs: {
+        parameters: {
+            query?: {
+                agent_id?: string;
+                conversation_id?: string;
+                status?: "pending" | "replied" | "handed_off" | "skipped_cap" | "failed";
+                limit?: number;
+                cursor?: string;
+            };
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AiAgentRunList"];
+                };
+            };
+        };
+    };
+    PublicAiAgentsController_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                agentId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AiAgent"];
+                };
+            };
+        };
+    };
+    PublicAiAgentsController_remove: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                agentId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            204: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    PublicAiAgentsController_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                agentId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateAiAgentDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AiAgent"];
+                };
+            };
+        };
+    };
+    PublicAiAgentsController_rotate: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                agentId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AiAgentWithSecret"];
+                };
+            };
+        };
+    };
+    PublicAiAgentsController_metrics: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                agentId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AiAgentMetrics"];
+                };
+            };
+        };
+    };
+    PublicSqlSegmentsController_schema: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SqlSchema"];
+                };
+            };
+        };
+    };
+    PublicSqlSegmentsController_run: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["RunSqlQueryDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SqlQueryResult"];
+                };
+            };
+        };
+    };
+    PublicSqlSegmentsController_runs: {
+        parameters: {
+            query?: {
+                segment_id?: string;
+                status?: "ok" | "rejected" | "timeout" | "failed";
+                limit?: number;
+                cursor?: string;
+            };
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SqlRunList"];
+                };
+            };
+        };
+    };
+    PublicSqlSegmentsController_listSegments: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SqlSegmentList"];
+                };
+            };
+        };
+    };
+    PublicSqlSegmentsController_createSegment: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateSqlSegmentDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Segment"];
+                };
+            };
+        };
+    };
+    PublicSqlSegmentsController_updateSegment: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                segmentId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateSqlSegmentDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Segment"];
+                };
+            };
+        };
+    };
+    PublicSqlSegmentsController_refresh: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                segmentId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Segment"];
+                };
+            };
+        };
+    };
+    PublicCustomAgentsController_list: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CustomAgentList"];
+                };
+            };
+        };
+    };
+    PublicCustomAgentsController_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateCustomAgentDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CustomAgent"];
+                };
+            };
+        };
+    };
+    PublicCustomAgentsController_runs: {
+        parameters: {
+            query?: {
+                agent_id?: string;
+                status?: "pending" | "running" | "succeeded" | "failed" | "skipped";
+                limit?: number;
+                cursor?: string;
+            };
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CustomAgentRunList"];
+                };
+            };
+        };
+    };
+    PublicCustomAgentsController_drafts: {
+        parameters: {
+            query?: {
+                agent_id?: string;
+                run_id?: string;
+                status?: "pending" | "applied" | "dismissed";
+                limit?: number;
+                cursor?: string;
+            };
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CustomAgentDraftList"];
+                };
+            };
+        };
+    };
+    PublicCustomAgentsController_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                agentId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CustomAgent"];
+                };
+            };
+        };
+    };
+    PublicCustomAgentsController_remove: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                agentId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            204: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    PublicCustomAgentsController_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                agentId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateCustomAgentDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CustomAgent"];
+                };
+            };
+        };
+    };
+    PublicCustomAgentsController_run: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                agentId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            202: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CustomAgentRun"];
+                };
+            };
+        };
+    };
+    PublicMessengerLinksController_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateMessengerLinkDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MessengerLink"];
+                };
+            };
+        };
+    };
+    PublicDataPipelinesController_listTransforms: {
+        parameters: {
+            query?: {
+                target?: "event" | "person";
+            };
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DataTransformList"];
+                };
+            };
+        };
+    };
+    PublicDataPipelinesController_createTransform: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateDataTransformDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DataTransform"];
+                };
+            };
+        };
+    };
+    PublicDataPipelinesController_preview: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PreviewDataTransformDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DataTransformPreview"];
+                };
+            };
+        };
+    };
+    PublicDataPipelinesController_getTransform: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                transformId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DataTransform"];
+                };
+            };
+        };
+    };
+    PublicDataPipelinesController_removeTransform: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                transformId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            204: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    PublicDataPipelinesController_updateTransform: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                transformId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateDataTransformDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DataTransform"];
+                };
+            };
+        };
+    };
+    PublicDataPipelinesController_listSources: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DataSourceList"];
+                };
+            };
+        };
+    };
+    PublicDataPipelinesController_createSource: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateDataSourceDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DataSourceWithSecret"];
+                };
+            };
+        };
+    };
+    PublicDataPipelinesController_getSource: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                sourceId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DataSource"];
+                };
+            };
+        };
+    };
+    PublicDataPipelinesController_removeSource: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                sourceId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            204: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    PublicDataPipelinesController_updateSource: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                sourceId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateDataSourceDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DataSource"];
+                };
+            };
+        };
+    };
+    PublicDataPipelinesController_rotate: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                sourceId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DataSourceWithSecret"];
+                };
+            };
+        };
+    };
+    PublicDataPipelinesController_run: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                sourceId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DataSourceRunResult"];
+                };
+            };
+        };
+    };
+    PublicDataPipelinesController_quarantine: {
+        parameters: {
+            query?: {
+                status?: "pending" | "reprocessed" | "discarded";
+                target?: "event" | "person";
+                source_id?: string;
+                transform_id?: string;
+                limit?: number;
+                cursor?: string;
+            };
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DataQuarantineList"];
+                };
+            };
+        };
+    };
+    PublicDataPipelinesController_reprocess: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ReprocessQuarantineDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DataQuarantineReprocessResult"];
+                };
+            };
+        };
+    };
+    PublicDataPipelinesController_discard: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["DiscardQuarantineDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DataQuarantineDiscardResult"];
+                };
+            };
+        };
+    };
+    PublicWarehouseSegmentsController_options: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WarehouseSegmentOptions"];
+                };
+            };
+        };
+    };
+    PublicWarehouseSegmentsController_listConnections: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WarehouseSegmentConnectionList"];
+                };
+            };
+        };
+    };
+    PublicWarehouseSegmentsController_createConnection: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateWarehouseConnectionDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WarehouseSegmentConnection"];
+                };
+            };
+        };
+    };
+    PublicWarehouseSegmentsController_getConnection: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                connectionId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WarehouseSegmentConnection"];
+                };
+            };
+        };
+    };
+    PublicWarehouseSegmentsController_removeConnection: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                connectionId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Ok"];
+                };
+            };
+        };
+    };
+    PublicWarehouseSegmentsController_updateConnection: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                connectionId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateWarehouseConnectionDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WarehouseSegmentConnection"];
+                };
+            };
+        };
+    };
+    PublicWarehouseSegmentsController_testConnection: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                connectionId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WarehouseSegmentConnectionTest"];
+                };
+            };
+        };
+    };
+    PublicWarehouseSegmentsController_preview: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PreviewWarehouseQueryDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WarehouseSegmentPreview"];
+                };
+            };
+        };
+    };
+    PublicWarehouseSegmentsController_listSegments: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WarehouseSegmentList"];
+                };
+            };
+        };
+    };
+    PublicWarehouseSegmentsController_createSegment: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateWarehouseSegmentDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Segment"];
+                };
+            };
+        };
+    };
+    PublicWarehouseSegmentsController_updateSegment: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                segmentId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateWarehouseSegmentDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Segment"];
+                };
+            };
+        };
+    };
+    PublicWarehouseSegmentsController_refresh: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                segmentId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            202: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Segment"];
+                };
+            };
+        };
+    };
+    PublicWarehouseSegmentsController_runs: {
+        parameters: {
+            query?: {
+                segment_id?: string;
+                connection_id?: string;
+                status?: "ok" | "rejected" | "timeout" | "failed";
+                limit?: number;
+                cursor?: string;
+            };
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WarehouseSegmentRunList"];
+                };
+            };
+        };
+    };
+    PublicChannelScoresController_config: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ChannelScoreConfig"];
+                };
+            };
+        };
+    };
+    PublicChannelScoresController_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateChannelScoreConfigDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ChannelScoreConfig"];
+                };
+            };
+        };
+    };
+    PublicChannelScoresController_compute: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            202: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ChannelScoreConfig"];
+                };
+            };
+        };
+    };
+    PublicChannelScoresController_overview: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ChannelScoreOverview"];
+                };
+            };
+        };
+    };
+    PublicChannelScoresController_users: {
+        parameters: {
+            query?: {
+                channel?: "push" | "email" | "whatsapp" | "rcs" | "sms";
+                limit?: number;
+                cursor?: string;
+            };
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ChannelScoreUsersPage"];
+                };
+            };
+        };
+    };
+    PublicChannelScoresController_user: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                userId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ChannelScoreUser"];
+                };
+            };
+        };
+    };
+    PublicWalletController_config: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WalletConfig"];
+                };
+            };
+        };
+    };
+    PublicWalletController_updateConfig: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateWalletConfigDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WalletConfig"];
+                };
+            };
+        };
+    };
+    PublicWalletController_templates: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WalletTemplateList"];
+                };
+            };
+        };
+    };
+    PublicWalletController_createTemplate: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateWalletTemplateDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WalletTemplate"];
+                };
+            };
+        };
+    };
+    PublicWalletController_template: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WalletTemplate"];
+                };
+            };
+        };
+    };
+    PublicWalletController_removeTemplate: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            204: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    PublicWalletController_updateTemplate: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateWalletTemplateDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WalletTemplate"];
+                };
+            };
+        };
+    };
+    PublicWalletController_passes: {
+        parameters: {
+            query?: {
+                template_id?: string;
+                limit?: number;
+                cursor?: string;
+            };
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WalletPassPage"];
+                };
+            };
+        };
+    };
+    PublicWalletController_issue: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["IssueWalletPassDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WalletPass"];
+                };
+            };
+        };
+    };
+    PublicWalletController_pass: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WalletPass"];
+                };
+            };
+        };
+    };
+    PublicWalletController_updatePass: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateWalletPassDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WalletPass"];
+                };
+            };
+        };
+    };
+    PublicWalletController_voidPass: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WalletPass"];
+                };
+            };
+        };
+    };
+    PublicPredictionsController_list: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PredictionModelList"];
+                };
+            };
+        };
+    };
+    PublicPredictionsController_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreatePredictionDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PredictionModel"];
+                };
+            };
+        };
+    };
+    PublicPredictionsController_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PredictionModel"];
+                };
+            };
+        };
+    };
+    PublicPredictionsController_remove: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            204: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    PublicPredictionsController_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdatePredictionDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PredictionModel"];
+                };
+            };
+        };
+    };
+    PublicPredictionsController_compute: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            202: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PredictionModel"];
+                };
+            };
+        };
+    };
+    PublicPredictionsController_users: {
+        parameters: {
+            query?: {
+                bucket?: "low" | "medium" | "high";
+                limit?: number;
+                cursor?: string;
+            };
+            header?: never;
+            path: {
+                id: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PredictionUsersPage"];
+                };
+            };
+        };
+    };
+    PublicDecisionsController_list: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DecisionAgentList"];
+                };
+            };
+        };
+    };
+    PublicDecisionsController_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateDecisionAgentDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DecisionAgent"];
+                };
+            };
+        };
+    };
+    PublicDecisionsController_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DecisionAgent"];
+                };
+            };
+        };
+    };
+    PublicDecisionsController_remove: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            204: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    PublicDecisionsController_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateDecisionAgentDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DecisionAgent"];
+                };
+            };
+        };
+    };
+    PublicDecisionsController_report: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DecisionReport"];
+                };
+            };
+        };
+    };
+    PublicDecisionsController_decide: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["DecideDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DecisionResult"];
+                };
+            };
+        };
+    };
     SdkErrorsIngestController_ingest: {
         parameters: {
             query?: never;
@@ -17845,6 +31548,59 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["SdkErrorsAccepted"];
+                };
+            };
+        };
+    };
+    PublicSdkErrorsController_list: {
+        parameters: {
+            query?: {
+                limit?: number;
+                cursor?: string;
+                platform?: string;
+                level?: "error" | "warning";
+            };
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SdkErrorPage"];
+                };
+            };
+        };
+    };
+    PublicWebhooksController_eventTypes: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WebhookEventTypes"];
                 };
             };
         };
@@ -18084,6 +31840,60 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["WebhookDeliveryPage"];
+                };
+            };
+        };
+    };
+    PublicWebhooksController_bulkReplay: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                webhookId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["BulkReplayDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WebhookBulkReplayResult"];
+                };
+            };
+        };
+    };
+    PublicWebhooksController_delivery: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                deliveryId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WebhookDeliveryDetail"];
                 };
             };
         };
@@ -18374,6 +32184,243 @@ export interface operations {
             };
         };
     };
+    PublicReverseEtlController_list: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ReverseEtlSyncList"];
+                };
+            };
+        };
+    };
+    PublicReverseEtlController_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ReverseEtlCreate"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ReverseEtlSync"];
+                };
+            };
+        };
+    };
+    PublicReverseEtlController_test: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ReverseEtlConnectionTest"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WarehouseConnectionResult"];
+                };
+            };
+        };
+    };
+    PublicReverseEtlController_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                syncId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ReverseEtlSync"];
+                };
+            };
+        };
+    };
+    PublicReverseEtlController_remove: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                syncId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Ok"];
+                };
+            };
+        };
+    };
+    PublicReverseEtlController_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                syncId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateReverseEtlDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ReverseEtlSync"];
+                };
+            };
+        };
+    };
+    PublicReverseEtlController_testSaved: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                syncId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WarehouseConnectionResult"];
+                };
+            };
+        };
+    };
+    PublicReverseEtlController_run: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                syncId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            202: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ReverseEtlRun"];
+                };
+            };
+        };
+    };
+    PublicReverseEtlController_runs: {
+        parameters: {
+            query?: {
+                limit?: number;
+                cursor?: string;
+            };
+            header?: never;
+            path: {
+                syncId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ReverseEtlRunPage"];
+                };
+            };
+        };
+    };
     PublicApiController_organization: {
         parameters: {
             query?: never;
@@ -18444,6 +32491,34 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["AuditPage"];
+                };
+            };
+        };
+    };
+    PublicApiController_requestLogs: {
+        parameters: {
+            query?: {
+                limit?: number;
+                cursor?: string;
+                app_id?: string;
+                status_class?: "2xx" | "4xx" | "5xx";
+                method?: "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RequestLogPage"];
                 };
             };
         };
@@ -18555,6 +32630,7 @@ export interface operations {
                 cursor?: string;
                 sort?: "last_active_at" | "-last_active_at";
                 q?: string;
+                ip?: string;
                 tag?: string;
                 last_active_after?: string;
                 last_active_before?: string;
@@ -18813,6 +32889,88 @@ export interface operations {
             };
         };
     };
+    PublicUsersController_timeline: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                label: string;
+                value: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["UserTimeline"];
+                };
+            };
+        };
+    };
+    PublicUsersController_userEvents: {
+        parameters: {
+            query?: {
+                limit?: number;
+            };
+            header?: never;
+            path: {
+                label: string;
+                value: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EventList"];
+                };
+            };
+        };
+    };
+    PublicUsersController_userMessages: {
+        parameters: {
+            query?: {
+                limit?: number;
+            };
+            header?: never;
+            path: {
+                label: string;
+                value: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["UserMessageList"];
+                };
+            };
+        };
+    };
     PublicUsersController_removeAlias: {
         parameters: {
             query?: never;
@@ -18866,6 +33024,65 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["Subscription"];
+                };
+            };
+        };
+    };
+    PublicUsersController_listSubscriptions: {
+        parameters: {
+            query?: {
+                limit?: number;
+                cursor?: string;
+                channel?: "ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs" | "telegram" | "viber";
+                status?: "subscribed" | "unsubscribed" | "invalid" | "pending";
+                test_device?: "true" | "false";
+                since?: string;
+            };
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SubscriptionList"];
+                };
+            };
+        };
+    };
+    PublicUsersController_cleanupSubscriptions: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PublicCleanupSubscriptionsDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CleanupResult"];
                 };
             };
         };
@@ -19085,6 +33302,74 @@ export interface operations {
             };
         };
     };
+    PublicChannelsController_status: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ChannelStatusList"];
+                };
+            };
+        };
+    };
+    PublicChannelsController_verifyDns: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        domain: string;
+                        checked_at: string;
+                        spf: {
+                            ok: boolean;
+                            record: string | null;
+                            expected: string;
+                        };
+                        dkim: {
+                            ok: boolean;
+                            selector: string;
+                            record: string | null;
+                            expected: string;
+                        };
+                        dmarc: {
+                            ok: boolean;
+                            record: string | null;
+                            expected: string;
+                        };
+                        issues: string[];
+                    };
+                };
+            };
+        };
+    };
     PublicChannelsController_upsert: {
         parameters: {
             query?: never;
@@ -19103,6 +33388,7 @@ export interface operations {
                     key_id?: string;
                     team_id?: string;
                     bundle_id?: string;
+                    app_clip_bundle_id?: string;
                     /** @enum {string} */
                     environment?: "sandbox" | "production";
                     p8?: string;
@@ -19128,6 +33414,16 @@ export interface operations {
                     app_id: string;
                     client_secret?: string;
                     high_priority?: boolean;
+                } | {
+                    /** @constant */
+                    provider: "adm";
+                    client_id: string;
+                    client_secret?: string;
+                } | {
+                    /** @constant */
+                    provider: "wns";
+                    package_sid: string;
+                    client_secret?: string;
                 } | {
                     /** @constant */
                     provider: "webpush";
@@ -19184,6 +33480,7 @@ export interface operations {
                     auth_token?: string;
                     from_number?: string;
                     messaging_service_sid?: string;
+                    verify_service_sid?: string;
                     content_sid?: string;
                     sms_fallback?: boolean;
                 } | {
@@ -19221,6 +33518,17 @@ export interface operations {
                     sms_fallback?: boolean;
                 } | {
                     /** @constant */
+                    provider: "telegram_bot";
+                    bot_token?: string;
+                } | {
+                    /** @constant */
+                    provider: "viber_bot";
+                    auth_token?: string;
+                    sender_name: string;
+                    /** Format: uri */
+                    sender_avatar?: string;
+                } | {
+                    /** @constant */
                     provider: "mock";
                     app_secret?: string;
                     sms_fallback?: boolean;
@@ -19228,6 +33536,10 @@ export interface operations {
                     from_address?: string;
                     from_name?: string;
                     dkim_selector?: string;
+                    bot_username?: string;
+                    viber_uri?: string;
+                    sender_name?: string;
+                    auth_token?: string;
                 };
             };
         };
@@ -19437,6 +33749,56 @@ export interface operations {
             };
         };
     };
+    PublicMessageTraceController_trace: {
+        parameters: {
+            query: {
+                q: string;
+            };
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TraceResult"];
+                };
+            };
+        };
+    };
+    PublicAnalyticsController_sessions: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SessionVolume"];
+                };
+            };
+        };
+    };
     PublicAnalyticsController_overview: {
         parameters: {
             query?: {
@@ -19524,6 +33886,64 @@ export interface operations {
             };
         };
     };
+    PublicAnalyticsController_uninstallReport: {
+        parameters: {
+            query?: {
+                from?: string;
+                to?: string;
+                compare?: "true" | "false";
+                format?: "json" | "csv";
+            };
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["UninstallReport"];
+                };
+            };
+        };
+    };
+    PublicAnalyticsController_androidDeliveryReport: {
+        parameters: {
+            query?: {
+                from?: string;
+                to?: string;
+                compare?: "true" | "false";
+                format?: "json" | "csv";
+            };
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AndroidDeliveryReport"];
+                };
+            };
+        };
+    };
     PublicAnalyticsController_eventsReport: {
         parameters: {
             query?: {
@@ -19581,6 +34001,62 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ConversionsReport"];
+                };
+            };
+        };
+    };
+    PublicAnalyticsController_runReport: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ReportRunBodyDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ReportResult"];
+                };
+            };
+        };
+    };
+    PublicAnalyticsController_paths: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PathBodyDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PathReport"];
                 };
             };
         };
@@ -19698,6 +34174,238 @@ export interface operations {
             };
         };
     };
+    PublicGlobalControlController_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GlobalControl"];
+                };
+            };
+        };
+    };
+    PublicGlobalControlController_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateGlobalControlDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GlobalControl"];
+                };
+            };
+        };
+    };
+    PublicGlobalControlController_reset: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GlobalControl"];
+                };
+            };
+        };
+    };
+    PublicGlobalControlController_report: {
+        parameters: {
+            query?: {
+                days?: number;
+                event?: string;
+            };
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GlobalControlReport"];
+                };
+            };
+        };
+    };
+    PublicSavedReportsController_list: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SavedReportList"];
+                };
+            };
+        };
+    };
+    PublicSavedReportsController_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateSavedReportDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SavedReport"];
+                };
+            };
+        };
+    };
+    PublicSavedReportsController_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SavedReport"];
+                };
+            };
+        };
+    };
+    PublicSavedReportsController_remove: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            204: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    PublicSavedReportsController_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateSavedReportDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SavedReport"];
+                };
+            };
+        };
+    };
     PublicEventsController_list: {
         parameters: {
             query?: {
@@ -19775,6 +34483,34 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["EventDefinition"];
+                };
+            };
+        };
+    };
+    PublicEventsController_recent: {
+        parameters: {
+            query?: {
+                name?: string;
+                limit?: number;
+                since?: string;
+            };
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RecentEvents"];
                 };
             };
         };
@@ -19899,7 +34635,7 @@ export interface operations {
             content: {
                 "multipart/form-data": {
                     /** @enum {string} */
-                    type: "onesignal_players" | "csv_users";
+                    type: "legacy_players" | "csv_users";
                     /**
                      * Format: binary
                      * @description CSV dosyası (UTF-8, en fazla 50 MB)
@@ -20215,6 +34951,31 @@ export interface operations {
             };
         };
     };
+    PublicSegmentsController_refresh: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                segmentId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Segment"];
+                };
+            };
+        };
+    };
     PublicSegmentsController_estimate: {
         parameters: {
             query?: {
@@ -20249,7 +35010,7 @@ export interface operations {
                 limit?: number;
                 cursor?: string;
                 q?: string;
-                channel?: "ios_push" | "android_push" | "hms_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs";
+                channel?: "ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs" | "telegram" | "viber";
             };
             header?: never;
             path: {
@@ -20458,6 +35219,32 @@ export interface operations {
             };
         };
     };
+    PublicTemplatesController_revert: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                templateId: string;
+                version: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Template"];
+                };
+            };
+        };
+    };
     PublicTemplatesController_render: {
         parameters: {
             query?: never;
@@ -20495,7 +35282,7 @@ export interface operations {
                 q?: string;
                 status?: "draft" | "scheduled" | "running" | "paused" | "completed" | "cancelled" | "failed";
                 type?: "one_time" | "scheduled" | "recurring" | "automated" | "transactional";
-                channel?: "ios_push" | "android_push" | "hms_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs";
+                channel?: "ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs" | "telegram" | "viber";
                 label?: string;
             };
             header?: never;
@@ -20544,7 +35331,7 @@ export interface operations {
                             any?: Record<string, never>[];
                             none?: Record<string, never>[];
                         };
-                        channels?: ("ios_push" | "android_push" | "hms_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs")[];
+                        channels?: ("ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs" | "telegram" | "viber")[];
                         test_devices_only?: boolean;
                     };
                     /** @description messages.content ile aynı şema (headings, contents, url, buttons…) */
@@ -20552,6 +35339,11 @@ export interface operations {
                     labels?: string[];
                     /** @description Tercih kategorisi anahtarı; kapalı kullanıcılar bastırılır */
                     category?: string | null;
+                    /** @description Dönüşüm hedefleri (ADR-0080): birincil A/B kazananını belirler; olaylar dönüşüm olayı olarak tanımlı olmalı. */
+                    goals?: {
+                        primary?: string;
+                        secondary?: string[];
+                    };
                     ab_test?: {
                         enabled?: boolean;
                         test_percentage?: number;
@@ -20583,6 +35375,9 @@ export interface operations {
                         priority?: 5 | 10;
                         collapse_id?: string;
                         frequency_cap_exempt?: boolean;
+                        /** @enum {string} */
+                        frequency_priority?: "low" | "normal" | "high";
+                        global_control_exempt?: boolean;
                         quiet_hours_exempt?: boolean;
                         one_per_user?: boolean;
                     };
@@ -20687,7 +35482,7 @@ export interface operations {
                             any?: Record<string, never>[];
                             none?: Record<string, never>[];
                         };
-                        channels?: ("ios_push" | "android_push" | "hms_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs")[];
+                        channels?: ("ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs" | "telegram" | "viber")[];
                         test_devices_only?: boolean;
                     };
                     /** @description messages.content ile aynı şema (headings, contents, url, buttons…) */
@@ -20695,6 +35490,11 @@ export interface operations {
                     labels?: string[];
                     /** @description Tercih kategorisi anahtarı; kapalı kullanıcılar bastırılır */
                     category?: string | null;
+                    /** @description Dönüşüm hedefleri (ADR-0080): birincil A/B kazananını belirler; olaylar dönüşüm olayı olarak tanımlı olmalı. */
+                    goals?: {
+                        primary?: string;
+                        secondary?: string[];
+                    };
                     ab_test?: {
                         enabled?: boolean;
                         test_percentage?: number;
@@ -20726,6 +35526,9 @@ export interface operations {
                         priority?: 5 | 10;
                         collapse_id?: string;
                         frequency_cap_exempt?: boolean;
+                        /** @enum {string} */
+                        frequency_priority?: "low" | "normal" | "high";
+                        global_control_exempt?: boolean;
                         quiet_hours_exempt?: boolean;
                         one_per_user?: boolean;
                     };
@@ -20756,7 +35559,10 @@ export interface operations {
     };
     PublicCampaignsController_schedule: {
         parameters: {
-            query?: never;
+            query?: {
+                force?: "true" | "false";
+                preflight_ack?: "true" | "false";
+            };
             header?: never;
             path: {
                 campaignId: string;
@@ -20785,7 +35591,10 @@ export interface operations {
     };
     PublicCampaignsController_send: {
         parameters: {
-            query?: never;
+            query?: {
+                force?: "true" | "false";
+                preflight_ack?: "true" | "false";
+            };
             header?: never;
             path: {
                 campaignId: string;
@@ -20804,6 +35613,58 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["Campaign"];
+                };
+            };
+        };
+    };
+    PublicCampaignsController_preflight: {
+        parameters: {
+            query?: {
+                check_links?: "true" | "false";
+            };
+            header?: never;
+            path: {
+                campaignId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CampaignPreflightReport"];
+                };
+            };
+        };
+    };
+    PublicCampaignsController_emailRisk: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                campaignId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CampaignEmailRisk"];
                 };
             };
         };
@@ -20910,7 +35771,10 @@ export interface operations {
     };
     PublicCampaignsController_approve: {
         parameters: {
-            query?: never;
+            query?: {
+                force?: "true" | "false";
+                preflight_ack?: "true" | "false";
+            };
             header?: never;
             path: {
                 campaignId: string;
@@ -21097,7 +35961,7 @@ export interface operations {
             query?: {
                 limit?: number;
                 cursor?: string;
-                channel?: "sms" | "whatsapp" | "rcs" | "email" | "chat";
+                channel?: "sms" | "whatsapp" | "rcs" | "telegram" | "viber" | "email" | "chat";
                 status?: "open" | "pending" | "resolved" | "closed";
                 unread?: "true" | "false";
                 q?: string;
@@ -21175,6 +36039,31 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["Conversation"];
+                };
+            };
+        };
+    };
+    PublicConversationsController_contact: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                conversationId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ConversationContact"];
                 };
             };
         };
@@ -21940,6 +36829,194 @@ export interface operations {
             };
         };
     };
+    PublicInboxController_createTeam: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["TeamInputDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["InboxTeam"];
+                };
+            };
+        };
+    };
+    PublicInboxController_deleteTeam: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                teamId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Ok"];
+                };
+            };
+        };
+    };
+    PublicInboxController_updateTeam: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                teamId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["TeamUpdateDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["InboxTeam"];
+                };
+            };
+        };
+    };
+    PublicInboxController_rules: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AssignmentRuleList"];
+                };
+            };
+        };
+    };
+    PublicInboxController_createRule: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AssignmentRuleInputDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AssignmentRule"];
+                };
+            };
+        };
+    };
+    PublicInboxController_deleteRule: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                ruleId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Ok"];
+                };
+            };
+        };
+    };
+    PublicInboxController_updateRule: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                ruleId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AssignmentRuleUpdateDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AssignmentRule"];
+                };
+            };
+        };
+    };
     PublicInboxController_agents: {
         parameters: {
             query?: never;
@@ -21960,6 +37037,35 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["InboxAgentList"];
+                };
+            };
+        };
+    };
+    PublicInboxController_updateAgent: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                accountId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AgentUpdateDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["InboxAgent"];
                 };
             };
         };
@@ -22021,7 +37127,7 @@ export interface operations {
             query?: {
                 from?: string;
                 to?: string;
-                channel?: "sms" | "whatsapp" | "rcs" | "email" | "chat";
+                channel?: "sms" | "whatsapp" | "rcs" | "telegram" | "viber" | "email" | "chat";
             };
             header?: never;
             path: {
@@ -22282,12 +37388,274 @@ export interface operations {
             };
         };
     };
+    PublicDeliverabilityController_hygiene: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EmailHygieneStatus"];
+                };
+            };
+        };
+    };
+    PublicDeliverabilityController_startHygiene: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["StartHygieneDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EmailHygieneStart"];
+                };
+            };
+        };
+    };
+    PublicDeliverabilityController_hygieneRun: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                runId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EmailHygieneRun"];
+                };
+            };
+        };
+    };
+    PublicDeliverabilityController_suppressHygiene: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                runId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["StartHygieneDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EmailHygieneSuppress"];
+                };
+            };
+        };
+    };
+    PublicDeliverabilityController_insights: {
+        parameters: {
+            query?: {
+                days?: number;
+            };
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EmailProviderInsights"];
+                };
+            };
+        };
+    };
+    PublicDeliverabilityController_bounces: {
+        parameters: {
+            query?: {
+                days?: number;
+            };
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EmailBounceStats"];
+                };
+            };
+        };
+    };
+    PublicDeliverabilityController_postmaster: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PostmasterStats"];
+                };
+            };
+        };
+    };
+    PublicDeliverabilityController_syncPostmaster: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PostmasterStats"];
+                };
+            };
+        };
+    };
+    PublicVerifyController_start: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["StartVerifyDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SmsVerification"];
+                };
+            };
+        };
+    };
+    PublicVerifyController_check: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CheckVerifyDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SmsVerificationCheck"];
+                };
+            };
+        };
+    };
     PublicSuppressionsController_list: {
         parameters: {
             query?: {
                 limit?: number;
                 cursor?: string;
-                channel?: "email" | "sms" | "whatsapp" | "rcs";
+                channel?: "email" | "sms" | "whatsapp" | "rcs" | "telegram" | "viber";
                 reason?: "bounce" | "complaint" | "manual" | "unsubscribe_link" | "stop";
                 value?: string;
             };
@@ -22375,6 +37743,36 @@ export interface operations {
             header?: never;
             path: {
                 appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SdkInAppList"];
+                };
+            };
+        };
+    };
+    SdkEngagementController_placement: {
+        parameters: {
+            query: {
+                subscription_id: string;
+                token_hash?: string;
+                supports?: string;
+                limit?: number;
+            };
+            header?: never;
+            path: {
+                appId: string;
+                key: string;
             };
             cookie?: never;
         };
@@ -22508,6 +37906,67 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["InboxItem"];
+                };
+            };
+        };
+    };
+    SdkEngagementController_cardsList: {
+        parameters: {
+            query: {
+                subscription_id: string;
+                identity_hash?: string;
+                token_hash?: string;
+                limit?: number;
+            };
+            header?: never;
+            path: {
+                appId: string;
+                userId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ContentCardList"];
+                };
+            };
+        };
+    };
+    SdkEngagementController_cardEvent: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+                userId: string;
+                itemId: string;
+                event: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SdkInboxActionDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ContentCard"];
                 };
             };
         };
@@ -23337,6 +38796,32 @@ export interface operations {
             };
         };
     };
+    PublicJourneysController_restoreVersion: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                journeyId: string;
+                version: number;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["JourneyDetail"];
+                };
+            };
+        };
+    };
     PublicJourneysController_publish: {
         parameters: {
             query?: never;
@@ -23652,6 +39137,30 @@ export interface operations {
             };
         };
     };
+    PublicIntegrationsController_hooks: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ZapierHookList"];
+                };
+            };
+        };
+    };
     PublicZapierController_subscribe: {
         parameters: {
             query?: never;
@@ -23728,6 +39237,156 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ZapierSamples"];
+                };
+            };
+        };
+    };
+    PublicIntegrationsController_list: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["IntegrationList"];
+                };
+            };
+        };
+    };
+    PublicIntegrationsController_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                type: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Integration"];
+                };
+            };
+        };
+    };
+    PublicIntegrationsController_runs: {
+        parameters: {
+            query?: {
+                limit?: number;
+            };
+            header?: never;
+            path: {
+                type: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["IntegrationRunList"];
+                };
+            };
+        };
+    };
+    PublicIntegrationsController_test: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                type: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["IntegrationTestResult"];
+                };
+            };
+        };
+    };
+    PublicIntegrationsController_sync: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                type: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            202: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["IntegrationSyncResult"];
+                };
+            };
+        };
+    };
+    PublicAdsController_platforms: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdPlatformList"];
                 };
             };
         };
@@ -24009,6 +39668,34 @@ export interface operations {
             };
         };
     };
+    PublicAdsReportingController_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateAdCampaignDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdCampaignCreated"];
+                };
+            };
+        };
+    };
     PublicAdsReportingController_get: {
         parameters: {
             query?: never;
@@ -24059,6 +39746,208 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["AdEntity"];
+                };
+            };
+        };
+    };
+    PublicAdsReportingController_preview: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                entityId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdCampaignPreview"];
+                };
+            };
+        };
+    };
+    PublicAdsReportingController_pages: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                accountId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdPageList"];
+                };
+            };
+        };
+    };
+    PublicAdsReportingController_creatives: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data?: components["schemas"]["AdCreative"][];
+                    };
+                };
+            };
+        };
+    };
+    PublicAdsReportingController_upload: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            201: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdCreative"];
+                };
+            };
+        };
+    };
+    PublicAdsReportingController_settings: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdReportingSettings"];
+                };
+            };
+        };
+    };
+    PublicAdsReportingController_updateSettings: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AdReportingSettingsInputDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdReportingSettings"];
+                };
+            };
+        };
+    };
+    PublicAdsReportingController_testCapi: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                configId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdCapiTestResult"];
+                };
+            };
+        };
+    };
+    PublicAdsReportingController_retryCapi: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                deliveryId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdCapiDelivery"];
                 };
             };
         };
@@ -24418,7 +40307,7 @@ export interface operations {
                             any?: Record<string, never>[];
                             none?: Record<string, never>[];
                         };
-                        channels?: ("ios_push" | "android_push" | "hms_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs")[];
+                        channels?: ("ios_push" | "android_push" | "hms_push" | "adm_push" | "wns_push" | "web_push" | "email" | "sms" | "whatsapp" | "rcs" | "telegram" | "viber")[];
                         test_devices_only?: boolean;
                     };
                     /** @description messages.content ile aynı şema (headings, contents, url, buttons…) */
@@ -24426,6 +40315,11 @@ export interface operations {
                     labels?: string[];
                     /** @description Tercih kategorisi anahtarı; kapalı kullanıcılar bastırılır */
                     category?: string | null;
+                    /** @description Dönüşüm hedefleri (ADR-0080): birincil A/B kazananını belirler; olaylar dönüşüm olayı olarak tanımlı olmalı. */
+                    goals?: {
+                        primary?: string;
+                        secondary?: string[];
+                    };
                     ab_test?: {
                         enabled?: boolean;
                         test_percentage?: number;
@@ -24457,6 +40351,9 @@ export interface operations {
                         priority?: 5 | 10;
                         collapse_id?: string;
                         frequency_cap_exempt?: boolean;
+                        /** @enum {string} */
+                        frequency_priority?: "low" | "normal" | "high";
+                        global_control_exempt?: boolean;
                         quiet_hours_exempt?: boolean;
                         one_per_user?: boolean;
                     };
@@ -24519,6 +40416,246 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["Segment"];
+                };
+            };
+        };
+    };
+    McpDraftsController_createTemplateDraft: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateTemplateDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Template"];
+                };
+            };
+        };
+    };
+    McpDraftsController_createJourneyDraft: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    name: string;
+                    description?: string;
+                    /** @description React Flow uyumlu journey grafı: { nodes: [{ id, type, position, data }], edges: [{ id, source, target, sourceHandle }] } (docs/journeys.md) */
+                    graph?: {
+                        nodes: {
+                            [key: string]: unknown;
+                        }[];
+                        edges: {
+                            [key: string]: unknown;
+                        }[];
+                    };
+                    /** @description Yeniden giriş, yalnızca yeni girenler, çıkış kuralları, çıkış tag'leri, hedefler, takvim (docs/journeys.md) */
+                    settings?: {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["JourneyDetail"];
+                };
+            };
+        };
+    };
+    McpDraftsController_createInAppDraft: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateInAppDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["InAppMessage"];
+                };
+            };
+        };
+    };
+    McpDraftsController_createWebCampaignDraft: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateWebCampaignDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WebCampaign"];
+                };
+            };
+        };
+    };
+    McpDraftsController_createWebPersonalizationDraft: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateWebPersonalizationDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WebPersonalization"];
+                };
+            };
+        };
+    };
+    McpDraftsController_createSurveyDraft: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateSurveyDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Survey"];
+                };
+            };
+        };
+    };
+    McpDraftsController_createLandingPageDraft: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateLandingPageDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LandingPage"];
+                };
+            };
+        };
+    };
+    McpDraftsController_testSend: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["TestPushDto"];
+            };
+        };
+        responses: {
+            202: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CreateNotificationResult"];
                 };
             };
         };
@@ -24638,6 +40775,63 @@ export interface operations {
             };
         };
     };
+    SdkWebPersonalizationsController_list: {
+        parameters: {
+            query?: {
+                subscription_id?: string;
+                token_hash?: string;
+                language?: string;
+            };
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SdkWebPersonalizationList"];
+                };
+            };
+        };
+    };
+    SdkWebPersonalizationsController_event: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+                personalizationId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SdkWebPersonalizationEventDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Ok"];
+                };
+            };
+        };
+    };
     PublicWebCampaignsController_list: {
         parameters: {
             query?: {
@@ -24715,6 +40909,31 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["WebCampaign"];
+                };
+            };
+        };
+    };
+    PublicWebCampaignsController_remove: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                campaignId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Ok"];
                 };
             };
         };
@@ -24804,6 +41023,255 @@ export interface operations {
             };
         };
     };
+    PublicWebCampaignsController_winner: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                campaignId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["WebCampaignWinnerDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WebCampaign"];
+                };
+            };
+        };
+    };
+    PublicWebPersonalizationsController_list: {
+        parameters: {
+            query?: {
+                limit?: number;
+                cursor?: string;
+                status?: "draft" | "active" | "paused" | "archived";
+            };
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WebPersonalizationPage"];
+                };
+            };
+        };
+    };
+    PublicWebPersonalizationsController_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateWebPersonalizationDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WebPersonalization"];
+                };
+            };
+        };
+    };
+    PublicWebPersonalizationsController_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                personalizationId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WebPersonalization"];
+                };
+            };
+        };
+    };
+    PublicWebPersonalizationsController_remove: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                personalizationId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Ok"];
+                };
+            };
+        };
+    };
+    PublicWebPersonalizationsController_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                personalizationId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateWebPersonalizationDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WebPersonalization"];
+                };
+            };
+        };
+    };
+    PublicWebPersonalizationsController_report: {
+        parameters: {
+            query?: {
+                days?: number;
+            };
+            header?: never;
+            path: {
+                personalizationId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WebPersonalizationReport"];
+                };
+            };
+        };
+    };
+    PublicWebPersonalizationsController_status: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                personalizationId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["WebPersonalizationStatusDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WebPersonalization"];
+                };
+            };
+        };
+    };
+    PublicWebPersonalizationsController_winner: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                personalizationId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["WebPersonalizationWinnerDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WebPersonalization"];
+                };
+            };
+        };
+    };
     PublicFormsController_list: {
         parameters: {
             query?: {
@@ -24871,6 +41339,60 @@ export interface operations {
             cookie?: never;
         };
         requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Form"];
+                };
+            };
+        };
+    };
+    PublicFormsController_remove: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                formId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Ok"];
+                };
+            };
+        };
+    };
+    PublicFormsController_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                formId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateFormDto"];
+            };
+        };
         responses: {
             200: {
                 headers: {
@@ -25025,6 +41547,60 @@ export interface operations {
             };
         };
     };
+    PublicSurveysController_remove: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                surveyId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Ok"];
+                };
+            };
+        };
+    };
+    PublicSurveysController_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                surveyId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateSurveyDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Survey"];
+                };
+            };
+        };
+    };
     PublicSurveysController_status: {
         parameters: {
             query?: never;
@@ -25038,6 +41614,35 @@ export interface operations {
         requestBody: {
             content: {
                 "application/json": components["schemas"]["SurveyStatusDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Survey"];
+                };
+            };
+        };
+    };
+    PublicSurveysController_distribute: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                surveyId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SurveyInAppDto"];
             };
         };
         responses: {
@@ -25168,6 +41773,34 @@ export interface operations {
             };
         };
     };
+    PublicLandingPagesController_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateLandingPageDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LandingPage"];
+                };
+            };
+        };
+    };
     PublicLandingPagesController_get: {
         parameters: {
             query?: never;
@@ -25179,6 +41812,60 @@ export interface operations {
             cookie?: never;
         };
         requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LandingPage"];
+                };
+            };
+        };
+    };
+    PublicLandingPagesController_remove: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                pageId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Ok"];
+                };
+            };
+        };
+    };
+    PublicLandingPagesController_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                pageId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateLandingPageDto"];
+            };
+        };
         responses: {
             200: {
                 headers: {
@@ -25239,6 +41926,430 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["LandingPage"];
+                };
+            };
+        };
+    };
+    PublicLandingPagesController_archive: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                pageId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LandingPage"];
+                };
+            };
+        };
+    };
+    PublicLandingPagesController_versions: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                pageId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LandingPageVersions"];
+                };
+            };
+        };
+    };
+    PublicLandingPagesController_restore: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                pageId: string;
+                version: number;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LandingPage"];
+                };
+            };
+        };
+    };
+    SdkSiteSearchController_search: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SiteSearchRequestDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SiteSearchResponse"];
+                };
+            };
+        };
+    };
+    SdkSiteSearchController_event: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SiteSearchEventDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Ok"];
+                };
+            };
+        };
+    };
+    PublicSiteSearchController_overview: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SiteSearchOverview"];
+                };
+            };
+        };
+    };
+    PublicSiteSearchController_updateSettings: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateSiteSearchSettingsDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SiteSearchOverview"];
+                };
+            };
+        };
+    };
+    PublicSiteSearchController_sources: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SiteSearchSourceList"];
+                };
+            };
+        };
+    };
+    PublicSiteSearchController_createSource: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateSiteSearchSourceDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SiteSearchSource"];
+                };
+            };
+        };
+    };
+    PublicSiteSearchController_removeSource: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                sourceId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Ok"];
+                };
+            };
+        };
+    };
+    PublicSiteSearchController_updateSource: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                sourceId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateSiteSearchSourceDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SiteSearchSource"];
+                };
+            };
+        };
+    };
+    PublicSiteSearchController_crawl: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                sourceId: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SiteSearchCrawlRequest"];
+                };
+            };
+        };
+    };
+    PublicSiteSearchController_documents: {
+        parameters: {
+            query?: {
+                source_id?: string;
+                q?: string;
+                limit?: number;
+                cursor?: string;
+            };
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SiteSearchDocumentPage"];
+                };
+            };
+        };
+    };
+    PublicSiteSearchController_putDocument: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                documentKey: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PutSiteSearchDocumentDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SiteSearchDocumentResult"];
+                };
+            };
+        };
+    };
+    PublicSiteSearchController_removeDocument: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                documentKey: string;
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Ok"];
+                };
+            };
+        };
+    };
+    PublicSiteSearchController_report: {
+        parameters: {
+            query?: {
+                days?: number;
+            };
+            header?: never;
+            path: {
+                appId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+                    "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+                    "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SiteSearchReport"];
                 };
             };
         };

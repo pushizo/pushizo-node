@@ -13,17 +13,6 @@
 
 **Pushizo Node.js SDK** — Server-side SDK for Node.js 20+ (TypeScript, ESM, built-in fetch): notifications, users, segments, journeys, campaigns, analytics and webhook signature verification. Types are generated from the Pushizo OpenAPI schema. Use it on the server only.
 
-> **Status:** Publishing to npm is in progress.<br>
-> **Durum:** npm yayını hazırlanıyor.
-
-**Install from GitHub until then · O zamana kadar GitHub'dan kurulum:**
-
-```bash
-npm install --allow-remote=root https://github.com/pushizo/pushizo-node/releases/download/v0.1.0/pushizo-node-0.1.0.tgz
-```
-
-**After publication · Yayından sonra:**
-
 ```bash
 npm install @pushizo/node
 ```
@@ -78,8 +67,8 @@ Her public API işlemi (`/sdk/v1` hariç) bir SDK metoduna karşılık gelir; e�
 | `subscriptions` | `get`, `update`, `delete`, `getUserIdentity`, `updateByToken`, `setOwner` |
 | `inbox` | `list`, `readAll`, `read`, `archive`; ekip gelen kutusu: `listCannedResponses`, `createCannedResponse`, `updateCannedResponse`, `deleteCannedResponse`, `listTeams`, `listAgents`, `getSettings`, `updateSettings`, `metrics` |
 | `events` | `send`, `listDefinitions`, `getDefinition`, `updateDefinition` |
-| `segments` | `list`, `create`, `preview`, `get`, `update`, `delete`, `usedBy`, `estimate` |
-| `templates` | `list`, `create`, `get`, `update`, `delete`, `copyToApp`, `versions`, `render`, `stats` |
+| `segments` | `list`, `create`, `preview`, `get`, `update`, `delete`, `usedBy`, `refresh`, `estimate` |
+| `templates` | `list`, `create`, `get`, `update`, `delete`, `copyToApp`, `versions`, `revert`, `render`, `stats` |
 | `campaigns` | `list`, `create`, `get`, `update`, `delete`, `schedule`, `send`, `pause`, `resume`, `cancel`, `duplicate`, `approve`, `stats`, `deliveries`, `resendFailed`, `messages`, `variantStats`, `selectWinner` |
 | `journeys` | `list`, `create`, `get`, `update`, `delete`, `saveDraft`, `updateNode`, `versions`, `publish`, `pause`, `resume`, `archive`, `duplicate`, `stats`, `listRuns`, `triggerRun`, `getRun`, `exitRun`, `listForUser` |
 | `inAppMessages` | `list`, `create`, `get`, `update`, `delete`, `setStatus`, `selectWinner` |
@@ -98,12 +87,37 @@ Her public API işlemi (`/sdk/v1` hariç) bir SDK metoduna karşılık gelir; e�
 | `whatsappTemplates` | `list`, `sync` |
 | `emailDeliverability` | `get`, `update`, `verifyAddress`, `listWarmupPlans`, `createWarmupPlan`, `updateWarmupPlan`, `deleteWarmupPlan` |
 | `zapier` | `me`, `subscribe`, `unsubscribe`, `samples` |
-| `mcp` | `createCampaignDraft`, `createSegmentDraft` |
+| `mcp` | `createCampaignDraft`, `createSegmentDraft`, `createTemplateDraft`, `createJourneyDraft`, `createInAppDraft`, `createWebCampaignDraft`, `createWebPersonalizationDraft`, `createSurveyDraft`, `createLandingPageDraft`, `sendTest` |
 | `ads` | `listAccounts`, `listAudiences`, `createAudience`, `getAudience`, `updateAudience`, `deleteAudience`, `syncAudience`, `listSyncs`, `createLookalike`, `listCampaigns`, `getCampaign`, `updateCampaign`, `refreshAccount`, `spendReport`, `attributionReport`, `ltvReport`, `listCapiConfigs`, `listCapiDeliveries`, `listAlertRules`, `createAlertRule`, `updateAlertRule`, `deleteAlertRule`, `listAlerts` |
-| `webCampaigns` | `list`, `create`, `get`, `update`, `report`, `setStatus` |
-| `forms` | `list`, `create`, `get`, `listSubmissions`, `submit` |
-| `surveys` | `list`, `create`, `get`, `setStatus`, `report`, `listResponses`, `respond` |
-| `landingPages` | `list`, `get`, `publish`, `unpublish` |
+| `webCampaigns` | `list`, `create`, `get`, `update`, `report`, `setStatus`, `selectWinner`, `delete` |
+| `forms` | `list`, `create`, `get`, `update`, `delete`, `listSubmissions`, `submit` |
+| `surveys` | `list`, `create`, `get`, `update`, `delete`, `setStatus`, `report`, `listResponses`, `respond` |
+| `landingPages` | `list`, `create`, `get`, `update`, `publish`, `unpublish`, `archive`, `versions`, `restoreVersion`, `delete` |
+| `sqlSegments` | `schema`, `query`, `runs`, `listSegments`, `createSegment`, `updateSegment`, `refreshSegment` |
+| `companies` | `list`, `upsert`, `batchUpsert`, `get`, `update`, `delete`, `members`, `setMember`, `batchMembers`, `removeMember`, `forUser`, `forUserBy` |
+| `warehouseSegments` | `options`, `listConnections`, `createConnection`, `getConnection`, `updateConnection`, `deleteConnection`, `testConnection`, `preview`, `listSegments`, `createSegment`, `updateSegment`, `refreshSegment`, `runs` |
+| `customAgents` | `list`, `create`, `get`, `update`, `delete`, `run`, `runs`, `drafts` |
+| `globalControl` | `get`, `update`, `reset`, `report` |
+| `featureFlags` | `list`, `create`, `get`, `update`, `delete`, `evaluate` |
+| `geofences` | `list`, `create`, `get`, `update`, `delete` |
+| `decisionAgents` | `list`, `create`, `get`, `update`, `delete`, `report`, `decide` |
+| `predictions` | `list`, `create`, `get`, `update`, `delete`, `compute`, `users` |
+| `wallet` | `getConfig`, `updateConfig`, `listTemplates`, `createTemplate`, `getTemplate`, `updateTemplate`, `deleteTemplate`, `listPasses`, `issuePass`, `getPass`, `updatePass`, `voidPass` |
+| `savedReports` | `list`, `get`, `create`, `update`, `delete` |
+| `channelScores` | `getConfig`, `updateConfig`, `compute`, `overview`, `users`, `user` |
+| `rfm` | `getConfig`, `updateConfig`, `compute`, `overview`, `transitions`, `users` |
+| `affinity` | `getConfig`, `updateConfig`, `compute`, `overview`, `user` |
+| `identityKeys` | `list`, `create`, `revoke` |
+| `liveActivities` | `listTypes`, `createType`, `updateType`, `deleteType`, `start`, `update`, `end` |
+| `promoCodeLists` | `list`, `create`, `get`, `update`, `delete`, `uploadCodes`, `codes` |
+| `catalogs` | `list`, `create`, `get`, `update`, `delete`, `items`, `upsertItems`, `uploadItems`, `getItem`, `deleteItem` |
+| `recommendations` | `list`, `getConfig`, `updateConfig`, `compute` |
+| `reverseEtl` | `list`, `testConnection`, `create`, `get`, `update`, `delete`, `test`, `run`, `runs` |
+| `verify` | `start`, `check` |
+| `aiAgents` | `list`, `create`, `get`, `update`, `delete`, `rotateSecret`, `metrics`, `runs` |
+| `dataPipelines` | `transforms.list`, `transforms.create`, `transforms.get`, `transforms.update`, `transforms.delete`, `transforms.preview`, `sources.list`, `sources.create`, `sources.get`, `sources.update`, `sources.delete`, `sources.rotateSecret`, `sources.run`, `quarantine.list`, `quarantine.reprocess`, `quarantine.discard` |
+| `siteSearch` | `get`, `updateSettings`, `sources.list`, `sources.create`, `sources.update`, `sources.delete`, `sources.crawl`, `documents.list`, `documents.put`, `documents.delete`, `report` |
+| `webPersonalizations` | `list`, `create`, `get`, `update`, `report`, `setStatus`, `selectWinner`, `delete` |
 
 Webhook alıcıları için `verifyWebhookSignature` ve `constructWebhookEvents` dışa aktarılır.
 
@@ -146,7 +160,7 @@ await hs.imports.create({ type: 'csv_users', file: csvText, filename: 'kullanici
 
 // Kullanıcı kutusu ve token ile abonelik güncelleme
 await hs.inbox.readAll('external_id', 'u-1');
-await hs.subscriptions.updateByToken('email', 'ayse@example.com', { status: 'unsubscribed' });
+await hs.subscriptions.updateByToken('email', 'ayse@pushizo.com', { status: 'unsubscribed' });
 
 // API anahtarı: düz anahtar yalnızca bu yanıtta döner, loglamayın
 const created = await hs.apiKeys.create({ name: 'ci', scopes: ['notifications:write'] });
@@ -234,7 +248,7 @@ await hs.inbox.createCannedResponse({ shortcut: 'iade', title: 'İade', body: 'M
 const spend = await hs.ads.spendReport({ from: '2026-10-01', to: '2026-10-31', group_by: 'campaign' });
 const attribution = await hs.ads.attributionReport({ from: '2026-10-01', to: '2026-10-31', model: 'time_decay' });
 await hs.ads.updateCampaign('ade_1', { status: 'paused' }); // platforma da yazılır
-await hs.ads.createAlertRule({ name: 'Günlük tavan', kind: 'daily_spend', threshold: 500, recipients: ['pazarlama@example.com'] });
+await hs.ads.createAlertRule({ name: 'Günlük tavan', kind: 'daily_spend', threshold: 500, recipients: ['pazarlama@pushizo.com'] });
 
 // Web büyüme: kampanya taslak oluşur, setStatus ile yayınlanır
 const popup = await hs.webCampaigns.create({
@@ -243,7 +257,7 @@ const popup = await hs.webCampaigns.create({
   trigger: { kind: 'exit_intent' },
 });
 await hs.webCampaigns.setStatus(popup.id, 'active');
-await hs.forms.submit('frm_1', { values: { email: 'ayse@example.com' }, external_id: 'u-1' }); // sunucu tarafı gönderim
+await hs.forms.submit('frm_1', { values: { email: 'ayse@pushizo.com' }, external_id: 'u-1' }); // sunucu tarafı gönderim
 for await (const s of hs.paginate((cursor) => hs.forms.listSubmissions('frm_1', { status: 'confirmed', cursor }))) {
   console.log(s.id);
 }

@@ -1,16 +1,76 @@
 import type { paths as PublicPaths } from '../generated/openapi.js';
 import type {
+  JsonResponse,
   ConversionsReport,
   EngagementReport,
   EventsReport,
   FunnelInput,
   FunnelReport,
+  PathInput,
+  PathReport,
+  ReportResultBody,
+  ReportRunInput,
+  SavedReport,
+  SavedReportInput,
+  SavedReportList,
+  SavedReportUpdateInput,
+  AndroidDeliveryReport,
+  UninstallReport,
+  CreateDecisionAgentInput,
+  DecisionAgent,
+  DecisionAgentList,
+  DecisionReport,
+  DecisionResult,
+  UpdateDecisionAgentInput,
+  CreatePredictionInput,
+  PredictionModel,
+  PredictionModelList,
+  PredictionUsersPage,
+  UpdatePredictionInput,
+  CreateWalletTemplateInput,
+  IssueWalletPassInput,
+  UpdateWalletConfigInput,
+  UpdateWalletPassInput,
+  UpdateWalletTemplateInput,
+  WalletConfig,
+  WalletPass,
+  WalletPassPage,
+  WalletTemplate,
+  WalletTemplateList,
+  GlobalControl,
+  GlobalControlReport,
+  AppFlag,
+  AppFlagEvaluation,
+  AppFlagList,
+  CreateAppFlagInput,
+  EvaluateAppFlagsInput,
+  UpdateAppFlagInput,
+  CreateGeofenceInput,
+  Geofence,
+  GeofenceList,
+  Ok,
+  UpdateGeofenceInput,
   MessagesReport,
   OverviewStats,
   ProvidersReport,
   QueryParams,
   RetentionReport,
+  ChannelScoreConfig,
+  ChannelScoreOverview,
+  ChannelScoreUser,
+  ChannelScoreUsersPage,
+  RfmConfig,
+  RfmOverview,
+  RfmTransitions,
+  RfmUsersPage,
+  UpdateChannelScoreConfigInput,
+  UpdateRfmConfigInput,
+  AffinityConfig,
+  AffinityOverview,
+  UpdateAffinityConfigInput,
+  UserAffinity,
   SubscriptionsReport,
+  UpdateGlobalControlInput,
 } from '../types.js';
 import type { ResourceContext } from './context.js';
 
@@ -48,13 +108,34 @@ export function createAnalytics(ctx: ResourceContext) {
     subscriptions: report<'/v1/apps/{appId}/analytics/subscriptions', SubscriptionsReport>(
       'subscriptions',
     ),
+    /** Uygulama kaldırma: günlük seri, iOS/Android kırılımı, kaldırmadan önceki son mesaj (ADR-0080). */
+    uninstalls: report<'/v1/apps/{appId}/analytics/uninstalls', UninstallReport>('uninstalls'),
+    /** Android teslimat sağlığı: üretici/ROM bazında teslim oranı, gecikme ve arka plan kısıtı özeti (ADR-0092). */
+    androidDelivery: report<'/v1/apps/{appId}/analytics/android-delivery', AndroidDeliveryReport>('android-delivery'),
     events: report<'/v1/apps/{appId}/analytics/events', EventsReport>('events'),
     conversions: report<'/v1/apps/{appId}/analytics/conversions', ConversionsReport>('conversions'),
     providers: report<'/v1/apps/{appId}/analytics/providers', ProvidersReport>('providers'),
     engagement: report<'/v1/apps/{appId}/analytics/engagement', EngagementReport>('engagement'),
+    /** Son 14 gün oturum hacmi ve tekil kullanıcı (günlük toplamlar). */
+    sessions: (appId?: string) =>
+      ctx.http.request<JsonResponse<'/v1/apps/{appId}/analytics/sessions', 'get'>>({ method: 'GET', path: path(appId, 'sessions') }),
     /** Retention kohortu: ilk görülme haftası × sonraki haftalarda aktiflik oranı (`weeks`). */
     retention: report<'/v1/apps/{appId}/analytics/retention', RetentionReport>('retention'),
     /** Sıralı adımlı huni raporu (`window_hours` içinde tamamlanan adımlar). */
+    /** Rapor oluşturucu: kaynak, metrik, boyut ve filtre seçerek rapor üretir. */
+    runReport: <F extends ReportFormat = 'json'>(body: Omit<ReportRunInput, 'format'> & { format?: F }, appId?: string) =>
+      ctx.http.request<ReportResult<F, ReportResultBody>>({
+        method: 'POST',
+        path: path(appId, 'reports/run'),
+        body: { format: 'json', ...body },
+      }),
+    /** Yol analizi: başlangıç olayından sonra veya önce izlenen yollar. */
+    paths: <F extends ReportFormat = 'json'>(body: Omit<PathInput, 'format'> & { format?: F }, appId?: string) =>
+      ctx.http.request<ReportResult<F, PathReport>>({
+        method: 'POST',
+        path: path(appId, 'paths'),
+        body: { format: 'json', ...body },
+      }),
     funnel: <F extends ReportFormat = 'json'>(
       body: Omit<FunnelInput, 'format'> & { format?: F },
       appId?: string,
@@ -64,5 +145,171 @@ export function createAnalytics(ctx: ResourceContext) {
         path: path(appId, 'funnels'),
         body,
       }),
+  };
+}
+
+/**
+ * Genel kontrol grubu (ADR-0060): kullanıcıların sabit bir yüzdesi pazarlama mesajı almaz, dönüşümleri diğerleriyle
+ * karşılaştırılır. API ve işlemsel gönderimler etkilenmez.
+ */
+export function createGlobalControl(ctx: ResourceContext) {
+  const base = (appId?: string) => `${ctx.appPath(appId)}/global-control`;
+  return {
+    get: (appId?: string) => ctx.http.request<GlobalControl>({ method: 'GET', path: base(appId) }),
+    /** Etkinleştirme ve yüzde değişikliği ölçümü yeniden başlatır. */
+    update: (body: UpdateGlobalControlInput, appId?: string) =>
+      ctx.http.request<GlobalControl>({ method: 'PUT', path: base(appId), body }),
+    /** Üyelik yeniden seçilir, ölçüm baştan başlar. */
+    reset: (appId?: string) => ctx.http.request<GlobalControl>({ method: 'POST', path: `${base(appId)}/reset` }),
+    /** Dönüşüm karşılaştırması (`days`, `event`). */
+    report: (params: QueryParams<'/v1/apps/{appId}/global-control/report', 'get'> = {}, appId?: string) =>
+      ctx.http.request<GlobalControlReport>({ method: 'GET', path: `${base(appId)}/report`, query: params }),
+  };
+}
+
+/** Özellik bayrakları ve kademeli yayın. */
+export function createFeatureFlags(ctx: ResourceContext) {
+  const base = (appId?: string) => `${ctx.appPath(appId)}/feature-flags`;
+  const one = (flagId: string, appId?: string) => `${base(appId)}/${encodeURIComponent(flagId)}`;
+  return {
+    list: (appId?: string) => ctx.http.request<AppFlagList>({ method: 'GET', path: base(appId) }),
+    create: (body: CreateAppFlagInput, appId?: string) => ctx.http.request<AppFlag>({ method: 'POST', path: base(appId), body }),
+    get: (flagId: string, appId?: string) => ctx.http.request<AppFlag>({ method: 'GET', path: one(flagId, appId) }),
+    update: (flagId: string, body: UpdateAppFlagInput, appId?: string) => ctx.http.request<AppFlag>({ method: 'PATCH', path: one(flagId, appId), body }),
+    delete: (flagId: string, appId?: string) => ctx.http.request<Ok>({ method: 'DELETE', path: one(flagId, appId) }),
+    /** `external_id`, `user_id` veya `subject` için tüm bayrakların sonucu. */
+    evaluate: (body: EvaluateAppFlagsInput, appId?: string) => ctx.http.request<AppFlagEvaluation>({ method: 'POST', path: `${base(appId)}/evaluate`, body }),
+  };
+}
+
+/** Bölgeler: konum paylaşan abonelik girip çıktığında `geofence_enter` ve `geofence_exit` olayları oluşur. */
+export function createGeofences(ctx: ResourceContext) {
+  const base = (appId?: string) => `${ctx.appPath(appId)}/geofences`;
+  return {
+    list: (appId?: string) => ctx.http.request<GeofenceList>({ method: 'GET', path: base(appId) }),
+    create: (body: CreateGeofenceInput, appId?: string) => ctx.http.request<Geofence>({ method: 'POST', path: base(appId), body }),
+    get: (geofenceId: string, appId?: string) => ctx.http.request<Geofence>({ method: 'GET', path: `${base(appId)}/${encodeURIComponent(geofenceId)}` }),
+    update: (geofenceId: string, body: UpdateGeofenceInput, appId?: string) =>
+      ctx.http.request<Geofence>({ method: 'PATCH', path: `${base(appId)}/${encodeURIComponent(geofenceId)}`, body }),
+    delete: (geofenceId: string, appId?: string) => ctx.http.request<Ok>({ method: 'DELETE', path: `${base(appId)}/${encodeURIComponent(geofenceId)}` }),
+  };
+}
+
+/** Kişi başına karar motoru: ajanlar, karar ve kazanç raporu. */
+export function createDecisionAgents(ctx: ResourceContext) {
+  const base = (appId?: string) => `${ctx.appPath(appId)}/decision-agents`;
+  return {
+    list: (appId?: string) => ctx.http.request<DecisionAgentList>({ method: 'GET', path: base(appId) }),
+    create: (body: CreateDecisionAgentInput, appId?: string) => ctx.http.request<DecisionAgent>({ method: 'POST', path: base(appId), body }),
+    get: (id: string, appId?: string) => ctx.http.request<DecisionAgent>({ method: 'GET', path: `${base(appId)}/${encodeURIComponent(id)}` }),
+    update: (id: string, body: UpdateDecisionAgentInput, appId?: string) => ctx.http.request<DecisionAgent>({ method: 'PATCH', path: `${base(appId)}/${encodeURIComponent(id)}`, body }),
+    delete: (id: string, appId?: string) => ctx.http.request<void>({ method: 'DELETE', path: `${base(appId)}/${encodeURIComponent(id)}` }),
+    /** Öğrenen politika ve kontrol grubu karşılaştırması. */
+    report: (id: string, appId?: string) => ctx.http.request<DecisionReport>({ method: 'GET', path: `${base(appId)}/${encodeURIComponent(id)}/report` }),
+    /** Kullanıcı için seçenek seçer ve kaydeder. */
+    decide: (id: string, externalId: string, appId?: string) => ctx.http.request<DecisionResult>({ method: 'POST', path: `${base(appId)}/${encodeURIComponent(id)}/decide`, body: { external_id: externalId } }),
+  };
+}
+
+/** Öngörü modelleri: kayıp riski ve olay olasılığı. */
+export function createPredictions(ctx: ResourceContext) {
+  const base = (appId?: string) => `${ctx.appPath(appId)}/predictions`;
+  return {
+    list: (appId?: string) => ctx.http.request<PredictionModelList>({ method: 'GET', path: base(appId) }),
+    /** Eğitim kuyruğa alınır; sonuç `outcome` alanından izlenir. */
+    create: (body: CreatePredictionInput, appId?: string) => ctx.http.request<PredictionModel>({ method: 'POST', path: base(appId), body }),
+    get: (id: string, appId?: string) => ctx.http.request<PredictionModel>({ method: 'GET', path: `${base(appId)}/${encodeURIComponent(id)}` }),
+    update: (id: string, body: UpdatePredictionInput, appId?: string) => ctx.http.request<PredictionModel>({ method: 'PATCH', path: `${base(appId)}/${encodeURIComponent(id)}`, body }),
+    delete: (id: string, appId?: string) => ctx.http.request<void>({ method: 'DELETE', path: `${base(appId)}/${encodeURIComponent(id)}` }),
+    compute: (id: string, appId?: string) => ctx.http.request<PredictionModel>({ method: 'POST', path: `${base(appId)}/${encodeURIComponent(id)}/compute` }),
+    users: (id: string, params: QueryParams<'/v1/apps/{appId}/predictions/{id}/users', 'get'> = {}, appId?: string) =>
+      ctx.http.request<PredictionUsersPage>({ method: 'GET', path: `${base(appId)}/${encodeURIComponent(id)}/users`, query: params }),
+  };
+}
+
+/** Apple ve Google Wallet: yapılandırma, şablon ve kart. */
+export function createWallet(ctx: ResourceContext) {
+  const base = (appId?: string) => `${ctx.appPath(appId)}/wallet`;
+  return {
+    getConfig: (appId?: string) => ctx.http.request<WalletConfig>({ method: 'GET', path: `${base(appId)}/config` }),
+    /** Kimlik bilgisi doğrulanır, şifrelenir ve bir daha okunamaz. */
+    updateConfig: (body: UpdateWalletConfigInput, appId?: string) => ctx.http.request<WalletConfig>({ method: 'PUT', path: `${base(appId)}/config`, body }),
+    listTemplates: (appId?: string) => ctx.http.request<WalletTemplateList>({ method: 'GET', path: `${base(appId)}/templates` }),
+    createTemplate: (body: CreateWalletTemplateInput, appId?: string) => ctx.http.request<WalletTemplate>({ method: 'POST', path: `${base(appId)}/templates`, body }),
+    getTemplate: (id: string, appId?: string) => ctx.http.request<WalletTemplate>({ method: 'GET', path: `${base(appId)}/templates/${encodeURIComponent(id)}` }),
+    updateTemplate: (id: string, body: UpdateWalletTemplateInput, appId?: string) => ctx.http.request<WalletTemplate>({ method: 'PATCH', path: `${base(appId)}/templates/${encodeURIComponent(id)}`, body }),
+    deleteTemplate: (id: string, appId?: string) => ctx.http.request<void>({ method: 'DELETE', path: `${base(appId)}/templates/${encodeURIComponent(id)}` }),
+    listPasses: (params: QueryParams<'/v1/apps/{appId}/wallet/passes', 'get'> = {}, appId?: string) => ctx.http.request<WalletPassPage>({ method: 'GET', path: `${base(appId)}/passes`, query: params }),
+    /** Kullanıcılı kart şablon başına tektir; yanıttaki `url` kartı açar. */
+    issuePass: (body: IssueWalletPassInput, appId?: string) => ctx.http.request<WalletPass>({ method: 'POST', path: `${base(appId)}/passes`, body }),
+    getPass: (id: string, appId?: string) => ctx.http.request<WalletPass>({ method: 'GET', path: `${base(appId)}/passes/${encodeURIComponent(id)}` }),
+    /** Cihazdaki kart arka planda yenilenir. */
+    updatePass: (id: string, body: UpdateWalletPassInput, appId?: string) => ctx.http.request<WalletPass>({ method: 'PATCH', path: `${base(appId)}/passes/${encodeURIComponent(id)}`, body }),
+    /** Geri alınmaz; cihazdaki kart geçersiz görünür. */
+    voidPass: (id: string, appId?: string) => ctx.http.request<WalletPass>({ method: 'POST', path: `${base(appId)}/passes/${encodeURIComponent(id)}/void` }),
+  };
+}
+
+/** Kaydedilmiş raporlar; çalıştırmak için `analytics.runReport`. */
+export function createSavedReports(ctx: ResourceContext) {
+  const base = (appId?: string) => `${ctx.appPath(appId)}/analytics/reports`;
+  return {
+    list: (appId?: string) => ctx.http.request<SavedReportList>({ method: 'GET', path: base(appId) }),
+    get: (id: string, appId?: string) => ctx.http.request<SavedReport>({ method: 'GET', path: `${base(appId)}/${encodeURIComponent(id)}` }),
+    create: (body: SavedReportInput, appId?: string) => ctx.http.request<SavedReport>({ method: 'POST', path: base(appId), body }),
+    update: (id: string, body: SavedReportUpdateInput, appId?: string) => ctx.http.request<SavedReport>({ method: 'PATCH', path: `${base(appId)}/${encodeURIComponent(id)}`, body }),
+    delete: (id: string, appId?: string) => ctx.http.request<void>({ method: 'DELETE', path: `${base(appId)}/${encodeURIComponent(id)}` }),
+  };
+}
+
+/** Kişi başına en iyi kanal: ayar, dağılım ve kullanıcı skorları. */
+export function createChannelScores(ctx: ResourceContext) {
+  const base = (appId?: string) => `${ctx.appPath(appId)}/channel-scores`;
+  return {
+    getConfig: (appId?: string) => ctx.http.request<ChannelScoreConfig>({ method: 'GET', path: `${base(appId)}/config` }),
+    /** Açıkken skorlar kayıttan sonra yeniden hesaplanır; kapatınca silinir. */
+    updateConfig: (body: UpdateChannelScoreConfigInput, appId?: string) => ctx.http.request<ChannelScoreConfig>({ method: 'PUT', path: `${base(appId)}/config`, body }),
+    /** Hesabı kuyruğa alır; ilerleme `status` alanından izlenir. */
+    compute: (appId?: string) => ctx.http.request<ChannelScoreConfig>({ method: 'POST', path: `${base(appId)}/compute` }),
+    overview: (appId?: string) => ctx.http.request<ChannelScoreOverview>({ method: 'GET', path: `${base(appId)}/overview` }),
+    /** En iyi kanalı belli kullanıcılar; `channel` ile süzülür, `next_cursor` ile sayfalanır. */
+    users: (params: QueryParams<'/v1/apps/{appId}/channel-scores/users', 'get'> = {}, appId?: string) =>
+      ctx.http.request<ChannelScoreUsersPage>({ method: 'GET', path: `${base(appId)}/users`, query: params }),
+    /** Tek kullanıcının kanal skorları. */
+    user: (userId: string, appId?: string) => ctx.http.request<ChannelScoreUser>({ method: 'GET', path: `${base(appId)}/users/${encodeURIComponent(userId)}` }),
+  };
+}
+
+/** İlgi etiketleri (ADR-0081): model ayarı, hesap, özellik başına yaygın ilgiler ve kişinin ilgileri. */
+export function createAffinity(ctx: ResourceContext) {
+  const base = (appId?: string) => `${ctx.appPath(appId)}/affinity`;
+  return {
+    getConfig: (appId?: string) => ctx.http.request<AffinityConfig>({ method: 'GET', path: `${base(appId)}/config` }),
+    /** Model açıksa ilgiler kayıttan sonra yeniden hesaplanır. */
+    updateConfig: (body: UpdateAffinityConfigInput, appId?: string) => ctx.http.request<AffinityConfig>({ method: 'PUT', path: `${base(appId)}/config`, body }),
+    /** Hesabı kuyruğa alır; ilerleme `status` alanından izlenir. */
+    compute: (appId?: string) => ctx.http.request<AffinityConfig>({ method: 'POST', path: `${base(appId)}/compute` }),
+    overview: (appId?: string) => ctx.http.request<AffinityOverview>({ method: 'GET', path: `${base(appId)}/overview` }),
+    /** Kişinin ilgileri ve kişisel haftalık sıklık sınırı. */
+    user: (userId: string, appId?: string) => ctx.http.request<UserAffinity>({ method: 'GET', path: `${base(appId)}/users/${encodeURIComponent(userId)}` }),
+  };
+}
+
+/** RFM segmentasyonu: model ayarı, segment dağılımı, geçişler ve kullanıcı listesi. */
+export function createRfm(ctx: ResourceContext) {
+  const base = (appId?: string) => `${ctx.appPath(appId)}/rfm`;
+  return {
+    getConfig: (appId?: string) => ctx.http.request<RfmConfig>({ method: 'GET', path: `${base(appId)}/config` }),
+    /** Model açıksa skorlar kayıttan sonra yeniden hesaplanır. */
+    updateConfig: (body: UpdateRfmConfigInput, appId?: string) => ctx.http.request<RfmConfig>({ method: 'PUT', path: `${base(appId)}/config`, body }),
+    /** Hesabı kuyruğa alır; ilerleme `status` alanından izlenir. */
+    compute: (appId?: string) => ctx.http.request<RfmConfig>({ method: 'POST', path: `${base(appId)}/compute` }),
+    overview: (appId?: string) => ctx.http.request<RfmOverview>({ method: 'GET', path: `${base(appId)}/overview` }),
+    /** İki tarih arası geçişler (`from`, `to`: YYYY-AA-GG). */
+    transitions: (params: QueryParams<'/v1/apps/{appId}/rfm/transitions', 'get'> = {}, appId?: string) =>
+      ctx.http.request<RfmTransitions>({ method: 'GET', path: `${base(appId)}/transitions`, query: params }),
+    /** Skoru olan kullanıcılar (`segment`, `limit`, `cursor`). */
+    users: (params: QueryParams<'/v1/apps/{appId}/rfm/users', 'get'> = {}, appId?: string) =>
+      ctx.http.request<RfmUsersPage>({ method: 'GET', path: `${base(appId)}/users`, query: params }),
   };
 }

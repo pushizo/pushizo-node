@@ -40,7 +40,7 @@ export function toBlob(file: ImportFile): Blob {
   return new Blob([bytes.slice()], { type: 'text/csv' });
 }
 
-/** İçe aktarma işleri (multipart CSV, en fazla 50 MB): OneSignal player dökümü veya kullanıcı CSV'si. */
+/** İçe aktarma işleri (multipart CSV, en fazla 50 MB): eski sağlayıcı player dökümü veya kullanıcı CSV'si. */
 export function createImports(ctx: ResourceContext) {
   const base = (appId?: string) => `${ctx.appPath(appId)}/imports`;
   return {

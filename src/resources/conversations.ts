@@ -1,5 +1,12 @@
 import type {
+  AiAgent,
+  AiAgentList,
+  AiAgentMetrics,
+  AiAgentRunList,
+  AiAgentWithSecret,
   AssignConversationInput,
+  CreateAiAgentInput,
+  UpdateAiAgentInput,
   Conversation,
   ConversationActivity,
   ConversationMessagePage,
@@ -10,6 +17,7 @@ import type {
   ConversationTagsResult,
   CreateSmsKeywordInput,
   Ok,
+  JsonResponse,
   QueryParams,
   SmsKeyword,
   SmsKeywordList,
@@ -66,6 +74,12 @@ export function createConversations(ctx: ResourceContext) {
     updateTags: (conversationId: string, body: ConversationTagsInput, appId?: string) =>
       ctx.http.request<ConversationTagsResult>({ method: 'POST', path: `${one(conversationId, appId)}/tags`, body }),
     /** Zaman çizelgesi: atama, durum değişikliği, ilk yanıt ve bot devri olayları. */
+    /** Kişi profili: özellikler, etiketler, abonelikler (maskeli), son olaylar ve diğer konuşmalar. */
+    contact: (conversationId: string, appId?: string) =>
+      ctx.http.request<JsonResponse<'/v1/apps/{appId}/conversations/{conversationId}/contact', 'get'>>({
+        method: 'GET',
+        path: `${one(conversationId, appId)}/contact`,
+      }),
     activity: (conversationId: string, appId?: string) =>
       ctx.http.request<ConversationActivity>({ method: 'GET', path: `${one(conversationId, appId)}/activity` }),
   };
@@ -95,5 +109,26 @@ export function createWhatsAppTemplates(ctx: ResourceContext) {
       ctx.http.request<WhatsAppTemplateList>({ method: 'GET', path: base(appId), query: params }),
     sync: (appId?: string) =>
       ctx.http.request<WhatsAppTemplateSync>({ method: 'POST', path: `${base(appId)}/sync` }),
+  };
+}
+
+/**
+ * Konuşmalı AI ajanı (ADR-0085): tanım, araç imza anahtarı rotasyonu, çalışma kayıtları ve ölçümler. Oluşturma ve
+ * rotasyon yanıtındaki `tool_secret` yalnız bir kez döner.
+ */
+export function createAiAgents(ctx: ResourceContext) {
+  const base = (appId?: string) => `${ctx.appPath(appId)}/ai-agents`;
+  const one = (agentId: string, appId?: string) => `${base(appId)}/${enc(agentId)}`;
+  return {
+    list: (appId?: string) => ctx.http.request<AiAgentList>({ method: 'GET', path: base(appId) }),
+    create: (body: CreateAiAgentInput, appId?: string) => ctx.http.request<AiAgentWithSecret>({ method: 'POST', path: base(appId), body }),
+    get: (agentId: string, appId?: string) => ctx.http.request<AiAgent>({ method: 'GET', path: one(agentId, appId) }),
+    update: (agentId: string, body: UpdateAiAgentInput, appId?: string) => ctx.http.request<AiAgent>({ method: 'PATCH', path: one(agentId, appId), body }),
+    delete: (agentId: string, appId?: string) => ctx.http.request<void>({ method: 'DELETE', path: one(agentId, appId) }),
+    rotateSecret: (agentId: string, appId?: string) => ctx.http.request<AiAgentWithSecret>({ method: 'POST', path: `${one(agentId, appId)}/rotate-secret` }),
+    metrics: (agentId: string, appId?: string) => ctx.http.request<AiAgentMetrics>({ method: 'GET', path: `${one(agentId, appId)}/metrics` }),
+    /** Çalışma kayıtları (`agent_id`, `conversation_id`, `status`, `limit`, `cursor`). */
+    runs: (params: QueryParams<'/v1/apps/{appId}/ai-agents/runs', 'get'> = {}, appId?: string) =>
+      ctx.http.request<AiAgentRunList>({ method: 'GET', path: `${base(appId)}/runs`, query: params }),
   };
 }
